@@ -12,6 +12,7 @@
 #include <fstream>
 #include "cAnimal.h"
 #include "cVehicle.h"
+#include "cPeople.h"
 #include "cGame.h"
 
 using namespace std;
@@ -37,8 +38,12 @@ enum class Color {
 	bright_white = 15
 };
 
+void clearConsole();
 void fixConsoleWindow();
 void gotoXY(int x, int y);
+
 void textColor(int color);
 void printCharacter(wstring content, COORD spot, Color textColor, Color backgroundColor, short maxlength = -1);
 void printCenterCharacters(wstring content, Color textColor, Color backgroundColor, short y, SMALL_RECT box, short maxlength = -1);
+
+void drawMainMenu(); 
