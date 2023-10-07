@@ -33,4 +33,6 @@
 
 .vs
 *.txt
+*.db
+*.vsidx
 Debug

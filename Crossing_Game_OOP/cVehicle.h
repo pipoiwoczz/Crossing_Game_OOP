@@ -1,6 +1,6 @@
 #pragma once
 #include "setup.h"
 
-class cGame {
+class cVehicle {
 
 };
