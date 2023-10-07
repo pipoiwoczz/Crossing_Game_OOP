@@ -93,10 +93,10 @@ void drawFrame() {
     for (int i = 5; i < 64; i++) {
         printCharacter(L"  ", { 5, short(i) }, Color::aqua, Color::aqua);
 		printCharacter(L"  ", { 200, short(i) }, Color::aqua, Color::aqua);
-        printCharacter(L"  ", { 265, short(i) }, Color::aqua, Color::aqua);
+        printCharacter(L"  ", { 264, short(i) }, Color::aqua, Color::aqua);
 
     }
-    for (int i = 5; i < 266; i++) {
+    for (int i = 5; i < 200; i++) {
         printCharacter(L" ", { short(i), 28 }, Color::aqua, Color::aqua);
     }
     
@@ -108,13 +108,31 @@ void drawFrame() {
 
 }
 
+void drawGameTitle() {
+    wstring content[9];
+    content[0] = L"▄████████    ▄████████  ▄██████▄     ▄████████    ▄████████  ▄█  ███▄▄▄▄      ▄██████▄          ▄████████  ▄██████▄     ▄████████  ████████▄";
+    content[1] = L"███    ███   ███    ███ ███    ███   ███    ███   ███    ███ ███  ███▀▀▀██▄   ███    ███        ███    ███ ███    ███   ███    ███ ███   ▀███";
+    content[2] = L"███    █▀    ███    ███ ███    ███   ███    █▀    ███    █▀  ███▌ ███   ███   ███    █▀         ███    ███ ███    ███   ███    ███ ███    ███"; 
+    content[3] = L"███         ▄███▄▄▄▄██▀ ███    ███   ███          ███        ███▌ ███   ███  ▄███              ▄███▄▄▄▄██▀ ███    ███   ███    ███ ███    ███";
+    content[4] = L"███        ▀▀███▀▀▀▀▀   ███    ███ ▀███████████ ▀███████████ ███▌ ███   ███ ▀▀███ ████▄       ▀▀███▀▀▀▀▀   ███    ███ ▀███████████ ███    ███";
+    content[5] = L"███    █▄  ▀███████████ ███    ███          ███          ███ ███  ███   ███   ███    ███      ▀███████████ ███    ███   ███    ███ ███    ███";
+    content[6] = L"███    ███   ███    ███ ███    ███    ▄█    ███    ▄█    ███ ███  ███   ███   ███    ███        ███    ███ ███    ███   ███    ███ ███   ▄███"; 
+    content[7] = L"████████▀    ███    ███  ▀██████▀   ▄████████▀   ▄████████▀  █▀    ▀█   █▀    ████████▀         ███    ███  ▀██████▀    ███    █▀  ████████▀ ";  
+    content[8] = L"             ███    ███                                                                         ███    ███                                   ";
+
+    Color color[9] = { Color::red, Color::light_red, Color::blue, Color::light_blue, Color::green, Color::aqua, Color::light_aqua, Color::light_purple, Color::light_purple};
+    for (int i = 0; i < 9; i++) {
+        printCenterCharacters(content[i], color[i], Color::bright_white, short(1 + i), My_Windows);
+	}
+    
+}
 
 void drawCharacter(COORD pos) {
     //printCharacter(L"  ");
     wstring content[5];
     content[0] = L" ▄▀▀▀▀▀───▄█▀▀▀█▄";
     content[1] = L"▐▄▄▄▄▄▄▄▄██▌▀▄▀▐██";
-    content[2] = L"▐▒▒▒▒▒▒▒▒███▌▀▐███";
+    content[2] = L"▐▒▒Lion▒▒███▌▀▐███";
     content[3] = L" ▌▒▓▒▒▒▒▓▒██▌▀▐██";
     content[4] = L" ▌▓▐▀▀▀▀▌▓─▀▀▀▀▀";
     for (int i = pos.Y; i < pos.Y + 5; i++) {

@@ -9,16 +9,24 @@ class cVehicle {
 		void move();
 };
 
-class cCar : public cVehicle {
-	public:
-		cCar();
-		~cCar();
-		void draw();
-};
 
 class cTruck : public cVehicle {
 	public:
 		cTruck();
 		~cTruck();
-		void draw();
+		void draw(COORD pos);
+};
+
+class cHelicopter : public cVehicle {
+	public:
+		cHelicopter();
+		~cHelicopter();
+		void draw(COORD pos);
+};
+
+class cMotorbike : public cVehicle {
+	public:
+		cMotorbike();
+		~cMotorbike();
+		void draw(COORD pos);
 };

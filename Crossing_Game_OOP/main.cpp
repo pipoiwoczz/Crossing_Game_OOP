@@ -6,8 +6,9 @@ int main() {
 	system("cls");
 	fixConsoleWindow();
 	
-	drawFrame();
-	drawCharacter({ 0, 1 });
+	drawGameTitle();
+	//drawFrame();
+	drawCharacter({ 12, 1 });
 
 	MOVING = toupper(_getch());
 

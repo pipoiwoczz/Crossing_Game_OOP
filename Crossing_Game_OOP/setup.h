@@ -10,6 +10,8 @@
 #include <conio.h>
 #include <direct.h>
 #include <fstream>
+#include <ctime>
+
 #include "cAnimal.h"
 #include "cVehicle.h"
 #include "cPeople.h"
@@ -17,7 +19,7 @@
 
 using namespace std;
 
-const SMALL_RECT My_Windows = { 0, 0, 135, 33 };
+const SMALL_RECT My_Windows = { 0, 0, 271, 64 };
 
 enum class Color {
 	black = 0,
@@ -50,3 +52,4 @@ void drawMainMenu();
 void drawGame();
 void drawFrame();
 void drawCharacter(COORD pos);
+void drawGameTitle();

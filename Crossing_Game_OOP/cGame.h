@@ -3,9 +3,7 @@
 
 class cGame {
 	cTruck *mTruck;
-	cCar *mCar;
-	cBird *mBird;
-	cDinosaur *mDinosaur;
+
 	cPeople *mPeople;
 
 	int mLevel;
