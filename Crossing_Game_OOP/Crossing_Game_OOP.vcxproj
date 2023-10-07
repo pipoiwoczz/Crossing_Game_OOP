@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,10 +130,12 @@
   <ItemGroup>
     <ClInclude Include="cAnimal.h" />
     <ClInclude Include="cGame.h" />
+    <ClInclude Include="cPeople.h" />
     <ClInclude Include="cVehicle.h" />
     <ClInclude Include="setup.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cAnimal.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="setup.cpp" />
   </ItemGroup>
