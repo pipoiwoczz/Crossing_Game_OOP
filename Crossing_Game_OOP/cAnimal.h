@@ -22,3 +22,10 @@ class cBird : public cAnimal {
 		~cBird();
 		void draw();
 };
+
+class cLion : public cAnimal {
+	public:
+		cLion();
+		~cLion();
+		void draw(COORD pos);
+};

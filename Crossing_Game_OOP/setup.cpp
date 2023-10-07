@@ -1,4 +1,4 @@
-#include "setup.h"
+﻿#include "setup.h"
 
 void textColor(int color) {
     HANDLE mau;
@@ -79,4 +79,45 @@ void clearConsole() {
 
 void drawMainMenu(){
 
+}
+
+void drawGame() {
+
+}
+
+
+void drawFrame() {
+    for (int i = 5; i < 266; i++) {
+        printCharacter(L" ", { short(i), 4 }, Color::aqua, Color::aqua);
+    }
+    for (int i = 5; i < 64; i++) {
+        printCharacter(L"  ", { 5, short(i) }, Color::aqua, Color::aqua);
+		printCharacter(L"  ", { 200, short(i) }, Color::aqua, Color::aqua);
+        printCharacter(L"  ", { 265, short(i) }, Color::aqua, Color::aqua);
+
+    }
+    for (int i = 5; i < 266; i++) {
+        printCharacter(L" ", { short(i), 28 }, Color::aqua, Color::aqua);
+    }
+    
+    for (int i = 10; i <= 64; i += 6) {
+        for (int j = 5; j < 266; j++) {
+			printCharacter(L" ", { short(j), short(i) }, Color::black, Color::black);
+		}
+    }
+
+}
+
+
+void drawCharacter(COORD pos) {
+    //printCharacter(L"  ");
+    wstring content[5];
+    content[0] = L" ▄▀▀▀▀▀───▄█▀▀▀█▄";
+    content[1] = L"▐▄▄▄▄▄▄▄▄██▌▀▄▀▐██";
+    content[2] = L"▐▒▒▒▒▒▒▒▒███▌▀▐███";
+    content[3] = L" ▌▒▓▒▒▒▒▓▒██▌▀▐██";
+    content[4] = L" ▌▓▐▀▀▀▀▌▓─▀▀▀▀▀";
+    for (int i = pos.Y; i < pos.Y + 5; i++) {
+		printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::green, Color::bright_white);
+	}
 }

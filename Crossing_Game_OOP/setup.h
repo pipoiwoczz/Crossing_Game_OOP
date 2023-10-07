@@ -47,3 +47,6 @@ void printCharacter(wstring content, COORD spot, Color textColor, Color backgrou
 void printCenterCharacters(wstring content, Color textColor, Color backgroundColor, short y, SMALL_RECT box, short maxlength = -1);
 
 void drawMainMenu(); 
+void drawGame();
+void drawFrame();
+void drawCharacter(COORD pos);
