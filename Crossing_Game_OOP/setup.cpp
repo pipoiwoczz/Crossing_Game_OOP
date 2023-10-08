@@ -130,12 +130,36 @@ void drawGameTitle() {
 void drawCharacter(COORD pos) {
     //printCharacter(L"  ");
     wstring content[5];
-    content[0] = L" ▄▀▀▀▀▀───▄█▀▀▀█▄";
-    content[1] = L"▐▄▄▄▄▄▄▄▄██▌▀▄▀▐██";
-    content[2] = L"▐▒▒Lion▒▒███▌▀▐███";
-    content[3] = L" ▌▒▓▒▒▒▒▓▒██▌▀▐██";
-    content[4] = L" ▌▓▐▀▀▀▀▌▓─▀▀▀▀▀";
+    content[0] = L"   ▄▀▀▀▀▀───▄█▀▀▀█▄  ";
+    content[1] = L"  ▐▄▄▄▄▄▄▄▄██▌▀▄▀▐██ ";
+    content[2] = L"  ▐▒▒Lion▒▒███▌▀▐███ ";
+    content[3] = L"   ▌▒▓▒▒▒▒▓▒██▌▀▐██  ";
+    content[4] = L"   ▌▓▐▀▀▀▀▌▓─▀▀▀▀▀   ";
     for (int i = pos.Y; i < pos.Y + 5; i++) {
-		printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::green, Color::bright_white);
+		printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::yellow, Color::bright_white);
 	}
+}
+
+void drawSpacing(COORD pos) {
+    wstring spacing[5];
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 19; j++) {
+			spacing[i] += L" ";
+		}
+	}
+    for (int i = pos.Y; i < pos.Y + 5; i++) {
+		printCharacter(spacing[i - pos.Y], { pos.X, short(i) }, Color::bright_white, Color::bright_white);
+	}
+}
+
+void moveTestting() {
+
+    for (int i = -20; i < 240; i++) {
+        for (int j = 0; j < 10; j++) {
+            drawCharacter({ short(i), short(50) });
+            Sleep(40);
+            i++;
+        }
+        Sleep(200);
+    }
 }

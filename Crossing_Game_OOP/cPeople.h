@@ -5,8 +5,12 @@ class cPeople {
 	int mX, mY;
 	bool mState;
 	public:
-		cPeople();
-		~cPeople();
+		cPeople() {
+
+		}
+		~cPeople() {
+
+		}
 		void draw();
 		void move(char MOVING);
 		void erase();

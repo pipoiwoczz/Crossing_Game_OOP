@@ -53,3 +53,4 @@ void drawGame();
 void drawFrame();
 void drawCharacter(COORD pos);
 void drawGameTitle();
+void moveTestting();

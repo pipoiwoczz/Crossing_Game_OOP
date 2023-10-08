@@ -41,5 +41,8 @@
     <ClCompile Include="cAnimal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cVehicle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
