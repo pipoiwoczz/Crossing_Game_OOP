@@ -11,6 +11,7 @@
 #include <direct.h>
 #include <fstream>
 #include <ctime>
+#include <thread>
 
 #include "cAnimal.h"
 #include "cVehicle.h"

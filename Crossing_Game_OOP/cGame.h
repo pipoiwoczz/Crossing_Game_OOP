@@ -2,9 +2,9 @@
 #include "setup.h"
 
 class cGame {
-	cTruck *mTruck;
-
-	cPeople *mPeople;
+	cTruck *truck;
+	cLion* lion;
+	cPeople *people;
 
 	int mLevel;
 

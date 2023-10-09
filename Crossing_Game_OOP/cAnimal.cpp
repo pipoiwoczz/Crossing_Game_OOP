@@ -20,11 +20,9 @@ void cLion::move(short y) {
             Sleep(20);
             i++;
             lX++;
-            lX++;
         }
         draw({ short(i), y });
         lX++;
-        lY++;
         Sleep(200);
     }
 }
@@ -49,11 +47,9 @@ void cRhyno::move(short y) {
 			Sleep(20);
 			i++;
 			rX++;
-			rY++;
 		}
 		draw({ short(i), y });
 		rX++;
-		rY++;
 		Sleep(200);
 	}
 }

@@ -28,6 +28,9 @@ class cLion : public cAnimal {
 
 		}
 		void draw(COORD pos);
+		COORD getPos() {
+			return { short(lX), short(lY) };
+		}
 		void move(short y);
 };
 
