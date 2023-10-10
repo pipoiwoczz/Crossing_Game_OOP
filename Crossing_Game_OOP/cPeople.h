@@ -1,14 +1,18 @@
 #pragma once
+#ifndef _CPEOPLE_H
+#define _CPEOPLE_H
 #include "setup.h"
 
 class cPeople {
 	int mX, mY;
-	bool mState;
+	bool mState; // true is alive, false is dead =))
 	public:
 		cPeople() {
-			mX = mY = 0;
+			mX = mY = 50;
+			mState = true;
 		}
 		cPeople(int x, int y) {
+			mState = true;
 			mX = x;
 			mY = y;
 		}
@@ -29,11 +33,17 @@ class cPeople {
 		void down();
 		void left();
 		void right();
-		void move(char &MOVING, cLion *lion);
+		void move(char &MOVING);
 		void erase();
-		bool isImpactOne(cLion *lion);
-		bool isImpact(cAnimal *animal);
+		bool isImpactOneLion(cLion *lion);
+		bool isImpactLion(cLion *lion);
 		bool isImpact(cVehicle *vehicle);
-		bool isDead();
+
+		bool isDead() {
+			mState = false;
+			return true;
+		}
 		bool isFinish();
 };
+
+#endif

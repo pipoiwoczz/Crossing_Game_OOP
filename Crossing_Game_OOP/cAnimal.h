@@ -1,4 +1,7 @@
 #pragma once
+#ifndef _CANIMAL_H
+#define _CANIMAL_H
+
 #include "setup.h"
 
 class cAnimal {
@@ -19,7 +22,12 @@ class cAnimal {
 
 class cLion : public cAnimal {
 	int lY, lX;
+	bool isStop = false;
 	public:
+		cLion() {
+			lX = -20;
+			lY = 40;
+		}
 		cLion(int x, int y) {
 			lX = x;
 			lY = y;
@@ -31,16 +39,24 @@ class cLion : public cAnimal {
 		COORD getPos() {
 			return { short(lX), short(lY) };
 		}
-		void move(short y);
+		void setPos(COORD pos) {
+			lX = pos.X;
+			lY = pos.Y;
+		}
+		void move(COORD pos);
+		void move(COORD pos, cLion* lion);
+		void stop() {
+			isStop = true;
+		}
 };
 
-class cRhyno : public cAnimal {
+class cRhino : public cAnimal {
 	int rY, rX;
 	public:
-		cRhyno() {
+		cRhino() {
 			rX = rY = 0;
 		}
-		~cRhyno() {
+		~cRhino() {
 
 		}
 		void draw(COORD pos);
@@ -59,3 +75,5 @@ class cCrocodile : public cAnimal {
 		void draw(COORD pos);
 		void move(short y);
 };
+
+#endif

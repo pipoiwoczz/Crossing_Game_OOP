@@ -1,4 +1,6 @@
 #pragma once
+#ifndef _SETUP_H
+#define _SETUP_H
 #define _CRT_SECURE_NO_WARNINGS
 
 
@@ -54,4 +56,7 @@ void drawGame();
 void drawFrame();
 void drawCharacter(COORD pos);
 void drawGameTitle();
+void drawLosingTitle();
 void moveTestting();
+
+#endif

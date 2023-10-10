@@ -75,6 +75,7 @@ void clearConsole() {
         screen.dwSize.X * screen.dwSize.Y, topLeft, &written
     );
     SetConsoleCursorPosition(console, topLeft);
+    system("color f0");
 }
 
 void drawMainMenu(){
@@ -161,5 +162,19 @@ void moveTestting() {
             i++;
         }
         Sleep(200);
+    }
+}
+
+void drawLosingTitle() {
+    wstring content[6];
+    content[0] = L"██╗░░░██╗░█████╗░██╗░░░██╗  ██╗░░░░░░█████╗░░██████╗███████╗";
+    content[1] = L"╚██╗░██╔╝██╔══██╗██║░░░██║  ██║░░░░░██╔══██╗██╔════╝██╔════╝";
+    content[2] = L"░╚████╔╝░██║░░██║██║░░░██║  ██║░░░░░██║░░██║╚█████╗░█████╗░░";
+    content[3] = L"░░╚██╔╝░░██║░░██║██║░░░██║  ██║░░░░░██║░░██║░╚═══██╗██╔══╝░░";
+    content[4] = L"░░░██║░░░╚█████╔╝╚██████╔╝  ███████╗╚█████╔╝██████╔╝███████╗";
+    content[5] = L"░░░╚═╝░░░░╚════╝░░╚═════╝░  ╚══════╝░╚════╝░╚═════╝░╚══════╝";
+
+    for (int i = 0; i < 6; i++) {
+        printCenterCharacters(content[i], Color::red, Color::bright_white, 8 + i, My_Windows);
     }
 }

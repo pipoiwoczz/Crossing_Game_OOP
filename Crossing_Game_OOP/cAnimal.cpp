@@ -12,22 +12,39 @@ void cLion::draw(COORD pos) {
     }
 }
 
-void cLion::move(short y) {
+void cLion::move(COORD pos) {
     int speed = level * 3;
-    for (int i = -20; i < 240; i++) {
-        for (int j = 0; j < speed; j++) {
-            draw({ short(i), y });
+    for (short i = pos.X; i < 180; i++) {
+        for (short j = 0; j < speed; j++) {
+            draw({ short(i), pos.Y });
             Sleep(20);
             i++;
             lX++;
         }
-        draw({ short(i), y });
+        draw({ short(i), pos.Y });
         lX++;
         Sleep(200);
     }
 }
 
-void cRhyno::draw(COORD pos) {
+void cLion::move(COORD pos, cLion* lion) {
+    int speed = level * 3;
+    while (!isStop) {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 7; j++) {
+                COORD temp = lion[j].getPos();
+                draw(temp);
+                temp.X++;
+                lion[j].setPos(temp);
+                //Sleep(5);
+            }
+        }
+        //Sleep(200);
+    }
+	
+}
+
+void cRhino::draw(COORD pos) {
 	wstring content[5];
     content[0] = L"░░░░░░░░░░░░▄░░▄░▀█▄░░";
     content[1] = L"░░▄████████▄██▄██▄██░░";
@@ -39,7 +56,7 @@ void cRhyno::draw(COORD pos) {
     }
 }
 
-void cRhyno::move(short y) {
+void cRhino::move(short y) {
 	int speed = level * 3;
     for (int i = -20; i < 240; i++) {
         for (int j = 0; j < speed; j++) {

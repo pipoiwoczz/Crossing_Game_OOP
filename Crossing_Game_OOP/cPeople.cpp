@@ -59,7 +59,7 @@ void cPeople::right() {
 	draw(pos);
 }
 
-void cPeople::move(char &MOVING, cLion *lion) {
+void cPeople::move(char &MOVING) {
 	if (MOVING == 'S') {
 		down();
 	}
@@ -74,10 +74,21 @@ void cPeople::move(char &MOVING, cLion *lion) {
 	}
 }
 
-bool cPeople::isImpactOne(cLion *lion) {
+bool cPeople::isImpactOneLion(cLion *lion) {
 	COORD pos = (*lion).getPos();
 	if (mX >= pos.X && mX < pos.X + 20 && mY >= pos.Y && mY < pos.Y + 6) {
 		return true;
+	}
+	return false;
+}
+
+bool cPeople::isImpactLion(cLion* lion) {
+	for (int i = 0; i < 7; i++) {
+		if (isImpactOneLion(&lion[i])) {
+			isDead();
+			drawLosingTitle();
+			return true;
+		}
 	}
 	return false;
 }
