@@ -2,14 +2,17 @@
 
 void cLion::draw(COORD pos) {
     wstring content[5];
-    content[0] = L"  ▄▀▀▀▀▀───▄█▀▀▀█▄  ";
-    content[1] = L" ▐▄▄▄▄▄▄▄▄██▌▀▄▀▐██ ";
-    content[2] = L" ▐▒▒▒▒▒▒▒▒███▌▀▐███ ";
-    content[3] = L"  ▌▒▓▒▒▒▒▓▒██▌▀▐██  ";
-    content[4] = L"  ▌▓▐▀▀▀▀▌▓─▀▀▀▀▀   ";
-    for (int i = pos.Y; i < pos.Y + 5; i++) {
-        printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::yellow, Color::bright_white);
-    }
+    content[0] = L"▄▀▀▀▀▀───▄█▀▀▀█▄";
+    content[1] = L"▐▄▄▄▄▄▄▄▄██▌▀▄▀▐██";
+    content[2] = L"▐▒▒▒▒▒▒▒▒███▌▀▐███";
+    content[3] = L"▌▒▓▒▒▒▒▓▒██▌▀▐██";
+    content[4] = L"▌▓▐▀▀▀▀▌▓─▀▀▀▀▀";
+    
+    printCharacter(content[0], { short(pos.X + 1), pos.Y }, Color::yellow, Color::bright_white);
+    printCharacter(content[1], { short(pos.X), short(pos.Y + 1) }, Color::yellow, Color::bright_white);
+    printCharacter(content[2], { short(pos.X), short(pos.Y + 2) }, Color::yellow, Color::bright_white);
+    printCharacter(content[3], { short(pos.X + 1), short(pos.Y + 3) }, Color::yellow, Color::bright_white);
+    printCharacter(content[4], { short(pos.X + 1), short(pos.Y + 4) }, Color::yellow, Color::bright_white);
 }
 
 void cLion::move(COORD pos) {
@@ -34,14 +37,41 @@ void cLion::move(COORD pos, cLion* lion) {
             for (int j = 0; j < 7; j++) {
                 COORD temp = lion[j].getPos();
                 draw(temp);
+                for (int i = 0; i < 5; i++) {
+                    printCharacter(L" ", { short(temp.X), short(temp.Y + i) }, Color::bright_white, Color::bright_white);
+                }
                 temp.X++;
                 lion[j].setPos(temp);
-                //Sleep(5);
+                Sleep(20);
             }
         }
         //Sleep(200);
     }
 	
+}
+
+short** cLion::getHitBoxX() {
+    short **hitBox = new short* [5];
+    for (int i = 0; i < 5; i++) {
+		hitBox[i] = new short[2];
+	}
+    COORD pos = getPos();
+    hitBox[0][0] = pos.X + 1;
+    hitBox[0][1] = pos.X + 18;
+    hitBox[1][0] = pos.X;
+    hitBox[0][1] = pos.X + 19;
+    hitBox[2][0] = pos.X;
+    hitBox[0][1] = pos.X + 19;
+    hitBox[3][0] = pos.X + 1;
+    hitBox[0][1] = pos.X + 18;
+    hitBox[4][0] = pos.X + 1;
+    hitBox[0][1] = pos.X + 17;
+
+    return hitBox;
+}
+
+short cLion::getHitBoxY() {
+    return getPos().Y;
 }
 
 void cRhino::draw(COORD pos) {

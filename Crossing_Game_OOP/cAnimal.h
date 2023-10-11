@@ -43,6 +43,8 @@ class cLion : public cAnimal {
 			lX = pos.X;
 			lY = pos.Y;
 		}
+		short** getHitBoxX ();
+		short getHitBoxY ();
 		void move(COORD pos);
 		void move(COORD pos, cLion* lion);
 		void stop() {
