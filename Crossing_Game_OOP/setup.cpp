@@ -48,6 +48,14 @@ void DisableCtrButton(bool Close, bool Min, bool Max) {
     }
 }
 
+void hideCursor(bool isHideCursor) {
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_CURSOR_INFO info;
+	info.dwSize = 100;
+	info.bVisible = !isHideCursor;
+	SetConsoleCursorInfo(consoleHandle, &info);
+}
+
 void setWindowSize(short width, short height) {
     HWND console = GetConsoleWindow();
     RECT r;
@@ -92,6 +100,16 @@ void printCenterCharacters(wstring content, Color textColor, Color backgroundCol
         FillConsoleOutputCharacterW(hOut, content[i], 1, { centerX, y }, &Written);
         centerX++;
     }
+}
+
+void textSize(int size) {
+    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	PCONSOLE_FONT_INFOEX lpConsoleCurrentFontEx = new CONSOLE_FONT_INFOEX();
+	lpConsoleCurrentFontEx->cbSize = sizeof(CONSOLE_FONT_INFOEX);
+	GetCurrentConsoleFontEx(hStdout, 0, lpConsoleCurrentFontEx);
+	lpConsoleCurrentFontEx->dwFontSize.X = size;
+	lpConsoleCurrentFontEx->dwFontSize.Y = size;
+	SetCurrentConsoleFontEx(hStdout, 0, lpConsoleCurrentFontEx);
 }
 
 void clearConsole() {

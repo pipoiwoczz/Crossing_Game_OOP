@@ -39,3 +39,17 @@ Project checklist
    4.4. Sprites and Images
 
    4.5. Handling changes
+
+5. Sound
+
+   5.1 Background Music
+
+   5.2 Character Music
+
+      5.2.1 Moving Sound
+      
+      5.2.2 Impacting Sound
+
+      5.2.3 Win a round Sound
+
+      5.2.4 Losing Sound

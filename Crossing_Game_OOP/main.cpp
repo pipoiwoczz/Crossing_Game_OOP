@@ -41,9 +41,11 @@ void threadTest2(thread *t) {
 
 int main() {
 	system("cls");
+	textSize(4);
 	SetConsoleTitle(L"Crossing Road");
 	fixConsoleWindow();
 	showScrollBar(false);
+	hideCursor(true);
 	DisableCtrButton(false, true, true);
 
 	drawGameTitle();

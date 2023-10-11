@@ -41,18 +41,18 @@ enum class Color {
 	light_purple = 13,
 	light_yellow = 14,
 	bright_white = 15,
-
-	test = 0xA12929
 };
 
 void clearConsole();
 void setWindowSize(short width, short height);
 void DisableCtrButton(bool Close, bool Min, bool Max);
 void showScrollBar(BOOL Show);
+void hideCursor(bool isHideCursor);
 void fixConsoleWindow();
 void gotoXY(int x, int y);
 
 void textColor(int color);
+void textSize(int size);
 void printCharacter(wstring content, COORD spot, Color textColor, Color backgroundColor, short maxlength = -1);
 void printCenterCharacters(wstring content, Color textColor, Color backgroundColor, short y, SMALL_RECT box, short maxlength = -1);
 
