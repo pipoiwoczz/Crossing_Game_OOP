@@ -22,7 +22,7 @@
 
 using namespace std;
 
-const SMALL_RECT My_Windows = { 0, 0, 271, 64 };
+const SMALL_RECT My_Windows = { 0, 0, 274, 66 };
 
 enum class Color {
 	black = 0,
@@ -40,10 +40,15 @@ enum class Color {
 	light_red = 12,
 	light_purple = 13,
 	light_yellow = 14,
-	bright_white = 15
+	bright_white = 15,
+
+	test = 0xA12929
 };
 
 void clearConsole();
+void setWindowSize(short width, short height);
+void DisableCtrButton(bool Close, bool Min, bool Max);
+void showScrollBar(BOOL Show);
 void fixConsoleWindow();
 void gotoXY(int x, int y);
 

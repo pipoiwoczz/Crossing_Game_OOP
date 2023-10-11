@@ -16,11 +16,45 @@ void gotoXY(int x, int y) {
 
 void fixConsoleWindow() {
     system("color f0");
+
     ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
     HWND consoleWindow = GetConsoleWindow();
     LONG style = GetWindowLong(consoleWindow, GWL_STYLE);
     style = style & ~(WS_MAXIMIZEBOX) & ~(WS_THICKFRAME);
     SetWindowLong(consoleWindow, GWL_STYLE, style);
+
+}
+
+void showScrollBar(BOOL Show) {
+    HWND hWnd = GetConsoleWindow();
+    ShowScrollBar(hWnd, SB_BOTH, Show);
+}
+
+void DisableCtrButton(bool Close, bool Min, bool Max) {
+    HWND hWnd = GetConsoleWindow();
+    HMENU hMenu = GetSystemMenu(hWnd, false);
+
+    if (Close == 1)
+    {
+        DeleteMenu(hMenu, SC_CLOSE, MF_BYCOMMAND);
+    }
+    if (Min == 1)
+    {
+        DeleteMenu(hMenu, SC_MINIMIZE, MF_BYCOMMAND);
+    }
+    if (Max == 1)
+    {
+        DeleteMenu(hMenu, SC_MAXIMIZE, MF_BYCOMMAND);
+    }
+}
+
+void setWindowSize(short width, short height) {
+    HWND console = GetConsoleWindow();
+    RECT r;
+    GetWindowRect(console, &r); //stores the console's current dimensions
+
+    MoveWindow(console, r.left, r.top, width, height, TRUE); 
+
 }
 
 void printCharacter(wstring content, COORD spot, Color textColor, Color backgroundColor, short maxlength) {

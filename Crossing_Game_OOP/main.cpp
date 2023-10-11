@@ -41,8 +41,11 @@ void threadTest2(thread *t) {
 
 int main() {
 	system("cls");
+	SetConsoleTitle(L"Crossing Road");
 	fixConsoleWindow();
-	
+	showScrollBar(false);
+	DisableCtrButton(false, true, true);
+
 	drawGameTitle();
 
 	//cLion lion(-20, 40);
