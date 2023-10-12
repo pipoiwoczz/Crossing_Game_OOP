@@ -49,6 +49,7 @@ void DisableCtrButton(bool Close, bool Min, bool Max);
 void showScrollBar(BOOL Show);
 void hideCursor(bool isHideCursor);
 void fixConsoleWindow();
+void disableUserSelection();
 void gotoXY(int x, int y);
 
 void textColor(int color);

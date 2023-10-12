@@ -47,6 +47,7 @@ int main() {
 	showScrollBar(false);
 	hideCursor(true);
 	DisableCtrButton(false, true, true);
+	disableUserSelection();
 
 	drawGameTitle();
 

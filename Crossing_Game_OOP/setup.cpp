@@ -88,6 +88,14 @@ void printCharacter(wstring content, COORD spot, Color textColor, Color backgrou
     }
 }
 
+void disableUserSelection() {
+    HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
+    DWORD mode = 0;
+    GetConsoleMode(hStdin, &mode);
+    SetConsoleMode(hStdin, mode & (~ENABLE_QUICK_EDIT_MODE));
+}
+
+
 void printCenterCharacters(wstring content, Color textColor, Color backgroundColor, short y, SMALL_RECT box, short maxlength) {
     short centerX = (short(box.Left) + short(box.Right)) / 2 - content.length() / 2;
 
