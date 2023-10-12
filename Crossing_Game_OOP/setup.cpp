@@ -110,6 +110,7 @@ void textSize(int size) {
 	lpConsoleCurrentFontEx->dwFontSize.X = size;
 	lpConsoleCurrentFontEx->dwFontSize.Y = size;
 	SetCurrentConsoleFontEx(hStdout, 0, lpConsoleCurrentFontEx);
+    delete lpConsoleCurrentFontEx;
 }
 
 void clearConsole() {
