@@ -398,5 +398,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 # Build File 
-*db
-*db-
+*.VC.db
+*.VC.db-wal
+*.VC.db-shm
