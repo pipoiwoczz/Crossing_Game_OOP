@@ -4,6 +4,21 @@ char MOVING;
 cGame cg;
 bool isRunningDrawGame = true;
 
+void subThread2(cLion *lion) {
+	(*lion).move(lion->getPos());
+}
+
+void subThread(cGame cg) {
+	cg.drawGame();
+}
+
+void subThread3(cLion* lion, cPeople* people) {
+	while (true) {
+		if ((*people).isImpactOneLion(lion)) {
+			drawFrame();
+		}
+	}
+}
 
 void threadTest() {
 	if (isRunningDrawGame) 
@@ -26,7 +41,7 @@ void threadTest2(thread *t) {
 
 int main() {
 	system("cls");
-	textSize(12);
+	textSize(4);
 	SetConsoleTitle(L"Crossing Road");
 	fixConsoleWindow();
 	showScrollBar(false);

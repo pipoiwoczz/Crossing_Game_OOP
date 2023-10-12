@@ -18,7 +18,7 @@ class cPeople {
 		}
 		~cPeople() {
 
-		}	
+		}
 
 		COORD getPos() {
 			return { short(mX), short(mY) };
@@ -27,7 +27,6 @@ class cPeople {
 			mX = pos.X;
 			mY = pos.Y;
 		}
-		
 
 		void draw(COORD pos);
 		void up();
