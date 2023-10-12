@@ -15,6 +15,11 @@ void gotoXY(int x, int y) {
 }
 
 void fixConsoleWindow() {
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(consoleHandle, &csbi);
+    SetConsoleScreenBufferSize(consoleHandle, csbi.dwMaximumWindowSize);
+
     system("color f0");
 
     ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
