@@ -401,3 +401,4 @@ FodyWeavers.xsd
 *.VC.db
 *.VC.db-wal
 *.VC.db-shm
+.DS_Store
