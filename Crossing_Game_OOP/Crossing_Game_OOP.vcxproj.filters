@@ -30,6 +30,9 @@
     <ClInclude Include="cPeople.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="cObstacle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -48,6 +51,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cObstacle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

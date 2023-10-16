@@ -50,27 +50,5 @@ int main() {
 
 	drawGameTitle();
 
-	//cLion lion(-20, 40);
-	//thread subThread(subThread2, &lion);
-
-	//cPeople people({50, 50});
-	//people.draw({ 50, 50 });
-	//thread t2(subThread3, &lion, &people);
-
-	/*while (true) {
-		MOVING = toupper(_getch());
-		people.move(MOVING, &lion);
-	}*/
-	
-	cg.getPeople();
-	cg.getLion();
-	thread t1(threadTest), t2(threadTest2, &t1);
-
-	while (true) {
-		MOVING = toupper(_getch());
-		cg.updatePosPeople(MOVING);
-	}
-	
-
 	return 1;
 }
