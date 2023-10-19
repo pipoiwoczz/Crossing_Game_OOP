@@ -30,7 +30,10 @@
     <ClInclude Include="cPeople.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cObstacle.h">
+    <ClInclude Include="cEntity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cAsset.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -53,7 +56,10 @@
     <ClCompile Include="cGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cObstacle.cpp">
+    <ClCompile Include="cEntity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cAsset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

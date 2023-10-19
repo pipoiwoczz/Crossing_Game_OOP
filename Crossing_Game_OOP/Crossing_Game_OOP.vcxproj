@@ -128,17 +128,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="cAsset.h" />
     <ClInclude Include="cAnimal.h" />
     <ClInclude Include="cGame.h" />
-    <ClInclude Include="cObstacle.h" />
+    <ClInclude Include="cEntity.h" />
     <ClInclude Include="cPeople.h" />
     <ClInclude Include="cVehicle.h" />
     <ClInclude Include="setup.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cAnimal.cpp" />
+    <ClCompile Include="cAsset.cpp" />
     <ClCompile Include="cGame.cpp" />
-    <ClCompile Include="cObstacle.cpp" />
+    <ClCompile Include="cEntity.cpp" />
     <ClCompile Include="cPeople.cpp" />
     <ClCompile Include="cVehicle.cpp" />
     <ClCompile Include="main.cpp" />

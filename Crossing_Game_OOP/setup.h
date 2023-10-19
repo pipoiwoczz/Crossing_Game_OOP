@@ -1,4 +1,3 @@
-#pragma once
 #ifndef _SETUP_H
 #define _SETUP_H
 #define _CRT_SECURE_NO_WARNINGS
@@ -14,11 +13,8 @@
 #include <fstream>
 #include <ctime>
 #include <thread>
+#include <vector>
 
-#include "cAnimal.h"
-#include "cVehicle.h"
-#include "cPeople.h"
-#include "cGame.h"
 
 using namespace std;
 
@@ -41,6 +37,22 @@ enum class Color {
 	light_purple = 13,
 	light_yellow = 14,
 	bright_white = 15,
+};
+
+enum class AnimalIndex {
+	Lion = 0,
+	Rhino = 1,
+	Crocodile = 2
+};
+enum class VehicleIndex {
+	Truck = 0,
+	Helicopter = 1,
+	Motorbike = 2
+};
+
+struct TextureInfo {
+	Color ForeG;
+	Color BackG;
 };
 
 void clearConsole();

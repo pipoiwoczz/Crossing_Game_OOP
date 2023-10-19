@@ -1,83 +1,60 @@
-#pragma once
-#ifndef _CANIMAL_H
+﻿#ifndef _CANIMAL_H
 #define _CANIMAL_H
 
-#include "setup.h"
+#include "cEntity.h"
 
-class cAnimal {
-	protected:
-		int mX, mY;
-		int level;
-	public:
-		cAnimal() {
-			mX = mY = 0;
-			level = 1;
-		}
-		~cAnimal() {
+class cAnimal : public cEntity {
+protected:
+	int level;
+public:
+	cAnimal(COORD In_pos, int difficult, AnimalIndex Aindex);
+	~cAnimal();
+	virtual void move(bool toRight = true)
+	{
 
-		}
-		void draw(COORD pos);
-		void move();
+	}
+
 };
 
 class cLion : public cAnimal {
-	int lY, lX;
-	bool isStop = false;
-	public:
-		cLion() {
-			lX = -20;
-			lY = 40;
-		}
-		cLion(int x, int y) {
-			lX = x;
-			lY = y;
-		}
-		~cLion() {
+public:
+	cLion();
+	cLion(COORD In_pos, int difficult);
+	~cLion();
 
-		}
-		void draw(COORD pos);
-		COORD getPos() {
-			return { short(lX), short(lY) };
-		}
-		void setPos(COORD pos) {
-			lX = pos.X;
-			lY = pos.Y;
-		}
-		short** getHitBoxX();
-		short getHitBoxY() {
-			return getPos().Y;
-		}
-		void move(COORD pos);
-		void move(COORD pos, cLion* lion);
-		void stop() {
-			isStop = true;
-		}
+	void move(bool toRight = true);
+	short** getHitBoxX();
 };
-
 class cRhino : public cAnimal {
-	int rY, rX;
-	public:
-		cRhino() {
-			rX = rY = 0;
-		}
-		~cRhino() {
+public:
+	cRhino();
+	cRhino(COORD In_pos, int difficult);
+	~cRhino();
 
-		}
-		void draw(COORD pos);
-		void move(short y);
+	void move(bool toRight = true);
+	short** getHitBoxX();
 };
-
+/*
+class cDinosaur : public cAnimal {
+public:
+	cDinosaur(COORD In_pos, int difficult);
+	void move(bool toRight) override;
+	short** getHitBoxX() override;
+};
+class cDog : public cAnimal {
+public:
+	cDog(COORD In_pos, int difficult);
+	void move(bool toRight) override;
+	short** getHitBoxX() override;
+};*/
 class cCrocodile : public cAnimal {
-	int cX, cY;
-	public:
-		cCrocodile() {
-			cX = cY = 0;
-		}
-		~cCrocodile() {
+public:
+	cCrocodile();
+	cCrocodile(COORD In_pos, int difficult);
+	~cCrocodile();
 
-		}
-		void draw(COORD pos);
-		void move(short y);
+	void move(bool toRight = true);
+	short** getHitBoxX();
 };
 
 #endif

@@ -1,52 +1,48 @@
-#pragma once
 #ifndef _CVEHICLE_H
 #define _CVEHICLE_H
-#include "setup.h"
+#include "cEntity.h"
+class cVehicle: public cEntity {
+protected:
+	int level;
+public:
+	cVehicle(COORD In_pos, int difficult, VehicleIndex Vindex);
+	~cVehicle();
 
-class cVehicle {
-	int mX, mY;
-	public:
-		cVehicle() {
+	virtual void move(bool toRight = true)
+	{
 
-		}
-		~cVehicle() {
-
-		}
-		void move();
+	}
 };
 
 
 class cTruck : public cVehicle {
-	public:
-		cTruck() {
+public:
+	cTruck();
+	cTruck(COORD In_pos, int difficult);
+	~cTruck();
 
-		}
-		~cTruck() {
-
-		}
-		void draw(COORD pos);
+	void move(bool toRight);
+	short** getHitBoxX();
 };
 
 class cHelicopter : public cVehicle {
-	public:
-		cHelicopter() {
+public:
+	cHelicopter();
+	cHelicopter(COORD In_pos, int difficult);
+	~cHelicopter();
 
-		}
-		~cHelicopter() {
-
-		}
-		void draw(COORD pos);
+	void move(bool toRight = true);
+	short** getHitBoxX();
 };
 
 class cMotorbike : public cVehicle {
-	public:
-		cMotorbike() {
+public:
+	cMotorbike();
+	cMotorbike(COORD In_pos, int difficult);
+	~cMotorbike();
 
-		}
-		~cMotorbike() {
-
-		}
-		void draw(COORD pos);
+	void move(bool toRight = true);
+	short** getHitBoxX();
 };
 
 #endif

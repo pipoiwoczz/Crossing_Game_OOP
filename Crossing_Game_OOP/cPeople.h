@@ -1,32 +1,14 @@
-#pragma once
 #ifndef _CPEOPLE_H
 #define _CPEOPLE_H
-#include "setup.h"
+#include "cEntity.h"
 
-class cPeople {
+class cPeople: public cEntity {
 	int mX, mY;
 	bool mState; // true is alive, false is dead =))
 	public:
-		cPeople() {
-			mX = mY = 50;
-			mState = true;
-		}
-		cPeople(int x, int y) {
-			mState = true;
-			mX = x;
-			mY = y;
-		}
-		~cPeople() {
-
-		}
-
-		COORD getPos() {
-			return { short(mX), short(mY) };
-		}
-		void setPos(COORD pos) {
-			mX = pos.X;
-			mY = pos.Y;
-		}
+		cPeople();
+		cPeople(COORD In_pos);
+		~cPeople();
 
 		void draw(COORD pos);
 		void up();
@@ -34,16 +16,21 @@ class cPeople {
 		void left();
 		void right();
 		void move(char &MOVING);
-		void erase();
-		bool isImpactOneLion(cLion *lion);
-		bool isImpactLion(cLion *lion);
-		bool isImpact(cVehicle *vehicle);
+		void erase() {
+
+		}
+		//bool isImpactOneLion(cLion *lion);
+		//bool isImpactLion(cLion *lion);
+		//bool isImpact(cVehicle *vehicle);
 
 		bool isDead() {
 			mState = false;
 			return true;
 		}
-		bool isFinish();
+		bool isFinish()
+		{
+			return true;
+		}
 };
 
 #endif

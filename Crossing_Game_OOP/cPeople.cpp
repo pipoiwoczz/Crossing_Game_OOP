@@ -1,4 +1,16 @@
-﻿#include "setup.h"
+﻿#include "cPeople.h"
+
+cPeople::cPeople() : cEntity({50, 50}) {
+	mState = true;
+}
+cPeople::cPeople(COORD In_pos) : cEntity(In_pos)
+{
+	mState = true;
+}
+cPeople::~cPeople()
+{
+	
+}
 
 void cPeople::draw(COORD pos) {
 	wstring content[3];
@@ -73,7 +85,7 @@ void cPeople::move(char &MOVING) {
 		right();
 	}
 }
-
+/*
 bool cPeople::isImpactOneLion(cLion *lion) {
 	COORD pos = (*lion).getPos();
 	short** lionShapeTemp = (*lion).getHitBoxX();
@@ -116,3 +128,5 @@ bool cPeople::isImpactLion(cLion* lion) {
 	}
 	return false;
 }
+
+*/
