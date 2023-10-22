@@ -11,6 +11,7 @@ int main() {
 
 
 	drawGameTitle();
+	drawMainMenu();
 
 	return 1;
 }
