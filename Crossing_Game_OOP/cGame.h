@@ -33,6 +33,8 @@ class cGame {
 			delete[]people;
 		}
 
+		void gameThread();
+
 		void drawGame();
 
 		void getPeople();
@@ -73,6 +75,8 @@ class cGame {
 		short getGameOrder() {
 			return gameOrder;
 		}
+
+		int getMenuChoice();
 };
 
 #endif

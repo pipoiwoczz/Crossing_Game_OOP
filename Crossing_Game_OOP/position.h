@@ -1,11 +1,11 @@
+#pragma once
 #ifndef position_hpp
 #define position_hpp
 
-class Position
-{
+class Position {
 private:
     int coordX, coordY;
-    
+
 public:
     int getX()
     {
@@ -15,9 +15,9 @@ public:
     {
         return coordY;
     }
-    
-    void getCoordinates (int &x, int &y);
-    void setCoordinates (int x, int y);
+
+    void getCoordinates(int& x, int& y);
+    void setCoordinates(int x, int y);
 };
 
 #endif /* position_hpp */

@@ -14,11 +14,13 @@
 #include <fstream>
 #include <ctime>
 #include <thread>
+#include <wchar.h>
 
 #include "cAnimal.h"
 #include "cVehicle.h"
 #include "cPeople.h"
 #include "cGame.h"
+#include "Graphics.h"
 
 using namespace std;
 
@@ -43,19 +45,14 @@ enum class Color {
 	bright_white = 15,
 };
 
-void clearConsole();
-void setWindowSize(short width, short height);
-void DisableCtrButton(bool Close, bool Min, bool Max);
-void showScrollBar(BOOL Show);
-void hideCursor(bool isHideCursor);
-void fixConsoleWindow();
-void disableUserSelection();
+
+
+int* hexToRGB(int hex);
 void gotoXY(int x, int y);
 
-void textColor(int color);
-void textSize(int size);
 void printCharacter(wstring content, COORD spot, Color textColor, Color backgroundColor, short maxlength = -1);
 void printCenterCharacters(wstring content, Color textColor, Color backgroundColor, short y, SMALL_RECT box, short maxlength = -1);
+void printCharacter2(COORD pos, std::wstring content, int R, int G, int B);
 
 void drawMainMenu(); 
 void drawGame();

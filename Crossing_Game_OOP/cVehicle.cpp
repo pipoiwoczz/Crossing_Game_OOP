@@ -37,3 +37,4 @@ void cMotorbike::draw(COORD pos) {
 		printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::green, Color::bright_white);
 	}
 }
+

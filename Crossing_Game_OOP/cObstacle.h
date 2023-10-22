@@ -2,8 +2,8 @@
 #ifndef _COBSTACLE_H
 #define _COBSTACLE_H
 
-#include "position.hpp"
-#include "hitbox.hpp"
+#include "position.h"
+#include "hitbox.h"
 #include <vector>
 
 using namespace std;

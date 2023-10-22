@@ -6,6 +6,12 @@ void textColor(int color) {
     SetConsoleTextAttribute(mau, color);
 }
 
+
+void fillPixel(wchar_t ch, COORD pos, int color) {
+
+}
+
+
 void gotoXY(int x, int y) {
     static HANDLE h = NULL;
     if (!h)
@@ -14,61 +20,8 @@ void gotoXY(int x, int y) {
     SetConsoleCursorPosition(h, c);
 }
 
-void fixConsoleWindow() {
-    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    GetConsoleScreenBufferInfo(consoleHandle, &csbi);
-    SetConsoleScreenBufferSize(consoleHandle, csbi.dwMaximumWindowSize);
 
-    system("color f0");
 
-    ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
-    HWND consoleWindow = GetConsoleWindow();
-    LONG style = GetWindowLong(consoleWindow, GWL_STYLE);
-    style = style & ~(WS_MAXIMIZEBOX) & ~(WS_THICKFRAME);
-    SetWindowLong(consoleWindow, GWL_STYLE, style);
-
-}
-
-void showScrollBar(BOOL Show) {
-    HWND hWnd = GetConsoleWindow();
-    ShowScrollBar(hWnd, SB_BOTH, Show);
-}
-
-void DisableCtrButton(bool Close, bool Min, bool Max) {
-    HWND hWnd = GetConsoleWindow();
-    HMENU hMenu = GetSystemMenu(hWnd, false);
-
-    if (Close == 1)
-    {
-        DeleteMenu(hMenu, SC_CLOSE, MF_BYCOMMAND);
-    }
-    if (Min == 1)
-    {
-        DeleteMenu(hMenu, SC_MINIMIZE, MF_BYCOMMAND);
-    }
-    if (Max == 1)
-    {
-        DeleteMenu(hMenu, SC_MAXIMIZE, MF_BYCOMMAND);
-    }
-}
-
-void hideCursor(bool isHideCursor) {
-    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-	CONSOLE_CURSOR_INFO info;
-	info.dwSize = 100;
-	info.bVisible = !isHideCursor;
-	SetConsoleCursorInfo(consoleHandle, &info);
-}
-
-void setWindowSize(short width, short height) {
-    HWND console = GetConsoleWindow();
-    RECT r;
-    GetWindowRect(console, &r); //stores the console's current dimensions
-
-    MoveWindow(console, r.left, r.top, width, height, TRUE); 
-
-}
 
 void printCharacter(wstring content, COORD spot, Color textColor, Color backgroundColor, short maxlength) {
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -88,12 +41,7 @@ void printCharacter(wstring content, COORD spot, Color textColor, Color backgrou
     }
 }
 
-void disableUserSelection() {
-    HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
-    DWORD mode = 0;
-    GetConsoleMode(hStdin, &mode);
-    SetConsoleMode(hStdin, mode & (~ENABLE_QUICK_EDIT_MODE));
-}
+
 
 
 void printCenterCharacters(wstring content, Color textColor, Color backgroundColor, short y, SMALL_RECT box, short maxlength) {
@@ -115,41 +63,21 @@ void printCenterCharacters(wstring content, Color textColor, Color backgroundCol
     }
 }
 
-void textSize(int size) {
-    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	PCONSOLE_FONT_INFOEX lpConsoleCurrentFontEx = new CONSOLE_FONT_INFOEX();
-	lpConsoleCurrentFontEx->cbSize = sizeof(CONSOLE_FONT_INFOEX);
-	GetCurrentConsoleFontEx(hStdout, 0, lpConsoleCurrentFontEx);
-	lpConsoleCurrentFontEx->dwFontSize.X = size;
-	lpConsoleCurrentFontEx->dwFontSize.Y = size;
-	SetCurrentConsoleFontEx(hStdout, 0, lpConsoleCurrentFontEx);
-    delete lpConsoleCurrentFontEx;
-}
 
-void clearConsole() {
-    COORD topLeft = { 0, 0 };
-    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_SCREEN_BUFFER_INFO screen;
-    DWORD written;
+void printCharacter(COORD pos, wstring content, int R, int G, int B) {
+    gotoXY(pos.X, pos.Y);
+    CONSOLE_SCREEN_BUFFER_INFOEX info;
+    info.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
 
-    GetConsoleScreenBufferInfo(console, &screen);
-    FillConsoleOutputCharacterA(
-        console, ' ', screen.dwSize.X * screen.dwSize.Y, topLeft, &written
-    );
-    FillConsoleOutputAttribute(
-        console, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE,
-        screen.dwSize.X * screen.dwSize.Y, topLeft, &written
-    );
-    SetConsoleCursorPosition(console, topLeft);
-    system("color f0");
-}
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    GetConsoleScreenBufferInfoEx(hConsole, &info);
 
-void drawMainMenu(){
+    info.ColorTable[15] = RGB(R, G, B);
 
-}
-
-void drawGame() {
-
+    SetConsoleScreenBufferInfoEx(hConsole, &info);
+    SetConsoleTextAttribute(hConsole, 3);
+    wcout << content;
+    info.ColorTable[15] = COLORREF(Color::bright_white);
 }
 
 

@@ -1,4 +1,4 @@
-#include "hitbox.hpp"
+#include "hitbox.h"
 
 bool Hitbox::isOverlap(Hitbox h)
 {
@@ -9,7 +9,7 @@ bool Hitbox::isOverlap(Hitbox h)
         return false;
 }
 
-void Hitbox::getHitbox(Position &topleftGet, Position &botrightGet)
+void Hitbox::getHitbox(Position& topleftGet, Position& botrightGet)
 {
     topleftGet = topleft;
     botrightGet = botright;
