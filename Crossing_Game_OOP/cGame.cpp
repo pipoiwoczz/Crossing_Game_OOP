@@ -25,31 +25,41 @@ void cGame::drawGame() {
 
 
 int cGame::getMenuChoice() {
-	char MOVING;
-	int choice = 1;
+	unsigned char MOVING;
+	int choice = 0;
 	while (true) {
 		cout << choice << endl;
 		drawMainMenu(choice);
 		MOVING = _getch();
+		if (MOVING == 224) {
+			MOVING = _getch();
+			if (MOVING == 'P')
+			{
+				choice = (++choice) % 3;
+			}
+			else if (MOVING == 'H') {
+				choice = (--choice + 3) % 3;
+			}
+		}
 		if (MOVING == 13) {
 			return choice;
 		}
-		if (toupper(MOVING) == 'S' || MOVING == 40) {
-			if (choice == 5) {
-				choice = 1;
-			}
-			else {
-				choice++;
-			}
-		}
-		else if (toupper(MOVING) || MOVING == 38) {
-			if (choice == 1) {
-				choice = 5;
-			}
-			else {
-				choice--;
-			}
-		}
+		//if (toupper(MOVING) == 'S' || MOVING == 40) {
+		//	if (choice == 5) {
+		//		choice = 1;
+		//	}
+		//	else {
+		//		choice++;
+		//	}
+		//}
+		//else if (toupper(MOVING) || MOVING == 38) {
+		//	if (choice == 1) {
+		//		choice = 5;
+		//	}
+		//	else {
+		//		choice--;
+		//	}
+		//}
 	}
 }
 
@@ -80,23 +90,23 @@ void cGame::startGame() {
 	int choice = getMenuChoice();
 	clearConsole();
 	switch (choice) {
-	case 1: 
+	case 0: 
 		// Start new game
 		MainGame();
 		break;
-	case 2:
+	case 1:
 		// Load game
 		//LoadGame();
 		break;
-	case 3:
+	case 2:
 		// Setting
 		//Setting();
 		break;
-	case 4:
+	case 3:
 		// Scoreboard
 		//ScoreBoard();
 		break;
-	case 5:
+	case 4:
 		/*HANDLE t = GetStdHandle(STD_OUTPUT_HANDLE);
 		exitGame(t);*/
 		break;
@@ -120,7 +130,8 @@ void cGame::gameThread() {
 	thread t2(&cGame::threadFunction2, this);*/
 	auto future1 = async(launch::async, &cGame::checkImpactThread, this);
 	auto future2 = async(launch::async, &cGame::drawThread, this);
-	auto future3 = async(launch::async, &cGame::movingThread, this);
+	//auto future3 = async(launch::async, &cGame::movingThread, this);
+	movingThread();
 }
 
 

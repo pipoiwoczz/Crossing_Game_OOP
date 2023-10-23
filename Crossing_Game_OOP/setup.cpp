@@ -158,30 +158,30 @@ void drawMainMenu(int choice)
     Color color[9] = { Color::light_red, Color::light_blue, Color::light_purple, Color::yellow };
     
     drawGameTitle();
-    if (choice == 1) {
-        drawBorder(color[0]);
-        drawPlay(color[3]);
-        drawLoad(color[1]);
-        drawSetting(color[2]);
-    }
-    else if (choice == 2) {
-        drawBorder(color[1]);
-        drawPlay(color[0]);
-        drawLoad(color[3]);
-        drawSetting(color[2]);
-    }
-    else if (choice == 3) {
+    if (choice == 0) {
         drawBorder(color[2]);
         drawPlay(color[0]);
-        drawLoad(color[1]);
+        drawLoad(color[3]);
+        drawSetting(color[1]);
+    }
+    else if (choice == 1) {
+        drawBorder(color[2]);
+        drawPlay(color[1]);
+        drawLoad(color[0]);
         drawSetting(color[3]);
     }
-    else {
-        drawBorder(color[3]);
-        drawPlay(color[0]);
+    else if (choice == 2) {
+        drawBorder(color[2]);
+        drawPlay(color[3]);
         drawLoad(color[1]);
-        drawSetting(color[2]);
+        drawSetting(color[0]);
     }
+    //else {
+    //    drawBorder(color[0]);
+    //    drawPlay(color[0]);
+    //    drawLoad(color[1]);
+    //    drawSetting(color[2]);
+    //}
    
 }
 
