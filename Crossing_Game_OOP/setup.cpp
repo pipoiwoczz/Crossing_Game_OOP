@@ -82,14 +82,14 @@ void printCharacter(COORD pos, wstring content, int R, int G, int B) {
 
 void drawPlay(Color color) {
     wstring content1[8];
-    content1[0] = L"▀███▀▀▀██▄▀████▀         ██     ▀███▀   ▀██▀  ";
-    content1[1] = L"  ██   ▀██▄ ██          ▄██▄      ███   ▄█    ";
-    content1[2] = L"  ██   ▄██  ██         ▄█▀██▄      ███ ▄█     ";
-    content1[3] = L"  ███████   ██        ▄█  ▀██       ████      ";
-    content1[4] = L"  ██        ██     ▄  ████████       ██       ";
-    content1[5] = L"  ██        ██    ▄█ █▀      ██      ██       ";
-    content1[6] = L"▄████▄    █████████████▄   ▄████▄  ▄████▄     ";
-    content1[7] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ";
+    content1[0] = L"▀███▀▀▀██▄▀████▀         ██     ▀███▀   ▀██▀";
+    content1[1] = L"  ██   ▀██▄ ██          ▄██▄      ███   ▄█  ";
+    content1[2] = L"  ██   ▄██  ██         ▄█▀██▄      ███ ▄█   ";
+    content1[3] = L"  ███████   ██        ▄█  ▀██       ████    ";
+    content1[4] = L"  ██        ██     ▄  ████████       ██     ";
+    content1[5] = L"  ██        ██    ▄█ █▀      ██      ██     ";
+    content1[6] = L"▄████▄    █████████████▄   ▄████▄  ▄████▄   ";
+    content1[7] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
 
     for (int i = 0; i < 8; i++) {
         printCenterCharacters(content1[i], color, Color::bright_white, short(25 + i), My_Windows);
@@ -99,14 +99,14 @@ void drawPlay(Color color) {
 
 void drawLoad(Color color) {
     wstring content2[8];
-    content2[0] = L" ▀████▀     ▄▄█▀▀██▄       ██     ▀███▀▀▀██▄    ";
-    content2[1] = L"   ██     ▄██▀    ▀██▄    ▄██▄      ██    ▀██▄  ";
-    content2[2] = L"   ██     ██▀      ▀██   ▄█▀██▄     ██     ▀██  ";
-    content2[3] = L"   ██     ██        ██  ▄█  ▀██     ██      ██  ";
-    content2[4] = L"   ██     ▄█▄      ▄██  ████████    ██     ▄██  ";
-    content2[5] = L"   ██    ▄███▄    ▄██▀ █▀      ██   ██    ▄██▀  ";
-    content2[6] = L" ██████████ ▀▀████▀▀ ▄███▄   ▄████▄████████▀    ";
-    content2[7] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ";
+    content2[0] = L" ▀████▀     ▄▄█▀▀██▄       ██     ▀███▀▀▀██▄  ";
+    content2[1] = L"   ██     ▄██▀    ▀██▄    ▄██▄      ██    ▀██▄";
+    content2[2] = L"   ██     ██▀      ▀██   ▄█▀██▄     ██     ▀██";
+    content2[3] = L"   ██     ██        ██  ▄█  ▀██     ██      ██";
+    content2[4] = L"   ██     ▄█▄      ▄██  ████████    ██     ▄██";
+    content2[5] = L"   ██    ▄███▄    ▄██▀ █▀      ██   ██    ▄██▀";
+    content2[6] = L" ██████████ ▀▀████▀▀ ▄███▄   ▄████▄████████▀  ";
+    content2[7] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
 
 
     for (int i = 0; i < 8; i++) {
@@ -117,20 +117,38 @@ void drawLoad(Color color) {
 
 void drawSetting(Color color) {
     wstring content3[8];
-    content3[0] = L" ▄█▀▀▀█▄████▀▀▀██████▀▀██▀▀█████▀▀██▀▀███████▀███▄   ▀███▀ ▄▄█▀▀▀█▄█ ▄█▀▀▀█▄█    ";
-    content3[1] = L"▄██    ▀█ ██    ▀██▀   ██   ▀█▀   ██   ▀█ ██   ███▄    █ ▄██▀     ▀█▄██    ▀█    ";
-    content3[2] = L"▀███▄     ██   █       ██         ██      ██   █ ███   █ ██▀       ▀▀███▄        ";
-    content3[3] = L"  ▀█████▄ ██████       ██         ██      ██   █  ▀██▄ █ ██           ▀█████▄    ";
-    content3[4] = L"▄     ▀██ ██   █  ▄    ██         ██      ██   █   ▀██▄█ ██▄    ▀████     ▀██    ";
-    content3[5] = L"██     ██ ██     ▄█    ██         ██      ██   █     ███ ▀██▄     ████     ██▀   ";
-    content3[6] = L" █▀█████▀▄██████████  ▄████▄     ▄████▄  ▄████▄███▄    ██   ▀▀████████▀█████▀    ";
-    content3[7] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━   ";
+    content3[0] = L" ▄█▀▀▀█▄████▀▀▀██████▀▀██▀▀█████▀▀██▀▀███████▀███▄   ▀███▀ ▄▄█▀▀▀█▄█ ▄█▀▀▀█▄█ ";
+    content3[1] = L"▄██    ▀█ ██    ▀██▀   ██   ▀█▀   ██   ▀█ ██   ███▄    █ ▄██▀     ▀█▄██    ▀█ ";
+    content3[2] = L"▀███▄     ██   █       ██         ██      ██   █ ███   █ ██▀       ▀▀███▄     ";
+    content3[3] = L"  ▀█████▄ ██████       ██         ██      ██   █  ▀██▄ █ ██           ▀█████▄ ";
+    content3[4] = L"▄     ▀██ ██   █  ▄    ██         ██      ██   █   ▀██▄█ ██▄    ▀████     ▀██ ";
+    content3[5] = L"██     ██ ██     ▄█    ██         ██      ██   █     ███ ▀██▄     ████     ██▀";
+    content3[6] = L" █▀█████▀▄██████████  ▄████▄     ▄████▄  ▄████▄███▄    ██   ▀▀████████▀█████▀ ";
+    content3[7] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
 
 
 
     for (int i = 0; i < 8; i++) {
         printCenterCharacters(content3[i], color, Color::bright_white, short(55 + i), My_Windows);
         Sleep(5);
+    }
+}
+
+void drawBorder(Color color)
+{
+    wstring border[47];
+    border[0] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+    for (int i = 1, count = 0; i < 47; i++) {
+        border[i] = L"｜                                                                                                      ｜";
+        if (i > 10 && i % 15 == 0 && count < 2) {
+            border[i] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+            count++;
+        }
+    }
+    border[46] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+
+    for (int i = 0; i < 47; i++) {
+        printCenterCharacters(border[i], color, Color::bright_white, short(21 + i), My_Windows);
     }
 }
 
@@ -141,21 +159,25 @@ void drawMainMenu(int choice)
     
     drawGameTitle();
     if (choice == 1) {
+        drawBorder(color[0]);
         drawPlay(color[3]);
         drawLoad(color[1]);
         drawSetting(color[2]);
     }
     else if (choice == 2) {
+        drawBorder(color[1]);
         drawPlay(color[0]);
         drawLoad(color[3]);
         drawSetting(color[2]);
     }
     else if (choice == 3) {
+        drawBorder(color[2]);
         drawPlay(color[0]);
         drawLoad(color[1]);
         drawSetting(color[3]);
     }
     else {
+        drawBorder(color[3]);
         drawPlay(color[0]);
         drawLoad(color[1]);
         drawSetting(color[2]);

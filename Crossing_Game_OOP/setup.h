@@ -59,6 +59,7 @@ void printCharacter2(COORD pos, std::wstring content, int R, int G, int B);
 void clearConsole();
 
 void drawMainMenu(int choice); 
+void drawBorder(Color color);
 void drawPlay(Color color);
 void drawLoad(Color color);
 void drawSetting(Color color);
