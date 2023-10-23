@@ -8,11 +8,15 @@ void cLion::draw(COORD pos) {
     content[3] = L"▌▒▓▒▒▒▒▓▒██▌▀▐██";
     content[4] = L"▌▓▐▀▀▀▀▌▓─▀▀▀▀▀";
 
+    
+    
     printCharacter(content[0], { short(pos.X + 1), pos.Y }, Color::yellow, Color::bright_white);
     printCharacter(content[1], { short(pos.X), short(pos.Y + 1) }, Color::yellow, Color::bright_white);
     printCharacter(content[2], { short(pos.X), short(pos.Y + 2) }, Color::yellow, Color::bright_white);
     printCharacter(content[3], { short(pos.X + 1), short(pos.Y + 3) }, Color::yellow, Color::bright_white);
     printCharacter(content[4], { short(pos.X + 1), short(pos.Y + 4) }, Color::yellow, Color::bright_white);
+
+
 }
 
 void cLion::move(COORD pos) {
@@ -30,18 +34,34 @@ void cLion::move(COORD pos) {
     }
 }
 
+void cLion::erase() {
+    for (int i = 18; i >= 0; i--) {
+        for (int j = 0; j < 5; j++) {
+            printCharacter(L" ", { short(lX + i), short(lY + j) }, Color::bright_white, Color::bright_white);
+        }
+        Sleep(1);
+    }
+}
+
 void cLion::move(COORD pos, cLion* lion) {
     int speed = level * 3;
     while (!isStop) {
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 7; j++) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 7; j++) { // num of lions
                 COORD temp = lion[j].getPos();
-                draw(temp);
+                lion[j].draw(temp);
+                // draw Spacing
                 for (int i = 0; i < 5; i++) {
                     printCharacter(L" ", { short(temp.X), short(temp.Y + i) }, Color::bright_white, Color::bright_white);
+                   // printCharacter(L"                    ", { 200, short(temp.Y + i) }, Color::bright_white, Color::bright_white);
+                }
+                
+                if (temp.X >= 200) {
+                    temp.X = -61;
                 }
                 temp.X++;
                 lion[j].setPos(temp);
+                
                 //Sleep(5);
             }
         }

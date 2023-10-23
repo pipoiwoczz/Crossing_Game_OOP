@@ -15,6 +15,8 @@
 #include <ctime>
 #include <thread>
 #include <wchar.h>
+#include <future>
+
 
 #include "cAnimal.h"
 #include "cVehicle.h"
@@ -24,7 +26,7 @@
 
 using namespace std;
 
-const SMALL_RECT My_Windows = { 0, 0, 274, 66 };
+const SMALL_RECT My_Windows = { 0, 0, 384, 99 };
 
 enum class Color {
 	black = 0,
@@ -54,7 +56,12 @@ void printCharacter(wstring content, COORD spot, Color textColor, Color backgrou
 void printCenterCharacters(wstring content, Color textColor, Color backgroundColor, short y, SMALL_RECT box, short maxlength = -1);
 void printCharacter2(COORD pos, std::wstring content, int R, int G, int B);
 
-void drawMainMenu(); 
+void clearConsole();
+
+void drawMainMenu(int choice); 
+void drawPlay(Color color);
+void drawLoad(Color color);
+void drawSetting(Color color);
 void drawGame();
 void drawFrame();
 void drawCharacter(COORD pos);

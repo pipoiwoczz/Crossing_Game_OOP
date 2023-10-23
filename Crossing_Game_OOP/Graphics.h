@@ -9,7 +9,6 @@ class Graphic {
 	
 public:
 	Graphic() {
-		clearConsole();
 		textSize(8);
 		SetConsoleTitle(L"Crossing Road");
 		fixConsoleWindow();
@@ -22,7 +21,6 @@ public:
 	~Graphic() {
 
 	}
-	void clearConsole();
 	void textSize(int);
 	void setWindowSize(short width, short height);
 	void DisableCtrButton(bool Close, bool Min, bool Max);

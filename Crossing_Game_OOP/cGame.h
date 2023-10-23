@@ -14,12 +14,14 @@ class cGame {
 
 	short gameOrder, gameLevel; // order: 1 or 2 player
 	bool isPause, isExit;
-	
+	int map = 0; // map = 1 -> city, map = 2 -> forest, map = 3 -> beach
+	bool isLose = false;
 
 	public:
 		cGame() {
 			gameOrder = 1;
 			gameLevel = 1;
+			map = 0;
 			isPause = false;
 			isExit = false;	
 		}
@@ -34,8 +36,13 @@ class cGame {
 		}
 
 		void gameThread();
+		void checkImpactThread();
+		void drawThread();
+		void movingThread();
+		void getMainMenuActionThread();
 
 		void drawGame();
+		void drawMap();
 
 		void getPeople();
 		void getVehicle();
@@ -50,21 +57,27 @@ class cGame {
 		void stopDrawAnimal() {
 			lion->stop();
 		}
+		void continueDrawAnimal() {
+			lion->next();
+		}
 
 		void resetGame();
 		void exitGame(HANDLE t);
 		void startGame();
 		void loadGame();
 		void saveGame();
-		void pauseGame(HANDLE t);
-		void resumeGame(HANDLE t);
+		void pauseGame();
+		void resumeGame();
 
 		void updatePosPeople(char MOVING) {
-			people->move(MOVING);
+			if (!isPause)
+				people->move(MOVING);
 		}
 		bool isImpact() {
-			if (people->isImpactLion(lion))
+			if (people->isImpactLion(lion)) {
+				isLose = true;
 				return true;
+			}
 			return false;
 		}
 		
@@ -77,6 +90,13 @@ class cGame {
 		}
 
 		int getMenuChoice();
+
+		void ScoreBoard();
+		void MainGame();
+		void LoadGame();
+		void Setting();
+		void GameOver();
+		void GameWin();
 };
 
 #endif

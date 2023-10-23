@@ -19,7 +19,8 @@ void cGame::getLion() {
 
 void cGame::drawGame() {
 	drawGameTitle();
-	lion->move(lion[0].getPos(), lion);
+	if (!isPause)
+		lion->move(lion[0].getPos(), lion);
 }
 
 
@@ -27,9 +28,13 @@ int cGame::getMenuChoice() {
 	char MOVING;
 	int choice = 1;
 	while (true) {
-		// drawMainMenu(choice);
-		MOVING = toupper(_getch());
-		if (MOVING == 'S' || MOVING == 40) {
+		cout << choice << endl;
+		drawMainMenu(choice);
+		MOVING = _getch();
+		if (MOVING == 13) {
+			return choice;
+		}
+		if (toupper(MOVING) == 'S' || MOVING == 40) {
 			if (choice == 5) {
 				choice = 1;
 			}
@@ -37,7 +42,7 @@ int cGame::getMenuChoice() {
 				choice++;
 			}
 		}
-		else if (MOVING == 'W' || MOVING == 38) {
+		else if (toupper(MOVING) || MOVING == 38) {
 			if (choice == 1) {
 				choice = 5;
 			}
@@ -48,28 +53,142 @@ int cGame::getMenuChoice() {
 	}
 }
 
-void cGame::startGame() {
-	// create mainmenu with option
-	// drawMainMenu(1)
-	int choice = getMenuChoice();
-	
-	switch (choice) {
-	case 1: 
-		// Start new game
+void cGame::drawMap() {
+	switch (gameLevel) {
+	case 1:
 		break;
 	case 2:
-		// Load game
 		break;
 	case 3:
-		// Setting
 		break;
 	case 4:
-		// Scoreboard
 		break;
 	case 5:
-		// Exit game
+		break;
+	case 6:
+		break;
+	case 7:
 		break;
 	default:
 		break;
 	}
+}
+
+void cGame::startGame() {
+	// create mainmenu with option
+	system("cls");
+	int choice = getMenuChoice();
+	clearConsole();
+	switch (choice) {
+	case 1: 
+		// Start new game
+		MainGame();
+		break;
+	case 2:
+		// Load game
+		//LoadGame();
+		break;
+	case 3:
+		// Setting
+		//Setting();
+		break;
+	case 4:
+		// Scoreboard
+		//ScoreBoard();
+		break;
+	case 5:
+		/*HANDLE t = GetStdHandle(STD_OUTPUT_HANDLE);
+		exitGame(t);*/
+		break;
+	default:
+		break;
+	}
+}
+
+void cGame::MainGame() {
+	drawMap();
+	
+	getPeople();
+	getLion();
+	
+	gameThread();
+	
+}
+
+void cGame::gameThread() {
+	/*thread t1(&cGame::threadFunction1, this);
+	thread t2(&cGame::threadFunction2, this);*/
+	auto future1 = async(launch::async, &cGame::checkImpactThread, this);
+	auto future2 = async(launch::async, &cGame::drawThread, this);
+	auto future3 = async(launch::async, &cGame::movingThread, this);
+}
+
+
+void cGame::checkImpactThread() {
+	while (true) {
+		if (isImpact()) {
+			break;
+		}
+	}
+	stopDrawAnimal();
+	drawLosingTitle();
+}
+
+void cGame::drawThread() {
+	while (!isLose) {
+		drawGame();
+	}
+}
+
+void cGame::movingThread() {
+	char MOVING;
+	while (true) {
+		MOVING = toupper(_getch());
+		if (MOVING == 'P') {
+			pauseGame();
+		}
+		else if (MOVING == 'R') {
+			resumeGame();
+		}
+		else if (MOVING == 'L') {
+			//loadGame();
+		}
+		else if (MOVING == 'O') {
+			//saveGame();
+		}
+		else if (MOVING == 27) {
+			//exitGame(t);
+		}
+		else {
+			updatePosPeople(MOVING);
+		}
+	}
+}
+
+void cGame::pauseGame() {
+	// draw pause game box
+	isPause = true;
+	stopDrawAnimal();
+}
+
+void cGame::resumeGame() {
+	// draw a box to count down 3 sec 
+	isPause = false;
+	continueDrawAnimal();
+}
+
+void cGame::saveGame() {
+	pauseGame();
+
+	ifstream ifs;
+
+	// draw a mini box in center as an input field
+	// user input save name <= 20 characters
+	// check this save name exist before or not
+	// => enter save name again or save successfully
+	// press ESC to exit save menu
+
+	ifs.close();
+
+	resumeGame();
 }

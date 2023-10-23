@@ -36,6 +36,7 @@ class cLion : public cAnimal {
 
 		}
 		void draw(COORD pos);
+		void erase();
 		COORD getPos() {
 			return { short(lX), short(lY) };
 		}
@@ -51,6 +52,9 @@ class cLion : public cAnimal {
 		void move(COORD pos, cLion* lion);
 		void stop() {
 			isStop = true;
+		}
+		void next() {
+			isStop = false;
 		}
 };
 

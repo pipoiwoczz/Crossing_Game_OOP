@@ -80,10 +80,7 @@ void printCharacter(COORD pos, wstring content, int R, int G, int B) {
     info.ColorTable[15] = COLORREF(Color::bright_white);
 }
 
-
-void drawMainMenu()
-{
-
+void drawPlay(Color color) {
     wstring content1[8];
     content1[0] = L"▀███▀▀▀██▄▀████▀         ██     ▀███▀   ▀██▀  ";
     content1[1] = L"  ██   ▀██▄ ██          ▄██▄      ███   ▄█    ";
@@ -94,12 +91,13 @@ void drawMainMenu()
     content1[6] = L"▄████▄    █████████████▄   ▄████▄  ▄████▄     ";
     content1[7] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ";
 
-    Color color[9] = { Color::light_red, Color::light_blue, Color::light_purple };
     for (int i = 0; i < 8; i++) {
-        printCenterCharacters(content1[i], color[0], Color::bright_white, short(15 + i), My_Windows);
+        printCenterCharacters(content1[i], color, Color::bright_white, short(25 + i), My_Windows);
+        Sleep(5);
     }
+}
 
-
+void drawLoad(Color color) {
     wstring content2[8];
     content2[0] = L" ▀████▀     ▄▄█▀▀██▄       ██     ▀███▀▀▀██▄    ";
     content2[1] = L"   ██     ▄██▀    ▀██▄    ▄██▄      ██    ▀██▄  ";
@@ -112,10 +110,12 @@ void drawMainMenu()
 
 
     for (int i = 0; i < 8; i++) {
-        printCenterCharacters(content2[i], color[1], Color::bright_white, short(30 + i), My_Windows);
+        printCenterCharacters(content2[i], color, Color::bright_white, short(40 + i), My_Windows);
+        Sleep(5);
     }
+}
 
-
+void drawSetting(Color color) {
     wstring content3[8];
     content3[0] = L" ▄█▀▀▀█▄████▀▀▀██████▀▀██▀▀█████▀▀██▀▀███████▀███▄   ▀███▀ ▄▄█▀▀▀█▄█ ▄█▀▀▀█▄█    ";
     content3[1] = L"▄██    ▀█ ██    ▀██▀   ██   ▀█▀   ██   ▀█ ██   ███▄    █ ▄██▀     ▀█▄██    ▀█    ";
@@ -124,13 +124,43 @@ void drawMainMenu()
     content3[4] = L"▄     ▀██ ██   █  ▄    ██         ██      ██   █   ▀██▄█ ██▄    ▀████     ▀██    ";
     content3[5] = L"██     ██ ██     ▄█    ██         ██      ██   █     ███ ▀██▄     ████     ██▀   ";
     content3[6] = L" █▀█████▀▄██████████  ▄████▄     ▄████▄  ▄████▄███▄    ██   ▀▀████████▀█████▀    ";
-    content2[7] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━   ";
+    content3[7] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━   ";
 
 
 
     for (int i = 0; i < 8; i++) {
-        printCenterCharacters(content3[i], color[2], Color::bright_white, short(45 + i), My_Windows);
+        printCenterCharacters(content3[i], color, Color::bright_white, short(55 + i), My_Windows);
+        Sleep(5);
     }
+}
+
+void drawMainMenu(int choice)
+{
+
+    Color color[9] = { Color::light_red, Color::light_blue, Color::light_purple, Color::yellow };
+    
+    drawGameTitle();
+    if (choice == 1) {
+        drawPlay(color[3]);
+        drawLoad(color[1]);
+        drawSetting(color[2]);
+    }
+    else if (choice == 2) {
+        drawPlay(color[0]);
+        drawLoad(color[3]);
+        drawSetting(color[2]);
+    }
+    else if (choice == 3) {
+        drawPlay(color[0]);
+        drawLoad(color[1]);
+        drawSetting(color[3]);
+    }
+    else {
+        drawPlay(color[0]);
+        drawLoad(color[1]);
+        drawSetting(color[2]);
+    }
+   
 }
 
 void drawFrame() {
@@ -225,4 +255,23 @@ void drawLosingTitle() {
     for (int i = 0; i < 6; i++) {
         printCenterCharacters(content[i], Color::red, Color::bright_white, 8 + i, My_Windows);
     }
+}
+
+
+void clearConsole() {
+    COORD topLeft = { 0, 0 };
+    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO screen;
+    DWORD written;
+
+    GetConsoleScreenBufferInfo(console, &screen);
+    FillConsoleOutputCharacterA(
+        console, ' ', screen.dwSize.X * screen.dwSize.Y, topLeft, &written
+    );
+    FillConsoleOutputAttribute(
+        console, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE,
+        screen.dwSize.X * screen.dwSize.Y, topLeft, &written
+    );
+    SetConsoleCursorPosition(console, topLeft);
+    system("color f0");
 }

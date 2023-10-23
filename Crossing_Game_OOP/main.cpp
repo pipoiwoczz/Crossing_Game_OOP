@@ -7,11 +7,12 @@ bool isRunningDrawGame = true;
 
 int main() {
 	system("cls");
+	clearConsole();
 	Graphic graphic = Graphic();
 
+	cg.startGame();
 
 	drawGameTitle();
-	drawMainMenu();
 
 	return 1;
 }
