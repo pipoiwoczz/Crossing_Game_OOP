@@ -402,3 +402,5 @@ FodyWeavers.xsd
 *.VC.db-wal
 *.VC.db-shm
 .DS_Store
+/.vs/Crossing_Game_OOP/v17/Browse.VC.db-shm
+/.vs/Crossing_Game_OOP/v17/Browse.VC.db
