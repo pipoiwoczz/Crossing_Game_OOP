@@ -41,6 +41,13 @@ int cGame::getMenuChoice() {
 				choice = (--choice + 3) % 3;
 			}
 		}
+		else if (toupper(MOVING) == 'W') {
+			choice = (--choice + 3) % 3;
+		}
+		else if (toupper(MOVING) == 'S') {
+			choice = (++choice) % 3;
+		}
+		
 		if (MOVING == 13) {
 			return choice;
 		}

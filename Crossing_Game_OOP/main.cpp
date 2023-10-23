@@ -9,7 +9,7 @@ int main() {
 	system("cls");
 	clearConsole();
 	Graphic graphic = Graphic();
-	drawGameTitle();
+	//drawGameTitle();
 	cg.startGame();
 
 	

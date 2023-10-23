@@ -43,7 +43,7 @@ void Graphic::fixConsoleWindow() {
     GetConsoleScreenBufferInfo(consoleHandle, &csbi);
     SetConsoleScreenBufferSize(consoleHandle, csbi.dwMaximumWindowSize);
 
-    system("color f0");
+    //system("color f0");
 
     ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
     HWND consoleWindow = GetConsoleWindow();

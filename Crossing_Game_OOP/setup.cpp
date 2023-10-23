@@ -64,7 +64,7 @@ void printCenterCharacters(wstring content, Color textColor, Color backgroundCol
 }
 
 
-void printCharacter(COORD pos, wstring content, int R, int G, int B) {
+void printCharacter2(COORD pos, wstring content, int R, int G, int B) {
     gotoXY(pos.X, pos.Y);
     CONSOLE_SCREEN_BUFFER_INFOEX info;
     info.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
@@ -93,7 +93,6 @@ void drawPlay(Color color) {
 
     for (int i = 0; i < 8; i++) {
         printCenterCharacters(content1[i], color, Color::bright_white, short(25 + i), My_Windows);
-        Sleep(5);
     }
 }
 
@@ -111,7 +110,6 @@ void drawLoad(Color color) {
 
     for (int i = 0; i < 8; i++) {
         printCenterCharacters(content2[i], color, Color::bright_white, short(40 + i), My_Windows);
-        Sleep(5);
     }
 }
 
@@ -130,25 +128,41 @@ void drawSetting(Color color) {
 
     for (int i = 0; i < 8; i++) {
         printCenterCharacters(content3[i], color, Color::bright_white, short(55 + i), My_Windows);
-        Sleep(5);
     }
 }
 
 void drawBorder(Color color)
 {
-    wstring border[47];
-    border[0] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
-    for (int i = 1, count = 0; i < 47; i++) {
-        border[i] = L"｜                                                                                                      ｜";
-        if (i > 10 && i % 15 == 0 && count < 2) {
-            border[i] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
-            count++;
-        }
-    }
-    border[46] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+    wstring border[3];
+    border[0] = L"┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓";
+    border[1] = L"┠━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫";
+    border[2] = L"┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛";
 
-    for (int i = 0; i < 47; i++) {
-        printCenterCharacters(border[i], color, Color::bright_white, short(21 + i), My_Windows);
+    printCenterCharacters(border[0], color, Color::bright_white, short(21), My_Windows);
+    printCenterCharacters(border[1], color, Color::bright_white, short(21 + 15), My_Windows);
+    printCenterCharacters(border[1], color, Color::bright_white, short(21 + 30), My_Windows);
+    printCenterCharacters(border[2], color, Color::bright_white, short(21 + 45), My_Windows);
+
+    short centerX = (short(My_Windows.Left) + short(My_Windows.Right)) / 2;
+
+    for (int i = 0; i < 46; i++) {
+        if (i == 0 || i == 15 || i == 30 || i == 45) {
+            continue;
+        }
+        printCharacter(L"┃", { short(centerX - short(105 / 2)), short(i + 21) }, color, Color::bright_white);
+        printCharacter(L"┃", { short(centerX + short(105 / 2)), short(i + 21) }, color, Color::bright_white);
+	}
+}
+
+void drawLine(int y) {
+    wstring line = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+    printCenterCharacters(line, Color::light_green, Color::bright_white, short(y), My_Windows);
+}
+
+void eraseLine() {
+    wstring line = L"                                                                        ";
+    for (int i = 0; i < 3; i++) {
+        printCenterCharacters(line, Color::bright_white, Color::bright_white, short(34 + 15*i), My_Windows);
     }
 }
 
@@ -157,24 +171,30 @@ void drawMainMenu(int choice)
 
     Color color[9] = { Color::light_red, Color::light_blue, Color::light_purple, Color::yellow };
     
+    short yLine = 34;
+
     drawGameTitle();
+    drawBorder(color[2]);
     if (choice == 0) {
-        drawBorder(color[2]);
-        drawPlay(color[0]);
-        drawLoad(color[3]);
+        eraseLine();
+        drawLine(yLine);
+        drawPlay(color[3]);
+        drawLoad(color[2]);
         drawSetting(color[1]);
     }
     else if (choice == 1) {
-        drawBorder(color[2]);
-        drawPlay(color[1]);
-        drawLoad(color[0]);
-        drawSetting(color[3]);
+        eraseLine();
+        drawLine(yLine + 15);
+        drawPlay(color[0]);
+        drawLoad(color[3]);
+        drawSetting(color[2]);
     }
     else if (choice == 2) {
-        drawBorder(color[2]);
-        drawPlay(color[3]);
+        eraseLine();
+        drawLine(yLine + 30);
+        drawPlay(color[0]);
         drawLoad(color[1]);
-        drawSetting(color[0]);
+        drawSetting(color[3]);
     }
     //else {
     //    drawBorder(color[0]);
