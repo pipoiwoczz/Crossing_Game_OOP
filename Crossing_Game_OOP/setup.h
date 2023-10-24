@@ -1,4 +1,4 @@
-#pragma once
+	#pragma once
 #ifndef _SETUP_H
 #define _SETUP_H
 #define _CRT_SECURE_NO_WARNINGS
@@ -26,7 +26,7 @@
 
 using namespace std;
 
-const SMALL_RECT My_Windows = { 0, 0, 384, 99 };
+
 
 enum class Color {
 	black = 0,

@@ -1,5 +1,7 @@
 #include "setup.h"
 
+SMALL_RECT My_Windows = { 0, 0, 0, 0 };
+
 void Graphic::textSize(int size) {
     HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     PCONSOLE_FONT_INFOEX lpConsoleCurrentFontEx = new CONSOLE_FONT_INFOEX();
@@ -40,10 +42,8 @@ void Graphic::setWindowSize(short width, short height) {
 void Graphic::fixConsoleWindow() {
     HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO csbi;
-    GetConsoleScreenBufferInfo(consoleHandle, &csbi);
-    SetConsoleScreenBufferSize(consoleHandle, csbi.dwMaximumWindowSize);
 
-    system("color f0");
+    
 
     ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
     HWND consoleWindow = GetConsoleWindow();
@@ -51,6 +51,12 @@ void Graphic::fixConsoleWindow() {
     style = style & ~(WS_MAXIMIZEBOX) & ~(WS_THICKFRAME);
     SetWindowLong(consoleWindow, GWL_STYLE, style);
 
+    GetConsoleScreenBufferInfo(consoleHandle, &csbi);
+    SetConsoleScreenBufferSize(consoleHandle, csbi.dwMaximumWindowSize);
+    My_Windows.Bottom = csbi.srWindow.Bottom;
+    My_Windows.Right = csbi.srWindow.Right;
+
+    system("color f0");
 }
 
 void Graphic::showScrollBar(BOOL Show) {

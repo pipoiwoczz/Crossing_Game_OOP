@@ -4,7 +4,7 @@
 
 #include "setup.h"
 #include <corecrt_wstring.h>
-
+extern SMALL_RECT My_Windows;
 class Graphic {
 	
 public:

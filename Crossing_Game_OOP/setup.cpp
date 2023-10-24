@@ -22,7 +22,6 @@ void gotoXY(int x, int y) {
 
 
 
-
 void printCharacter(wstring content, COORD spot, Color textColor, Color backgroundColor, short maxlength) {
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     DWORD Written;
