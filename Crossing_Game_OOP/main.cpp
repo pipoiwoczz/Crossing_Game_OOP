@@ -11,8 +11,8 @@ int main() {
 	Graphic graphic = Graphic();
 	//drawGameTitle();
 	//cg.startGame();
-	
-	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	//HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	//system("color 30");
 
