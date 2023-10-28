@@ -1,21 +1,17 @@
 ﻿#include "setup.h"
 
 void cPeople::draw(COORD pos) {
-	wstring content[3];
-	printCharacter(L"     ", {short (pos.X), short(pos.Y - 1)}, Color::bright_white, Color::bright_white);
-	printCharacter(L"     ", { short(pos.X), short(pos.Y + 3) }, Color::bright_white, Color::bright_white);
-	for (int i = 0; i < 3; i++) {
-		if (i == 0) {
-			printCharacter(L"     ", pos, Color::green, Color::green);
-		}
-		if (i == 1) {
-			printCharacter(L"     ", { pos.X, short(pos.Y + 1) }, Color::black, Color::green);
-			printCharacter(L" ", { short(pos.X + 1), short(pos.Y + 1) }, Color::black, Color::black);
-			printCharacter(L" ", { short(pos.X + 3), short(pos.Y + 1) }, Color::black, Color::black);
-		}
-		else if (i == 2) {
-			printCharacter(L"     ", { pos.X, short(pos.Y + 2) }, Color::green, Color::green);
-		}
+	wstring content[4];
+	content[0] = L"    ▀    ";
+	content[1] = L"  ▄███▄  ";
+	content[2] = L" ▀ ███ ▀ ";
+	content[3] = L"  ▄█ █▄  ";
+	printCharacter(L"         ", {short (pos.X), short(pos.Y - 1)}, Color::bright_white, Color::bright_white);
+	printCharacter(L"         ", { short(pos.X), short(pos.Y + 4) }, Color::bright_white, Color::bright_white);
+	printCharacter(L"         ", { short(pos.X+1), short(pos.Y + 2) }, Color::bright_white, Color::bright_white);
+
+	for (int i = 0; i < 4; i++) {
+		printCharacter(content[i], { pos.X, short(pos.Y + i) }, Color::gray, Color::bright_white);
 	}
 }
 

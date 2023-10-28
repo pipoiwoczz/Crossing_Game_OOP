@@ -2,19 +2,17 @@
 
 void cLion::draw(COORD pos) {
     wstring content[5];
-    content[0] = L"▄▀▀▀▀▀───▄█▀▀▀█▄";
-    content[1] = L"▐▄▄▄▄▄▄▄▄██▌▀▄▀▐██";
-    content[2] = L"▐▒▒▒▒▒▒▒▒███▌▀▐███";
-    content[3] = L"▌▒▓▒▒▒▒▓▒██▌▀▐██";
-    content[4] = L"▌▓▐▀▀▀▀▌▓─▀▀▀▀▀";
+    content[0] = L"         ▄▓▓▓▓▓▄";
+    content[1] = L" ▂▄██████▓▓▀▄▀▓▓";
+    content[2] = L"▕ ███████▓▓▄█▄▓▓";
+    content[3] = L"▕ ████████▓▓▓▓▓";
+    content[4] = L" ▀ ▓█▄   ██▀▀▀";
+    
 
-    
-    
-    printCharacter(content[0], { short(pos.X + 1), pos.Y }, Color::yellow, Color::bright_white);
-    printCharacter(content[1], { short(pos.X), short(pos.Y + 1) }, Color::yellow, Color::bright_white);
-    printCharacter(content[2], { short(pos.X), short(pos.Y + 2) }, Color::yellow, Color::bright_white);
-    printCharacter(content[3], { short(pos.X + 1), short(pos.Y + 3) }, Color::yellow, Color::bright_white);
-    printCharacter(content[4], { short(pos.X + 1), short(pos.Y + 4) }, Color::yellow, Color::bright_white);
+
+    for (int i = pos.Y; i < pos.Y + 5; i++) {
+        printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::yellow, Color::bright_white);
+    }
 
 
 }
@@ -91,15 +89,16 @@ short** cLion::getHitBoxX() {
 
 void cRhino::draw(COORD pos) {
     wstring content[5];
-    content[0] = L"░░░░░░░░░░░░▄░░▄░▀█▄░░";
-    content[1] = L"░░▄████████▄██▄██▄██░░";
-    content[2] = L"░░█████████████▄████▌░";
-    content[3] = L"░░▌████████████▀▀▀▀▀░░";
-    content[4] = L"▒▀▒▐█▄▐█▄▐█▄▐█▄▒░▒░▒░▒";
+    content[0] = L"             ▄▄  ";
+    content[1] = L"▂▄███████▄█▄█▄██ ";
+    content[2] = L"▎██████████▀█████";
+    content[3] = L"▀ ███████████▀▀▀ ";
+    content[4] = L"   ▓█▄   ▓█▄     ";
     for (int i = pos.Y; i < pos.Y + 5; i++) {
         printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::green, Color::bright_white);
     }
 }
+
 
 void cRhino::move(short y) {
     int speed = level * 3;
@@ -117,13 +116,12 @@ void cRhino::move(short y) {
 }
 
 void cCrocodile::draw(COORD pos) {
-    wstring content[5];
-    content[0] = L"░░░░░▄▄▄▄▄░▄░▄░▄░▄";
-    content[1] = L"▄▄▄▄██▄████▀█▀█▀█▀██▄";
-    content[2] = L"▀▄▀▄▀▄████▄█▄█▄█▄█████";
-    content[3] = L"▒▀▀▀▀▀▀▀▀██▀▀▀▀██▀▒▄██";
-    content[4] = L"▒▒▒▒▒▒▒▒▀▀▒▒▒▒▀▀▄▄██▀▒";
-    for (int i = pos.Y; i < pos.Y + 5; i++) {
+    wstring content[4];
+    content[0] = L"            ▄ ▄ ▄  ▄▄ ▄▄       ";
+    content[1] = L"▀▄▄    ▄▄▄██████████▄██▄█▀█▀█▀█";
+    content[2] = L"  ▀▀██████████████████████▄█▄█ ";
+    content[3] = L"           ▀█▄▀▄  ▀█▄▀█▄       ";
+    for (int i = pos.Y; i < pos.Y + 4; i++) {
         printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::green, Color::bright_white);
     }
 }
