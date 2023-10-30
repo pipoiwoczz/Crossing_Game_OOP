@@ -6,8 +6,17 @@ cEntity::cEntity(COORD In_pos) {
 cEntity::~cEntity() {
 
 }
-bool cEntity::collide(cEntity anotherHitbox) {
-    return true;
+bool cEntity::collide(cEntity anotherEntity)
+{
+    for (Hitbox hitboxEntity1 : hitboxes)
+    {
+        for (Hitbox hitboxEntity2 : anotherEntity.hitboxes)
+        {
+            if (hitboxEntity1.isOverlap(hitboxEntity2))
+                return true;
+        }
+    }
+    return false;
 }
 
 COORD cEntity::getPos()
