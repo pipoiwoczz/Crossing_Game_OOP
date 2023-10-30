@@ -1,5 +1,19 @@
 #include "cObstacle.h"
 
+cObstacle::cObstacle(COORD In_pos, int difficulty, int ttm) {
+    center = In_pos;
+    speed = difficulty;
+    timeUntilMove = ttm;
+}
+
+COORD cObstacle::getPos() {
+    return center;
+}
+
+void cObstacle::setPos(COORD new_Pos) {
+    center = new_Pos;
+}
+
 bool cObstacle::collide(Hitbox h)
 {
     for (Hitbox check : boxes)
@@ -7,3 +21,35 @@ bool cObstacle::collide(Hitbox h)
             return true;
     return false;
 }
+
+void cObstacle::advanceTime(int time) {
+
+}
+
+void cObstacle::draw() {
+    COORD drawInit = { center.X - center.X / 2, center.Y - center.Y / 2 };
+    for (int i = 0; i < texture.size(); i++) {
+        printCharacter(texture[i], drawInit, Color::yellow, Color::bright_white);
+        drawInit.Y++;
+    }
+}
+
+void cObstacle::erase() {
+    COORD eraseInit = { center.X - center.X / 2, center.Y - center.Y / 2 };
+    for (int i = 0; i < texture.size(); i++) {
+        wstring blank(texture[i].length(), '\0');
+        printCharacter(blank, eraseInit, Color::bright_white, Color::bright_white);
+        eraseInit.Y++;
+    }   
+}
+
+void cObstacle::move() {
+    erase();
+    center.X += 1;
+    for (auto box : boxes) {
+        box.move(1, 0);
+    }
+    draw();
+}
+ 
+

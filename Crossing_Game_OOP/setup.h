@@ -1,4 +1,3 @@
-	#pragma once
 #ifndef _SETUP_H
 #define _SETUP_H
 #define _CRT_SECURE_NO_WARNINGS
@@ -18,11 +17,7 @@
 #include <future>
 
 
-#include "cAnimal.h"
-#include "cVehicle.h"
-#include "cPeople.h"
-#include "cGame.h"
-#include "Graphics.h"
+
 
 using namespace std;
 

@@ -1,4 +1,5 @@
 #include "setup.h"
+#include"Graphics.h"
 
 SMALL_RECT My_Windows = { 0, 0, 0, 0 };
 

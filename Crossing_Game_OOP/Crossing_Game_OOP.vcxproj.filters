@@ -74,5 +74,11 @@
     <ClCompile Include="position.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cAsset.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cAsset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

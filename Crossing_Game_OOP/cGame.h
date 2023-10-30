@@ -1,7 +1,8 @@
-#pragma once
 #ifndef _CGAME_H
 #define _CGAME_H
-#include "setup.h"
+#include "cAnimal.h"
+#include "cVehicle.h"
+#include "cPeople.h"
 
 class cGame {
 	cTruck *truck;
@@ -58,7 +59,7 @@ class cGame {
 			lion->stop();
 		}
 		void continueDrawAnimal() {
-			lion->next();
+			lion->resume();
 		}
 
 		void resetGame();
@@ -73,13 +74,13 @@ class cGame {
 			if (!isPause)
 				people->move(MOVING);
 		}
-		bool isImpact() {
-			if (people->isImpactLion(lion)) {
-				isLose = true;
-				return true;
-			}
-			return false;
-		}
+		//bool isImpact() {
+		//	if (people->isImpactLion(lion)) {
+		//		isLose = true;
+		//		return true;
+		//	}
+		//	return false;
+		//}
 		
 
 		void updatePosVehicle();

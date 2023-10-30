@@ -1,4 +1,4 @@
-#include "setup.h"
+#include "cGame.h"
 
 void cGame::getPeople() {
 	short numOfPlayer = getGameOrder();
@@ -20,7 +20,7 @@ void cGame::getLion() {
 void cGame::drawGame() {
 	drawGameTitle();
 	if (!isPause)
-		lion->move(lion[0].getPos(), lion);
+		lion->move();
 }
 
 
@@ -135,22 +135,22 @@ void cGame::MainGame() {
 void cGame::gameThread() {
 	/*thread t1(&cGame::threadFunction1, this);
 	thread t2(&cGame::threadFunction2, this);*/
-	auto future1 = async(launch::async, &cGame::checkImpactThread, this);
-	auto future2 = async(launch::async, &cGame::drawThread, this);
+	//auto future1 = async(launch::async, &cGame::checkImpactThread, this);
+	//auto future2 = async(launch::async, &cGame::drawThread, this);
 	//auto future3 = async(launch::async, &cGame::movingThread, this);
 	movingThread();
 }
 
 
-void cGame::checkImpactThread() {
-	while (true) {
-		if (isImpact()) {
-			break;
-		}
-	}
-	stopDrawAnimal();
-	drawLosingTitle();
-}
+//void cGame::checkImpactThread() {
+//	while (true) {
+//		if (isImpact()) {
+//			break;
+//		}
+//	}
+//	stopDrawAnimal();
+//	drawLosingTitle();
+//}
 
 void cGame::drawThread() {
 	while (!isLose) {
