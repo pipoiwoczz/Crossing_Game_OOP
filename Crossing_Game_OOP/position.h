@@ -1,6 +1,6 @@
 #pragma once
-#ifndef position_hpp
-#define position_hpp
+#ifndef position_h
+#define position_h
 
 class Position {
 private:

@@ -1,17 +1,20 @@
-#pragma once
-#ifndef hitbox_hpp
-#define hitbox_hpp
+#ifndef hitbox_h
+#define hitbox_h
 
-#include "position.h"
+#include "setup.h"
+class cObstacle;
+class cPeople;
 
 class Hitbox
 {
 private:
-    Position topleft;
-    Position botright;
+    COORD topleft;
+    COORD botright;
 
 public:
-    void getHitbox(Position& topleftGet, Position& botrightGet);
+    friend cObstacle;
+    friend cPeople;
+    void getHitbox(COORD& topleftGet, COORD& botrightGet);
     void move(const int move_x, const int move_y);
     bool isOverlap(Hitbox h);
 };

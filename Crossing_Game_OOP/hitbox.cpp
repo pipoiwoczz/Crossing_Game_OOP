@@ -2,14 +2,14 @@
 
 bool Hitbox::isOverlap(Hitbox h)
 {
-    if (h.topleft.getX() <= botright.getX() && h.botright.getX() >= topleft.getX()
-        && h.topleft.getY() <= botright.getY() && h.botright.getY() >= topleft.getY())
+    if (h.topleft.X<= botright.X && h.botright.X >= topleft.X
+        && h.topleft.Y <= botright.Y && h.botright.Y >= topleft.Y)
         return true;
     else
         return false;
 }
 
-void Hitbox::getHitbox(Position& topleftGet, Position& botrightGet)
+void Hitbox::getHitbox(COORD& topleftGet, COORD& botrightGet)
 {
     topleftGet = topleft;
     botrightGet = botright;
@@ -17,6 +17,6 @@ void Hitbox::getHitbox(Position& topleftGet, Position& botrightGet)
 
 void Hitbox::move(const int move_x, const int move_y)
 {
-    topleft.setCoordinates(topleft.getX() + move_x, topleft.getY() + move_y);
-    botright.setCoordinates(botright.getX() + move_x, botright.getY() + move_y);
+    topleft = { short(topleft.X + move_x), short(topleft.Y + move_y) };
+    botright = { short(botright.X + move_x), short(botright.Y + move_y) };
 }
