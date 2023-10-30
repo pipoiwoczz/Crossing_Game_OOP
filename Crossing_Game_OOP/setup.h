@@ -1,4 +1,4 @@
-#ifndef _SETUP_H
+﻿#ifndef _SETUP_H
 #define _SETUP_H
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -44,12 +44,11 @@ enum class Color {
 
 
 
-int* hexToRGB(int hex);
 void gotoXY(int x, int y);
 
 void printCharacter(wstring content, COORD spot, Color textColor, Color backgroundColor, short maxlength = -1);
+void printCharacter2(wstring content, COORD spot, Color textColor, Color backgroundColor, short maxlength = -1);
 void printCenterCharacters(wstring content, Color textColor, Color backgroundColor, short y, SMALL_RECT box, short maxlength = -1);
-void printCharacter2(COORD pos, std::wstring content, int R, int G, int B);
 
 void clearConsole();
 
@@ -58,11 +57,8 @@ void drawBorder(Color color);
 void drawPlay(Color color);
 void drawLoad(Color color);
 void drawSetting(Color color);
-void drawGame();
-void drawFrame();
-void drawCharacter(COORD pos);
 void drawGameTitle();
 void drawLosingTitle();
-void moveTestting();
+
 
 #endif

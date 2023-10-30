@@ -39,4 +39,10 @@ public:
 	}
 };
 
+//class lion : cObstacle {
+//	
+//};
+
+
+
 #endif

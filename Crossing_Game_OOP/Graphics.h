@@ -9,7 +9,7 @@ extern SMALL_RECT My_Windows;
 class Graphic {
 public:
 	Graphic() {
-		textSize(8);
+		textSize(6);
 		SetConsoleTitle(L"Crossing Road");
 		fixConsoleWindow();
 		showScrollBar(false);
