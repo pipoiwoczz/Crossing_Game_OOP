@@ -1,42 +1,52 @@
+#pragma once
 #ifndef _CVEHICLE_H
 #define _CVEHICLE_H
-#include "cObstacle.h"
+#include "setup.h"
 
-class cVehicle: public cObstacle {
-public:
-	cVehicle(COORD In_pos, int difficulty, int ttm) : cObstacle(In_pos, difficulty, ttm) {
-	}
+class cVehicle {
+	int mX, mY;
+	public:
+		cVehicle() {
 
-	virtual void playSound() {
+		}
+		~cVehicle() {
 
-	}
+		}
+		void move();
 };
 
-class cTruck : public cVehicle {
-public:
-	cTruck();
-	cTruck(COORD In_pos, int difficulty, int ttm);
-	~cTruck() {
 
-	}
+class cTruck : public cVehicle {
+	public:
+		cTruck() {
+
+		}
+		~cTruck() {
+
+		}
+		void draw(COORD pos);
 };
 
 class cHelicopter : public cVehicle {
-public:
-	cHelicopter();
-	cHelicopter(COORD In_pos, int difficulty, int ttm);
-	~cHelicopter() {
+	public:
+		cHelicopter() {
 
-	}
+		}
+		~cHelicopter() {
+
+		}
+		void draw(COORD pos);
 };
 
 class cMotorbike : public cVehicle {
-public:
-	cMotorbike();
-	cMotorbike(COORD In_pos, int difficulty, int ttm);
-	~cMotorbike() {
+	public:
+		cMotorbike() {
 
-	}
+		}
+		~cMotorbike() {
+
+		}
+		void draw(COORD pos);
 };
 
 #endif

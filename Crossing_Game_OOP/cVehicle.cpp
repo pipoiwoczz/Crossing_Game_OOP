@@ -1,7 +1,6 @@
-﻿#include "cVehicle.h"
+﻿#include "setup.h"
 
-cTruck::cTruck() : cTruck({ 0, 40 }, 1, 2) {};
-cTruck::cTruck(COORD In_pos, int difficulty, int ttm): cVehicle(In_pos, difficulty, ttm) {
+void cTruck::draw(COORD pos) {
 	wstring content[5];
 	content[0] = L"  ▄███ ▄████████▄";
 	content[1] = L" ▄█▒▒█▓██▒▒▒▒▒▒██";
@@ -9,11 +8,13 @@ cTruck::cTruck(COORD In_pos, int difficulty, int ttm): cVehicle(In_pos, difficul
 	content[3] = L"██████▓██████████";
 	content[4] = L" ▀🞕▀       ▀🞕🞕▀";
 
-	texture.assign(content, content + content->size());
-}
 
-cHelicopter::cHelicopter() : cHelicopter({ 0, 40 }, 1, 2) {};
-cHelicopter::cHelicopter(COORD In_pos, int difficulty, int ttm): cVehicle(In_pos, difficulty, ttm) {
+	for (int i = pos.Y; i < pos.Y + 5; i++) {
+		printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::green, Color::bright_white);
+	}
+}	
+
+void cHelicopter::draw(COORD pos) {
 	wstring content[5];
 	content[0] = L"▂▂▂▂▂▂▂▂▂▂▂▂";
 	content[1] = L"      ▌     ";
@@ -21,11 +22,13 @@ cHelicopter::cHelicopter(COORD In_pos, int difficulty, int ttm): cVehicle(In_pos
 	content[3] = L"	▀▄▄▄█▐█▀";
 	content[4] = L" ▄▂▌▂▂▌▂▄";
 
-	texture.assign(content, content + content->size());
+
+	for (int i = pos.Y; i < pos.Y + 5; i++) {
+		printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::green, Color::bright_white);
+	}
 }
 
-cMotorbike::cMotorbike() : cMotorbike({ 0, 40 }, 1, 2) {};
-cMotorbike::cMotorbike(COORD In_pos, int difficulty, int ttm): cVehicle(In_pos, difficulty, ttm) {
+void cMotorbike::draw(COORD pos) {
 	wstring content[5];
 	content[0] = L"   ▄██▀";
 	content[1] = L"   ▀▀██▄▓▓▓▄ ▄▄██▀▀";
@@ -33,30 +36,9 @@ cMotorbike::cMotorbike(COORD In_pos, int difficulty, int ttm): cVehicle(In_pos, 
 	content[3] = L"▌ ◾ ▐███▓▓▓▓██▌ ◾ ▐";
 	content[4] = L"▀▄▄▄▀         █▄▄▄▀";
 
-	texture.assign(content, content + content->size());
-}
 
-//void cTruck::draw(COORD pos) {
-//
-//
-//	for (int i = pos.Y; i < pos.Y + 5; i++) {
-//		printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::green, Color::bright_white);
-//	}
-//}	
-//
-//void cHelicopter::draw(COORD pos) {
-//
-//
-//	for (int i = pos.Y; i < pos.Y + 5; i++) {
-//		printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::green, Color::bright_white);
-//	}
-//}
-//
-//void cMotorbike::draw(COORD pos) {
-//
-//
-//	for (int i = pos.Y; i < pos.Y + 5; i++) {
-//		printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::green, Color::bright_white);
-//	}
-//}
+	for (int i = pos.Y; i < pos.Y + 5; i++) {
+		printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::green, Color::bright_white);
+	}
+}
 

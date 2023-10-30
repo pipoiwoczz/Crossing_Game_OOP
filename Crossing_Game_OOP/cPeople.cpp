@@ -1,6 +1,4 @@
-﻿#include "cPeople.h"
-#include "cAnimal.h"
-#include "cVehicle.h"
+﻿#include "setup.h"
 
 void cPeople::draw(COORD pos) {
 	wstring content[4];
@@ -72,45 +70,45 @@ void cPeople::move(char &MOVING) {
 	}
 }
 
-//bool cPeople::isImpactOneLion(cLion *lion) {
-//	COORD pos = (*lion).getPos();
-//	short** lionShapeTemp = (*lion).getHitBoxX();
-//	short lionShape[5][2];
-//	for (int i = 0; i < 5; i++) {
-//		lionShape[i][0] = lionShapeTemp[i][0];
-//		lionShape[i][1] = lionShapeTemp[i][1];
-//	}
-//	for (int i = 0; i < 5; i++) {
-//		delete[] lionShapeTemp[i];
-//	}
-//	delete[] lionShapeTemp;
-//	for (int i = 0; i < 5; i++) {
-//		if (mX >= lionShape[i][0] && mX < lionShape[i][1] && mY >= pos.Y && mY < pos.Y + 6)
-//
-//			return true;
-//	}
-//	for (int i = 0; i < 5; i++) {
-//		if (mX + 4 >= lionShape[i][0] && mX < lionShape[i][1] && mY >= pos.Y && mY < pos.Y + 6)
-//			return true;
-//	}
-//	for (int i = 0; i < 5; i++) {
-//		if (mX >= lionShape[i][0] && mX < lionShape[i][1] && mY + 2 >= pos.Y && mY < pos.Y + 6)
-//			return true;
-//	}
-//	for (int i = 0; i < 5; i++) {
-//		if (mX + 4 >= lionShape[i][0] && mX < lionShape[i][1] && mY + 2 >= pos.Y && mY < pos.Y + 6)
-//			return true;
-//	}
-//	return false;
-//}
-//
-//bool cPeople::isImpactLion(cLion* lion) {
-//	for (int i = 0; i < 7; i++) {
-//		if (isImpactOneLion(&lion[i])) {
-//			isDead();
-//			drawLosingTitle();
-//			return true;
-//		}
-//	}
-//	return false;
-//}
+bool cPeople::isImpactOneLion(cLion *lion) {
+	COORD pos = (*lion).getPos();
+	short** lionShapeTemp = (*lion).getHitBoxX();
+	short lionShape[5][2];
+	for (int i = 0; i < 5; i++) {
+		lionShape[i][0] = lionShapeTemp[i][0];
+		lionShape[i][1] = lionShapeTemp[i][1];
+	}
+	for (int i = 0; i < 5; i++) {
+		delete[] lionShapeTemp[i];
+	}
+	delete[] lionShapeTemp;
+	for (int i = 0; i < 5; i++) {
+		if (mX >= lionShape[i][0] && mX < lionShape[i][1] && mY >= pos.Y && mY < pos.Y + 6)
+
+			return true;
+	}
+	for (int i = 0; i < 5; i++) {
+		if (mX + 4 >= lionShape[i][0] && mX < lionShape[i][1] && mY >= pos.Y && mY < pos.Y + 6)
+			return true;
+	}
+	for (int i = 0; i < 5; i++) {
+		if (mX >= lionShape[i][0] && mX < lionShape[i][1] && mY + 2 >= pos.Y && mY < pos.Y + 6)
+			return true;
+	}
+	for (int i = 0; i < 5; i++) {
+		if (mX + 4 >= lionShape[i][0] && mX < lionShape[i][1] && mY + 2 >= pos.Y && mY < pos.Y + 6)
+			return true;
+	}
+	return false;
+}
+
+bool cPeople::isImpactLion(cLion* lion) {
+	for (int i = 0; i < 7; i++) {
+		if (isImpactOneLion(&lion[i])) {
+			isDead();
+			drawLosingTitle();
+			return true;
+		}
+	}
+	return false;
+}

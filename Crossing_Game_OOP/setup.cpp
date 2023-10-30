@@ -1,5 +1,4 @@
 ﻿#include "setup.h"
-#include "Graphics.h"
 
 void textColor(int color) {
     HANDLE mau;

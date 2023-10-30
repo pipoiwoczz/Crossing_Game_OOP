@@ -1,8 +1,4 @@
-#include "cAnimal.h"
-#include "cVehicle.h"
-#include "cPeople.h"
-#include "cGame.h"
-#include "Graphics.h"
+#include "setup.h"
 
 char MOVING;
 cGame cg = cGame();

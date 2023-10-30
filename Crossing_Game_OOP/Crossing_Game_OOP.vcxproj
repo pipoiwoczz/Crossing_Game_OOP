@@ -140,8 +140,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cAnimal.cpp" />
-    <ClCompile Include="cAsset.cpp" />
-    <ClCompile Include="cAsset.h" />
     <ClCompile Include="cGame.cpp" />
     <ClCompile Include="cObstacle.cpp" />
     <ClCompile Include="cPeople.cpp" />
