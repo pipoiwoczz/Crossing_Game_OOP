@@ -9,7 +9,7 @@ class Graphic {
 	
 public:
 	Graphic() {
-		textSize(8);
+		textSize(6);
 		SetConsoleTitle(L"Crossing Road");
 		fixConsoleWindow();
 		showScrollBar(false);

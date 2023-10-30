@@ -7,11 +7,23 @@ void cLion::draw(COORD pos) {
     content[2] = L"▕ ███████▓▓▄█▄▓▓";
     content[3] = L"▕ ████████▓▓▓▓▓";
     content[4] = L" ▀ ▓█▄   ██▀▀▀";
+
     
-
-
     for (int i = pos.Y; i < pos.Y + 5; i++) {
+        int temp = content[i - pos.Y].length() - 200 + pos.X;
+        while (temp > 0) {
+            content[i - pos.Y].pop_back();
+            temp--;
+        }
         printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::yellow, Color::bright_white);
+        if (i == pos.Y) {
+            printCharacter2(L"         ", { short(pos.X), short(i) }, Color::yellow, Color::bright_white);
+        }
+        else if (i == pos.Y + 4) {
+            printCharacter2(L" ", { short(pos.X + 2), short(i) }, Color::yellow, Color::bright_white);
+            printCharacter2(L"   ", { short(pos.X + 5), short(i) }, Color::yellow, Color::bright_white);
+        }
+        printCharacter2(L" ", { short(pos.X), short(i) }, Color::yellow, Color::bright_white);
     }
 
 
@@ -47,13 +59,7 @@ void cLion::move(COORD pos, cLion* lion) {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 7; j++) { // num of lions
                 COORD temp = lion[j].getPos();
-                lion[j].draw(temp);
-                // draw Spacing
-                for (int i = 0; i < 5; i++) {
-                    printCharacter(L" ", { short(temp.X), short(temp.Y + i) }, Color::bright_white, Color::bright_white);
-                   // printCharacter(L"                    ", { 200, short(temp.Y + i) }, Color::bright_white, Color::bright_white);
-                }
-                
+                lion[j].draw(temp);             
                 if (temp.X >= 200) {
                     temp.X = -61;
                 }

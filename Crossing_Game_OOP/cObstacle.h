@@ -10,6 +10,7 @@ using namespace std;
 
 class cObstacle
 {
+ 
 protected:
     Position center;
     int speed;
@@ -17,6 +18,10 @@ protected:
     vector <Hitbox> boxes;
 
 public:
+    cObstacle() {
+
+    }
+
     // abtract methods
     void draw();
     void move();

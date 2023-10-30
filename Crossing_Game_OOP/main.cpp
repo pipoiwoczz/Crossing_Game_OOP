@@ -8,51 +8,52 @@ bool isRunningDrawGame = true;
 int main() {
 	system("cls");
 	clearConsole();
+//	test();
 	Graphic graphic = Graphic();
-	//drawGameTitle();
-	//cg.startGame();
+	drawGameTitle();
+	cg.startGame();
 
-	//HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 
-	//system("color 30");
+	system("color 30");
 
-	//DWORD his;
-	//CONSOLE_SCREEN_BUFFER_INFO csbi;
+	DWORD his;
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
 
-	//GetConsoleScreenBufferInfo(h, &csbi);
+	GetConsoleScreenBufferInfo(h, &csbi);
 
-	////cout << csbi.dwSize.X << " - " << csbi.dwSize.Y << endl;
-	////cout << csbi.dwMaximumWindowSize.X << " - " << csbi.dwMaximumWindowSize.Y << endl;
-	////cout << csbi.srWindow.Right << " - " << csbi.srWindow.Bottom << endl;
+	cout << csbi.dwSize.X << " - " << csbi.dwSize.Y << endl;
+	cout << csbi.dwMaximumWindowSize.X << " - " << csbi.dwMaximumWindowSize.Y << endl;
+	cout << csbi.srWindow.Right << " - " << csbi.srWindow.Bottom << endl;
 
-	////playzone
-	//COORD playTL = { 0, 0 };
-	//COORD playBR = { ((My_Windows.Right+1)*3)/4, My_Windows.Bottom};
+	//playzone
+	COORD playTL = { 0, 0 };
+	COORD playBR = { ((My_Windows.Right+1)*3)/4, My_Windows.Bottom};
 
-	//vector<COORD> roadspawn;
-	//
+	vector<COORD> roadspawn;
+	
 
-	//for (int i = playTL.Y; i <= playBR.Y; i++)
-	//{
-	//	FillConsoleOutputAttribute(h, int(Color::green) * 16 + int(Color::bright_white), playBR.X, { 0, short(playTL.Y + i) }, &his);
-	//}
-	//COORD p = { 0, 5 };
-	//for (int j = 0; j < 5; j++)
-	//{
-	//	
-	//	for (int i = 0; i < 11; i++)
-	//	{
-	//		FillConsoleOutputAttribute(h, int(Color::gray) * 16 + int(Color::bright_white), playBR.X, p, &his);
-	//		p.Y += 1;
-	//	}
-	//	roadspawn.push_back(p);
-	//	p.Y+= 7;
-	//}
-	//
-	//cLion myLion(roadspawn[0].X, roadspawn[0].Y-7);
-	//myLion.move(myLion.getPos());
+	for (int i = playTL.Y; i <= playBR.Y; i++)
+	{
+		FillConsoleOutputAttribute(h, int(Color::green) * 16 + int(Color::bright_white), playBR.X, { 0, short(playTL.Y + i) }, &his);
+	}
+	COORD p = { 0, 5 };
+	for (int j = 0; j < 5; j++)
+	{
+		
+		for (int i = 0; i < 11; i++)
+		{
+			FillConsoleOutputAttribute(h, int(Color::gray) * 16 + int(Color::bright_white), playBR.X, p, &his);
+			p.Y += 1;
+		}
+		roadspawn.push_back(p);
+		p.Y+= 7;
+	}
+	
+	/*cLion myLion(roadspawn[0].X, roadspawn[0].Y-7);
+	myLion.move(myLion.getPos());*/
 
 
-	//system("pause");
+	system("pause");
 	return 1;
 }

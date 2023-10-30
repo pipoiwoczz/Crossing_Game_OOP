@@ -84,4 +84,10 @@ class cCrocodile : public cAnimal {
 		void move(short y);
 };
 
+//class lion : cObstacle {
+//	
+//};
+
+
+
 #endif

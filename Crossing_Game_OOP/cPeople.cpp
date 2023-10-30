@@ -1,23 +1,34 @@
 ﻿#include "setup.h"
 
 void cPeople::draw(COORD pos) {
-	wstring content[4];
+	/*wstring content[4];
 	content[0] = L"    ▀    ";
 	content[1] = L"  ▄███▄  ";
 	content[2] = L" ▀ ███ ▀ ";
 	content[3] = L"  ▄█ █▄  ";
 	printCharacter(L"         ", {short (pos.X), short(pos.Y - 1)}, Color::bright_white, Color::bright_white);
 	printCharacter(L"         ", { short(pos.X), short(pos.Y + 4) }, Color::bright_white, Color::bright_white);
-	printCharacter(L"         ", { short(pos.X+1), short(pos.Y + 2) }, Color::bright_white, Color::bright_white);
-
+	printCharacter(L"         ", { short(pos.X+1), short(pos.Y + 2) }, Color::bright_white, Color::bright_white);*/
+	wstring content[4];
+	content[0] = L" ▄████";
+	content[1] = L"██▄▄▄▄";
+	content[2] = L"██████";
+	content[3] = L" ██ ██";
 	for (int i = 0; i < 4; i++) {
-		printCharacter(content[i], { pos.X, short(pos.Y + i) }, Color::gray, Color::bright_white);
+		if (i == 1) {
+			printCharacter2(content[i], { pos.X, short(pos.Y + i) }, Color::red, Color::blue);
+		}
+		else
+			printCharacter2(content[i], { pos.X, short(pos.Y + i) }, Color::red, Color::bright_white);
 	}
 }
 
 void cPeople::up(){
 	COORD pos = getPos();
 	pos.Y--;
+	for (int i = 0; i < 7; i++) {
+		printCharacter2(L" ", { short(pos.X + i), short(pos.Y + 4)}, Color::bright_white, Color::bright_white);
+	}
 	setPos(pos);
 	draw(pos);
 }
@@ -25,21 +36,24 @@ void cPeople::up(){
 void cPeople::down() {
 	COORD pos = getPos();
 	pos.Y++;
+	for (int i = 0; i < 7; i++) {
+		printCharacter2(L" ", { short(pos.X + i), short(pos.Y - 1)}, Color::bright_white, Color::bright_white);
+	}
 	setPos(pos);
 	draw(pos);
 }
 
 void delPeople(COORD pos) {
 	int y = pos.Y;
-	for (int i = y; i < y + 3; i++) {
-		printCharacter(L" ", { pos.X, short(i) }, Color::bright_white, Color::bright_white);
+	for (int i = y; i < y + 4; i++) {
+		printCharacter2(L" ", { pos.X, short(i) }, Color::bright_white, Color::bright_white);
 	}
 }
 
 void cPeople::left() {
 	COORD pos = getPos();
 	delPeople({ short(pos.X + 4), pos.Y });
-	delPeople({ short(pos.X + 3), pos.Y });
+	delPeople({ short(pos.X + 5), pos.Y });
 	pos.X -= 2;
 	setPos(pos);
 	draw(pos);
