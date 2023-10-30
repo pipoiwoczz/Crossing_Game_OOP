@@ -74,13 +74,13 @@ class cGame {
 			if (!isPause)
 				people->move(MOVING);
 		}
-		//bool isImpact() {
-		//	if (people->isImpactLion(lion)) {
-		//		isLose = true;
-		//		return true;
-		//	}
-		//	return false;
-		//}
+		bool isImpact() {
+			if (people->isImpactLion(lion)) {
+				isLose = true;
+				return true;
+			}
+			return false;
+		}
 		
 
 		void updatePosVehicle();

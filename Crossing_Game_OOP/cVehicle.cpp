@@ -9,7 +9,7 @@ cTruck::cTruck(COORD In_pos, int difficulty, int ttm): cVehicle(In_pos, difficul
 	content[3] = L"██████▓██████████";
 	content[4] = L" ▀🞕▀       ▀🞕🞕▀";
 
-	texture.assign(content, content + content->size());
+	texture.assign(content, content + 5);
 }
 
 cHelicopter::cHelicopter() : cHelicopter({ 0, 40 }, 1, 2) {};
@@ -21,7 +21,7 @@ cHelicopter::cHelicopter(COORD In_pos, int difficulty, int ttm): cVehicle(In_pos
 	content[3] = L"	▀▄▄▄█▐█▀";
 	content[4] = L" ▄▂▌▂▂▌▂▄";
 
-	texture.assign(content, content + content->size());
+	texture.assign(content, content + 5);
 }
 
 cMotorbike::cMotorbike() : cMotorbike({ 0, 40 }, 1, 2) {};
@@ -33,7 +33,7 @@ cMotorbike::cMotorbike(COORD In_pos, int difficulty, int ttm): cVehicle(In_pos, 
 	content[3] = L"▌ ◾ ▐███▓▓▓▓██▌ ◾ ▐";
 	content[4] = L"▀▄▄▄▀         █▄▄▄▀";
 
-	texture.assign(content, content + content->size());
+	texture.assign(content, content + 5);
 }
 
 //void cTruck::draw(COORD pos) {

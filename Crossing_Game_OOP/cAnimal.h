@@ -19,6 +19,7 @@ public:
 	~cLion() {
 
 	}
+	short** getHitBoxX();
 };
 
 class cRhino : public cAnimal {

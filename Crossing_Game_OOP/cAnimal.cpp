@@ -8,7 +8,8 @@ cLion::cLion(COORD In_pos, int difficulty, int ttm) : cAnimal(In_pos, difficulty
     content[2] = L"▕ ███████▓▓▄█▄▓▓";
     content[3] = L"▕ ████████▓▓▓▓▓";
     content[4] = L" ▀ ▓█▄   ██▀▀▀";
-    texture.assign(content, content + content->size());
+    int n = content->size();
+    texture.assign(content, content + 5);
 }
 
 cRhino::cRhino() : cRhino({ 0,20 }, 1, 3) {}
@@ -19,7 +20,7 @@ cRhino::cRhino(COORD In_pos, int difficulty, int ttm) : cAnimal(In_pos, difficul
     content[2] = L"▎██████████▀█████";
     content[3] = L"▀ ███████████▀▀▀ ";
     content[4] = L"   ▓█▄   ▓█▄     ";
-    texture.assign(content, content + content->size());
+    texture.assign(content, content + 5);
 }
 
 cCrocodile::cCrocodile() : cCrocodile({ 0,20 }, 1, 3) {}
@@ -29,7 +30,7 @@ cCrocodile::cCrocodile(COORD In_pos, int difficulty, int ttm) : cAnimal(In_pos, 
     content[1] = L"▀▄▄    ▄▄▄██████████▄██▄█▀█▀█▀█";
     content[2] = L"  ▀▀██████████████████████▄█▄█ ";
     content[3] = L"           ▀█▄▀▄  ▀█▄▀█▄       ";
-    texture.assign(content, content + content->size());
+    texture.assign(content, content + 4);
 }
 //void cLion::move(COORD pos) {
 //    int speed = level * 3;
@@ -82,24 +83,24 @@ cCrocodile::cCrocodile(COORD In_pos, int difficulty, int ttm) : cAnimal(In_pos, 
 //
 //}
 
-//short** cLion::getHitBoxX() {
-//    short** hitBox = new short* [5];
-//    for (int i = 0; i < 5; i++) {
-//        hitBox[i] = new short[2];
-//    }
-//    COORD pos = getPos();
-//    hitBox[0][0] = pos.X + 1;
-//    hitBox[0][1] = pos.X + 18;
-//    hitBox[1][0] = pos.X;
-//    hitBox[0][1] = pos.X + 19;
-//    hitBox[2][0] = pos.X;
-//    hitBox[0][1] = pos.X + 19;
-//    hitBox[3][0] = pos.X + 1;
-//    hitBox[0][1] = pos.X + 18;
-//    hitBox[4][0] = pos.X + 1;
-//    hitBox[0][1] = pos.X + 17;
-//    return hitBox;
-//}
+short** cLion::getHitBoxX() {
+    short** hitBox = new short* [5];
+    for (int i = 0; i < 5; i++) {
+        hitBox[i] = new short[2];
+    }
+    COORD pos = getPos();
+    hitBox[0][0] = pos.X + 1;
+    hitBox[0][1] = pos.X + 18;
+    hitBox[1][0] = pos.X;
+    hitBox[0][1] = pos.X + 19;
+    hitBox[2][0] = pos.X;
+    hitBox[0][1] = pos.X + 19;
+    hitBox[3][0] = pos.X + 1;
+    hitBox[0][1] = pos.X + 18;
+    hitBox[4][0] = pos.X + 1;
+    hitBox[0][1] = pos.X + 17;
+    return hitBox;
+}
 
 //void cRhino::draw(COORD pos) {
 //    wstring content[5];

@@ -1,7 +1,8 @@
-#pragma once
 #ifndef _CPEOPLE_H
 #define _CPEOPLE_H
 #include "setup.h"
+#include "cAnimal.h"
+#include "cVehicle.h"
 
 class cPeople {
 	int mX, mY;
@@ -35,9 +36,9 @@ class cPeople {
 		void right();
 		void move(char &MOVING);
 		void erase();
-		//bool isImpactOneLion(cLion *lion);
-		//bool isImpactLion(cLion *lion);
-		//bool isImpact(cVehicle *vehicle);
+		bool isImpactOneLion(cLion *lion);
+		bool isImpactLion(cLion *lion);
+		bool isImpact(cVehicle *vehicle);
 
 		bool isDead() {
 			mState = false;
