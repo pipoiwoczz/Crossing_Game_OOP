@@ -2,6 +2,7 @@
 
 cEntity::cEntity(COORD In_pos) {
     pos = In_pos;
+    getHitbox();
 }
 cEntity::~cEntity() {
 

@@ -14,7 +14,7 @@ private:
     
 public:
     void getHitbox (COORD &topleftGet, COORD &botrightGet);
-    void move(const int move_x, const int move_y);
+    void move(const COORD displace);
     bool isOverlap (Hitbox h);
 };
 

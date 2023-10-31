@@ -15,12 +15,12 @@ void Hitbox::getHitbox(COORD &topleftGet, COORD &botrightGet)
     botrightGet = botright;
 }
 
-void Hitbox::move(const int move_x, const int move_y)
+void Hitbox::move(const COORD displace)
 {
 //    topleft.setCoordinates(topleft.getX() + move_x, topleft.getY() + move_y);
 //    botright.setCoordinates(botright.getX() + move_x, botright.getY() + move_y);
-    topleft.X += move_x;
-    topleft.Y += move_y;
-    botright.X += move_x;
-    botright.Y += move_y;
+    topleft.X += displace.X;
+    topleft.Y += displace.Y;
+    botright.X += displace.X;
+    botright.Y += displace.Y;
 }
