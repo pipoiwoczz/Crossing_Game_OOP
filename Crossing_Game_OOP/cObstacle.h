@@ -4,7 +4,7 @@
 #include "setup.h"
 #include "hitbox.h"
 
-extern SMALL_RECT My_Windows;
+class cPeople;
 class cObstacle {
 protected:
     COORD center;
@@ -16,6 +16,7 @@ protected:
     vector<wstring> texture;
 
 public:
+    friend cPeople;
     cObstacle(COORD In_pos, int difficulty, int ttm);
     COORD getPos();
     void setPos(COORD new_Pos);

@@ -7,6 +7,7 @@
 class cPeople {
 	int mX, mY;
 	bool mState; // true is alive, false is dead =))
+	vector<Hitbox> mBoxes;
 	public:
 		cPeople() {
 			mX = mY = 50;
@@ -39,7 +40,7 @@ class cPeople {
 		bool isImpactOneLion(cLion *lion);
 		bool isImpactLion(cLion *lion);
 		bool isImpact(cVehicle *vehicle);
-
+		bool isImpart(cObstacle obsta);
 		bool isDead() {
 			mState = false;
 			return true;

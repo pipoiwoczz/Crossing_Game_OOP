@@ -12,8 +12,6 @@ private:
     COORD botright;
 
 public:
-    friend cObstacle;
-    friend cPeople;
     void getHitbox(COORD& topleftGet, COORD& botrightGet);
     void move(const int move_x, const int move_y);
     bool isOverlap(Hitbox h);

@@ -85,37 +85,48 @@ void cPeople::move(char &MOVING) {
 		right();
 	}
 }
-
-bool cPeople::isImpactOneLion(cLion *lion) {
-	COORD pos = (*lion).getPos();
-	short** lionShapeTemp = (*lion).getHitBoxX();
-	short lionShape[5][2];
-	for (int i = 0; i < 5; i++) {
-		lionShape[i][0] = lionShapeTemp[i][0];
-		lionShape[i][1] = lionShapeTemp[i][1];
-	}
-	for (int i = 0; i < 5; i++) {
-		delete[] lionShapeTemp[i];
-	}
-	delete[] lionShapeTemp;
-	for (int i = 0; i < 5; i++) {
-		if (mX >= lionShape[i][0] && mX < lionShape[i][1] && mY >= pos.Y && mY < pos.Y + 6)
-
-			return true;
-	}
-	for (int i = 0; i < 5; i++) {
-		if (mX + 4 >= lionShape[i][0] && mX < lionShape[i][1] && mY >= pos.Y && mY < pos.Y + 6)
-			return true;
-	}
-	for (int i = 0; i < 5; i++) {
-		if (mX >= lionShape[i][0] && mX < lionShape[i][1] && mY + 2 >= pos.Y && mY < pos.Y + 6)
-			return true;
-	}
-	for (int i = 0; i < 5; i++) {
-		if (mX + 4 >= lionShape[i][0] && mX < lionShape[i][1] && mY + 2 >= pos.Y && mY < pos.Y + 6)
-			return true;
+bool cPeople::isImpart(cObstacle obsta) {
+	for (auto box : obsta.boxes) {
+		for (auto mbox : mBoxes)
+		{
+			if(mbox.isOverlap(box)) return true;
+		}
 	}
 	return false;
+}
+
+//bool cPeople::isImpactOneLion(cLion *lion) {
+//	for (auto box: lion->)
+
+	//COORD pos = (*lion).getPos();
+	//short** lionShapeTemp = (*lion).getHitBoxX();
+	//short lionShape[5][2];
+	//for (int i = 0; i < 5; i++) {
+	//	lionShape[i][0] = lionShapeTemp[i][0];
+	//	lionShape[i][1] = lionShapeTemp[i][1];
+	//}
+	//for (int i = 0; i < 5; i++) {
+	//	delete[] lionShapeTemp[i];
+	//}
+	//delete[] lionShapeTemp;
+	//for (int i = 0; i < 5; i++) {
+	//	if (mX >= lionShape[i][0] && mX < lionShape[i][1] && mY >= pos.Y && mY < pos.Y + 6)
+
+	//		return true;
+	//}
+	//for (int i = 0; i < 5; i++) {
+	//	if (mX + 4 >= lionShape[i][0] && mX < lionShape[i][1] && mY >= pos.Y && mY < pos.Y + 6)
+	//		return true;
+	//}
+	//for (int i = 0; i < 5; i++) {
+	//	if (mX >= lionShape[i][0] && mX < lionShape[i][1] && mY + 2 >= pos.Y && mY < pos.Y + 6)
+	//		return true;
+	//}
+	//for (int i = 0; i < 5; i++) {
+	//	if (mX + 4 >= lionShape[i][0] && mX < lionShape[i][1] && mY + 2 >= pos.Y && mY < pos.Y + 6)
+	//		return true;
+	//}
+	//return false;
 }
 
 bool cPeople::isImpactLion(cLion* lion) {

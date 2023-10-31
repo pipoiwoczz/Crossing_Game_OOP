@@ -82,7 +82,6 @@ class cGame {
 			return false;
 		}
 		
-
 		void updatePosVehicle();
 		void updatePosAnimal();
 

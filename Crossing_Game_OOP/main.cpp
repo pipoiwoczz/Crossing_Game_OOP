@@ -17,19 +17,39 @@ int main() {
 	//drawGameTitle();
 	//cg.startGame();
 
-	//HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	//system("color 30");
 
-	//DWORD his;
-	//CONSOLE_SCREEN_BUFFER_INFO csbi;
+	DWORD his;
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
 
-	//GetConsoleScreenBufferInfo(h, &csbi);
+	GetConsoleScreenBufferInfo(h, &csbi);
 
 	//cout << csbi.dwSize.X << " - " << csbi.dwSize.Y << endl;
 	//cout << csbi.dwMaximumWindowSize.X << " - " << csbi.dwMaximumWindowSize.Y << endl;
 	//cout << csbi.srWindow.Right << " - " << csbi.srWindow.Bottom << endl;
 
+	//ifstream ifs;
+	//ifs.open("te.txt");
+	//vector < vector<unsigned char>> bg;
+	//bg.resize(csbi.srWindow.Bottom);
+	//for (int i = 0; i < bg.size(); i++)
+	//{
+	//	bg[i].resize(csbi.srWindow.Right);
+	//	for (int j = 0; j < bg[i].size(); j++)
+	//	{
+	//		ifs >> bg[i][j];
+	//	}
+	//}
+
+	//for (short i = 0; i < bg.size(); i++)
+	//{
+	//	for (short j = 0; j < bg[i].size(); j++)
+	//	{
+	//		FillConsoleOutputAttribute(h, bg[i][j] * 16, 1, { j,i }, &his);
+	//	}
+	//}
 	////playzone
 	//COORD playTL = { 0, 0 };
 	//COORD playBR = { ((My_Windows.Right+1)*3)/4, My_Windows.Bottom};
