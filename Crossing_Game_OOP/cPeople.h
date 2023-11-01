@@ -45,7 +45,12 @@ class cPeople {
 			mState = false;
 			return true;
 		}
-		bool isFinish();
+		bool isFinish() {
+			if (mY == 10) {
+				return true;
+			}
+			return false;
+		}
 };
 
 #endif
