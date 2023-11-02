@@ -3,15 +3,20 @@
 #include "cAnimal.h"
 #include "cVehicle.h"
 #include "cPeople.h"
+#include "cObstacle.h"
 
 class cGame {
-	cTruck *truck;
-	cLion* lion;
-	cRhino * rhino;
-	cCrocodile *crocodile;
-	cHelicopter *helicopter;
-	cMotorbike *motorbike;
-	cPeople *people;
+//	cTruck *truck;
+//	cLion* lion;
+//	cRhino * rhino;
+//	cCrocodile *crocodile;
+//	cHelicopter *helicopter;
+//	cMotorbike *motorbike;
+    
+    vector<cObstacle> liveObstacles;
+    
+	//cPeople *people;
+    vector<cPeople> livePeople;
 
 	short gameOrder, gameLevel; // order: 1 or 2 player
 	bool isPause, isExit;
@@ -26,14 +31,15 @@ class cGame {
 			isPause = false;
 			isExit = false;	
 		}
+    
 		~cGame() {
-			delete[]truck;
-			delete[]lion;
-			delete[]rhino;
-			delete[]crocodile;
-			delete[]helicopter;
-			delete[]motorbike;
-			delete[]people;
+//			delete[]truck;
+//			delete[]lion;
+//			delete[]rhino;
+//			delete[]crocodile;
+//			delete[]helicopter;
+//			delete[]motorbike;
+//			delete[]people;
 		}
 
 		void gameThread();

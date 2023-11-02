@@ -1,4 +1,4 @@
-﻿#include "cPeople.h"
+#include "cPeople.h"
 #include "cAnimal.h"
 #include "cVehicle.h"
 
@@ -85,7 +85,7 @@ void cPeople::move(char &MOVING) {
 		right();
 	}
 }
-bool cPeople::isImpart(cObstacle obsta) {
+bool cPeople::isImpact(cObstacle obsta) {
 	for (auto box : obsta.boxes) {
 		for (auto mbox : mBoxes)
 		{

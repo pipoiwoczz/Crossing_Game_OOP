@@ -3,31 +3,35 @@
 #include "setup.h"
 #include "cAnimal.h"
 #include "cVehicle.h"
+#include <Windows.h>
 
 class cPeople {
-	int mX, mY;
+	//int mX, mY;
+    COORD position;
 	bool mState; // true is alive, false is dead =))
 	vector<Hitbox> mBoxes;
 	public:
 		cPeople() {
-			mX = mY = 50;
+			//mX = mY = 50;
+            position.X = position.Y = 50;
 			mState = true;
 		}
 		cPeople(int x, int y) {
+            position.X = x;
+            position.Y = y;
 			mState = true;
-			mX = x;
-			mY = y;
+//			mX = x;
+//			mY = y;
 		}
 		~cPeople() {
 
 		}
 
 		COORD getPos() {
-			return { short(mX), short(mY) };
+			return position;
 		}
 		void setPos(COORD pos) {
-			mX = pos.X;
-			mY = pos.Y;
+            position = pos;
 		}
 
 		void draw(COORD pos);
@@ -37,10 +41,10 @@ class cPeople {
 		void right();
 		void move(char &MOVING);
 		void erase();
-		bool isImpactOneLion(cLion *lion);
-		bool isImpactLion(cLion *lion);
-		bool isImpact(cVehicle *vehicle);
-		bool isImpart(cObstacle obsta);
+//		bool isImpactOneLion(cLion *lion);
+//		bool isImpactLion(cLion *lion);
+//		bool isImpact(cVehicle *vehicle);
+		bool isImpact(cObstacle obsta);
 		bool isDead() {
 			mState = false;
 			return true;
