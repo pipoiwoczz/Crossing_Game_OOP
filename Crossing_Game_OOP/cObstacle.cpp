@@ -45,9 +45,9 @@ void cObstacle::erase() {
 
 void cObstacle::move() {
     erase();
-    center.X += 1;
+    center.X += 3;
     for (auto box : boxes) {
-        box.move(1, 0);
+        box.move({1, 0});
     }
     draw();
 }

@@ -11,20 +11,40 @@ bool isRunningDrawGame = true;
 
 int main() {
 	system("cls");
-	clearConsole();
+	clearConsole();	
 //	test();
 	Graphic graphic = Graphic();
 	//drawGameTitle();
 	//cg.startGame();
 
-	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 
-	//system("color 30");
+	//const int desiredFPS = 60;
+	//const std::chrono::duration<double> frameTime(1.0 / desiredFPS);
 
-	DWORD his;
-	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	//// Initialize your game state and resources here.
 
-	GetConsoleScreenBufferInfo(h, &csbi);
+	//// The main game loop.
+	//auto previousTime = std::chrono::high_resolution_clock::now();
+	//auto currentTime = previousTime;
+
+	//while (true) {
+	//	currentTime = std::chrono::high_resolution_clock::now();
+	//	std::chrono::duration<double> deltaTime = currentTime - previousTime;
+
+	//	if (deltaTime >= frameTime) {
+	//		// Update game logic and handle input here.
+	//		a.move();
+	//		// Render the game.
+
+	//		// Reset the previous time for the next frame.
+	//		previousTime = currentTime;
+	//	}
+
+	//	// Sleep to control the frame rate.
+	//	std::this_thread::sleep_for(frameTime - deltaTime);
+	//}
+
+
 
 	//cout << csbi.dwSize.X << " - " << csbi.dwSize.Y << endl;
 	//cout << csbi.dwMaximumWindowSize.X << " - " << csbi.dwMaximumWindowSize.Y << endl;

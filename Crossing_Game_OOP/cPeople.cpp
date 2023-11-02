@@ -127,15 +127,15 @@ bool cPeople::isImpart(cObstacle obsta) {
 	//		return true;
 	//}
 	//return false;
-}
+//}
 
-bool cPeople::isImpactLion(cLion* lion) {
-	for (int i = 0; i < 7; i++) {
-		if (isImpactOneLion(&lion[i])) {
-			isDead();
-			drawLosingTitle();
-			return true;
-		}
-	}
-	return false;
-}
+//bool cPeople::isImpactLion(cLion* lion) {
+//	for (int i = 0; i < 7; i++) {
+//		if (isImpactOneLion(&lion[i])) {
+//			isDead();
+//			drawLosingTitle();
+//			return true;
+//		}
+//	}
+//	return false;
+//}
