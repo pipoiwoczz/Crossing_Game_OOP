@@ -1,5 +1,9 @@
 ﻿#include "cVehicle.h"
 
+vector<vector<unsigned char>> cTruck::textureTruck = loadTexture(truckFile);
+vector<vector<unsigned char>> cHelicopter::textureHeli = loadTexture(heliFile);
+vector<vector<unsigned char>> cMotorbike::textureMotorb = loadTexture(motorbFile);
+
 cTruck::cTruck() : cTruck({ 0, 40 }, 1, 2) {};
 cTruck::cTruck(COORD In_pos, int difficulty, int ttm): cVehicle(In_pos, difficulty, ttm) {
 	wstring content[5];

@@ -3,6 +3,9 @@
 #include "cObstacle.h"
 
 class cAnimal: public cObstacle {
+private:
+	
+
 public:
 	cAnimal(COORD In_pos, int difficulty, int ttm): cObstacle(In_pos, difficulty, ttm)  {
 	}
@@ -13,6 +16,8 @@ public:
 };
 
 class cLion : public cAnimal {
+	static vector<vector<unsigned char>> textureLion;
+
 public:
 	cLion();
 	cLion(COORD In_pos, int difficulty, int ttm);
@@ -23,6 +28,8 @@ public:
 };
 
 class cRhino : public cAnimal {
+	static vector<vector<unsigned char>> textureRhino;
+
 public:
 	cRhino();
 	cRhino(COORD In_pos, int difficulty, int ttm);
@@ -32,6 +39,8 @@ public:
 };
 
 class cCrocodile : public cAnimal {
+	static vector<vector<unsigned char>> textureCrocodile;
+
 public:
 	cCrocodile();
 	cCrocodile(COORD In_pos, int difficulty, int ttm);
@@ -43,6 +52,7 @@ public:
 //class lion : cObstacle {
 //	
 //};
+
 
 
 

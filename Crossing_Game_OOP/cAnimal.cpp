@@ -1,5 +1,9 @@
 ﻿#include "cAnimal.h"
 
+vector<vector<unsigned char>> cLion::textureLion = loadTexture(lionFile);
+vector<vector<unsigned char>> cRhino::textureRhino = loadTexture(rhinoFile);
+vector<vector<unsigned char>> cCrocodile::textureCrocodile = loadTexture(crocoFile);
+
 cLion::cLion() : cLion({ 0,20 }, 1, 3) {}
 cLion::cLion(COORD In_pos, int difficulty, int ttm) : cAnimal(In_pos, difficulty, ttm) {
     wstring content[5];

@@ -13,6 +13,7 @@ public:
 };
 
 class cTruck : public cVehicle {
+	static vector<vector<unsigned char>> textureTruck;
 public:
 	cTruck();
 	cTruck(COORD In_pos, int difficulty, int ttm);
@@ -22,6 +23,7 @@ public:
 };
 
 class cHelicopter : public cVehicle {
+	static vector<vector<unsigned char>> textureHeli;
 public:
 	cHelicopter();
 	cHelicopter(COORD In_pos, int difficulty, int ttm);
@@ -31,6 +33,8 @@ public:
 };
 
 class cMotorbike : public cVehicle {
+	static vector<vector<unsigned char>> textureMotorb;
+
 public:
 	cMotorbike();
 	cMotorbike(COORD In_pos, int difficulty, int ttm);

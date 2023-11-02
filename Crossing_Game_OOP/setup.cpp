@@ -265,3 +265,27 @@ void clearConsole() {
     SetConsoleCursorPosition(console, topLeft);
     system("color f0");
 }
+
+vector<vector<unsigned char>> loadTexture(string filename)
+{
+    ifstream ifs;
+    ifs.open(filename);
+
+    vector <vector<unsigned char>> res;
+    if (ifs.is_open()) {
+        int x;
+        ifs >> x;
+        res.resize(x);
+        ifs >> x;
+        for (int i = 0; i < res.size(); i++)
+        {
+            res[i].resize(x);
+            for (int j = 0; j < x; j++)
+            {
+                ifs >> res[i][j];
+            }
+        }
+    }
+    ifs.close();
+    return res;
+}

@@ -21,7 +21,12 @@
 
 using namespace std;
 
-
+const string lionFile = "lion.txt";
+const string rhinoFile = "rhino.txt";
+const string crocoFile = "croco.txt";
+const string truckFile = "truck.txt";
+const string heliFile = "heli.txt";
+const string motorbFile = "motorb.txt";
 
 enum class Color {
 	black = 0,
@@ -42,7 +47,7 @@ enum class Color {
 	bright_white = 15,
 };
 
-
+vector<vector<unsigned char>> loadTexture(string filename);
 
 void gotoXY(int x, int y);
 
