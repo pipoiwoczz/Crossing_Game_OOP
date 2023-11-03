@@ -14,8 +14,12 @@ int main() {
 	clearConsole();	
 //	test();
 	Graphic graphic = Graphic();
-	//drawGameTitle();
+	//drawMainMenu(1);
 	//cg.startGame();
+
+	//drawSettingMenu(2,false);
+	//drawLoadMenu(1);
+	drawScoreboardMenu();
 
 
 	//const int desiredFPS = 60;

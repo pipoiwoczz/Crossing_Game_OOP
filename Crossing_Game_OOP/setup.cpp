@@ -140,36 +140,55 @@ void drawSetting(Color color) {
     }
 }
 
+void drawScoreBoard(Color color) {
+    wstring content3[8];
+    content3[0] = L" ▄█▀▀▀█▄█ ▄▄█▀▀▀█▄█ ▄▄█▀▀██▄ ▀███▀▀▀██▄ ▀███▀▀▀███▀███▀▀▀██▄ ▄▄█▀▀██▄       ██     ▀███▀▀▀██▄ ▀███▀▀▀██▄  ";
+    content3[1] = L"▄██    ▀███▀     ▀███▀    ▀██▄ ██   ▀██▄  ██    ▀█  ██    ████▀    ▀██▄    ▄██▄      ██   ▀██▄  ██    ▀██▄";
+    content3[2] = L"▀███▄   ██▀       ▀█▀      ▀██ ██   ▄██   ██   █    ██    ███▀      ▀██   ▄█▀██▄     ██   ▄██   ██     ▀██";
+    content3[3] = L"  ▀█████▄█        ██        ██ ███████    ██████    ██▀▀▀█▄▄█        ██  ▄█  ▀██     ███████    ██      ██";
+    content3[4] = L"▄     ▀███▄       ██▄      ▄██ ██  ██▄    ██   █  ▄ ██    ▀██▄      ▄██  ████████    ██  ██▄    ██     ▄██";
+    content3[5] = L"██     ████▄     ▄▀██▄    ▄██▀ ██   ▀██▄  ██     ▄█ ██    ▄███▄    ▄██▀ █▀      ██   ██   ▀██▄  ██    ▄██▀";
+    content3[6] = L"█▀█████▀  ▀▀█████▀  ▀▀████▀▀ ▄████▄ ▄███▄██████████████████  ▀▀████▀▀ ▄███▄   ▄████▄████▄ ▄███▄████████▀  ";
+    content3[7] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+
+
+
+    for (int i = 0; i < 8; i++) {
+        printCenterCharacters(content3[i], color, Color::bright_white, short(70 + i), My_Windows);
+    }
+}
+
 void drawBorder(Color color)
 {
-    wstring border[3];
-    border[0] = L"┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓";
-    border[1] = L"┠━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫";
-    border[2] = L"┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛";
+    wstring border[4];
+    border[0] = L"┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓";
+    border[1] = L"┠━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫";
+    border[2] = L"┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛";
 
     printCenterCharacters(border[0], color, Color::bright_white, short(21), My_Windows);
     printCenterCharacters(border[1], color, Color::bright_white, short(21 + 15), My_Windows);
     printCenterCharacters(border[1], color, Color::bright_white, short(21 + 30), My_Windows);
-    printCenterCharacters(border[2], color, Color::bright_white, short(21 + 45), My_Windows);
+    printCenterCharacters(border[1], color, Color::bright_white, short(21 + 45), My_Windows);
+    printCenterCharacters(border[2], color, Color::bright_white, short(21 + 60), My_Windows);
 
     short centerX = (short(My_Windows.Left) + short(My_Windows.Right)) / 2;
 
-    for (int i = 0; i < 46; i++) {
-        if (i == 0 || i == 15 || i == 30 || i == 45) {
+    for (int i = 0; i < 61; i++) {
+        if (i == 0 || i == 15 || i == 30 || i == 45 || i == 60) {
             continue;
         }
-        printCharacter(L"┃", { short(centerX - short(105 / 2)), short(i + 21) }, color, Color::bright_white);
-        printCharacter(L"┃", { short(centerX + short(105 / 2)), short(i + 21) }, color, Color::bright_white);
+        printCharacter(L"┃", { short(centerX - short(117 / 2)), short(i + 21) }, color, Color::bright_white);
+        printCharacter(L"┃", { short(centerX + short(117 / 2)), short(i + 21) }, color, Color::bright_white);
 	}
 }
 
 void drawLine(int y) {
-    wstring line = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+    wstring line = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
     printCenterCharacters(line, Color::light_green, Color::bright_white, short(y), My_Windows);
 }
 
 void eraseLine() {
-    wstring line = L"                                                                        ";
+    wstring line = L"                                                                              ";
     for (int i = 0; i < 3; i++) {
         printCenterCharacters(line, Color::bright_white, Color::bright_white, short(34 + 15*i), My_Windows);
     }
@@ -177,7 +196,7 @@ void eraseLine() {
 
 void drawMainMenu(int choice) {
 
-    Color color[9] = { Color::light_red, Color::light_blue, Color::light_purple, Color::yellow };
+    Color color[5] = { Color::light_red, Color::light_blue, Color::light_purple, Color::yellow, Color::light_green };
     
     short yLine = 34;
 
@@ -189,20 +208,31 @@ void drawMainMenu(int choice) {
         drawPlay(color[3]);
         drawLoad(color[2]);
         drawSetting(color[1]);
+        drawScoreBoard(color[4]);
     }
     else if (choice == 1) {
         eraseLine();
         drawLine(yLine + 15);
         drawPlay(color[0]);
         drawLoad(color[3]);
-        drawSetting(color[2]);
+        drawSetting(color[1]);
+        drawScoreBoard(color[4]);
     }
     else if (choice == 2) {
         eraseLine();
         drawLine(yLine + 30);
         drawPlay(color[0]);
-        drawLoad(color[1]);
+        drawLoad(color[2]);
         drawSetting(color[3]);
+        drawScoreBoard(color[4]);
+    }
+    else if (choice == 4) {
+        eraseLine();
+        drawLine(yLine + 45);
+        drawPlay(color[0]);
+        drawLoad(color[2]);
+        drawSetting(color[1]);
+        drawScoreBoard(color[3]);
     }
     //else {
     //    drawBorder(color[0]);
@@ -213,6 +243,254 @@ void drawMainMenu(int choice) {
    
 }
 
+void drawSettingMenu(int choice, bool On) {
+    Color color[5] = { Color::light_red, Color::light_blue, Color::light_purple, Color::yellow, Color::light_green };
+
+    drawGameTitle();
+
+    wstring content[9];
+    content[0] = L"                                               ▄▄         ";
+    content[1] = L" ▄█▀▀▀█▄█                                    ▀███         ";
+    content[2] = L"▄██    ▀█                                      ██         ";
+    content[3] = L"▀███▄     ▄██▀██▄▀███  ▀███ ▀████████▄    ▄█▀▀███  ▄██▀███";
+    content[4] = L"  ▀█████▄██▀   ▀██ ██    ██   ██    ██  ▄██    ██  ██   ▀▀";
+    content[5] = L"▄     ▀████     ██ ██    ██   ██    ██  ███    ██  ▀█████▄";
+    content[6] = L"██     ████▄   ▄██ ██    ██   ██    ██  ▀██    ██  █▄   ██";
+    content[7] = L"█▀█████▀  ▀█████▀  ▀████▀███▄████  ████▄ ▀████▀███▄██████▀";
+    content[8] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+
+
+    for (int i = 0; i < 9; i++) {
+        printCenterCharacters(content[i], color[0], Color::bright_white, short(25 + i), My_Windows);
+    }
+
+    
+    wstring state[8];
+    state[0] = L"            ▄▄▄▄   ▄▄▄▄                                       ";
+    state[1] = L"          ▄█▀ ▀▀ ▄█▀ ▀▀                                       ";
+    state[2] = L"          ██▀    ██▀                                          ";
+    state[3] = L" ▄██▀██▄ █████  █████                      ▄██▀██▄▀████████▄  ";
+    state[4] = L"██▀   ▀██ ██     ██                       ██▀   ▀██ ██    ██  ";
+    state[5] = L"██     ██ ██     ██                       ██     ██ ██    ██  ";
+    state[6] = L"██▄   ▄██ ██     ██                       ██▄   ▄██ ██    ██  ";
+    state[7] = L" ▀█████▀▄████▄ ▄████▄                      ▀█████▀▄████  ████▄";
+
+
+    for (int i = 0; i < 8; i++) {
+        printCenterCharacters(state[i], color[1], Color::bright_white, short(40 + i), My_Windows);
+    }
+
+
+
+    wstring button1[8];
+
+    button1[0] = L"▄███████████████████████████████████████████████████▄";
+    button1[1] = L"███▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓███";
+    button1[2] = L"██▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒███████████████████████▓██";
+    button1[3] = L"██▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒███████████████████████▓██";
+    button1[4] = L"██▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒███████████████████████▓██";
+    button1[5] = L"██▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒███████████████████████▓██";
+    button1[6] = L"███▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓███";
+    button1[7] = L"▀███████████████████████████████████████████████████▀";
+
+
+
+    wstring button2[8];
+
+    button2[0] = L"▄███████████████████████████████████████████████████▄";
+    button2[1] = L"███▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓███";
+    button2[2] = L"██▓███████████████████████▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓██";
+    button2[3] = L"██▓███████████████████████▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓██";
+    button2[4] = L"██▓███████████████████████▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓██";
+    button2[5] = L"██▓███████████████████████▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓██";
+    button2[6] = L"███▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓███";
+    button2[7] = L"▀███████████████████████████████████████████████████▀";
+
+
+    wstring exit[8];
+
+    exit[0] = L"    ▄   ▄   ▀███▀▀▀██▄     ██       ▄▄█▀▀▀█▄█████▀ ▀███▀       ";
+    exit[1] = L"   █   █      ██    ██    ▄██▄    ▄██▀     ▀█ ██   ▄█▀         ";
+    exit[2] = L" ▄█  ▄█       ██    ██   ▄█▀██▄   ██▀       ▀ ██ ▄█▀           ";
+    exit[3] = L"██  ██        ██▀▀▀█▄▄  ▄█  ▀██   ██          █████▄           ";
+    exit[4] = L" ▀█  ▀█       ██    ▀█  ████████  ██▄         ██  ███          ";
+    exit[5] = L"   █   █      ██    ▄█ █▀      ██ ▀██▄     ▄▀ ██   ▀██▄        ";
+    exit[6] = L"    ▀   ▀   ▄████████▄███▄   ▄████▄ ▀▀█████▀▄████▄   ███▄      ";
+
+
+
+    if (choice == 1) {
+        if (On) {
+            for (int i = 0; i < 8; i++) {
+                printCenterCharacters(button1[i], color[3], Color::bright_white, short(50 + i), My_Windows);
+            }
+        }
+        else if (!On) {
+            for (int i = 0; i < 8; i++) {
+                printCenterCharacters(button2[i], color[3], Color::bright_white, short(50 + i), My_Windows);
+            }
+        }
+        for (int i = 0; i < 8; i++) {
+            printCenterCharacters(exit[i], color[2], Color::bright_white, short(70 + i), My_Windows);
+        }
+    }
+    else if (choice == 2) {
+        if (On) {
+            for (int i = 0; i < 8; i++) {
+                printCenterCharacters(button1[i], color[1], Color::bright_white, short(50 + i), My_Windows);
+            }
+        }
+        else if (!On) {
+            for (int i = 0; i < 8; i++) {
+                printCenterCharacters(button2[i], color[1], Color::bright_white, short(50 + i), My_Windows);
+            }
+        }
+        for (int i = 0; i < 8; i++) {
+            printCenterCharacters(exit[i], color[3], Color::bright_white, short(70 + i), My_Windows);
+        }
+    }
+}
+
+void drawLoadMenu(int choice) {
+    Color color[5] = { Color::light_red, Color::light_blue, Color::light_purple, Color::yellow, Color::light_green };
+
+    drawGameTitle();
+    
+    wstring content[8];
+    content[0] = L" ▄█▀▀▀█▄█                                  ";
+    content[1] = L"▄██    ▀█                                  ";
+    content[2] = L"▀███▄    ▄█▀██▄ ▀██▀   ▀██▀  ▄▄█▀██ ▄██▀███";
+    content[3] = L"  ▀█████▄█   ██   ██   ▄█   ▄█▀   ████   ▀▀";
+    content[4] = L"▄     ▀██▄█████    ██ ▄█    ██▀▀▀▀▀▀▀█████▄";
+    content[5] = L"██     ███   ██     ███     ██▄    ▄█▄   ██";
+    content[6] = L"█▀█████▀▀████▀██▄    █       ▀█████▀██████▀";
+    content[7] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+
+    for (int i = 0; i < 8; i++) {
+        printCenterCharacters(content[i], color[1], Color::bright_white, short(15 + i), My_Windows);
+    }
+
+    wstring border[4];
+    border[0] = L"┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓";
+    border[1] = L"┠━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫";
+    border[2] = L"┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛";
+
+    printCenterCharacters(border[0], color[0], Color::bright_white, short(25), My_Windows);
+    printCenterCharacters(border[1], color[0], Color::bright_white, short(25 + 15), My_Windows);
+    printCenterCharacters(border[1], color[0], Color::bright_white, short(25 + 30), My_Windows);
+    printCenterCharacters(border[1], color[0], Color::bright_white, short(25 + 45), My_Windows);
+    printCenterCharacters(border[1], color[0], Color::bright_white, short(25 + 60), My_Windows);
+    printCenterCharacters(border[2], color[0], Color::bright_white, short(25 + 75), My_Windows);
+
+    short centerX = (short(My_Windows.Left) + short(My_Windows.Right)) / 2;
+
+    for (int i = 0; i < 76; i++) {
+        if (i == 0 || i == 15 || i == 30 || i == 45 || i == 60 || i == 75) {
+            continue;
+        }
+        printCharacter(L"┃", { short(centerX - short(117 / 2)), short(i + 25) }, color[0], Color::bright_white);
+        printCharacter(L"┃", { short(centerX + short(117 / 2)), short(i + 25) }, color[0], Color::bright_white);
+    }
+
+
+
+    wstring exit[8];
+
+    exit[0] = L"    ▄   ▄   ▀███▀▀▀██▄     ██       ▄▄█▀▀▀█▄█████▀ ▀███▀       ";
+    exit[1] = L"   █   █      ██    ██    ▄██▄    ▄██▀     ▀█ ██   ▄█▀         ";
+    exit[2] = L" ▄█  ▄█       ██    ██   ▄█▀██▄   ██▀       ▀ ██ ▄█▀           ";
+    exit[3] = L"██  ██        ██▀▀▀█▄▄  ▄█  ▀██   ██          █████▄           ";
+    exit[4] = L" ▀█  ▀█       ██    ▀█  ████████  ██▄         ██  ███          ";
+    exit[5] = L"   █   █      ██    ▄█ █▀      ██ ▀██▄     ▄▀ ██   ▀██▄        ";
+    exit[6] = L"    ▀   ▀   ▄████████▄███▄   ▄████▄ ▀▀█████▀▄████▄   ███▄      ";
+
+    for (int i = 0; i < 7; i++) {
+        printCenterCharacters(exit[i], color[2], Color::bright_white, short(105 + i), My_Windows);
+    }
+
+    if (choice == 1) {
+
+    }
+    else if (choice == 2) {
+
+    }
+    else if (choice == 3) {
+
+    }
+    else if (choice == 4) {
+
+    }
+    else if (choice == 5) {
+
+    }
+    else if (choice == 6) {
+        for (int i = 0; i < 7; i++) {
+            printCenterCharacters(exit[i], color[3], Color::bright_white, short(105 + i), My_Windows);
+        }
+    }
+
+}
+
+void drawScoreboardMenu() {
+    Color color[5] = { Color::light_red, Color::light_blue, Color::light_purple, Color::yellow, Color::light_green };
+
+    drawGameTitle();
+
+    wstring content[8];
+    content[0] = L" ▄█▀▀▀█▄█                                ▄██                                      ▀███  ";
+    content[1] = L"▄██    ▀█                                 ██                                        ██  ";
+    content[2] = L"▀███▄    ▄██▀██  ▄██▀██▄▀███▄███  ▄▄█▀██  ██▄████▄   ▄██▀██▄ ▄█▀██▄ ▀███▄███   ▄█▀▀███  ";
+    content[3] = L"  ▀█████▄█▀  ██ ██▀   ▀██ ██▀ ▀▀ ▄█▀   ██ ██    ▀██ ██▀   ▀███   ██   ██▀ ▀▀ ▄██    ██  ";
+    content[4] = L"▄     ▀███      ██     ██ ██     ██▀▀▀▀▀▀ ██     ██ ██     ██▄█████   ██     ███    ██  ";
+    content[5] = L"██     ███▄    ▄██▄   ▄██ ██     ██▄    ▄ ██▄   ▄██ ██▄   ▄███   ██   ██     ▀██    ██  ";
+    content[6] = L"█▀█████▀ █████▀  ▀█████▀▄████▄    ▀█████▀ █▀█████▀   ▀█████▀▀████▀██▄████▄    ▀████▀███▄";
+    content[7] = L"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+
+    for (int i = 0; i < 8; i++) {
+        printCenterCharacters(content[i], color[1], Color::bright_white, short(15 + i), My_Windows);
+    }
+
+    wstring border[4];
+    border[0] = L"┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓";
+    border[1] = L"┠━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫";
+    border[2] = L"┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛";
+
+    printCenterCharacters(border[0], color[0], Color::bright_white, short(25), My_Windows);
+    printCenterCharacters(border[1], color[0], Color::bright_white, short(25 + 15), My_Windows);
+    printCenterCharacters(border[1], color[0], Color::bright_white, short(25 + 30), My_Windows);
+    printCenterCharacters(border[1], color[0], Color::bright_white, short(25 + 45), My_Windows);
+    printCenterCharacters(border[1], color[0], Color::bright_white, short(25 + 60), My_Windows);
+    printCenterCharacters(border[2], color[0], Color::bright_white, short(25 + 75), My_Windows);
+
+    short centerX = (short(My_Windows.Left) + short(My_Windows.Right)) / 2;
+
+    for (int i = 0; i < 76; i++) {
+        if (i == 0 || i == 15 || i == 30 || i == 45 || i == 60 || i == 75) {
+            continue;
+        }
+        printCharacter(L"┃", { short(centerX - short(117 / 2)), short(i + 25) }, color[0], Color::bright_white);
+        printCharacter(L"┃", { short(centerX + short(117 / 2)), short(i + 25) }, color[0], Color::bright_white);
+    }
+
+
+
+    wstring exit[8];
+
+    exit[0] = L"    ▄   ▄   ▀███▀▀▀██▄     ██       ▄▄█▀▀▀█▄█████▀ ▀███▀       ";
+    exit[1] = L"   █   █      ██    ██    ▄██▄    ▄██▀     ▀█ ██   ▄█▀         ";
+    exit[2] = L" ▄█  ▄█       ██    ██   ▄█▀██▄   ██▀       ▀ ██ ▄█▀           ";
+    exit[3] = L"██  ██        ██▀▀▀█▄▄  ▄█  ▀██   ██          █████▄           ";
+    exit[4] = L" ▀█  ▀█       ██    ▀█  ████████  ██▄         ██  ███          ";
+    exit[5] = L"   █   █      ██    ▄█ █▀      ██ ▀██▄     ▄▀ ██   ▀██▄        ";
+    exit[6] = L"    ▀   ▀   ▄████████▄███▄   ▄████▄ ▀▀█████▀▄████▄   ███▄      ";
+
+    for (int i = 0; i < 7; i++) {
+        printCenterCharacters(exit[i], color[3], Color::bright_white, short(105 + i), My_Windows);
+    }
+
+
+
+}
 
 void drawGameTitle() {
     wstring content[9];

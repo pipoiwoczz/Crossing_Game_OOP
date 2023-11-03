@@ -62,6 +62,10 @@ void drawBorder(Color color);
 void drawPlay(Color color);
 void drawLoad(Color color);
 void drawSetting(Color color);
+void drawScoreBoard(Color color);
+void drawSettingMenu(int choice, bool On);
+void drawLoadMenu(int choice);
+void drawScoreboardMenu();
 void drawGameTitle();
 void drawLosingTitle();
 
