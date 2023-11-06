@@ -1,11 +1,11 @@
-﻿#include "cAnimal.h"
+#include "cAnimal.h"
 
 vector<vector<unsigned char>> cLion::textureLion = loadTexture(lionFile);
 vector<vector<unsigned char>> cRhino::textureRhino = loadTexture(rhinoFile);
 vector<vector<unsigned char>> cCrocodile::textureCrocodile = loadTexture(crocoFile);
 
-cLion::cLion() : cLion({ 0,20 }, 1, 3) {}
-cLion::cLion(COORD In_pos, int difficulty, int ttm) : cAnimal(In_pos, difficulty, ttm) {
+cLion::cLion() : cLion({ 0,20 }, 3) {}
+cLion::cLion(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In_pos, /*difficulty, ttm*/ speed) {
     wstring content[5];
     content[0] = L"         ▄▓▓▓▓▓▄";
     content[1] = L" ▂▄██████▓▓▀▄▀▓▓";
@@ -16,8 +16,8 @@ cLion::cLion(COORD In_pos, int difficulty, int ttm) : cAnimal(In_pos, difficulty
     texture.assign(content, content + 5);
 }
 
-cRhino::cRhino() : cRhino({ 0,20 }, 1, 3) {}
-cRhino::cRhino(COORD In_pos, int difficulty, int ttm) : cAnimal(In_pos, difficulty, ttm) {
+cRhino::cRhino() : cRhino({ 0,20 }, 3) {}
+cRhino::cRhino(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In_pos, /*difficulty, ttm*/ speed) {
     wstring content[5];
     content[0] = L"             ▄▄  ";
     content[1] = L"▂▄███████▄█▄█▄██ ";
@@ -27,8 +27,8 @@ cRhino::cRhino(COORD In_pos, int difficulty, int ttm) : cAnimal(In_pos, difficul
     texture.assign(content, content + 5);
 }
 
-cCrocodile::cCrocodile() : cCrocodile({ 0,20 }, 1, 3) {}
-cCrocodile::cCrocodile(COORD In_pos, int difficulty, int ttm) : cAnimal(In_pos, difficulty, ttm) {
+cCrocodile::cCrocodile() : cCrocodile({ 0,20 }, 3) {}
+cCrocodile::cCrocodile(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In_pos, /*difficulty, ttm*/ speed) {
     wstring content[4];
     content[0] = L"            ▄ ▄ ▄  ▄▄ ▄▄       ";
     content[1] = L"▀▄▄    ▄▄▄██████████▄██▄█▀█▀█▀█";

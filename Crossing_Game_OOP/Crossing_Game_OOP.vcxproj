@@ -135,7 +135,6 @@
     <ClInclude Include="cVehicle.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="hitbox.h" />
-    <ClInclude Include="position.h" />
     <ClInclude Include="setup.h" />
   </ItemGroup>
   <ItemGroup>
@@ -149,7 +148,7 @@
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="hitbox.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="position.cpp" />
+    <ClCompile Include="main2.cpp" />
     <ClCompile Include="setup.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
