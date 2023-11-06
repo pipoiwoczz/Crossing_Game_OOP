@@ -1,9 +1,13 @@
 #include "cObstacle.h"
 
-cObstacle::cObstacle(COORD In_pos, int difficulty, int ttm) {
+cObstacle::cObstacle(COORD In_pos, /* int difficulty, int ttm */ int speed) {
     center = In_pos;
-    speed = difficulty;
-    timeUntilMove = ttm;
+    /*speed = difficulty;
+    timeUntilMove = ttm;*/
+    if (speed <= 0)
+        speed = 1;
+    this -> speed = speed;
+    timeUntilMove = speed;
 }
 
 COORD cObstacle::getPos() {
@@ -22,8 +26,18 @@ bool cObstacle::collide(Hitbox h)
     return false;
 }
 
-void cObstacle::advanceTime(int time) {
-
+void cObstacle::advanceTime(int time)
+{
+    if (isStop)
+        return;
+    
+    timeUntilMove -= time;
+    if (timeUntilMove <= 0)
+    {
+        move();
+        timeUntilMove = speed;
+    }
+    
 }
 
 void cObstacle::draw() {

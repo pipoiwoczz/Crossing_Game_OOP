@@ -1,11 +1,11 @@
-﻿#include "cVehicle.h"
+#include "cVehicle.h"
 
 vector<vector<unsigned char>> cTruck::textureTruck = loadTexture(truckFile);
 vector<vector<unsigned char>> cHelicopter::textureHeli = loadTexture(heliFile);
 vector<vector<unsigned char>> cMotorbike::textureMotorb = loadTexture(motorbFile);
 
-cTruck::cTruck() : cTruck({ 0, 40 }, 1, 2) {};
-cTruck::cTruck(COORD In_pos, int difficulty, int ttm): cVehicle(In_pos, difficulty, ttm) {
+cTruck::cTruck() : cTruck({ 0, 40 }, 2) {};
+cTruck::cTruck(COORD In_pos, /*int difficulty, int ttm*/ int speed): cVehicle(In_pos, /*difficulty, ttm*/ speed) {
 	wstring content[5];
 	content[0] = L"  ▄███ ▄████████▄";
 	content[1] = L" ▄█▒▒█▓██▒▒▒▒▒▒██";
@@ -16,8 +16,8 @@ cTruck::cTruck(COORD In_pos, int difficulty, int ttm): cVehicle(In_pos, difficul
 	texture.assign(content, content + 5);
 }
 
-cHelicopter::cHelicopter() : cHelicopter({ 0, 40 }, 1, 2) {};
-cHelicopter::cHelicopter(COORD In_pos, int difficulty, int ttm): cVehicle(In_pos, difficulty, ttm) {
+cHelicopter::cHelicopter() : cHelicopter({ 0, 40 }, 2) {};
+cHelicopter::cHelicopter(COORD In_pos, /*int difficulty, int ttm*/ int speed): cVehicle(In_pos, /*difficulty, ttm*/ speed) {
 	wstring content[5];
 	content[0] = L"▂▂▂▂▂▂▂▂▂▂▂▂";
 	content[1] = L"      ▌     ";
@@ -28,8 +28,8 @@ cHelicopter::cHelicopter(COORD In_pos, int difficulty, int ttm): cVehicle(In_pos
 	texture.assign(content, content + 5);
 }
 
-cMotorbike::cMotorbike() : cMotorbike({ 0, 40 }, 1, 2) {};
-cMotorbike::cMotorbike(COORD In_pos, int difficulty, int ttm): cVehicle(In_pos, difficulty, ttm) {
+cMotorbike::cMotorbike() : cMotorbike({ 0, 40 }, 2) {};
+cMotorbike::cMotorbike(COORD In_pos, /*int difficulty, int ttm*/ int speed): cVehicle(In_pos, /*difficulty, ttm*/ speed) {
 	wstring content[5];
 	content[0] = L"   ▄██▀";
 	content[1] = L"   ▀▀██▄▓▓▓▄ ▄▄██▀▀";
