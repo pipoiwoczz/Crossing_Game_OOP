@@ -12,7 +12,7 @@ cLion::cLion(COORD In_pos, int difficulty, int ttm) : cAnimal(In_pos, difficulty
     content[2] = L"▕ ███████▓▓▄█▄▓▓";
     content[3] = L"▕ ████████▓▓▓▓▓";
     content[4] = L" ▀ ▓█▄   ██▀▀▀";
-    int n = content->size();
+   // int n = content->size();
     texture.assign(content, content + 5);
 }
 

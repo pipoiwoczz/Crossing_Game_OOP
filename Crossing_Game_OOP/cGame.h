@@ -62,10 +62,10 @@ class cGame {
 		void getMotorbike();
 		
 		void stopDrawAnimal() {
-			lion->stop();
+			//lion->stop();
 		}
 		void continueDrawAnimal() {
-			lion->resume();
+			//lion->resume();
 		}
 
 		void resetGame();
@@ -77,14 +77,16 @@ class cGame {
 		void resumeGame();
 
 		void updatePosPeople(char MOVING) {
-			if (!isPause)
-				people->move(MOVING);
+			if (!isPause) {
+
+			}
+				//people->move(MOVING);
 		}
 		bool isImpact() {
-			if (people->isImpactLion(lion)) {
+	/*		if (people->isImpactLion(lion)) {
 				isLose = true;
 				return true;
-			}
+			}*/
 			return false;
 		}
 		

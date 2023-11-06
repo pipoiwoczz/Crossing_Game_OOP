@@ -13,12 +13,11 @@ class cPeople {
 	public:
 		cPeople() {
 			//mX = mY = 50;
-            position.X = position.Y = 50;
+			position = { 50,50 };
 			mState = true;
 		}
-		cPeople(int x, int y) {
-            position.X = x;
-            position.Y = y;
+		cPeople(COORD In_pos) {
+			position = In_pos;
 			mState = true;
 //			mX = x;
 //			mY = y;
@@ -50,10 +49,10 @@ class cPeople {
 			return true;
 		}
 		bool isFinish() {
-			if (mY == 10) {
-				return true;
-			}
-			return false;
+			//if (mY == 10) {
+			//	return true;
+			//}
+			//return false;
 		}
 };
 
