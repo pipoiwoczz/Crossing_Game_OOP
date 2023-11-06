@@ -1,9 +1,9 @@
-﻿#ifndef _SETUP_H
+#ifndef _SETUP_H
 #define _SETUP_H
 #define _CRT_SECURE_NO_WARNINGS
 
 
-
+#include "Windows.h"
 #include <iostream>
 #include <string>
 #include <wchar.h>
