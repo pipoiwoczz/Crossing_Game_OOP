@@ -1,8 +1,9 @@
-#include "setup.h"
+#include "cGame.h"
 #include "Graphics.h"
 
 CHAR_INFO* loader(string filename, short& height, short &width)
 {
+	
 	ifstream ifs;
 	ifs.open(filename);
 	ifs >> height >> width;
@@ -53,7 +54,7 @@ int main()
 	CHAR_INFO* tankL = loader("tankL.txt", charHH, charWH);
 	CHAR_INFO* tankR = loader("tankR.txt", charHH, charWH);
 
-
+	cout << "press Q to quit" << endl;
 
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD pos = { 60, 20 };

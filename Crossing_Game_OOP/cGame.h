@@ -73,7 +73,7 @@ class cGame {
 		void startGame();
 		void loadGame();
 		void saveGame();
-		void pauseGame();
+		void pauseGame();	
 		void resumeGame();
 
 		void updatePosPeople(char MOVING) {
