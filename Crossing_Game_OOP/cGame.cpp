@@ -195,18 +195,58 @@
 //	continueDrawAnimal();
 //}
 //
-//void cGame::saveGame() {
-//	pauseGame();
-//
-//	ifstream ifs;
-//
-//	// draw a mini box in center as an input field
-//	// user input save name <= 20 characters
-//	// check this save name exist before or not
-//	// => enter save name again or save successfully
-//	// press ESC to exit save menu
-//
-//	ifs.close();
-//
-//	resumeGame();
-//}
+
+
+void cGame::saveGame() {
+	pauseGame();
+
+	ofstream ofs;
+    ofs.open("test.bin", ios::binary);
+
+	// draw a mini box in center as an input field
+	// user input save name <= 20 characters
+	// check this save name exist before or not
+	// => enter save name again or save successfully
+	// press ESC to exit save menu
+    
+    // suggestion: have limited save slots with their own pre-designated save files. no name-checking needed, easier to manage.
+    
+    // testing simple version of save file
+    // file format (binary)
+    // [gameOrder] [gameLevel] [map]
+    // [player coord X] [player coord Y]
+    // [number of obstacles] [obstacle 1 coord X] [obstacle 1 coord Y] ...
+    
+    ofs.write((char *) &gameOrder, sizeof(short));
+    ofs.write((char *) &gameLevel, sizeof(short));
+    ofs.write((char *) &map, sizeof(int));
+    
+    short * peoplePosition = new short [livePeople.size() * 2];
+    int count = 0;
+    for (cPeople element : livePeople)
+    {
+        peoplePosition[count] = element.getPos().X;
+        count++;
+        peoplePosition[count] = element.getPos().Y;
+        count++;
+    }
+    ofs.write((char *) peoplePosition, sizeof(short) * livePeople.size() * 2);
+    delete [] peoplePosition;
+    peoplePosition = nullptr;
+    
+    short * obstaclePosition = new short [liveObstacles.size() * 2];
+    count = 0;
+    for (cObstacle element : liveObstacles)
+    {
+        peoplePosition[count] = element.getPos().X;
+        count++;
+        peoplePosition[count] = element.getPos().Y;
+        count++;
+    }
+    ofs.write((char *) obstaclePosition, sizeof(short) * livePeople.size() * 2);
+    delete [] obstaclePosition;
+
+	ofs.close();
+
+	resumeGame();
+}
