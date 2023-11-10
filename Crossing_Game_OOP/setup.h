@@ -68,6 +68,6 @@ void drawLoadMenu(int choice);
 void drawScoreboardMenu();
 void drawGameTitle();
 void drawLosingTitle();
-
+CHAR_INFO* loader(string filename, short& height, short& width);
 
 #endif

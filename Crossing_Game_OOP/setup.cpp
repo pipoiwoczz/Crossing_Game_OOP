@@ -567,3 +567,28 @@ vector<vector<unsigned char>> loadTexture(string filename)
     ifs.close();
     return res;
 }
+
+CHAR_INFO* loader(string filename, short& height, short& width)
+{
+    ifstream ifs;
+    ifs.open(filename);
+    ifs >> height >> width;
+    CHAR_INFO* res = new CHAR_INFO[height * width];
+    for (int i = 0; i < height * width; i++)
+    {
+        int x;
+        ifs >> x;
+        if (x == 16)
+        {
+            CHAR_INFO t = { L'b', 15 * 16 };
+            res[i] = t;
+        }
+        else {
+            CHAR_INFO t = { L' ', x * 16 };
+            res[i] = t;
+        }
+
+    }
+    ifs.close();
+    return res;
+}
