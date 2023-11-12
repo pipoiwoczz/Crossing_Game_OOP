@@ -4,6 +4,7 @@
 #include "cVehicle.h"
 #include "cPeople.h"
 #include "cObstacle.h"
+#include "Map.h"
 
 class cGame {
 //	cTruck *truck;
@@ -12,11 +13,14 @@ class cGame {
 //	cCrocodile *crocodile;
 //	cHelicopter *helicopter;
 //	cMotorbike *motorbike;
+
+	//Map* map;
     
     vector<cObstacle> liveObstacles;
     
 	//cPeople *people;
     vector<cPeople> livePeople;
+	//cPeople people;
 
 	short gameOrder, gameLevel; // order: 1 or 2 player
 	bool isPause, isExit;
@@ -40,6 +44,7 @@ class cGame {
 //			delete[]helicopter;
 //			delete[]motorbike;
 //			delete[]people;
+			//delete map;
 		}
 
 		void gameThread();

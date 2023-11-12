@@ -11,7 +11,7 @@ void cPeople::draw(COORD pos) {
 	printCharacter(L"         ", {short (pos.X), short(pos.Y - 1)}, Color::bright_white, Color::bright_white);
 	printCharacter(L"         ", { short(pos.X), short(pos.Y + 4) }, Color::bright_white, Color::bright_white);
 	printCharacter(L"         ", { short(pos.X+1), short(pos.Y + 2) }, Color::bright_white, Color::bright_white);*/
-	wstring content[4];
+	/*wstring content[4];
 	content[0] = L" ▄████";
 	content[1] = L"██▄▄▄▄";
 	content[2] = L"██████";
@@ -22,7 +22,13 @@ void cPeople::draw(COORD pos) {
 		}
 		else
 			printCharacter2(content[i], { pos.X, short(pos.Y + i) }, Color::red, Color::bright_white);
-	}
+	}*/
+
+	/*CHAR_INFO *character;
+	short height, width;*/
+
+
+
 }
 
 void cPeople::up(){
@@ -71,8 +77,8 @@ void cPeople::right() {
 	draw(pos);
 }
 
-void cPeople::move(char &MOVING) {
-	if (MOVING == 'S') {
+void cPeople::move(Map &map) {
+	/*if (MOVING == 'S') {
 		down();
 	}
 	else if (MOVING == 'W') {
@@ -83,7 +89,73 @@ void cPeople::move(char &MOVING) {
 	}
 	else if (MOVING == 'D') {
 		right();
+	}*/
+	short* curW = &width;
+	short* curH = &height;
+	
+	while (true)
+	{
+		bool horizon = true;
+		float dx = 0, dy = 0;
+		if (GetAsyncKeyState(0x51) < 0)
+			break;
+		if (GetAsyncKeyState(VK_LEFT) < 0) {
+			dx--;
+			horizon = true;
+			curW = &width;
+			curH = &height;
+		}
+
+		if (GetAsyncKeyState(VK_RIGHT) < 0) {
+			dx++;
+			horizon = true;
+			curW = &width;
+			curH = &height;
+		}
+
+		if (GetAsyncKeyState(VK_UP) < 0) {
+			dy--;
+			horizon = false;
+			curW = &width;
+			curH = &height;
+		}
+
+		if (GetAsyncKeyState(VK_DOWN) < 0) {
+			dy++;
+			horizon = false;
+			curW = &width;
+			curH = &height;
+		}
+		COORD topleftPlayer = { position.X - 0.5 * *(curW), position.Y - 0.5 * *(curH) };
+		if (horizon)
+		{
+			//if (topleftPlayer.X + dx >= 0 && topleftPlayer.X + dx < 478 - width)
+				position.X += dx * 3;
+		}
+		else {
+			//if (topleftPlayer.Y + dy >= 0 && topleftPlayer.Y + dy < 101 - height)
+				position.Y += dy * 2.0;
+		}
+		
+		CHAR_INFO* pP = new CHAR_INFO[*(curH) * *(curW)];
+		memcpy(pP, character, *(curH) * *(curW) * sizeof(CHAR_INFO));
+		for (int i = 0; i < *(curH) * *(curW); i++)
+		{
+			if (pP[i].Char.UnicodeChar == L'b') {
+				pP[i].Char.UnicodeChar = L' ';
+				pP[i].Attributes = map.getBG()[(topleftPlayer.Y + i / *curW) * map.getWidth() + topleftPlayer.X + (i % *curW)].Attributes;
+			}
+
+		}
+
+		map.draw();
+		SMALL_RECT playerRect = { topleftPlayer.X, topleftPlayer.Y, *curW + topleftPlayer.X - 1, *curH + topleftPlayer.Y - 1 };
+		WriteConsoleOutput(h, pP, { *curW, *curH }, { 0,0 }, &playerRect);
+		delete[]pP;
+		
+		Sleep(1.0 / 60 * 1000.0);
 	}
+
 }
 bool cPeople::isImpact(cObstacle obsta) {
 	for (auto box : obsta.boxes) {

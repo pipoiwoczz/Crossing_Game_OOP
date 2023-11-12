@@ -135,7 +135,9 @@
     <ClInclude Include="cVehicle.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="hitbox.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="setup.h" />
+    <ClInclude Include="Tank.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cAnimal.cpp" />
@@ -150,6 +152,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main2.cpp" />
     <ClCompile Include="setup.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Tank.cpp" />
+    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

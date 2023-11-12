@@ -65,6 +65,6 @@ Map::Map(int map, int level) {
 
 void Map::draw() {
 	// draw
-	SMALL_RECT bgRect = { 0, 0, width - 1, height - 1 };
+	SMALL_RECT bgRect = { 0, 0, width , height };
 	WriteConsoleOutput(h, bg, { width, height }, { 0,0 }, &bgRect);
 }

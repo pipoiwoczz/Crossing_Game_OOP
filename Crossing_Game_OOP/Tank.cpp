@@ -23,16 +23,16 @@ Tank::Tank(COORD pos, int speed) : cObstacle{ pos, speed } {
 void Tank::moveRight(Map &map) {
 	short* curW = &charWH;
 	short* curH = &charHH;
-	while (true) {
+	//while (true) {
 		float dx = 0;
 		dx++;
 		curH = &charHH;
 		curW = &charWH;
 
 		COORD topleftPlayer = { center.X - 0.5 * *(curW), center.Y - 0.5 * *(curH) };
-		if (topleftPlayer.X + dx >= 0 && topleftPlayer.X + dx < 478 - charWH) {
+	//	if (topleftPlayer.X + dx >= 0 && topleftPlayer.X + dx < 478 - charWH) {
 			center.X += dx * 3;
-		}
+		//}
 		CHAR_INFO* pP = new CHAR_INFO[*(curH) * *(curW)];
 		memcpy(pP, tankR, *(curH) * *(curW) * sizeof(CHAR_INFO));
 		CHAR_INFO* bg = map.getBG();
@@ -45,17 +45,20 @@ void Tank::moveRight(Map &map) {
 			}
 		}
 
-		map.draw();
+		//map.draw();
 		SMALL_RECT playerRect = { topleftPlayer.X, topleftPlayer.Y, *curW + topleftPlayer.X - 1, *curH + topleftPlayer.Y - 1 };
+
 		WriteConsoleOutput(h, pP, { *curW, *curH }, { 0,0 }, &playerRect);
 		delete[]pP;
 
-		Sleep(25.0 / speed / 60 * 1000.0);
+		//Sleep(25.0 / speed / 60 * 1000.0);
+		srand(time(NULL));
+		int random = rand() % 100;
 		
-		if (center.X > 250) {
-			center.X = 50;
+		if (center.X > 500 + random) {
+			center.X = -45;
 		}
-	}
+//	}
 }
 
 void Tank::moveLeft(Map &map) {
@@ -63,7 +66,7 @@ void Tank::moveLeft(Map &map) {
 	short* curH = &charHH;
 	
 	
-	while (true) {
+	//while (true) {
 		float dx = 0;
 		dx--;
 		curH = &charHH;
@@ -73,6 +76,7 @@ void Tank::moveLeft(Map &map) {
 		if (topleftPlayer.X + dx >= 0 && topleftPlayer.X + dx < 478 - charWH) {
 			center.X += dx * 3;
 		}
+
 		CHAR_INFO* pP = new CHAR_INFO[*(curH) * *(curW)];
 		memcpy(pP, tankL, *(curH) * *(curW) * sizeof(CHAR_INFO));
 		CHAR_INFO* bg = map.getBG();
@@ -85,17 +89,20 @@ void Tank::moveLeft(Map &map) {
 			}
 		}
 
-		map.draw();
+		//map.draw();
 		SMALL_RECT playerRect = { topleftPlayer.X, topleftPlayer.Y, *curW + topleftPlayer.X - 1, *curH + topleftPlayer.Y - 1 };
+
 		WriteConsoleOutput(h, pP, { *curW, *curH }, { 0,0 }, &playerRect);
 		delete[]pP;
 
-		Sleep(25.0 / speed / 60 * 1000.0);
+		//Sleep(25.0 / speed / 60 * 1000.0);
+		srand(time(NULL));
+		int random = rand() % 100;
 
-		if (center.X <  50) {
-			center.X = 250;
+		if (center.X < -45 - random) {
+			center.X = 480;
 		}
-	}
+	//}
 }
 
 void Tank::move(Map &map) {

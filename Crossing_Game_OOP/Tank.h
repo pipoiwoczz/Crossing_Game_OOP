@@ -6,6 +6,7 @@
 class Tank : public cObstacle {
 private:
 	COORD pos;
+	bool isRedraw = false;
 	bool isMovingLeft = true;
 	short charHH, charWH, charHV, charWV;
 	CHAR_INFO* tankU;
@@ -32,5 +33,11 @@ public:
 	}
 	void setDirection(bool isMovingLeft) {
 		this->isMovingLeft = isMovingLeft;
+	}
+	int getSpeed() {
+		return speed;
+	}
+	void setRedraw() {
+		isRedraw = true;
 	}
 };
