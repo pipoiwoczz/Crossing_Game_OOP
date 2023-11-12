@@ -20,6 +20,8 @@ public:
     //cObstacle(COORD In_pos, int difficulty, int ttm);
     cObstacle (COORD In_pos, int speed); // constructor: set center and speed. timeUntilMove automatically set to be equal to speed
     COORD getPos();
+    int getSpeed();
+    
     void setPos(COORD new_Pos);
 
     void draw(); // draws sprite based on texture

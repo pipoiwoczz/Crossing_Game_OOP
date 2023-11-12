@@ -14,6 +14,11 @@ COORD cObstacle::getPos() {
     return center;
 }
 
+int cObstacle::getSpeed()
+{
+    return speed;
+}
+
 void cObstacle::setPos(COORD new_Pos) {
     center = new_Pos;
 }

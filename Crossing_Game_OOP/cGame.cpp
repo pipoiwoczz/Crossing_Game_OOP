@@ -198,30 +198,33 @@ void cGame::resumeGame() {
 
 
 void cGame::saveGame() {
-	pauseGame();
-
-	ofstream ofs;
-    ofs.open("test.bin", ios::binary);
-
-	// draw a mini box in center as an input field
-	// user input save name <= 20 characters
-	// check this save name exist before or not
-	// => enter save name again or save successfully
-	// press ESC to exit save menu
+    pauseGame();
+    
+    string filename = "test.bin"; // placeholder filename
+    
+    ofstream ofs;
+    ofs.open(filename, ios::binary);
+    
+    // draw a mini box in center as an input field
+    // user input save name <= 20 characters
+    // check this save name exist before or not
+    // => enter save name again or save successfully
+    // press ESC to exit save menu
     
     // suggestion: have limited save slots with their own pre-designated save files. no name-checking needed, easier to manage.
     
     // testing simple version of save file
     // file format (binary)
     // [gameOrder] [gameLevel] [map]
-    // [player coord X] [player coord Y]
-    // [number of obstacles] [obstacle 1 coord X] [obstacle 1 coord Y] ...
+    // [player 1 coord X] [player 1 coord Y] ...
+    // [number of obstacles]
+    // [obstacle 1 type] [obstacle 1 coord X] [obstacle 1 coord Y] [obstacle 1 speed] ...
     
     ofs.write((char *) &gameOrder, sizeof(short));
     ofs.write((char *) &gameLevel, sizeof(short));
     ofs.write((char *) &map, sizeof(int));
     
-    short * peoplePosition = new short [livePeople.size() * 2];
+    short * peoplePosition = new short [gameOrder * 2];
     int count = 0;
     for (cPeople element : livePeople)
     {
@@ -230,23 +233,77 @@ void cGame::saveGame() {
         peoplePosition[count] = element.getPos().Y;
         count++;
     }
-    ofs.write((char *) peoplePosition, sizeof(short) * livePeople.size() * 2);
+    ofs.write((char *) peoplePosition, sizeof(short) * gameOrder * 2);
     delete [] peoplePosition;
     peoplePosition = nullptr;
     
-    short * obstaclePosition = new short [liveObstacles.size() * 2];
+    int obstacleCount = (int) liveObstacles.size();
+    ofs.write((char *) &obstacleCount, sizeof(int));
+    short * obstacleList = new short [obstacleCount * 4];
     count = 0;
     for (cObstacle element : liveObstacles)
     {
-        peoplePosition[count] = element.getPos().X;
+        obstacleList[count] = 0; // placeholder for obstacle type (rhino/truck/...)
         count++;
-        peoplePosition[count] = element.getPos().Y;
+        obstacleList[count] = element.getPos().X;
         count++;
+        obstacleList[count] = element.getPos().Y;
+        count++;
+        obstacleList[count] = element.getSpeed();
     }
-    ofs.write((char *) obstaclePosition, sizeof(short) * livePeople.size() * 2);
-    delete [] obstaclePosition;
+    ofs.write((char *) obstacleList, sizeof(short) * obstacleCount * 4);
+    delete [] obstacleList;
+    obstacleList = nullptr;
 
 	ofs.close();
 
 	resumeGame();
+}
+
+cGame::cGame (string saveFile) // load game (create cgame object) from save file
+{
+    ifstream ifs;
+    ifs.open(saveFile, ios::binary);
+    ifs.read((char *) &gameOrder, sizeof(short));
+    ifs.read((char *) &gameLevel, sizeof(short));
+    ifs.read((char *) &map, sizeof(int));
+    
+    short * peoplePosition = new short [gameOrder * 2];
+    ifs.read((char *) peoplePosition, sizeof(short) * gameOrder * 2);
+    livePeople.resize(gameOrder);
+    for (short i = 0; i < gameOrder; i++)
+    {
+        livePeople[i] = new cPeople({peoplePosition[2 * i], peoplePosition[2 * i + 1]});
+    }
+    delete [] peoplePosition;
+    peoplePosition = nullptr;
+    
+    int obstacleCount;
+    ifs.read((char *) &obstacleCount, sizeof(int));
+    short * obstacleList = new short [obstacleCount * 4];
+    ifs.read((char *) obstacleList, sizeof(short) * obstacleCount * 4);
+    ifs.close();
+    liveObstacles.resize(obstacleCount);
+    for (int i = 0; i < obstacleCount; i++)
+    {
+        // create object from type at obstaclePosition[4 * i],
+            // set pos to {obstaclePosition[4 * i + 1], obstaclePosition[4 * i + 2]}
+            // set speed to obstaclePosition[4 * i + 3]
+        liveObstacles[i] = createObject(obstacleList[4 * i], {obstacleList[4 * i + 1], obstacleList[4 * i + 2]}, obstacleList[4 * i + 3]);
+    }
+    delete [] obstacleList;
+    obstacleList = nullptr;
+}
+
+// object from type - prototype
+cObstacle * createObject (short type, COORD position, int speed)
+{
+    switch (type)
+    {
+        case 0: //placeholder
+            return dynamic_cast<cObstacle *>(new cRhino(position, speed));
+            
+        default:
+            return dynamic_cast<cObstacle *>(new cRhino());
+    }
 }

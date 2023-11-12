@@ -16,10 +16,10 @@ class cGame {
 
 	//Map* map;
     
-    vector<cObstacle> liveObstacles;
+    vector<cObstacle *> liveObstacles;
     
 	//cPeople *people;
-    vector<cPeople> livePeople;
+    vector<cPeople *> livePeople;
 	//cPeople people;
 
 	short gameOrder, gameLevel; // order: 1 or 2 player
@@ -36,6 +36,8 @@ class cGame {
 			isExit = false;	
 		}
     
+        cGame (string saveFile);
+    
 		~cGame() {
 //			delete[]truck;
 //			delete[]lion;
@@ -45,6 +47,17 @@ class cGame {
 //			delete[]motorbike;
 //			delete[]people;
 			//delete map;
+            
+            while (!liveObstacles.empty())
+            {
+                delete liveObstacles[liveObstacles.size() - 1];
+                liveObstacles.pop_back();
+            }
+            while (!livePeople.empty())
+            {
+                delete livePeople[liveObstacles.size() - 1];
+                livePeople.pop_back();
+            }
 		}
 
 		void gameThread();
@@ -111,5 +124,6 @@ class cGame {
 		void GameOver();
 		void GameWin();
 };
+cObstacle * createObject (short type, COORD position, int speed);
 
 #endif
