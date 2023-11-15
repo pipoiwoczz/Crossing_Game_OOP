@@ -40,13 +40,21 @@ class cPeople {
 		void setPos(COORD pos) {
             position = pos;
 		}
+        bool getState ()
+        {
+            return mState;
+        }
+        
 
 		void draw(COORD pos);
+    
 		void up();
 		void down();
 		void left();
 		void right();
+    
 		void move(Map &map);
+    
 		void erase();
 //		bool isImpactOneLion(cLion *lion);
 //		bool isImpactLion(cLion *lion);
@@ -54,7 +62,7 @@ class cPeople {
 		bool isImpact(cObstacle obsta);
 		bool isDead() {
 			mState = false;
-			return true;
+			return true; // why?
 		}
 		bool isFinish() {
 			//if (mY == 10) {
