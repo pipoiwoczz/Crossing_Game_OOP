@@ -51,12 +51,11 @@ void Graphic::fixConsoleWindow() {
     LONG style = GetWindowLong(consoleWindow, GWL_STYLE);
     style = style & ~(WS_MAXIMIZEBOX) & ~(WS_THICKFRAME);
     SetWindowLong(consoleWindow, GWL_STYLE, style);
-
+  
     GetConsoleScreenBufferInfo(consoleHandle, &csbi);
     SetConsoleScreenBufferSize(consoleHandle, csbi.dwMaximumWindowSize);
     My_Windows.Bottom = csbi.srWindow.Bottom;
     My_Windows.Right = csbi.srWindow.Right;
-
     system("color f0");
 }
 

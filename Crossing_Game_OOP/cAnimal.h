@@ -16,7 +16,7 @@ public:
 };
 
 class cLion : public cAnimal {
-	static vector<vector<unsigned char>> textureLion;
+	static vector<Texture> textureLion;
 
 public:
 	cLion();
@@ -25,11 +25,11 @@ public:
 	~cLion() {
 
 	}
-	short** getHitBoxX();
+
 };
 
 class cRhino : public cAnimal {
-	static vector<vector<unsigned char>> textureRhino;
+	static vector<Texture> textureRhino;
 
 public:
 	cRhino();
@@ -38,10 +38,17 @@ public:
 	~cRhino() {
 
 	}
+	//void draw()
+	//{
+	//	//cObstacle::draw();
+	//	//currentFrame = (currentFrame + 1) % textureRhino.size();
+	//	//pTexture = &textureRhino[currentFrame];
+	//}
 };
 
 class cCrocodile : public cAnimal {
-	static vector<vector<unsigned char>> textureCrocodile;
+	static vector<Texture> textureCroco;
+
 
 public:
 	cCrocodile();
@@ -51,12 +58,4 @@ public:
 
 	}
 };
-
-//class lion : cObstacle {
-//	
-//};
-
-
-
-
 #endif

@@ -1,52 +1,56 @@
 #ifndef _CPEOPLE_H
 #define _CPEOPLE_H
 #include "setup.h"
+#include "cAsset.h"
 #include "cAnimal.h"
 #include "cVehicle.h"
-#include "Map.h"
-#include <Windows.h>
-
+//#include "Map.h"
 class cPeople {
 	//int mX, mY;
-	CHAR_INFO *character;
+
+
+	vector<Texture> skin;
+	Texture* pTexture;
+	int currentFrame;
 	short height, width;
 	HANDLE h;
-    COORD position;
+    COORD topleft;
 	bool mState; // true is alive, false is dead =))
-	vector<Hitbox> mBoxes;
 
 
 	public:
-		cPeople() {
-			character = loader("c.txt", height, width);
-			h = GetStdHandle(STD_OUTPUT_HANDLE);
-			position = { 200,100 };
-			mState = true;
-		}
+		/*vector<Hitbox> mBoxes;*/
+		vector<Hitbox> mBoxes;
+		cPeople() : cPeople({ 200, 100 }) {}
 		cPeople(COORD In_pos) {
-			character = loader("c.txt", height, width);
-			h = GetStdHandle(STD_OUTPUT_HANDLE);
-			position = In_pos;
+			topleft = In_pos;
 			mState = true;
+			skin = cAsset::assetLoader2(peopleFile);
+			pTexture = &skin[0];
+			currentFrame = 0;
+			Hitbox a(In_pos, {short(skin[0].width + topleft.X), short(skin[0].height + topleft.Y)});
+			
+			mBoxes.push_back(a);
+
 		}
 		~cPeople() {
-			delete[] character;
+			
 
 		}
 
 		COORD getPos() {
-			return position;
+			return topleft;
 		}
 		void setPos(COORD pos) {
-            position = pos;
+			topleft = pos;
 		}
 
-		void draw(COORD pos);
+		void draw();
 		void up();
 		void down();
 		void left();
 		void right();
-		void move(Map &map);
+		bool move();
 		void erase();
 //		bool isImpactOneLion(cLion *lion);
 //		bool isImpactLion(cLion *lion);

@@ -10,12 +10,20 @@ class cPeople;
 class Hitbox
 {
 private:
-    COORD topleft;
-    COORD botright;
+
     
 public:
+    COORD topleft;
+    COORD botright;
+    Hitbox() {}
+
+    Hitbox(COORD tl, COORD br)
+    {
+        topleft = tl;
+        botright = br;
+    }
     void getHitbox (COORD &topleftGet, COORD &botrightGet);
-    void move(const COORD displace);
+    void move(COORD displace);
     bool isOverlap (Hitbox h);
 };
 

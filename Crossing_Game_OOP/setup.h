@@ -21,13 +21,8 @@
 
 using namespace std;
 
-const string lionFile = "lion.txt";
-const string rhinoFile = "rhino.txt";
-const string crocoFile = "croco.txt";
-const string truckFile = "truck.txt";
-const string heliFile = "heli.txt";
-const string motorbFile = "motorb.txt";
-
+extern SMALL_RECT My_Windows;
+const HANDLE mainHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 enum class Color {
 	black = 0,
 	blue = 1,
@@ -46,9 +41,6 @@ enum class Color {
 	light_yellow = 14,
 	bright_white = 15,
 };
-
-vector<vector<unsigned char>> loadTexture(string filename);
-
 void gotoXY(int x, int y);
 
 void printCharacter(wstring content, COORD spot, Color textColor, Color backgroundColor, short maxlength = -1);
@@ -68,6 +60,10 @@ void drawLoadMenu(int choice);
 void drawScoreboardMenu();
 void drawGameTitle();
 void drawLosingTitle();
-CHAR_INFO* loader(string filename, short& height, short& width);
 
+static COORD toTopleft(COORD &center)
+{
+	COORD topleft = { short(center.X - center.X / 2), short(center.Y - center.Y / 2) };
+	return topleft;
+}
 #endif

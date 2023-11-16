@@ -1,66 +1,30 @@
 #include "cVehicle.h"
 
-vector<vector<unsigned char>> cTruck::textureTruck = loadTexture(truckFile);
-vector<vector<unsigned char>> cHelicopter::textureHeli = loadTexture(heliFile);
-vector<vector<unsigned char>> cMotorbike::textureMotorb = loadTexture(motorbFile);
+vector<Texture> cTruck::textureTruck = cAsset::assetLoader2(truckFile);
+vector<Texture> cHelicopter::textureHeli = cAsset::assetLoader2(heliFile);
+vector<Texture> cMotorbike::textureMotorb = cAsset::assetLoader2(motorbFile);
 
 cTruck::cTruck() : cTruck({ 0, 40 }, 2) {};
 cTruck::cTruck(COORD In_pos, /*int difficulty, int ttm*/ int speed): cVehicle(In_pos, /*difficulty, ttm*/ speed) {
-	wstring content[5];
-	content[0] = L"  ▄███ ▄████████▄";
-	content[1] = L" ▄█▒▒█▓██▒▒▒▒▒▒██";
-	content[2] = L"██████▓██▒▒▒▒▒▒██";
-	content[3] = L"██████▓██████████";
-	content[4] = L" ▀🞕▀       ▀🞕🞕▀";
-
-	texture.assign(content, content + 5);
+	pTexture = &cTruck::textureTruck[0];
+	pLTexture = pTexture;
+	currentFrame = 0;
+	nFrame = textureTruck.size();
 }
 
 cHelicopter::cHelicopter() : cHelicopter({ 0, 40 }, 2) {};
 cHelicopter::cHelicopter(COORD In_pos, /*int difficulty, int ttm*/ int speed): cVehicle(In_pos, /*difficulty, ttm*/ speed) {
-	wstring content[5];
-	content[0] = L"▂▂▂▂▂▂▂▂▂▂▂▂";
-	content[1] = L"      ▌     ";
-	content[2] = L"	 ▄▀▀█▐█▄▄▃▃▃▃🞕";
-	content[3] = L"	▀▄▄▄█▐█▀";
-	content[4] = L" ▄▂▌▂▂▌▂▄";
-
-	texture.assign(content, content + 5);
+	pTexture = &cHelicopter::textureHeli[0];
+	pLTexture = pTexture;
+	currentFrame = 0;
+	nFrame = textureHeli.size();
 }
 
 cMotorbike::cMotorbike() : cMotorbike({ 0, 40 }, 2) {};
 cMotorbike::cMotorbike(COORD In_pos, /*int difficulty, int ttm*/ int speed): cVehicle(In_pos, /*difficulty, ttm*/ speed) {
-	wstring content[5];
-	content[0] = L"   ▄██▀";
-	content[1] = L"   ▀▀██▄▓▓▓▄ ▄▄██▀▀";
-	content[2] = L"▄▀▀▀██▓▓▓▓█████▀▀▀▄";
-	content[3] = L"▌ ◾ ▐███▓▓▓▓██▌ ◾ ▐";
-	content[4] = L"▀▄▄▄▀         █▄▄▄▀";
-
-	texture.assign(content, content + 5);
+	pTexture = &cMotorbike::textureMotorb[0];
+	pLTexture = pTexture;
+	currentFrame = 0;
+	nFrame = textureMotorb.size();
 }
-
-//void cTruck::draw(COORD pos) {
-//
-//
-//	for (int i = pos.Y; i < pos.Y + 5; i++) {
-//		printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::green, Color::bright_white);
-//	}
-//}	
-//
-//void cHelicopter::draw(COORD pos) {
-//
-//
-//	for (int i = pos.Y; i < pos.Y + 5; i++) {
-//		printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::green, Color::bright_white);
-//	}
-//}
-//
-//void cMotorbike::draw(COORD pos) {
-//
-//
-//	for (int i = pos.Y; i < pos.Y + 5; i++) {
-//		printCharacter(content[i - pos.Y], { pos.X, short(i) }, Color::green, Color::bright_white);
-//	}
-//}
 

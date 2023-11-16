@@ -15,7 +15,7 @@ void Hitbox::getHitbox(COORD &topleftGet, COORD &botrightGet)
     botrightGet = botright;
 }
 
-void Hitbox::move(const COORD displace)
+void Hitbox::move(COORD displace)
 {
     topleft.X += displace.X;
     topleft.Y += displace.Y;

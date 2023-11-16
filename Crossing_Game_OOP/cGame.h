@@ -1,5 +1,6 @@
 #ifndef _CGAME_H
 #define _CGAME_H
+#include "Graphics.h"
 #include "cAnimal.h"
 #include "cVehicle.h"
 #include "cPeople.h"
@@ -123,6 +124,10 @@ class cGame {
 		void Setting();
 		void GameOver();
 		void GameWin();
+
+		void drawBackGround();
+
+#define refreshBackGround drawBackGround
 };
 cObstacle * createObject (short type, COORD position, int speed);
 

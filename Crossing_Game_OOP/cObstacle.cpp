@@ -1,17 +1,18 @@
 #include "cObstacle.h"
 
 cObstacle::cObstacle(COORD In_pos, /* int difficulty, int ttm */ int speed) {
-    center = In_pos;
+    topleft = In_pos;
     /*speed = difficulty;
     timeUntilMove = ttm;*/
     if (speed <= 0)
         speed = 1;
     this -> speed = speed;
     timeUntilMove = speed;
+
 }
 
 COORD cObstacle::getPos() {
-    return center;
+    return topleft;
 }
 
 int cObstacle::getSpeed()
@@ -20,7 +21,7 @@ int cObstacle::getSpeed()
 }
 
 void cObstacle::setPos(COORD new_Pos) {
-    center = new_Pos;
+    topleft = new_Pos;
 }
 
 bool cObstacle::collide(Hitbox h)
@@ -46,29 +47,83 @@ void cObstacle::advanceTime(int time)
 }
 
 void cObstacle::draw() {
-    COORD drawInit = { center.X - center.X / 2, center.Y - center.Y / 2 };
-    for (int i = 0; i < texture.size(); i++) {
-        printCharacter(texture[i], drawInit, Color::yellow, Color::bright_white);
-        drawInit.Y++;
+    //chrono::time_point<chrono::high_resolution_clock> start, end;
+    //start = chrono::high_resolution_clock::now();
+
+    //TYPE 1:
+
+    //SMALL_RECT reg = { topleft.X, topleft.Y, topleft.X + pTexture->width - 1, topleft.Y + pTexture->height - 1 };
+    //for (int i = 0; i < pTexture->blankTexture.size(); i++)
+    //{
+    //    for (int j = 0; j < pTexture->blankTexture[i].size(); j++)
+    //    {
+    //        int copysize = (pTexture->blankTexture[i][j].end - pTexture->blankTexture[i][j].start + 1);
+    //        int offsetplayer = i * pTexture->width + pTexture->blankTexture[i][j].start;
+    //        int offsetBackground = (topleft.Y + i) * cAsset::currentMap->width + topleft.X + pTexture->blankTexture[i][j].start;
+    //        memcpy(pTexture->textureArray + offsetplayer, cAsset::currentMap->mapArray + offsetBackground, copysize * sizeof(CHAR_INFO));
+    //    }
+    //}
+    //WriteConsoleOutput(mainHandle, pTexture->textureArray, { pTexture->width, pTexture->height }, { 0,0 }, &reg);
+
+    //TYPE 2:
+    
+    CHAR_INFO* readyBuffer = new CHAR_INFO[pTexture->width * pTexture->height];
+    memcpy(readyBuffer, pTexture->textureArray, pTexture->width * pTexture->height * sizeof(CHAR_INFO));
+
+    for (int i = 0; i < pTexture->width * pTexture->height; i++)
+    {
+        if (readyBuffer[i].Char.UnicodeChar == L' ') {
+            readyBuffer[i].Attributes = cAsset::currentMap->mapArray[(topleft.Y + i / pTexture->width) * cAsset::currentMap->width + topleft.X + (i % pTexture->width)].Attributes;
+        }
     }
+    SMALL_RECT reg = { topleft.X, topleft.Y, topleft.X + pTexture->width - 1, topleft.Y + pTexture->height - 1 };
+    WriteConsoleOutput(mainHandle, readyBuffer, { pTexture->width, pTexture->height }, { 0,0 }, &reg);
+    delete[]readyBuffer;
+
+    currentFrame = (currentFrame + 1) % nFrame;
+    pTexture = pLTexture + currentFrame;
+
+    //end = chrono::high_resolution_clock::now();
+
+    //chrono::duration<double> cost = end - start;
+    //	cout << cost.count() << endl;
+    //    topleft.X += 1;
+    ////Texture* curBg = cAsset::getCurrentMap();
+    //CHAR_INFO* readyBuffer = new CHAR_INFO[pTexture->width * pTexture->height];
+    //memcpy(readyBuffer, pTexture->textureArray, pTexture->width * pTexture->height * sizeof(CHAR_INFO));
+
+    //for (int i = 0; i < pTexture->width * pTexture->height; i++)
+    //{
+    //    if (readyBuffer[i].Char.UnicodeChar == L'b') {
+    //        readyBuffer[i].Char.UnicodeChar = L' ';
+    //        readyBuffer[i].Attributes = cAsset::currentMap->textureArray[(topleft.Y + i / pTexture->width) * cAsset::currentMap->width + topleft.X + (i % pTexture->width)].Attributes;
+    //    }
+    //}
+    //SMALL_RECT reg = { topleft.X, topleft.Y, topleft.X + pTexture->width - 1, topleft.Y + pTexture->height - 1 };
+    //WriteConsoleOutput(mainHandle, readyBuffer, { pTexture->width, pTexture->height }, { 0,0 }, &reg);
+    //delete[]readyBuffer;
 }
 
+
 void cObstacle::erase() {
-    COORD eraseInit = { center.X - center.X / 2, center.Y - center.Y / 2 };
-    for (int i = 0; i < texture.size(); i++) {
-        wstring blank(texture[i].length(), '\0');
-        printCharacter(blank, eraseInit, Color::bright_white, Color::bright_white);
-        eraseInit.Y++;
-    }   
+    gameMap* currentMap = cAsset::getCurrentMap();
+    for (int i = 0; i < pTexture->height; i++)
+    {
+        SMALL_RECT reg = { topleft.X, topleft.Y + i, topleft.X + pTexture->width - 1, topleft.Y + i };
+        WriteConsoleOutput(mainHandle, currentMap->mapArray, { currentMap->width, currentMap->height }, { topleft.X, short(topleft.Y + i) }, &reg);
+
+    }
 }
 
 void cObstacle::move() {
-    erase();
-    center.X += 3;
-    for (auto box : boxes) {
-        box.move({1, 0});
-    }
+    if (isStop) return;
+    //erase();
     draw();
+    topleft.X += 1;
+    for (int i = 0; i < boxes.size(); i++)
+    {
+        boxes[i].move({ 1,0 });
+    }
 }
  
 

@@ -543,52 +543,27 @@ void clearConsole() {
     SetConsoleCursorPosition(console, topLeft);
     system("color f0");
 }
-
-vector<vector<unsigned char>> loadTexture(string filename)
-{
-    ifstream ifs;
-    ifs.open(filename);
-
-    vector <vector<unsigned char>> res;
-    if (ifs.is_open()) {
-        int x;
-        ifs >> x;
-        res.resize(x);
-        ifs >> x;
-        for (int i = 0; i < res.size(); i++)
-        {
-            res[i].resize(x);
-            for (int j = 0; j < x; j++)
-            {
-                ifs >> res[i][j];
-            }
-        }
-    }
-    ifs.close();
-    return res;
-}
-
-CHAR_INFO* loader(string filename, short& height, short& width)
-{
-    ifstream ifs;
-    ifs.open(filename);
-    ifs >> height >> width;
-    CHAR_INFO* res = new CHAR_INFO[height * width];
-    for (int i = 0; i < height * width; i++)
-    {
-        int x;
-        ifs >> x;
-        if (x == 16)
-        {
-            CHAR_INFO t = { L'b', 15 * 16 };
-            res[i] = t;
-        }
-        else {
-            CHAR_INFO t = { L' ', x * 16 };
-            res[i] = t;
-        }
-
-    }
-    ifs.close();
-    return res;
-}
+//
+//vector<vector<unsigned char>> loadTexture(string filename)
+//{
+//    ifstream ifs;
+//    ifs.open(filename);
+//
+//    vector <vector<unsigned char>> res;
+//    if (ifs.is_open()) {
+//        int x;
+//        ifs >> x;
+//        res.resize(x);
+//        ifs >> x;
+//        for (int i = 0; i < res.size(); i++)
+//        {
+//            res[i].resize(x);
+//            for (int j = 0; j < x; j++)
+//            {
+//                ifs >> res[i][j];
+//            }
+//        }
+//    }
+//    ifs.close();
+//    return res;
+//}

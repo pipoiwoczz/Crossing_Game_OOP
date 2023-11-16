@@ -226,11 +226,11 @@ void cGame::saveGame() {
     
     short * peoplePosition = new short [gameOrder * 2];
     int count = 0;
-    for (cPeople element : livePeople)
+    for (cPeople* element : livePeople)
     {
-        peoplePosition[count] = element.getPos().X;
+        peoplePosition[count] = element->getPos().X;
         count++;
-        peoplePosition[count] = element.getPos().Y;
+        peoplePosition[count] = element->getPos().Y;
         count++;
     }
     ofs.write((char *) peoplePosition, sizeof(short) * gameOrder * 2);
@@ -241,15 +241,15 @@ void cGame::saveGame() {
     ofs.write((char *) &obstacleCount, sizeof(int));
     short * obstacleList = new short [obstacleCount * 4];
     count = 0;
-    for (cObstacle element : liveObstacles)
+    for (cObstacle* element : liveObstacles)
     {
         obstacleList[count] = 0; // placeholder for obstacle type (rhino/truck/...)
         count++;
-        obstacleList[count] = element.getPos().X;
+        obstacleList[count] = element->getPos().X;
         count++;
-        obstacleList[count] = element.getPos().Y;
+        obstacleList[count] = element->getPos().Y;
         count++;
-        obstacleList[count] = element.getSpeed();
+        obstacleList[count] = element->getSpeed();
     }
     ofs.write((char *) obstacleList, sizeof(short) * obstacleCount * 4);
     delete [] obstacleList;
@@ -306,4 +306,13 @@ cObstacle * createObject (short type, COORD position, int speed)
         default:
             return dynamic_cast<cObstacle *>(new cRhino());
     }
+}
+
+void cGame::drawBackGround()
+{
+	gameMap* pMap = cAsset::getCurrentMap();
+	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	SMALL_RECT reg = { 0,0, My_Windows.Right - 1, My_Windows.Bottom - 1 };
+	WriteConsoleOutput(h, pMap->mapArray, { My_Windows.Right, My_Windows.Bottom }, { 0,0 }, &reg);
 }
