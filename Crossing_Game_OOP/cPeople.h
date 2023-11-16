@@ -44,8 +44,14 @@ class cPeople {
 		void setPos(COORD pos) {
 			topleft = pos;
 		}
+        bool getState ()
+        {
+            return mState;
+        }
+        
 
 		void draw();
+    
 		void up();
 		void down();
 		void left();
@@ -55,10 +61,23 @@ class cPeople {
 //		bool isImpactOneLion(cLion *lion);
 //		bool isImpactLion(cLion *lion);
 //		bool isImpact(cVehicle *vehicle);
-		bool isImpact(cObstacle obsta);
+		bool isImpact(cObstacle obsta)
+		{
+			for (int i = 0; i < mBoxes.size(); i++)
+			{
+				for (int j = 0; j < obsta.boxes.size(); j++)
+				{
+					if (obsta.boxes[j].isOverlap(mBoxes[i]))
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 		bool isDead() {
 			mState = false;
-			return true;
+			return true; // why?
 		}
 		bool isFinish() {
 			//if (mY == 10) {

@@ -66,19 +66,21 @@ class cGame {
 		void drawThread();
 		void movingThread();
 		void getMainMenuActionThread();
+        void despawnThread(); // cleans up objects that have gone offscreen
 
 		void drawGame();
 		void drawMap();
 
-		void getPeople();
-		void getVehicle();
-		void getAnimal();
-		void getTruck();
-		void getLion();
-		void getRhino();
-		void getCrocodile();
-		void getHelicopter();
-		void getMotorbike();
+		vector<cPeople *> getPeople();
+        vector<cObstacle *> getObstacles();
+//		void getVehicle();
+//		void getAnimal();
+//		void getTruck();
+//		void getLion();
+//		void getRhino();
+//		void getCrocodile();
+//		void getHelicopter();
+//		void getMotorbike();
 		
 		void stopDrawAnimal() {
 			//lion->stop();
@@ -101,13 +103,7 @@ class cGame {
 			}
 				//people->move(MOVING);
 		}
-		bool isImpact() {
-	/*		if (people->isImpactLion(lion)) {
-				isLose = true;
-				return true;
-			}*/
-			return false;
-		}
+        bool isImpact();
 		
 		void updatePosVehicle();
 		void updatePosAnimal();

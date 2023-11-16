@@ -54,7 +54,7 @@ int main()
 	string mapanimation[]{ "m1.txt", "m2.txt" ,"m3.txt" ,"m4.txt", "m5.txt", "m6.txt", "m7.txt" };
 	vector<Texture> f;
 	ifstream test;
-	for (auto name : namelist)
+	for (auto name : mapanimation)
 	{
 		test.open(name);
 		if (test.is_open())
@@ -113,48 +113,70 @@ int main()
 	//cLion b({ 20, 20 }, 1);
 	//b.draw();
 	//system("pause");
-	cPeople cr({ 20,20 });
-	cLion li({ 50, 50 }, 1);
-	system("pause");
+	// 
 	
-	
-
-	while (true) {
-		//for (int i = 0; i < cr.mBoxes.size(); i++)
-		//{
-		//	cout << cr.mBoxes[i].topleft.X << " - " << cr.mBoxes[i].topleft.Y << endl;
-		//	cout << cr.mBoxes[i].botright.X << " - " << cr.mBoxes[i].botright.Y << endl;
-		//}
-
-		//cout << endl;
-
-		//for (int i = 0; i < li.boxes.size(); i++)
-		//{
-		//	cout << li.boxes[i].topleft.X << " - " << li.boxes[i].topleft.Y << endl;
-		//	cout << li.boxes[i].botright.X << " - " << li.boxes[i].botright.Y << endl;
-		//}
-
-
-
+	//for (int i = 0; i < 10; i++)
+	//	fx({ 0,0 }, f);
+//	cPeople cr({ 20,20 });
+cLion li({ 50, 50 }, 1);
+while (true)
+{
 	if (GetAsyncKeyState(0x51) < 0)
 		break;
+
+
 	li.move();
-	if (cr.move()) {
-		
+	COORD p = li.getPos();
+
+	if (p.X > My_Windows.Right)
+	{
+		li.setPos({ 0, p.Y });
 	}
 
-	if (impactNow(cr, li, f)) {
-		a.drawBackGround();
-		break;
-	}
-
-
-	Sleep(30);
-	system("cls");
-	a.drawBackGround();
-	cr.draw();
-	li.draw();
+	Sleep(20);
+	a.refreshBackGround();
+	
 }
+//	system("pause");
+//	
+//	
+//
+//	while (true) {
+//		//for (int i = 0; i < cr.mBoxes.size(); i++)
+//		//{
+//		//	cout << cr.mBoxes[i].topleft.X << " - " << cr.mBoxes[i].topleft.Y << endl;
+//		//	cout << cr.mBoxes[i].botright.X << " - " << cr.mBoxes[i].botright.Y << endl;
+//		//}
+//
+//		//cout << endl;
+//
+//		//for (int i = 0; i < li.boxes.size(); i++)
+//		//{
+//		//	cout << li.boxes[i].topleft.X << " - " << li.boxes[i].topleft.Y << endl;
+//		//	cout << li.boxes[i].botright.X << " - " << li.boxes[i].botright.Y << endl;
+//		//}
+//
+//
+//
+//	if (GetAsyncKeyState(0x51) < 0)
+//		break;
+//	li.move();
+//	if (cr.move()) {
+//		
+//	}
+//
+//	if (impactNow(cr, li, f)) {
+//		a.drawBackGround();
+//		break;
+//	}
+//
+//
+//	Sleep(30);
+//	system("cls");
+//	a.drawBackGround();
+//	cr.draw();
+//	li.draw();
+//}
 
 	//std::thread myTh(myFunct, ref(cr), ref(li));
 
