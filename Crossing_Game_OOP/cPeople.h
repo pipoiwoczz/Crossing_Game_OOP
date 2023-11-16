@@ -44,8 +44,14 @@ class cPeople {
 		void setPos(COORD pos) {
 			topleft = pos;
 		}
+        bool getState ()
+        {
+            return mState;
+        }
+        
 
 		void draw();
+    
 		void up();
 		void down();
 		void left();
@@ -58,7 +64,7 @@ class cPeople {
 		bool isImpact(cObstacle obsta);
 		bool isDead() {
 			mState = false;
-			return true;
+			return true; // why?
 		}
 		bool isFinish() {
 			//if (mY == 10) {

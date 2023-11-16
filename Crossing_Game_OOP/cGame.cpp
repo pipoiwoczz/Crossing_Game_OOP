@@ -141,6 +141,25 @@ void cGame::gameThread() {
 	movingThread();
 }
 
+bool cGame::isImpact()
+{
+    for (int i = 0; i < livePeople.size(); i++)
+    {
+        if (livePeople[i] -> getState())
+        for (cObstacle * obstacle : liveObstacles)
+        {
+            if (livePeople[i] -> isImpact(*obstacle))
+            {
+                livePeople[i] -> isDead();
+                //delete livePeople[i];
+                //livePeople.erase(livePeople.begin() + i);
+                break;
+            }
+        }
+    }
+    
+    return livePeople.empty();
+}
 
 void cGame::checkImpactThread() {
 	while (true) {
@@ -181,6 +200,19 @@ void cGame::movingThread() {
 			updatePosPeople(MOVING);
 		}
 	}
+}
+
+void cGame::despawnThread()
+{
+    for (int i = 0; i < liveObstacles.size(); i++)
+    {
+        short coordX = liveObstacles[i] -> getPos().X;
+        if (coordX < 0 || coordX > 300) //placeholder - replace with screen size
+        {
+            delete liveObstacles[i];
+            liveObstacles.erase(liveObstacles.begin() + i);
+        }
+    }
 }
 
 void cGame::pauseGame() {
