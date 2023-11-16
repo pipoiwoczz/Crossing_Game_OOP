@@ -48,58 +48,58 @@ bool impactNow(cPeople& pp, cLion& li, vector<Texture> &f)
 int main()
 {
 	system("cls");
-	Graphic gr;
+	//Graphic gr;
 
-	string namelist[]{ "base.txt", "purple.txt", "blast.txt", "explosion1.txt","explosion2.txt", "explosion3.txt","fade1.txt", "fade2.txt", "fade3.txt", "dissappear.txt"};
-	string mapanimation[]{ "m1.txt", "m2.txt" ,"m3.txt" ,"m4.txt", "m5.txt", "m6.txt", "m7.txt" };
-	vector<Texture> f;
-	ifstream test;
-	for (auto name : mapanimation)
-	{
-		test.open(name);
-		if (test.is_open())
-		{
-			Texture a;
-			test >> a.height >> a.width;
-			a.textureArray = new CHAR_INFO[a.height * a.width];
+	//string namelist[]{ "base.txt", "purple.txt", "blast.txt", "explosion1.txt","explosion2.txt", "explosion3.txt","fade1.txt", "fade2.txt", "fade3.txt", "dissappear.txt"};
+	//string mapanimation[]{ "m1.txt", "m2.txt" ,"m3.txt" ,"m4.txt", "m5.txt", "m6.txt", "m7.txt" };
+	//vector<Texture> f;
+	//ifstream test;
+	//for (auto name : mapanimation)
+	//{
+	//	test.open(name);
+	//	if (test.is_open())
+	//	{
+	//		Texture a;
+	//		test >> a.height >> a.width;
+	//		a.textureArray = new CHAR_INFO[a.height * a.width];
 
-			for (int i = 0; i < a.height; i++)
-			{
-				//  BlankSegment bla;
-				//  bool encounter = false;
+	//		for (int i = 0; i < a.height; i++)
+	//		{
+	//			//  BlankSegment bla;
+	//			//  bool encounter = false;
 
-				for (int j = 0; j < a.width; j++)
-				{
-					int x;
-					test >> x;
-					if (x != 16 && x != 17)
-					{
-						/*   if (encounter) {
-							   encounter = false;
-							   loaded.blankTexture[i].push_back(bla);
-						   }*/
-						CHAR_INFO t = { L'█', x * 16 + x};
-						a.textureArray[i * a.width + j] = t;
+	//			for (int j = 0; j < a.width; j++)
+	//			{
+	//				int x;
+	//				test >> x;
+	//				if (x != 16 && x != 17)
+	//				{
+	//					/*   if (encounter) {
+	//						   encounter = false;
+	//						   loaded.blankTexture[i].push_back(bla);
+	//					   }*/
+	//					CHAR_INFO t = { L'█', x * 16 + x};
+	//					a.textureArray[i * a.width + j] = t;
 
-					}
-					else {
-						/* if (!encounter) {
-							 encounter = true;
-							 bla.start = j;
-							 bla.end = bla.start - 1;
-						 }
-						 bla.end++;*/
-						CHAR_INFO t = { L' ', 11 * 16 + 11};
-						a.textureArray[i * a.width + j] = t;
-					}
-				}
-			}
-			f.push_back(a);
-		}
-		test.close();
-	}
-	cGame a;
-	a.drawBackGround();
+	//				}
+	//				else {
+	//					/* if (!encounter) {
+	//						 encounter = true;
+	//						 bla.start = j;
+	//						 bla.end = bla.start - 1;
+	//					 }
+	//					 bla.end++;*/
+	//					CHAR_INFO t = { L' ', 11 * 16 + 11};
+	//					a.textureArray[i * a.width + j] = t;
+	//				}
+	//			}
+	//		}
+	//		f.push_back(a);
+	//	}
+	//	test.close();
+	//}
+	//cGame a;
+	//a.drawBackGround();
 	//COORD center = { 100,50 };
 	//cRhino r(center, 1);
 	//r.draw();
@@ -118,25 +118,27 @@ int main()
 	//for (int i = 0; i < 10; i++)
 	//	fx({ 0,0 }, f);
 //	cPeople cr({ 20,20 });
-cLion li({ 50, 50 }, 1);
-while (true)
-{
-	if (GetAsyncKeyState(0x51) < 0)
-		break;
-
-
-	li.move();
-	COORD p = li.getPos();
-
-	if (p.X > My_Windows.Right)
-	{
-		li.setPos({ 0, p.Y });
-	}
-
-	Sleep(20);
-	a.refreshBackGround();
-	
-}
+// 
+	cout << sizeof(WORD) << endl;
+//cLion li({ 50, 50 }, 1);
+//while (true)
+//{
+//	if (GetAsyncKeyState(0x51) < 0)
+//		break;
+//
+//
+//	li.move();
+//	COORD p = li.getPos();
+//
+//	if (p.X > My_Windows.Right)
+//	{
+//		li.setPos({ 0, p.Y });
+//	}
+//
+//	Sleep(20);
+//	a.refreshBackGround();
+//	
+//}
 //	system("pause");
 //	
 //	
