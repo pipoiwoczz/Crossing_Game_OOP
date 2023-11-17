@@ -103,12 +103,12 @@ bool cPeople::move() {
 	}
 	if (ismove) {
 		int x = 0, y = 0;
-		if (topleft.X + dx >= 0 && topleft.X + dx < My_Windows.Right - width) {
+		if (topleft.X + dx * 4 + 4>= 0 && topleft.X + dx * 4 < My_Windows.Right - width - 12) {
 			topleft.X += dx * 4;
 			x = dx * 4;
 		}
 			
-		if (topleft.Y + dy >= 0 && topleft.Y + dy < My_Windows.Bottom - height) {
+		if (topleft.Y + dy * 2 + 2>= 0 && topleft.Y + dy * 2 < My_Windows.Bottom - height - 4) {
 			topleft.Y += dy * 2;
 			y = dy * 2;
 		}

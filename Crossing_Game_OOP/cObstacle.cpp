@@ -117,13 +117,22 @@ void cObstacle::erase() {
 
 void cObstacle::move() {
     if (isStop) return;
-    //erase();
-    draw();
     topleft.X += 1;
+    
     for (int i = 0; i < boxes.size(); i++)
     {
         boxes[i].move({ 1,0 });
     }
+
+    /*if (topleft.X >= cAsset::currentMap->width)
+    {
+		topleft.X = -100;
+        for (int i = 0; i < boxes.size(); i++)
+            boxes[i].setHitHox(topleft.X);
+        return;
+	}*/
+
+    
 }
  
 

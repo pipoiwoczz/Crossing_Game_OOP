@@ -8,58 +8,51 @@
 #include "Map.h"
 
 class cGame {
-//	cTruck *truck;
-//	cLion* lion;
-//	cRhino * rhino;
-//	cCrocodile *crocodile;
-//	cHelicopter *helicopter;
-//	cMotorbike *motorbike;
 
-	//Map* map;
+
     
     vector<cObstacle *> liveObstacles;
     
-	//cPeople *people;
     vector<cPeople *> livePeople;
-	//cPeople people;
 
 	short gameOrder, gameLevel; // order: 1 or 2 player
 	bool isPause, isExit;
 	int map = 0; // map = 1 -> city, map = 2 -> forest, map = 3 -> beach
 	bool isLose = false;
 
+	long totalPoint;
+	double totalTime;
+	double timeStart, timeEnd;
+	double timePauseStart, timePauseEnd;
+	double timePause;
+
 	public:
 		cGame() {
 			gameOrder = 1;
 			gameLevel = 1;
-			map = 0;
+			map = 1;
 			isPause = false;
 			isExit = false;	
+			totalPoint = 0;
+			timePause = 0;
+			totalTime = 0;
 		}
     
         cGame (string saveFile);
     
 		~cGame() {
-//			delete[]truck;
-//			delete[]lion;
-//			delete[]rhino;
-//			delete[]crocodile;
-//			delete[]helicopter;
-//			delete[]motorbike;
-//			delete[]people;
-			//delete map;
-            
-            while (!liveObstacles.empty())
-            {
-                delete liveObstacles[liveObstacles.size() - 1];
-                liveObstacles.pop_back();
-            }
-            while (!livePeople.empty())
-            {
-                delete livePeople[liveObstacles.size() - 1];
-                livePeople.pop_back();
-            }
+			for (int i = 0; i < liveObstacles.size(); i++)
+			{
+				delete liveObstacles[i];
+			}
+			for (int i = 0; i < livePeople.size(); i++)
+			{
+				delete livePeople[i];
+			}
+			liveObstacles.clear();
+			livePeople.clear();
 		}
+
 
 		void gameThread();
 		void checkImpactThread();
@@ -67,6 +60,7 @@ class cGame {
 		void movingThread();
 		void getMainMenuActionThread();
         void despawnThread(); // cleans up objects that have gone offscreen
+		
 
 		void drawGame();
 		void drawMap();
@@ -122,6 +116,13 @@ class cGame {
 		void GameWin();
 
 		void drawBackGround();
+		void impactEffect(int i);
+		void spawnPeople();
+		void spawnObstacle();
+		bool isFinishLevel();
+		double calculateTime();
+		void resetTime();
+		void calculatePoint();
 
 #define refreshBackGround drawBackGround
 };

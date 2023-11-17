@@ -28,7 +28,7 @@ class cPeople {
 			skin = cAsset::assetLoader2(peopleFile);
 			pTexture = &skin[0];
 			currentFrame = 0;
-			Hitbox a(In_pos, {short(skin[0].width + topleft.X), short(skin[0].height + topleft.Y)});
+			Hitbox a({ short(topleft.X + 4), short( 2 + topleft.Y) }, {short(skin[0].width - 4 + topleft.X), short(skin[0].height - 2 + topleft.Y)});
 			
 			mBoxes.push_back(a);
 
@@ -39,7 +39,7 @@ class cPeople {
 		}
 
 		COORD getPos() {
-			return topleft;
+			return mBoxes[0].topleft;
 		}
 		void setPos(COORD pos) {
 			topleft = pos;
@@ -58,9 +58,7 @@ class cPeople {
 		void right();
 		bool move();
 		void erase();
-//		bool isImpactOneLion(cLion *lion);
-//		bool isImpactLion(cLion *lion);
-//		bool isImpact(cVehicle *vehicle);
+
 		bool isImpact(cObstacle obsta)
 		{
 			for (int i = 0; i < mBoxes.size(); i++)
