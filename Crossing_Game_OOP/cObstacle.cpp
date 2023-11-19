@@ -1,5 +1,35 @@
 #include "cObstacle.h"
 
+vector<cObstacle *> cObstacle::objects;
+
+cObstacle * cObstacle::addObject (cObstacle * obj)
+{
+    if (obj == nullptr)
+        return nullptr;
+    objects.push_back(obj);
+    return obj;
+}
+
+cObstacle * cObstacle::createObject(char type, COORD pos)
+{
+    for (cObstacle * sample : objects)
+    {
+        if (type == sample -> getType())
+            return sample -> copy(pos);
+    }
+    return nullptr;
+}
+
+void cObstacle::cleanBootstrap()
+{
+    for (cObstacle * sample : objects)
+    {
+        delete sample;
+        sample = nullptr;
+    }
+    objects.clear();
+}
+
 cObstacle::cObstacle(COORD In_pos, /* int difficulty, int ttm */ int speed) {
     topleft = In_pos;
     /*speed = difficulty;
@@ -8,7 +38,6 @@ cObstacle::cObstacle(COORD In_pos, /* int difficulty, int ttm */ int speed) {
         speed = 1;
     this -> speed = speed;
     timeUntilMove = speed;
-
 }
 
 COORD cObstacle::getPos() {

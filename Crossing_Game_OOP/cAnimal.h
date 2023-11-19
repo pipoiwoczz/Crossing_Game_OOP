@@ -16,6 +16,8 @@ public:
 };
 
 class cLion : public cAnimal {
+    static cObstacle * bootstrapObjectcLion;
+    
 	static vector<Texture> textureLion;
 
 public:
@@ -25,10 +27,33 @@ public:
 	~cLion() {
 
 	}
+    
+    virtual char getType ()
+    {
+        return 'l';
+    }
 
+    virtual cObstacle * copy (COORD pos)
+    {
+        cLion * obj = new cLion (*this);
+        obj -> topleft = pos;
+        return obj;
+    }
+    
+    virtual cObstacle * construct (COORD pos, int spd)
+    {
+        cLion * obj = new cLion (*this);
+        obj -> topleft = pos;
+        obj -> speed = spd;
+        return obj;
+    }
+    
+    virtual void hitEffect() {}
 };
 
 class cRhino : public cAnimal {
+    static cObstacle * bootstrapObjectcRhino;
+
 	static vector<Texture> textureRhino;
 
 public:
@@ -44,9 +69,32 @@ public:
 	//	//currentFrame = (currentFrame + 1) % textureRhino.size();
 	//	//pTexture = &textureRhino[currentFrame];
 	//}
+    
+    virtual char getType ()
+    {
+        return 'r';
+    }
+    
+    virtual cObstacle * copy (COORD pos)
+    {
+        cRhino * obj = new cRhino (*this);
+        obj -> topleft = pos;
+        return obj;
+    }
+    virtual cObstacle * construct (COORD pos, int spd)
+    {
+        cRhino * obj = new cRhino (*this);
+        obj -> topleft = pos;
+        obj -> speed = spd;
+        return obj;
+    }
+    
+    virtual void hitEffect() {}
 };
 
 class cCrocodile : public cAnimal {
+    static cObstacle * bootstrapObjectcCrocodile;
+
 	static vector<Texture> textureCroco;
 
 
@@ -57,5 +105,31 @@ public:
 	~cCrocodile() {
 
 	}
+    
+    virtual char getType ()
+    {
+        return 'c';
+    }
+    
+    virtual cObstacle * copy (COORD pos)
+    {
+        cCrocodile * obj = new cCrocodile (*this);
+        obj -> topleft = pos;
+        return obj;
+    }
+    virtual cObstacle * construct (COORD pos, int spd)
+    {
+        cCrocodile * obj = new cCrocodile (*this);
+        obj -> topleft = pos;
+        obj -> speed = spd;
+        return obj;
+    }
+    
+    virtual void hitEffect() {}
 };
+
+cObstacle * cLion::bootstrapObjectcLion = cObstacle::addObject(new cLion());
+cObstacle * cRhino::bootstrapObjectcRhino = cObstacle::addObject(new cRhino());
+cObstacle * cCrocodile::bootstrapObjectcCrocodile = cObstacle::addObject(new cCrocodile());
+
 #endif
