@@ -108,6 +108,7 @@ private:
 	//Maps textures go here
 	static vector<gameMap> listMap;
 	static gameMap* currentMap;
+	static MapIndex currentMapIndex;
 			
 public:
 	static Texture assetLoader(string filename);
@@ -116,5 +117,6 @@ public:
 	static vector<gameMap> loadMap();
 	static gameMap* getCurrentMap();
 	static void changeMap(MapIndex newMapIndex);
+	static void nextMap();
 };
 #endif

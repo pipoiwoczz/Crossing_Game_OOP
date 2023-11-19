@@ -22,6 +22,11 @@ public:
         topleft = tl;
         botright = br;
     }
+    void setHitHox(short topLeftX) {
+        short dis = botright.X - topleft.X;
+        topleft.X = topLeftX;
+        botright.X = topleft.X + dis;
+    }
     void getHitbox (COORD &topleftGet, COORD &botrightGet);
     void move(COORD displace);
     bool isOverlap (Hitbox h);

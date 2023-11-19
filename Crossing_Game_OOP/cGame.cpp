@@ -1,4 +1,6 @@
-#include "cGame.h"
+﻿#include "cGame.h"
+#include "Map.h"
+#include "Sound.h"
 
 //void cGame::getPeople() {
 //	short numOfPlayer = getGameOrder();
@@ -18,9 +20,9 @@
 //}
 //
 void cGame::drawGame() {
-	drawGameTitle();
-	if (!isPause);
-		//lion->move();
+	//drawGameTitle();
+	//if (!isPause);
+	//	//lion->move();
 }
 
 
@@ -123,12 +125,65 @@ void cGame::startGame() {
 }
 
 void cGame::MainGame() {
-	drawMap();
+	drawBackGround();
+	spawnPeople();
+	spawnObstacle();
+	resetTime();
+	for (int i = 0; i < gameOrder; i++) {
+		livePeople[i]->draw();
+	}
 	
-	//getPeople();
-	//getLion();
-	
-	gameThread();
+	Sound::playSoundList();
+	Sound::playIntroSound();
+	//Sound::musicThread();
+	while (!isPause) {
+		
+		
+			
+
+		if (GetAsyncKeyState(0x50) < 0) {
+			pauseGame();
+			break;
+		}
+		if (GetAsyncKeyState(0x51) < 0)
+			break;
+		
+		for (int i = 0; i < gameOrder; i++) {
+			livePeople[i] -> move();
+		}
+		
+		for (int i = 0; i < liveObstacles.size(); i++) {
+			liveObstacles[i]->move();
+		}
+
+		if (isFinishLevel()) {
+			this->gameLevel++;
+			cAsset::nextMap();
+			calculatePoint();
+			cout << "Total point: " << totalPoint << endl;
+			cout << "Total time: " << totalTime << endl;
+			isPause = true;
+			std::system("pause");
+			break;
+		}
+
+		if (isImpact()) {
+			
+
+			break;
+		}
+		
+
+		Sleep(30);
+		//drawBackGround();
+		for (int i = 0; i < gameOrder; i++) {
+			livePeople[i]->draw();
+		}
+		for (int i = 0; i < liveObstacles.size(); i++) {
+			liveObstacles[i]->draw();
+		}
+
+	}
 	
 }
 
@@ -145,20 +200,23 @@ bool cGame::isImpact()
 {
     for (int i = 0; i < livePeople.size(); i++)
     {
+		int cnt = -1;
         if (livePeople[i] -> getState())
-        for (cObstacle * obstacle : liveObstacles)
-        {
-            if (livePeople[i] -> isImpact(*obstacle))
-            {
-                livePeople[i] -> isDead();
-                //delete livePeople[i];
-                //livePeople.erase(livePeople.begin() + i);
-                break;
-            }
-        }
+			for (cObstacle * obstacle : liveObstacles)
+			{
+				cnt++;
+				if (livePeople[i] -> isImpact(*obstacle))
+				{
+					livePeople[i] -> isDead();
+					impactEffect(cnt);
+					return true;
+					//delete livePeople[i];
+					//livePeople.erase(livePeople.begin() + i);
+				}
+			}
     }
-    
-    return livePeople.empty();
+	return false;
+    //return livePeople.empty();
 }
 
 void cGame::checkImpactThread() {
@@ -216,12 +274,16 @@ void cGame::despawnThread()
 
 void cGame::pauseGame() {
 	// draw pause game box
+	timePauseStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 	isPause = true;
 	stopDrawAnimal();
 }
 
 void cGame::resumeGame() {
 	// draw a box to count down 3 sec 
+	// then continue game
+	timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+	timePause += (timePauseEnd - timePauseStart) / 1000;
 	isPause = false;
 	continueDrawAnimal();
 }
@@ -346,4 +408,128 @@ void cGame::drawBackGround()
 
 	SMALL_RECT reg = { 0,0, My_Windows.Right - 1, My_Windows.Bottom - 1 };
 	WriteConsoleOutput(h, pMap->mapArray, { My_Windows.Right, My_Windows.Bottom }, { 0,0 }, &reg);
+}
+
+vector<cPeople*> cGame::getPeople() {
+	return livePeople;
+}
+
+vector<cObstacle*> cGame::getObstacles() {
+	return liveObstacles;
+}
+
+void cGame::spawnPeople() {
+	for (int i = 0; i < gameOrder; i++) {
+		livePeople.push_back(new cPeople());
+	}
+}
+
+void cGame::impactEffect(int i) {
+	string effectList[]{ "base.txt", "purple.txt", "blast.txt", "explosion1.txt","explosion2.txt", "explosion3.txt","fade1.txt", "fade2.txt", "fade3.txt", "dissappear.txt" };
+	vector<Texture> f;
+	ifstream test;
+	for (auto name : effectList)
+	{
+		test.open(name);
+		if (test.is_open())
+		{
+			Texture a;
+			test >> a.height >> a.width;
+			a.textureArray = new CHAR_INFO[a.height * a.width];
+
+			for (int i = 0; i < a.height; i++)
+			{
+				//  BlankSegment bla;
+				//  bool encounter = false;
+
+				for (int j = 0; j < a.width; j++)
+				{
+					int x;
+					test >> x;
+					if (x != 16 && x != 17)
+					{
+						/*   if (encounter) {
+							   encounter = false;
+							   loaded.blankTexture[i].push_back(bla);
+						   }*/
+						CHAR_INFO t = { L'█', x * 16 + x };
+						a.textureArray[i * a.width + j] = t;
+
+					}
+					else {
+						/* if (!encounter) {
+							 encounter = true;
+							 bla.start = j;
+							 bla.end = bla.start - 1;
+						 }
+						 bla.end++;*/
+						CHAR_INFO t = { L' ', 11 * 16 + 11 };
+						a.textureArray[i * a.width + j] = t;
+					}
+				}
+			}
+			f.push_back(a);
+		}
+		test.close();
+	}
+
+
+	for (auto e : f)
+	{
+		COORD topleft = this->liveObstacles[i]->getPos();
+		topleft = {short(max(topleft.X, 0)), short(max(topleft.Y, 0))};
+		CHAR_INFO* readyBuffer = new CHAR_INFO[e.width * e.height];
+		memcpy(readyBuffer, e.textureArray, e.width * e.height * sizeof(CHAR_INFO));
+
+		for (int i = 0; i < e.width * e.height; i++)
+		{
+			if (readyBuffer[i].Char.UnicodeChar == L' ') {
+				readyBuffer[i].Attributes = cAsset::getCurrentMap()->mapArray[(topleft.Y + i / e.width) * cAsset::getCurrentMap()->width + topleft.X + (i % e.width)].Attributes;
+			}
+		}
+
+		SMALL_RECT reg = { topleft.X , topleft.Y,  topleft.X + e.width - 1, topleft.Y + e.height - 1 };
+
+		WriteConsoleOutput(mainHandle, readyBuffer, { e.width , e.height }, { 0,0 }, &reg);
+		delete[]readyBuffer;
+		//system("pause");
+		Sleep(120);
+	}
+
+}
+
+void cGame::spawnObstacle() {
+	for (int i = 0; i < 4; i++) {
+		liveObstacles.push_back(new cLion({short(-300 +100*i), 50}, 3));
+	}
+}
+
+bool cGame::isFinishLevel() {
+	return (livePeople[0]->getPos().Y == 0);
+	
+}
+
+double cGame::calculateTime() {
+	double time = timeEnd - timeStart - timePauseStart - timePauseEnd;
+	return time / 1000.0;
+	return 0;
+}
+
+void cGame::resetTime() {
+	this->timeStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+	this->timeEnd = timeStart;
+	this->timePauseStart = 0;
+	this->timePauseEnd = 0;
+}
+
+void cGame::calculatePoint() {
+	this->timeEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+	int bonus[6] = { 120, 70, 35, 15, 5, 0 };
+	int count = min(int(calculateTime() / 5), 5);
+	cout << "Time: " << calculateTime() << endl;
+	cout << "Bonus: " << bonus[count] << endl;
+	cout << "Total point: " << totalPoint << endl;
+	totalTime += calculateTime();
+	totalPoint += 100 + bonus[count];
+	resetTime();
 }

@@ -3,6 +3,7 @@
 
 vector<gameMap> cAsset::listMap = cAsset::loadMap();
 gameMap* cAsset::currentMap = &cAsset::listMap[0];
+MapIndex cAsset::currentMapIndex = MapIndex::Jungle;
 
 Texture cAsset::assetLoader(string filename)
 {
@@ -100,4 +101,9 @@ gameMap* cAsset::getCurrentMap()
 void cAsset::changeMap(MapIndex newMapIndex)
 {
     currentMap = &listMap[int(newMapIndex) % maplist.size()];
+}
+
+void cAsset::nextMap() {
+    currentMapIndex = MapIndex((int(currentMapIndex) + 1) % maplist.size());
+    currentMap = &listMap[int(currentMapIndex) % maplist.size()];
 }

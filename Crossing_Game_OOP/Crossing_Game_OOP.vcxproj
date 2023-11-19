@@ -137,6 +137,7 @@
     <ClInclude Include="hitbox.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="setup.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="Tank.h" />
   </ItemGroup>
   <ItemGroup>
