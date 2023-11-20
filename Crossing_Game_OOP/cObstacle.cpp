@@ -10,12 +10,22 @@ cObstacle * cObstacle::addObject (cObstacle * obj)
     return obj;
 }
 
-cObstacle * cObstacle::createObject(char type, COORD pos)
+cObstacle * cObstacle::copyObject(char type, COORD pos)
 {
     for (cObstacle * sample : objects)
     {
         if (type == sample -> getType())
             return sample -> copy(pos);
+    }
+    return nullptr;
+}
+
+cObstacle * cObstacle::constructObject(char type, COORD pos, int spd)
+{
+    for (cObstacle * sample : objects)
+    {
+        if (type == sample -> getType())
+            return sample -> construct(pos, spd);
     }
     return nullptr;
 }

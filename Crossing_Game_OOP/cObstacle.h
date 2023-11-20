@@ -37,7 +37,8 @@ public:
     
     void setPos(COORD new_Pos);
     
-    static cObstacle * createObject (char, COORD);
+    static cObstacle * copyObject (char, COORD);
+    static cObstacle * constructObject (char, COORD, int);
     virtual cObstacle * copy (COORD pos) = 0; // create object at pos, copying speed of original object
     virtual cObstacle * construct (COORD pos, int spd) = 0; // create object at pos, with speed set to spd
     // note: copy constructors have not been declared - currently using default copy constructors

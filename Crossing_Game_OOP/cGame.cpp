@@ -1,4 +1,4 @@
-﻿#include "cGame.h"
+#include "cGame.h"
 #include "Map.h"
 #include "Sound.h"
 
@@ -311,7 +311,10 @@ void cGame::saveGame() {
     // [gameOrder] [gameLevel] [map]
     // [player 1 coord X] [player 1 coord Y] ...
     // [number of obstacles]
-    // [obstacle 1 type] [obstacle 1 coord X] [obstacle 1 coord Y] [obstacle 1 speed] ...
+    // [obstacle 1 type] [obstacle 2 type] ...
+    // [obstacle 1 coord X] [obstacle 1 coord Y] [obstacle 1 speed] ...
+    
+    // note: stop status not recorded yet
     
     ofs.write((char *) &gameOrder, sizeof(short));
     ofs.write((char *) &gameLevel, sizeof(short));
@@ -332,28 +335,31 @@ void cGame::saveGame() {
     
     int obstacleCount = (int) liveObstacles.size();
     ofs.write((char *) &obstacleCount, sizeof(int));
-    short * obstacleList = new short [obstacleCount * 4];
-    count = 0;
-    for (cObstacle* element : liveObstacles)
+    
+    char * obstacleType = new char [obstacleCount];
+    
+    short * obstacleInfo = new short [obstacleCount * 3];
+    for (int count = 0; count < obstacleCount; count++)
     {
-        obstacleList[count] = 0; // placeholder for obstacle type (rhino/truck/...)
-        count++;
-        obstacleList[count] = element->getPos().X;
-        count++;
-        obstacleList[count] = element->getPos().Y;
-        count++;
-        obstacleList[count] = element->getSpeed();
+        obstacleType[count] = liveObstacles[count] -> getType();
+        obstacleInfo[3 * count] = liveObstacles[count] -> getPos().X;
+        obstacleInfo[3 * count + 1] = liveObstacles[count] -> getPos().Y;
+        obstacleInfo[3 * count + 2] = liveObstacles[count] -> getSpeed();
     }
-    ofs.write((char *) obstacleList, sizeof(short) * obstacleCount * 4);
-    delete [] obstacleList;
-    obstacleList = nullptr;
+    
+    ofs.write(obstacleType, obstacleCount);
+    ofs.write((char *) obstacleInfo, sizeof(short) * obstacleCount * 3);
+    
+    delete [] obstacleType;
+    obstacleType = nullptr;
+    delete [] obstacleInfo;
+    obstacleInfo = nullptr;
 
 	ofs.close();
-
 	resumeGame();
 }
 
-cGame::cGame (string saveFile) // load game (create cgame object) from save file
+cGame::cGame (string saveFile) // load game (create cGame object) from save file
 {
     ifstream ifs;
     ifs.open(saveFile, ios::binary);
@@ -373,33 +379,26 @@ cGame::cGame (string saveFile) // load game (create cgame object) from save file
     
     int obstacleCount;
     ifs.read((char *) &obstacleCount, sizeof(int));
-    short * obstacleList = new short [obstacleCount * 4];
-    ifs.read((char *) obstacleList, sizeof(short) * obstacleCount * 4);
+    
+    char * obstacleType = new char [obstacleCount];
+    short * obstacleInfo = new short [obstacleCount * 3];
+    ifs.read(obstacleType, obstacleCount);
+    ifs.read((char *) obstacleInfo, obstacleCount * 3);
     ifs.close();
+    
     liveObstacles.resize(obstacleCount);
     for (int i = 0; i < obstacleCount; i++)
     {
-        // create object from type at obstaclePosition[4 * i],
-            // set pos to {obstaclePosition[4 * i + 1], obstaclePosition[4 * i + 2]}
-            // set speed to obstaclePosition[4 * i + 3]
-        liveObstacles[i] = createObject(obstacleList[4 * i], {obstacleList[4 * i + 1], obstacleList[4 * i + 2]}, obstacleList[4 * i + 3]);
+        COORD pos = {obstacleInfo[3 * i], obstacleInfo[3 * i + 1]};
+        liveObstacles[i] = cObstacle::constructObject(obstacleType[i], pos, obstacleInfo[3 * i + 2]);
     }
-    delete [] obstacleList;
-    obstacleList = nullptr;
+    
+    delete [] obstacleType;
+    obstacleType = nullptr;
+    delete [] obstacleInfo;
+    obstacleInfo = nullptr;
 }
 
-// object from type - prototype
-cObstacle * createObject (short type, COORD position, int speed)
-{
-    switch (type)
-    {
-        case 0: //placeholder
-            return dynamic_cast<cObstacle *>(new cRhino(position, speed));
-            
-        default:
-            return dynamic_cast<cObstacle *>(new cRhino());
-    }
-}
 
 void cGame::drawBackGround()
 {
