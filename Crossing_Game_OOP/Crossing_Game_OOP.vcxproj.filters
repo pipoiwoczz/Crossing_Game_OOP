@@ -39,7 +39,7 @@
     <ClInclude Include="hitbox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Tank.h">
+    <ClInclude Include="gameEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Map.h">
@@ -92,7 +92,10 @@
     <ClCompile Include="test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tank.cpp">
+    <ClCompile Include="gameEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
