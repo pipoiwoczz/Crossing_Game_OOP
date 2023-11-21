@@ -66,6 +66,9 @@ void cGameEngine::drawT(cGame* pGame)
 
 			itera->currentFrame = (itera->currentFrame + 1) % itera->nFrame;
 			itera->pTexture = itera->pLTexture + itera->currentFrame;
+
+			COORD br = itera->boxes[0].botright;
+			wstring ba = br.X + L" - " + br.Y;
 		}
 
 		//put people onto buffer

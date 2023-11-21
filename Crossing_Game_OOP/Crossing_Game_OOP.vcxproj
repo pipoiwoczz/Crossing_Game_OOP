@@ -138,7 +138,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="setup.h" />
     <ClInclude Include="Sound.h" />
-    <ClInclude Include="Tank.h" />
+    <ClInclude Include="gameEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cAnimal.cpp" />
@@ -154,7 +154,8 @@
     <ClCompile Include="main2.cpp" />
     <ClCompile Include="setup.cpp" />
     <ClCompile Include="Map.cpp" />
-    <ClCompile Include="Tank.cpp" />
+    <ClCompile Include="gameEngine.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

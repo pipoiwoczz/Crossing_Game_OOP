@@ -104,7 +104,7 @@ bool cPeople::move() {
 		topleft.Y += dy;
 		for (int i = 0; i < mBoxes.size(); i++)
 		{
-			mBoxes[i].set({ short(topleft.X + 4), short(2 + topleft.Y) }, { short(pTexture->getWidth() - 4 + topleft.X), short(pTexture->getHeight() - 2 + topleft.Y) });
+			mBoxes[i].set({ short(topleft.X), short(topleft.Y) }, { short(pTexture->getWidth() + topleft.X), short(pTexture->getHeight() + topleft.Y) });
 		}
 		return ismove;
 	}

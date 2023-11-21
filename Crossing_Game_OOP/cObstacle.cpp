@@ -151,7 +151,7 @@ void cObstacle::move() {
     
     for (int i = 0; i < boxes.size(); i++)
     {
-        boxes[i].set({ short(topleft.X + 10), short(topleft.Y + 10) }, { short(topleft.X + pTexture->getWidth() - 10), short(topleft.Y + pTexture->getHeight() - 10) });
+        boxes[i].set({ short(topleft.X + 10), short(topleft.Y + 10)}, { short((topleft.X + pTexture->getWidth() - 10) % My_Windows.Right), short((topleft.Y + pTexture->getHeight() - 10) % My_Windows.Bottom) });
     }
 
     /*if (topleft.X >= cAsset::currentMap->width)

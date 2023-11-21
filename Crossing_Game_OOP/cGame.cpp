@@ -149,7 +149,7 @@ void cGame::MainGame() {
 			break;
 		}
 			
-		if (isImpact())
+			if (isImpact())
 		{
 			isLose = true;
 			
