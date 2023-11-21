@@ -86,7 +86,7 @@ bool cPeople::move() {
 
 	}
 
-	if (GetAsyncKeyState(VK_UP) < 0 && topleft.Y > 0) {
+	if (GetAsyncKeyState(VK_UP) < 0 && topleft.Y > 1) {
 		dy--;
 		//horizon = false;
 		ismove = true;

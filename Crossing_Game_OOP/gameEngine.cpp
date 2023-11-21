@@ -60,7 +60,10 @@ void cGameEngine::drawT(cGame* pGame)
 			for (int j = 0; j < w * h; j++)
 			{
 				if (itera->pTexture->textureArray[j].Char.UnicodeChar != L' ') {
-					mainBuffer[(itera->topleft.Y + j / w) * curMap->width + itera->topleft.X + (j % w)].Attributes = itera->pTexture->textureArray[j].Attributes;
+					//mainBuffer[(itera->topleft.Y + j / w) * curMap->width + itera->topleft.X + (j % w)].Attributes = itera->pTexture->textureArray[j].Attributes;
+					int topleft1 = itera->topleft.Y * curMap->width + (itera->topleft.X + (j % w)) % curMap->width;
+					topleft1 = topleft1 + (j / w) * curMap->width;
+					mainBuffer[topleft1].Attributes = itera->pTexture->textureArray[j].Attributes;
 				}
 			}
 
@@ -80,7 +83,10 @@ void cGameEngine::drawT(cGame* pGame)
 			for (int j = 0; j < w * h; j++)
 			{
 				if (itera->pTexture->textureArray[j].Char.UnicodeChar != L' ') {
-					mainBuffer[(itera->topleft.Y + j / w) * curMap->width + itera->topleft.X + (j % w)].Attributes = itera->pTexture->textureArray[j].Attributes;
+					int topleft1 = itera->topleft.Y * curMap->width + (itera->topleft.X + (j % w)) % curMap->width;
+					topleft1 = topleft1 + (j / w) * curMap->width;
+					mainBuffer[topleft1].Attributes = itera->pTexture->textureArray[j].Attributes;
+					/*mainBuffer[(itera->topleft.Y + j / w) * curMap->width + itera->topleft.X + (j % w)].Attributes = itera->pTexture->textureArray[j].Attributes;*/
 				}
 			}
 		/*	itera->currentFrame = (itera->currentFrame + 1) % itera->nFrame;
