@@ -308,7 +308,7 @@ void cGame::saveGame() {
     
     // testing simple version of save file
     // file format (binary)
-    // [gameOrder] [gameLevel] [map]
+    // [gameOrder] [gameLevel] [map] [score] [time]
     // [player 1 coord X] [player 1 coord Y] ...
     // [number of obstacles]
     // [obstacle 1 type] [obstacle 2 type] ...
@@ -319,6 +319,8 @@ void cGame::saveGame() {
     ofs.write((char *) &gameOrder, sizeof(short));
     ofs.write((char *) &gameLevel, sizeof(short));
     ofs.write((char *) &map, sizeof(int));
+    ofs.write((char *) &totalPoint, sizeof(long));
+    ofs.write((char *) &totalTime, sizeof(double));
     
     short * peoplePosition = new short [gameOrder * 2];
     int count = 0;
@@ -366,6 +368,8 @@ cGame::cGame (string saveFile) // load game (create cGame object) from save file
     ifs.read((char *) &gameOrder, sizeof(short));
     ifs.read((char *) &gameLevel, sizeof(short));
     ifs.read((char *) &map, sizeof(int));
+    ifs.read((char *) &totalPoint, sizeof(long));
+    ifs.read((char *) &totalTime, sizeof(double));
     
     short * peoplePosition = new short [gameOrder * 2];
     ifs.read((char *) peoplePosition, sizeof(short) * gameOrder * 2);
