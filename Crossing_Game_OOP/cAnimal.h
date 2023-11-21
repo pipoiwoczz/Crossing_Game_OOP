@@ -8,6 +8,8 @@ private:
 
 public:
 	//cAnimal(COORD In_pos, int difficulty, int ttm): cObstacle(In_pos, difficulty, ttm)  {}
+    cAnimal() {};
+
 	cAnimal(COORD In_pos, int speed) : cObstacle(In_pos, speed) {
 	};
 
@@ -128,8 +130,6 @@ public:
     virtual void hitEffect() {}
 };
 
-cObstacle * cLion::bootstrapObjectcLion = cObstacle::addObject(new cLion());
-cObstacle * cRhino::bootstrapObjectcRhino = cObstacle::addObject(new cRhino());
-cObstacle * cCrocodile::bootstrapObjectcCrocodile = cObstacle::addObject(new cCrocodile());
+
 
 #endif

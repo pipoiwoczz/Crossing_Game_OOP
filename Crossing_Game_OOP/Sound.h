@@ -27,12 +27,14 @@ public:
 	Sound() {};
 	~Sound() {};
 	static void playSoundList() {
+
 		mciSendString(TEXT("open \"sound/test.mp3\" type mpegvideo alias test"), 0, 0, 0);
 	}
 	static void playDieSound();
 	static void playFinishLevelSound();
 	static void playFinishGameSound();
 	static void playIntroSound() {
+		cout << "Playing" << endl;
 		mciSendString(TEXT("play test"), 0, 0, 0);
 	}
 	static void playBackGroundSound();

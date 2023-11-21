@@ -3,7 +3,6 @@
 #define _GRAPHICS_H
 
 #include "setup.h"
-#include <corecrt_wstring.h>
 
 class Graphic {
 public:

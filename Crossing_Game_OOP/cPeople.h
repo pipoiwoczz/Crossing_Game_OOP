@@ -19,16 +19,17 @@ class cPeople {
 
 
 	public:
+		friend class cGameEngine;
 		/*vector<Hitbox> mBoxes;*/
 		vector<Hitbox> mBoxes;
 		cPeople() : cPeople({ 200, 100 }) {}
 		cPeople(COORD In_pos) {
 			topleft = In_pos;
 			mState = true;
-			skin = cAsset::assetLoader2(peopleFile);
+			skin = cAsset::assetLoaders(peopleFile);
 			pTexture = &skin[0];
 			currentFrame = 0;
-			Hitbox a({ short(topleft.X + 4), short( 2 + topleft.Y) }, {short(skin[0].width - 4 + topleft.X), short(skin[0].height - 2 + topleft.Y)});
+			Hitbox a({ short(topleft.X + 4), short( 2 + topleft.Y) }, {short(skin[0].getWidth() - 4 + topleft.X), short(skin[0].getHeight() - 2 + topleft.Y)});
 			
 			mBoxes.push_back(a);
 
@@ -49,8 +50,6 @@ class cPeople {
             return mState;
         }
         
-
-		void draw();
     
 		void up();
 		void down();
@@ -59,13 +58,13 @@ class cPeople {
 		bool move();
 		void erase();
 
-		bool isImpact(cObstacle obsta)
+		bool isImpact(cObstacle* obsta)
 		{
 			for (int i = 0; i < mBoxes.size(); i++)
 			{
-				for (int j = 0; j < obsta.boxes.size(); j++)
+				for (int j = 0; j < obsta->boxes.size(); j++)
 				{
-					if (obsta.boxes[j].isOverlap(mBoxes[i]))
+					if (obsta->boxes[j].isOverlap(mBoxes[i]))
 					{
 						return true;
 					}

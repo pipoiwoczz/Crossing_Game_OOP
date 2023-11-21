@@ -5,11 +5,14 @@
 #include "cVehicle.h"
 #include "cPeople.h"
 #include "cObstacle.h"
+#include "Sound.h"
 #include "Map.h"
+#include "gameEngine.h"
+//#include "Map.h"
 
 class cGame {
 
-
+	friend cGameEngine;
     
     vector<cObstacle *> liveObstacles;
     
@@ -99,8 +102,7 @@ class cGame {
 		}
         bool isImpact();
 		
-		void updatePosVehicle();
-		void updatePosAnimal();
+		void updatePosObstacle();
 
 		short getGameOrder() {
 			return gameOrder;

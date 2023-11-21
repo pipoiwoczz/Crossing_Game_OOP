@@ -1,19 +1,25 @@
-#include "setup.h"
-#include "Map.h"
-#include "Graphics.h"
-#include "Tank.h"
-#include "cPeople.h"
+//#include "Map.h"
+//#include "Graphics.h"
 #include "cGame.h"
-#include "cAsset.h"
-
+#include <iostream>
 int main() {
 	Graphic gr;
-	
+	cGameEngine::startEngine();
 
-	cGame game;
-	game.MainGame();
+	cGame a;
+	a.MainGame();
+	//
 
-	return 1;
+
+	//cout << "---------" << endl;
+
+	//CONSOLE_SCREEN_BUFFER_INFO csbi1, csbi2;
+	//GetConsoleScreenBufferInfo(cGameEngine::Hbuffer1, &csbi1);
+	//GetConsoleScreenBufferInfo(cGameEngine::Hbuffer2, &csbi2);
+
+	//cout << csbi1.dwSize.X << endl;
+	//cout << csbi2.dwSize.X << endl;
+
 }
 
 //#include <iostream>

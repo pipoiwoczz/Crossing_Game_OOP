@@ -4,7 +4,7 @@
 #include "setup.h"
 #include "hitbox.h"
 #include "cAsset.h"
-#include <vector>
+#include "Map.h"
 class cPeople;
 class cObstacle {
 private:
@@ -25,7 +25,12 @@ protected:
 public:
     vector <Hitbox> boxes;
     friend cPeople;
+
+    friend class cGameEngine;
     //cObstacle(COORD In_pos, int difficulty, int ttm);
+    cObstacle() {};
+
+
     cObstacle (COORD In_pos, int speed); // constructor: set topleft and speed. timeUntilMove automatically set to be equal to speed
     virtual ~cObstacle() {}
     static void cleanBootstrap (); // clean up static objects vector. call before program exits. [better solutions?]
@@ -42,8 +47,6 @@ public:
     virtual cObstacle * construct (COORD pos, int spd) = 0; // create object at pos, with speed set to spd
     // note: copy constructors have not been declared - currently using default copy constructors
 
-    void draw(); // draws sprite based on texture
-    void erase(); // deletes sprite on screen
     void move(); // moves obstacle to new position
     virtual void hitEffect() = 0;// (optional) effect on collision with player
     void stop() {

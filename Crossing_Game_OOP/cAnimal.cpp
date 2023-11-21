@@ -1,8 +1,8 @@
 #include "cAnimal.h"
 
-vector<Texture> cLion::textureLion = cAsset::assetLoader2(lionFile);
-vector<Texture> cRhino::textureRhino = cAsset::assetLoader2(rhinoFile);
-vector<Texture> cCrocodile::textureCroco = cAsset::assetLoader2(crocoFile);
+vector<Texture> cLion::textureLion = cAsset::assetLoaders(lionFile);
+vector<Texture> cRhino::textureRhino = cAsset::assetLoaders(rhinoFile);
+vector<Texture> cCrocodile::textureCroco = cAsset::assetLoaders(crocoFile);
 
 
 
@@ -12,8 +12,7 @@ cLion::cLion(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In_p
     pLTexture = pTexture;
     currentFrame = 0;
     nFrame = textureLion.size();
-
-    Hitbox a(topleft, { short(topleft.X + pTexture->width), short(topleft.Y + pTexture->height) });
+    Hitbox a(topleft, { short(topleft.X + pTexture->getWidth()), short(topleft.Y + pTexture->getHeight())});
 
     boxes.push_back(a);
 }
@@ -35,3 +34,6 @@ cCrocodile::cCrocodile(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cA
     nFrame = textureCroco.size();
 }
 
+cObstacle* cLion::bootstrapObjectcLion = cObstacle::addObject(new cLion());
+cObstacle* cRhino::bootstrapObjectcRhino = cObstacle::addObject(new cRhino());
+cObstacle* cCrocodile::bootstrapObjectcCrocodile = cObstacle::addObject(new cCrocodile());

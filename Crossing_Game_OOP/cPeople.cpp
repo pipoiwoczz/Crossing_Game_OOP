@@ -1,51 +1,49 @@
 #include "cPeople.h"
-#include "cAnimal.h"
-#include "cVehicle.h"
 
-void cPeople::draw() {
-	/*wstring content[4];
-	content[0] = L"    ▀    ";
-	content[1] = L"  ▄███▄  ";
-	content[2] = L" ▀ ███ ▀ ";
-	content[3] = L"  ▄█ █▄  ";
-	printCharacter(L"         ", {short (pos.X), short(pos.Y - 1)}, Color::bright_white, Color::bright_white);
-	printCharacter(L"         ", { short(pos.X), short(pos.Y + 4) }, Color::bright_white, Color::bright_white);
-	printCharacter(L"         ", { short(pos.X+1), short(pos.Y + 2) }, Color::bright_white, Color::bright_white);*/
-	/*wstring content[4];
-	content[0] = L" ▄████";
-	content[1] = L"██▄▄▄▄";
-	content[2] = L"██████";
-	content[3] = L" ██ ██";
-	for (int i = 0; i < 4; i++) {
-		if (i == 1) {
-			printCharacter2(content[i], { pos.X, short(pos.Y + i) }, Color::red, Color::blue);
-		}
-		else
-			printCharacter2(content[i], { pos.X, short(pos.Y + i) }, Color::red, Color::bright_white);
-	}*/
-
-	/*CHAR_INFO *character;
-	short height, width;*/
-	gameMap* pMap = cAsset::getCurrentMap();
-	CHAR_INFO* readyBuffer = new CHAR_INFO[pTexture->width * pTexture->height];
-	memcpy(readyBuffer, pTexture->textureArray, pTexture->width * pTexture->height * sizeof(CHAR_INFO));
-
-
-	for (int i = 0; i < pTexture->width * pTexture->height; i++)
-	{
-		if (readyBuffer[i].Char.UnicodeChar == L' ') {
-			readyBuffer[i].Attributes = pMap->mapArray[(topleft.Y + i / pTexture->width) * pMap->width + topleft.X + (i % pTexture->width)].Attributes;
-		}
-	}
-	SMALL_RECT reg = { topleft.X, topleft.Y, topleft.X + pTexture->width - 1, topleft.Y + pTexture->height - 1 };
-	WriteConsoleOutput(mainHandle, readyBuffer, { pTexture->width, pTexture->height }, { 0,0 }, &reg);
-	delete[]readyBuffer;
-
-	currentFrame = (currentFrame + 1) % skin.size();
-	pTexture = &skin[currentFrame];
-
-
-}
+//void cPeople::draw() {
+//	/*wstring content[4];
+//	content[0] = L"    ▀    ";
+//	content[1] = L"  ▄███▄  ";
+//	content[2] = L" ▀ ███ ▀ ";
+//	content[3] = L"  ▄█ █▄  ";
+//	printCharacter(L"         ", {short (pos.X), short(pos.Y - 1)}, Color::bright_white, Color::bright_white);
+//	printCharacter(L"         ", { short(pos.X), short(pos.Y + 4) }, Color::bright_white, Color::bright_white);
+//	printCharacter(L"         ", { short(pos.X+1), short(pos.Y + 2) }, Color::bright_white, Color::bright_white);*/
+//	/*wstring content[4];
+//	content[0] = L" ▄████";
+//	content[1] = L"██▄▄▄▄";
+//	content[2] = L"██████";
+//	content[3] = L" ██ ██";
+//	for (int i = 0; i < 4; i++) {
+//		if (i == 1) {
+//			printCharacter2(content[i], { pos.X, short(pos.Y + i) }, Color::red, Color::blue);
+//		}
+//		else
+//			printCharacter2(content[i], { pos.X, short(pos.Y + i) }, Color::red, Color::bright_white);
+//	}*/
+//
+//	/*CHAR_INFO *character;
+//	short height, width;*/
+//	gameMap* pMap = gameMap::getCurrentMap();
+//	CHAR_INFO* readyBuffer = new CHAR_INFO[pTexture->getWidth() * pTexture->getHeight()];
+//	memcpy(readyBuffer, pTexture->textureArray, pTexture->getWidth() * pTexture->getHeight() * sizeof(CHAR_INFO));
+//
+//
+//	for (int i = 0; i < pTexture->getWidth() * pTexture->getHeight(); i++)
+//	{
+//		if (readyBuffer[i].Char.UnicodeChar == L' ') {
+//			readyBuffer[i].Attributes = pMap->mapArray[(topleft.Y + i / pTexture->getWidth()) * pMap->width + topleft.X + (i % pTexture->getWidth())].Attributes;
+//		}
+//	}
+//	SMALL_RECT reg = { topleft.X, topleft.Y, topleft.X + pTexture->getWidth() - 1, topleft.Y + pTexture->getHeight() - 1 };
+//	WriteConsoleOutput(mainHandle, readyBuffer, { pTexture->getWidth(), pTexture->getHeight() }, { 0,0 }, &reg);
+//	delete[]readyBuffer;
+//
+//	currentFrame = (currentFrame + 1) % skin.size();
+//	pTexture = &skin[currentFrame];
+//
+//
+//}
 
 void cPeople::up(){
 	topleft.Y--;
@@ -75,57 +73,39 @@ bool cPeople::move() {
 	bool ismove = false;
 	//bool horizon = true;
 	float dx = 0, dy = 0;
-	if (GetAsyncKeyState(VK_LEFT) < 0) {
+	if (GetAsyncKeyState(VK_LEFT) < 0 && topleft.X > 5) {
 		dx--;
 		//horizon = true;
 		ismove = true;
 	}
 
-	if (GetAsyncKeyState(VK_RIGHT) < 0) {
+	if (GetAsyncKeyState(VK_RIGHT) < 0 && topleft.X < My_Windows.Right - 30) {
 		dx++;
 		//horizon = true;
 		ismove = true;
 
 	}
 
-	if (GetAsyncKeyState(VK_UP) < 0) {
+	if (GetAsyncKeyState(VK_UP) < 0 && topleft.Y > 5) {
 		dy--;
 		//horizon = false;
 		ismove = true;
 
 	}
 
-	if (GetAsyncKeyState(VK_DOWN) < 0) {
+	if (GetAsyncKeyState(VK_DOWN) < 0 && topleft.Y < My_Windows.Bottom - 30) {
 		dy++;
 		//horizon = false;
 		ismove = true;
 
 	}
 	if (ismove) {
-		int x = 0, y = 0;
-		if (topleft.X + dx * 4 + 4>= 0 && topleft.X + dx * 4 < My_Windows.Right - width - 12) {
-			topleft.X += dx * 4;
-			x = dx * 4;
-		}
-			
-		if (topleft.Y + dy * 2 + 2>= 0 && topleft.Y + dy * 2 < My_Windows.Bottom - height - 4) {
-			topleft.Y += dy * 2;
-			y = dy * 2;
-		}
-
+		topleft.X += dx*2;
+		topleft.Y += dy*4;
 		for (int i = 0; i < mBoxes.size(); i++)
 		{
-			mBoxes[i].move({ short(x),short(y) });
+			mBoxes[i].move({ short(dx*2),short(dy*4) });
 		}
-		//if (horizon)
-		//{
-		//	if (topleft.X + dx >= 0 && topleft.X + dx < My_Windows.Right - width)
-		//	center.X += dx;
-		//}
-		//else {
-		//	if (topleft.Y + dy >= 0 && topleft.Y + dy < My_Windows.Bottom - height)
-		//	center.Y += dy;
-		//}
 		return ismove;
 	}
 }

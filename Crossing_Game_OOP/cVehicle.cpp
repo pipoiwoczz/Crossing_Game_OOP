@@ -1,8 +1,8 @@
 #include "cVehicle.h"
 
-vector<Texture> cTruck::textureTruck = cAsset::assetLoader2(truckFile);
-vector<Texture> cHelicopter::textureHeli = cAsset::assetLoader2(heliFile);
-vector<Texture> cMotorbike::textureMotorb = cAsset::assetLoader2(motorbFile);
+vector<Texture> cTruck::textureTruck = cAsset::assetLoaders(truckFile);
+vector<Texture> cHelicopter::textureHeli = cAsset::assetLoaders(heliFile);
+vector<Texture> cMotorbike::textureMotorb = cAsset::assetLoaders(motorbFile);
 
 cTruck::cTruck() : cTruck({ 0, 40 }, 2) {};
 cTruck::cTruck(COORD In_pos, /*int difficulty, int ttm*/ int speed): cVehicle(In_pos, /*difficulty, ttm*/ speed) {
@@ -28,3 +28,6 @@ cMotorbike::cMotorbike(COORD In_pos, /*int difficulty, int ttm*/ int speed): cVe
 	nFrame = textureMotorb.size();
 }
 
+cObstacle* cTruck::bootstrapObjectcTruck = cObstacle::addObject(new cTruck());
+cObstacle* cHelicopter::bootstrapObjectcHelicopter = cObstacle::addObject(new cHelicopter());
+cObstacle* cMotorbike::bootstrapObjectcMotorbike = cObstacle::addObject(new cMotorbike());

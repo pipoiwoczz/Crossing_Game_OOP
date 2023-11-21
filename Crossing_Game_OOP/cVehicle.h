@@ -4,6 +4,7 @@
 
 class cVehicle: public cObstacle {
 public:
+    cVehicle() {};
 	//cVehicle(COORD In_pos, int difficulty, int ttm) : cObstacle(In_pos, difficulty, ttm) {}
 	cVehicle(COORD In_pos, int speed) : cObstacle(In_pos, speed) {
 	
@@ -115,8 +116,6 @@ public:
     virtual void hitEffect() {}
 };
 
-cObstacle * cTruck::bootstrapObjectcTruck = cObstacle::addObject(new cTruck());
-cObstacle * cHelicopter::bootstrapObjectcHelicopter = cObstacle::addObject(new cHelicopter());
-cObstacle * cMotorbike::bootstrapObjectcMotorbike = cObstacle::addObject(new cMotorbike());
+
 
 #endif

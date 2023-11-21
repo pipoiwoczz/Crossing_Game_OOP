@@ -16,10 +16,12 @@
 #include <wchar.h>
 #include <future>
 #include <vector>
-
+#include <mutex>
 
 
 using namespace std;
+
+static mutex mtx;	
 
 extern SMALL_RECT My_Windows;
 const HANDLE mainHandle = GetStdHandle(STD_OUTPUT_HANDLE);

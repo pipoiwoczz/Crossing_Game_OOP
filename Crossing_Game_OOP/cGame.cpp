@@ -1,6 +1,4 @@
 ﻿#include "cGame.h"
-#include "Map.h"
-#include "Sound.h"
 
 //void cGame::getPeople() {
 //	short numOfPlayer = getGameOrder();
@@ -19,11 +17,7 @@
 //	}
 //}
 //
-void cGame::drawGame() {
-	//drawGameTitle();
-	//if (!isPause);
-	//	//lion->move();
-}
+
 
 
 int cGame::getMenuChoice() {
@@ -124,41 +118,50 @@ void cGame::startGame() {
 	}
 }
 
+
+
+void cGame::updatePosObstacle()
+{
+	for (int i = 0; i < liveObstacles.size(); i++)
+	{
+		liveObstacles[i]->move();
+	}
+}
+
+
 void cGame::MainGame() {
-	drawBackGround();
+	//drawBackGround();
 	spawnPeople();
 	spawnObstacle();
-	resetTime();
-	for (int i = 0; i < gameOrder; i++) {
-		livePeople[i]->draw();
-	}
-	
+	//resetTime();
+	//thread drawingThread(&cGameEngine::drawT, this);
 	Sound::playSoundList();
 	Sound::playIntroSound();
 	//Sound::musicThread();
-	while (!isPause) {
-		
-		
-			
-
-		if (GetAsyncKeyState(0x50) < 0) {
-			pauseGame();
+	
+	while (true) {
+		cGameEngine::drawT(this);
+		//if (GetAsyncKeyState(0x50) < 0) {
+		//	pauseGame();
+		//	break;
+		//}
+		if (GetAsyncKeyState(0x51) < 0) {
+			isExit = true;
 			break;
 		}
-		if (GetAsyncKeyState(0x51) < 0)
-			break;
+			
+		if (isImpact())
+		{
+			isLose = true;
+		}
 		
 		for (int i = 0; i < gameOrder; i++) {
-			livePeople[i] -> move();
-		}
-		
-		for (int i = 0; i < liveObstacles.size(); i++) {
-			liveObstacles[i]->move();
+			livePeople[i]->move();
 		}
 
 		if (isFinishLevel()) {
 			this->gameLevel++;
-			cAsset::nextMap();
+			gameMap::nextMap();
 			calculatePoint();
 			cout << "Total point: " << totalPoint << endl;
 			cout << "Total time: " << totalTime << endl;
@@ -166,25 +169,9 @@ void cGame::MainGame() {
 			std::system("pause");
 			break;
 		}
-
-		if (isImpact()) {
-			
-
-			break;
-		}
-		
-
-		Sleep(30);
-		//drawBackGround();
-		for (int i = 0; i < gameOrder; i++) {
-			livePeople[i]->draw();
-		}
-		for (int i = 0; i < liveObstacles.size(); i++) {
-			liveObstacles[i]->draw();
-		}
-
+		Sleep(10);
 	}
-	
+	//drawingThread.join();
 }
 
 void cGame::gameThread() {
@@ -205,8 +192,9 @@ bool cGame::isImpact()
 			for (cObstacle * obstacle : liveObstacles)
 			{
 				cnt++;
-				if (livePeople[i] -> isImpact(*obstacle))
+				if (livePeople[i] -> isImpact(obstacle))
 				{
+					isPause = true;
 					livePeople[i] -> isDead();
 					impactEffect(cnt);
 					return true;
@@ -230,9 +218,7 @@ void cGame::checkImpactThread() {
 }
 
 void cGame::drawThread() {
-	while (!isLose) {
-		drawGame();
-	}
+
 }
 
 void cGame::movingThread() {
@@ -403,7 +389,7 @@ cObstacle * createObject (short type, COORD position, int speed)
 
 void cGame::drawBackGround()
 {
-	gameMap* pMap = cAsset::getCurrentMap();
+	gameMap* pMap = gameMap::getCurrentMap();
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	SMALL_RECT reg = { 0,0, My_Windows.Right - 1, My_Windows.Bottom - 1 };
@@ -484,13 +470,13 @@ void cGame::impactEffect(int i) {
 		for (int i = 0; i < e.width * e.height; i++)
 		{
 			if (readyBuffer[i].Char.UnicodeChar == L' ') {
-				readyBuffer[i].Attributes = cAsset::getCurrentMap()->mapArray[(topleft.Y + i / e.width) * cAsset::getCurrentMap()->width + topleft.X + (i % e.width)].Attributes;
+				readyBuffer[i].Attributes = gameMap::getCurrentMap()->mapArray[(topleft.Y + i / e.width) * gameMap::getCurrentMap()->width + topleft.X + (i % e.width)].Attributes;
 			}
 		}
 
 		SMALL_RECT reg = { topleft.X , topleft.Y,  topleft.X + e.width - 1, topleft.Y + e.height - 1 };
 
-		WriteConsoleOutput(mainHandle, readyBuffer, { e.width , e.height }, { 0,0 }, &reg);
+		WriteConsoleOutput(cGameEngine::curHandle, readyBuffer, { e.width , e.height }, { 0,0 }, &reg);
 		delete[]readyBuffer;
 		//system("pause");
 		Sleep(120);
@@ -499,7 +485,7 @@ void cGame::impactEffect(int i) {
 }
 
 void cGame::spawnObstacle() {
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 1; i++) {
 		liveObstacles.push_back(new cLion({short(-300 +100*i), 50}, 3));
 	}
 }

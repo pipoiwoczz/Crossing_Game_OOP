@@ -2,8 +2,6 @@
 #define CASSET_H
 #include "setup.h"
 
-class cObstacle;
-
 const vector<string> lionFile { "lion.txt" };
 const vector<string> rhinoFile {"rhino.txt"};
 const vector<string> crocoFile { "croco.txt" };
@@ -11,7 +9,6 @@ const vector<string> truckFile { "truck.txt" };
 const vector<string> heliFile { "heli.txt" };
 const vector<string> motorbFile {"motorb.txt"};
 const vector<string> maplist { "jungle.txt" };
-
 const vector<string> peopleFile{ "people.txt" };
 
 enum class MapIndex {
@@ -34,13 +31,20 @@ struct BlankSegment {
 	short start, end;
 };
 
-class cAsset;
 
+
+
+//predeclare
 class Texture {
 private:
-public:
 	short height;
 	short width;
+public:
+	friend class gameMap;
+	friend class cAsset;
+	friend class cObstacle;
+	friend class cGame;
+	friend class cGameEngine;
 	//vector<vector<BlankSegment>> blankTexture;
 	CHAR_INFO* textureArray;
 	Texture() {
@@ -66,57 +70,29 @@ public:
 		if (textureArray)
 			delete[]textureArray;
 	}
-	friend cAsset;
-	friend cObstacle;
-};
-
-class gameMap {
-public:
-	short height;
-	short width;
-	CHAR_INFO* mapArray;
-	gameMap()
+	void setHeight(const short &height)
 	{
-		mapArray = nullptr;
+		this->height = height;
 	}
-	~gameMap()
+	void setWidth(const short &width)
 	{
-		if (mapArray)
-			delete[]mapArray;
+		this->width = width;
 	}
-	friend cAsset;
-	gameMap(const gameMap& a)
-	{
-		height = a.height;
-		width = a.width;
-		mapArray = new CHAR_INFO[height*width];
-		memcpy(mapArray, a.mapArray, a.height * a.width * sizeof(CHAR_INFO));
+	short getHeight() {
+		return height;
 	}
-	gameMap& operator=(const gameMap& a)
-	{
-		height = a.height;
-		width = a.width;
-		delete[]mapArray;
-		mapArray = new CHAR_INFO[height * width];
-		memcpy(mapArray, a.mapArray, a.height * a.width * sizeof(CHAR_INFO));
+	short getWidth() {
+		return width;
 	}
 };
 
 class cAsset {
 private:
 	cAsset();
-	//Maps textures go here
-	static vector<gameMap> listMap;
-	static gameMap* currentMap;
-	static MapIndex currentMapIndex;
-			
 public:
 	static Texture assetLoader(string filename);
-	static vector<Texture> assetLoader2(const vector<string>& textureList);
-	friend cObstacle;
-	static vector<gameMap> loadMap();
-	static gameMap* getCurrentMap();
-	static void changeMap(MapIndex newMapIndex);
-	static void nextMap();
+	static vector<Texture> assetLoaders(const vector<string>& textureList);
 };
+
+
 #endif
