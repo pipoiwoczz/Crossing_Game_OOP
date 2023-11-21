@@ -128,6 +128,6 @@ class cGame {
 
 #define refreshBackGround drawBackGround
 };
-cObstacle * createObject (short type, COORD position, int speed);
+//cObstacle * createObject (short type, COORD position, int speed);
 
 #endif
