@@ -489,8 +489,8 @@ void cGame::impactEffect(int i) {
 }
 
 void cGame::spawnObstacle() {
-	for (int i = 0; i < 4; i++) {
-		liveObstacles.push_back(new cLion({short(-300 +100*i), 50}, 3));
+	for (int i = 0; i < 1; i++) {
+		liveObstacles.push_back(new cLion({short(0 + 100*i), 50}, 3));
 	}
 }
 
