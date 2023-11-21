@@ -36,7 +36,7 @@ void Graphic::setWindowSize(short width, short height) {
     RECT r;
     GetWindowRect(console, &r); //stores the console's current dimensions
 
-    MoveWindow(console, r.left, r.top, width, height, TRUE);
+    MoveWindow(console, 0, 0, width, height, TRUE);
 
 }
 
@@ -56,7 +56,11 @@ void Graphic::fixConsoleWindow() {
     SetConsoleScreenBufferSize(consoleHandle, csbi.dwMaximumWindowSize);
     My_Windows.Bottom = csbi.srWindow.Bottom;
     My_Windows.Right = csbi.srWindow.Right;
+
+   // SetWindowPos(consoleWindow, 0, 0, 0, 480, 131, SWP_NOSIZE | SWP_NOZORDER);
+    DWORD g;
     system("color f0");
+    //0,0 479-130
 }
 
 void Graphic::showScrollBar(BOOL Show) {

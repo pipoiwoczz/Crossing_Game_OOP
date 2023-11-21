@@ -10,12 +10,22 @@ cObstacle * cObstacle::addObject (cObstacle * obj)
     return obj;
 }
 
-cObstacle * cObstacle::createObject(char type, COORD pos)
+cObstacle * cObstacle::copyObject(char type, COORD pos)
 {
     for (cObstacle * sample : objects)
     {
         if (type == sample -> getType())
             return sample -> copy(pos);
+    }
+    return nullptr;
+}
+
+cObstacle * cObstacle::constructObject(char type, COORD pos, int spd)
+{
+    for (cObstacle * sample : objects)
+    {
+        if (type == sample -> getType())
+            return sample -> construct(pos, spd);
     }
     return nullptr;
 }
@@ -137,11 +147,11 @@ void cObstacle::advanceTime(int time)
 
 void cObstacle::move() {
     if (isStop) return;
-    topleft.X += 1;
+    topleft.X = (topleft.X + 1) % My_Windows.Right;
     
     for (int i = 0; i < boxes.size(); i++)
     {
-        boxes[i].move({ 1,0 });
+        boxes[i].set({ short(topleft.X + 10), short(topleft.Y + 10) }, { short(topleft.X + pTexture->getWidth() - 10), short(topleft.Y + pTexture->getHeight() - 10) });
     }
 
     /*if (topleft.X >= cAsset::currentMap->width)

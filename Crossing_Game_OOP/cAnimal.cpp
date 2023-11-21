@@ -12,7 +12,7 @@ cLion::cLion(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In_p
     pLTexture = pTexture;
     currentFrame = 0;
     nFrame = textureLion.size();
-    Hitbox a(topleft, { short(topleft.X + pTexture->getWidth()), short(topleft.Y + pTexture->getHeight())});
+    Hitbox a({short(topleft.X + 2), short(topleft.Y)}, {short(topleft.X + pTexture->getWidth() - 2), short(topleft.Y + pTexture->getHeight())});
 
     boxes.push_back(a);
 }

@@ -5,11 +5,10 @@
 int main() {
 	Graphic gr;
 	cGameEngine::startEngine();
-
+	
 	cGame a;
 	a.MainGame();
-	//
-
+	
 
 	//cout << "---------" << endl;
 

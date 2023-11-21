@@ -28,7 +28,7 @@ public:
         botright.X = topleft.X + dis;
     }
     void getHitbox (COORD &topleftGet, COORD &botrightGet);
-    void move(COORD displace);
+    void set(const COORD& newTopleft, const COORD& newBotright);
     bool isOverlap (Hitbox h);
 };
 

@@ -12,7 +12,6 @@ class cPeople {
 	vector<Texture> skin;
 	Texture* pTexture;
 	int currentFrame;
-	short height, width;
 	HANDLE h;
     COORD topleft;
 	bool mState; // true is alive, false is dead =))

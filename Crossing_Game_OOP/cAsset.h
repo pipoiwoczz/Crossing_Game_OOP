@@ -2,13 +2,15 @@
 #define CASSET_H
 #include "setup.h"
 
-const vector<string> lionFile { "lion.txt" };
+const vector<string> lionFile { "unk1.txt", "unk2.txt"};
 const vector<string> rhinoFile {"rhino.txt"};
 const vector<string> crocoFile { "croco.txt" };
 const vector<string> truckFile { "truck.txt" };
 const vector<string> heliFile { "heli.txt" };
 const vector<string> motorbFile {"motorb.txt"};
-const vector<string> maplist { "jungle.txt" };
+
+const vector<string> maplist { "Sprites//map_forest.txt" };
+
 const vector<string> peopleFile{ "people.txt" };
 
 enum class MapIndex {

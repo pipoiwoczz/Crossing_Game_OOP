@@ -24,13 +24,17 @@ void cGameEngine::startEngine()
 	SetConsoleWindowInfo(Hbuffer1, TRUE, &My_Windows);
 	SetConsoleScreenBufferSize(Hbuffer2, buffsize);
 	SetConsoleWindowInfo(Hbuffer2, TRUE, &My_Windows);
+
 	SetConsoleActiveScreenBuffer(Hbuffer1);
+
 }
 
 void cGameEngine::drawT(cGame* pGame)
 {
-	//while (!pGame->isPause)
-	//{
+	while (!pGame->isExit)
+	{
+		if (pGame->isPause || pGame->isLose)
+			continue;
 		count = 1 - count;
 		if (count % 2 == 0) {
 			curHandle = Hbuffer1;
@@ -79,17 +83,17 @@ void cGameEngine::drawT(cGame* pGame)
 		/*	itera->currentFrame = (itera->currentFrame + 1) % itera->nFrame;
 			itera->pTexture = itera->pLTexture + itera->currentFrame;*/
 		}
-
+		
 		WriteConsoleOutput(curHandle, mainBuffer, { curMap->width, curMap->height }, { 0,0 }, &My_Windows);
 		SetConsoleActiveScreenBuffer(curHandle);
 		
-		/*if (!pGame->isPause)
+		if (!pGame->isPause)
 		{
 			pGame->updatePosObstacle();
 
-		}*/
+		}
 
 
-		//Sleep(10);
-	//}
+		Sleep(15);
+	}
 }
