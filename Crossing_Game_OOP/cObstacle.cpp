@@ -61,6 +61,15 @@ int cObstacle::getSpeed()
 
 void cObstacle::setPos(COORD new_Pos) {
     topleft = new_Pos;
+    // use if neccessary - sets new hitbox according to new position
+    //determineHitbox();
+}
+
+void cObstacle::determineHitbox() // default function to determine an obstacle's hitbox, can be overridden for each subclass
+{
+    boxes.clear();
+    Hitbox a({short(topleft.X + 2), short(topleft.Y)}, {short(topleft.X + pTexture->getWidth() - 2), short(topleft.Y + pTexture->getHeight())});
+    boxes.push_back(a);
 }
 
 bool cObstacle::collide(Hitbox h)
