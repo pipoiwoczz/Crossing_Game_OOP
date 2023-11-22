@@ -48,13 +48,6 @@ void cGameEngine::drawT(cGame* pGame)
 		else {
 			curHandle = Hbuffer2;
 		}
-
-		//if (!pGame->isPause)
-		//{
-		//	pGame->updatePosObstacle();
-
-		//}
-
 		gameMap* curMap = gameMap::getCurrentMap();
 
 		//clear all entities
@@ -75,17 +68,13 @@ void cGameEngine::drawT(cGame* pGame)
 			for (int j = 0; j < w * h; j++)
 			{
 				if (itera->pTexture->textureArray[j].Char.UnicodeChar != L' ') {
-					//mainBuffer[(itera->topleft.Y + j / w) * curMap->width + itera->topleft.X + (j % w)].Attributes = itera->pTexture->textureArray[j].Attributes;
-					int topleft1 = itera->topleft.Y * curMap->width + (itera->topleft.X + (j % w)) % (curMap->width - 1);
-					topleft1 = topleft1 + (j / w) * curMap->width;
-					mainBuffer[topleft1].Attributes = itera->pTexture->textureArray[j].Attributes;
+					mainBuffer[itera->topleft.Y * curMap->width + (itera->topleft.X + (j % w)) % (curMap->width - 1) + (j / w) * curMap->width].Attributes = itera->pTexture->textureArray[j].Attributes;
 				}
 			}
 
 			itera->currentFrame = (itera->currentFrame + 1) % itera->nFrame;
 			itera->pTexture = itera->pLTexture + itera->currentFrame;
-			if (!pGame->isPause)
-				itera->move();
+			itera->move();
 		}
 
 		//put people onto buffer
@@ -97,22 +86,15 @@ void cGameEngine::drawT(cGame* pGame)
 			for (int j = 0; j < w * h; j++)
 			{
 				if (itera->pTexture->textureArray[j].Char.UnicodeChar != L' ') {
-					int topleft1 = itera->topleft.Y * curMap->width + (itera->topleft.X + (j % w)) % curMap->width;
-					topleft1 = topleft1 + (j / w) * curMap->width;
-					mainBuffer[topleft1].Attributes = itera->pTexture->textureArray[j].Attributes;
-					/*mainBuffer[(itera->topleft.Y + j / w) * curMap->width + itera->topleft.X + (j % w)].Attributes = itera->pTexture->textureArray[j].Attributes;*/
+					mainBuffer[itera->topleft.Y * curMap->width + (itera->topleft.X + (j % w)) % (curMap->width - 1) + (j / w) * curMap->width].Attributes = itera->pTexture->textureArray[j].Attributes;
 				}
 			}
 		/*	itera->currentFrame = (itera->currentFrame + 1) % itera->nFrame;
-			itera->pTexture = itera->pLTexture + itera->currentFrame;*/
+			itera->pTexture = itera->pLTexture + itera->currentFrame; */
 		}
 		
 		WriteConsoleOutput(curHandle, mainBuffer, { curMap->width, curMap->height }, { 0,0 }, &My_Windows);
 		SetConsoleActiveScreenBuffer(curHandle);
-		
-
-
-
 		Sleep(15);
 	}
 }
