@@ -15,11 +15,14 @@ public:
 
 	virtual void playSound() {
 	}
+    virtual void playHitEffect() {
+
+    }
 };
 
 class cLion : public cAnimal {
     static cObstacle * bootstrapObjectcLion;
-    
+    static vector<Texture> hitEffectFrame;
 	static vector<Texture> textureLion;
 
 public:

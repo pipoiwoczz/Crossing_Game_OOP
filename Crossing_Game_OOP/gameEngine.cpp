@@ -25,6 +25,12 @@ void cGameEngine::startEngine()
 	SetConsoleScreenBufferSize(Hbuffer2, buffsize);
 	SetConsoleWindowInfo(Hbuffer2, TRUE, &My_Windows);
 
+	CONSOLE_CURSOR_INFO info;
+	info.dwSize = 100;
+	info.bVisible = false;
+	SetConsoleCursorInfo(Hbuffer1, &info);
+	SetConsoleCursorInfo(Hbuffer2, &info);
+
 	SetConsoleActiveScreenBuffer(Hbuffer1);
 
 }
@@ -96,7 +102,7 @@ void cGameEngine::drawT(cGame* pGame)
 		WriteConsoleOutput(curHandle, mainBuffer, { curMap->width, curMap->height }, { 0,0 }, &My_Windows);
 		SetConsoleActiveScreenBuffer(curHandle);
 		
-		if (!pGame->isPause)
+		if (!pGame->isPause)	
 		{
 			pGame->updatePosObstacle();
 

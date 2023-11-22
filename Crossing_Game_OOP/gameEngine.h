@@ -8,7 +8,6 @@
 
 class cGameEngine {
 private:
-public:
 	static COORD buffsize;
 
 	//Buffer
@@ -20,10 +19,10 @@ public:
 	//handles for double-buffs tech
 	static HANDLE Hbuffer1;
 	static HANDLE Hbuffer2;
-	static HANDLE curHandle;
 	//count for double-buffs tech
 	static int count;
-
+public:
+	static HANDLE curHandle;
 
 	~cGameEngine()
 	{
@@ -35,6 +34,7 @@ public:
 	static void startEngine();
 
 	static void drawT(cGame* pGame);
+	static void drawHitEffect(const cObstacle* &pObstacle);
 };
 
 #endif // !GAME_ENGINE_H
