@@ -62,7 +62,8 @@ class cGame {
 		void drawThread();
 		void movingThread();
 		void getMainMenuActionThread();
-        void despawnThread(); // cleans up objects that have gone offscreen
+        void despawnThread(); // loops objects that have gone offscreen to the other side
+        void randomStopThread(); // stops a row of objects at random (or set) intervals
 		
 
 		void drawGame();

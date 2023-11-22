@@ -249,12 +249,82 @@ void cGame::movingThread() {
 
 void cGame::despawnThread()
 {
-    for (int i = 0; i < liveObstacles.size(); i++)
+    while (!isLose && !isExit)
     {
-        COORD coord = liveObstacles[i] -> getPos();
-        if (coord.X > My_Windows.Right) 
+        if (isPause)
+            continue;
+        for (int i = 0; i < liveObstacles.size(); i++)
         {
-			liveObstacles[i]->setPos({ 0, coord.Y });
+            COORD coord = liveObstacles[i] -> getPos();
+            if (coord.X > My_Windows.Right)
+            {
+                liveObstacles[i] -> setPos({ 0, coord.Y });
+            }
+            else if (coord.X < 0)
+            {
+                liveObstacles[i] -> setPos({ My_Windows.Right, coord.Y });
+            }
+        }
+    }
+}
+
+void cGame::randomStopThread()
+{
+    long long lastTime = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+    long long stopDuration = 0;
+    long long stopCooldown = 0;
+    short stopped = -1;
+    
+    vector<short> linePos;
+    for (cObstacle * element : liveObstacles)
+    {
+        if (find(linePos.begin(), linePos.end(), element -> getPos().Y) == linePos.end())
+        {
+            linePos.push_back(element -> getPos().Y);
+        }
+    }
+    int size = (int) linePos.size();
+    
+    srand((unsigned int) time(NULL));
+    while (!isLose && !isExit)
+    {
+        if (isPause)
+            continue;
+        long long timePassed = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count() - lastTime;
+        if (timePassed <= 0)
+            continue;
+        
+        if (stopCooldown > 0)
+        {
+            if (stopDuration > 0)
+            {
+                stopDuration -= timePassed;
+                if (stopDuration <= 0)
+                {
+                    for (cObstacle * element : liveObstacles)
+                    {
+                        if (element -> getPos().Y == stopped)
+                            element -> resume();
+                    }
+                }
+            }
+            stopCooldown -= timePassed;
+        }
+        else
+        {
+            int roll = rand() % 30000 + 1;
+            if (roll > timePassed)
+                continue;
+            roll = rand() % size;
+            for (cObstacle * element : liveObstacles)
+            {
+                if (element -> getPos().Y == linePos[roll])
+                    element -> stop();
+            }
+            
+            roll = rand() % 10000;
+            stopDuration = roll + 5000;
+            stopCooldown = stopDuration + 10000;
         }
     }
 }
