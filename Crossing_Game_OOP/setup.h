@@ -17,6 +17,7 @@
 #include <future>
 #include <vector>
 #include <mutex>
+#include <algorithm>
 
 
 using namespace std;
