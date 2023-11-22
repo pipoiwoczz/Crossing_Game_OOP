@@ -70,38 +70,47 @@ void cPeople::right() {
 }
 
 bool cPeople::move() {
+	if (moveCooldown > 0)
+	{	
+		moveCooldown--;
+		return false;
+	}
+	moveCooldown = 10;
 	bool ismove = false;
-	//bool horizon = true;
+	bool horizon;
 	float dx = 0, dy = 0;
 	if (GetAsyncKeyState(VK_LEFT) < 0 && topleft.X > 0) {
 		dx--;
-		//horizon = true;
+		horizon = true;
 		ismove = true;
 	}
 
 	if (GetAsyncKeyState(VK_RIGHT) < 0 && topleft.X < 479 - pTexture->getWidth() + 1) {
 		dx++;	
-		//horizon = true;
+		horizon = true;
 		ismove = true;
 
 	}
 
 	if (GetAsyncKeyState(VK_UP) < 0 && topleft.Y > 1) {
 		dy--;
-		//horizon = false;
+		horizon = false;
 		ismove = true;
 
 	}
 
 	if (GetAsyncKeyState(VK_DOWN) < 0 && topleft.Y < My_Windows.Bottom - pTexture->getHeight() + 1) {
 		dy++;
-		//horizon = false;
+		horizon = false;
 		ismove = true;
 
 	}
-	if (ismove) {
-		topleft.X += dx;
-		topleft.Y += dy;
+	if (ismove)
+	{
+		if (horizon)
+			topleft.X += dx*pTexture->getWidth();
+		else
+			topleft.Y += dy * pTexture->getHeight();
 		for (int i = 0; i < mBoxes.size(); i++)
 		{
 			mBoxes[i].set({ short(topleft.X), short(topleft.Y) }, { short(pTexture->getWidth() + topleft.X), short(pTexture->getHeight() + topleft.Y) });

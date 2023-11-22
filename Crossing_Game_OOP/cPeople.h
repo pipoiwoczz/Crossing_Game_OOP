@@ -15,7 +15,7 @@ class cPeople {
 	HANDLE h;
     COORD topleft;
 	bool mState; // true is alive, false is dead =))
-
+	int moveCooldown;
 
 	public:
 		friend class cGameEngine;
@@ -25,6 +25,7 @@ class cPeople {
 		cPeople(COORD In_pos) {
 			topleft = In_pos;
 			mState = true;
+			moveCooldown = 0;
 			skin = cAsset::assetLoaders(peopleFile);
 			pTexture = &skin[0];
 			currentFrame = 0;

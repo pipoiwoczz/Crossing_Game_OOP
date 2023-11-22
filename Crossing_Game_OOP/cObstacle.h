@@ -27,6 +27,7 @@ public:
     friend cPeople;
 
     friend class cGameEngine;
+    friend class cGame;
     //cObstacle(COORD In_pos, int difficulty, int ttm);
     cObstacle() {};
 
@@ -41,6 +42,7 @@ public:
     virtual char getType() = 0; // returns the class the object belongs to as a char
     
     void setPos(COORD new_Pos);
+    virtual void determineHitbox();
     
     static cObstacle * copyObject (char, COORD);
     static cObstacle * constructObject (char, COORD, int);

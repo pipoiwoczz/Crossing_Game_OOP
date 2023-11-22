@@ -49,6 +49,11 @@ void cGameEngine::drawT(cGame* pGame)
 			curHandle = Hbuffer2;
 		}
 
+		//if (!pGame->isPause)
+		//{
+		//	pGame->updatePosObstacle();
+
+		//}
 
 		gameMap* curMap = gameMap::getCurrentMap();
 
@@ -59,15 +64,19 @@ void cGameEngine::drawT(cGame* pGame)
 		//put obstacles onto screen buffer
 		for (int i = 0; i < pGame->liveObstacles.size(); i++)
 		{
+			bool te = false;
 			cObstacle* itera = pGame->liveObstacles[i];
-
+			if (itera->topleft.X == 0)
+			{
+				te = true;
+			}
 			w = itera->pTexture->width;
 			h = itera->pTexture->height;
 			for (int j = 0; j < w * h; j++)
 			{
 				if (itera->pTexture->textureArray[j].Char.UnicodeChar != L' ') {
 					//mainBuffer[(itera->topleft.Y + j / w) * curMap->width + itera->topleft.X + (j % w)].Attributes = itera->pTexture->textureArray[j].Attributes;
-					int topleft1 = itera->topleft.Y * curMap->width + (itera->topleft.X + (j % w)) % curMap->width;
+					int topleft1 = itera->topleft.Y * curMap->width + (itera->topleft.X + (j % w)) % (curMap->width - 1);
 					topleft1 = topleft1 + (j / w) * curMap->width;
 					mainBuffer[topleft1].Attributes = itera->pTexture->textureArray[j].Attributes;
 				}
@@ -75,9 +84,8 @@ void cGameEngine::drawT(cGame* pGame)
 
 			itera->currentFrame = (itera->currentFrame + 1) % itera->nFrame;
 			itera->pTexture = itera->pLTexture + itera->currentFrame;
-
-			COORD br = itera->boxes[0].botright;
-			wstring ba = br.X + L" - " + br.Y;
+			if (!pGame->isPause)
+				itera->move();
 		}
 
 		//put people onto buffer
@@ -102,11 +110,7 @@ void cGameEngine::drawT(cGame* pGame)
 		WriteConsoleOutput(curHandle, mainBuffer, { curMap->width, curMap->height }, { 0,0 }, &My_Windows);
 		SetConsoleActiveScreenBuffer(curHandle);
 		
-		if (!pGame->isPause)	
-		{
-			pGame->updatePosObstacle();
 
-		}
 
 
 		Sleep(15);
