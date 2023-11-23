@@ -666,3 +666,139 @@ void cGame::calculatePoint() {
 void foo()
 {}
 
+void cGame::nextLevel() {
+	this->gameLevel++;
+	gameMap::nextMap();
+	calculatePoint();
+	// set position of people
+	for (int i = 0; i < livePeople.size(); i++) {
+		livePeople[i]->setPos({ 200, 100 });
+	};
+	// respawn obstacle
+	for (int i = 0; i < liveObstacles.size(); i++) {
+		delete liveObstacles[i];
+	};
+	liveObstacles.clear();
+	spawnObstacle();
+}
+void cGame::endlessMode() {
+	spawnPeople();
+	spawnObstacle();
+	//resetTime();
+	thread drawingThread(&cGameEngine::drawT, this);
+	Sound::playSoundList();
+	Sound::playIntroSound();
+	//Sound::musicThread();
+	DWORD his;
+	while (true) {
+		if (GetAsyncKeyState(0x50) < 0) {
+			pauseGame();
+		}
+		if (GetAsyncKeyState(0x53) < 0) {
+			resumeGame();
+		}
+		if (GetAsyncKeyState(0x51) < 0) {
+			// isExit = true;
+			// save game Menu here
+			// draw save game menu
+			// can save or not 
+			// if can save => save game
+			// if not => continue game
+		}
+		if (GetAsyncKeyState(0x1B) < 0) {
+			isExit = true;
+			// save game Menu here
+			// draw save game menu
+			// can save or not 
+			// if can save => save game => exit game
+			// if not => exit game
+			break;
+		}
+		if (isImpact())
+		{
+			isLose = true;
+			break;
+		}
+		for (int i = 0; i < gameOrder; i++) {
+			livePeople[i]->move();
+		}
+		if (isFinishLevel()) {
+			this->gameLevel++;
+			calculatePoint();
+			resetTime();
+			srand(NULL);
+			int random = rand() % 7 + 1;
+			gameMap::changeMap(MapIndex(random));
+			for (int i = 0; i < livePeople.size(); i++) {
+				livePeople[i]->setPos({ short(200 - 100 * i), 100 });
+			}
+			for (int i = 0; i < liveObstacles.size(); i++) {
+				delete liveObstacles[i];
+			}
+			liveObstacles.clear();
+			string src = "//Level//map_";
+			string map[3] = { "jungle", "beach", "city" };
+			srand(NULL);
+			int rand_map = rand() % 3;
+			src += map[rand_map] + "//.txt";
+			spawnObstacle();
+		}
+		Sleep(10);
+	}
+	drawingThread.join();
+}
+void cGame::GameOver() {
+	// draw game over animation // has  a box to know game point and time
+	// draw game over menu has choices: exit game, start new game with same map, back to main menu
+
+}
+void cGame::GameWin() {
+	// draw game win animation //
+	// draw game win menu has choices: exit game, start new game with next map, back to main menu, save game score and time
+}
+void cGame::Setting() {
+	// draw setting menu	// has a tutorial box to know how to play game
+	// has choices: change game sound, back to previous menu
+	// change gmae sound: on/off or reduce and increase sound 
+	// sound: background music, sound effect
+}
+void cGame::ScoreBoard() {
+	// draw score board menu // has a box to show score and time of game
+	// has choices: back to previous menu
+}
+void cGame::exitGame() {
+	// draw exit game menu // has a box to ask user want to save game or not
+	// has choices: save game and exit, exit without save game, back to previous menu
+	// if user choose save game and exit => save game and exit
+	// if user choose exit without save game => exit game
+	// if user choose back to previous menu => back to previous menu
+}
+void cGame::resetGame() {
+	resetTime();
+	totalPoint = 0;
+	totalTime = 0;
+	gameLevel = 1;
+	gameOrder = 1;
+	for (int i = 0; i < livePeople.size(); i++) {
+		delete livePeople[i];
+	}
+	for (int i = 0; i < liveObstacles.size(); i++) {
+		delete liveObstacles[i];
+	}
+	livePeople.clear();
+	liveObstacles.clear();
+	// game type ?
+	/*if (gameType == 0) {
+		MainGame();
+	}
+	else {
+		endlessMode();
+	}*/
+	MainGame();
+}
+void cGame::LoadGame() {
+	// draw load game menu // has a box to show list of save game
+	// has choices: choose save game and load, back to previous menu
+	// if user choose choose save game and load => load game to play
+	// if user choose back to previous menu => back to previous menu
+}

@@ -5,8 +5,10 @@
 #include "cWidget.h"
 #include "cAnimal.h"
 #include "cVehicle.h"
+#include "Sound.h"
 
-
+int Sound::BGSoundVolume = 1000;
+int Sound::EffectSoundVolume = 1000;
 bool runing = true;
 void oncl()
 {

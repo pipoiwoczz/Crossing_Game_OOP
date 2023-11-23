@@ -97,6 +97,9 @@ class cGame {
 		void resetTime();
 		void calculatePoint();
 
+		void nextLevel();
+		void endlessMode();
+
 };
 //cObstacle * createObject (short type, COORD position, int speed);
 
