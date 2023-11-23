@@ -1,51 +1,52 @@
-//#include "Map.h"
-//#include "Graphics.h"
+#include "Graphics.h"
 #include "cGame.h"
-#include <iostream>
+#include "gameEngine.h"
+#include "cObstacle.h"
+#include "cWidget.h"
+#include "cAnimal.h"
+#include "cVehicle.h"
+
+
+bool runing = true;
+void oncl()
+{
+	runing = false;
+}
+
+vector<cObstacle*> cObstacle::objects;
+cObstacle* cLion::bootstrapObjectcLion = cObstacle::addObject(new cLion());
+cObstacle* cRhino::bootstrapObjectcRhino = cObstacle::addObject(new cRhino());
+cObstacle* cCrocodile::bootstrapObjectcCrocodile = cObstacle::addObject(new cCrocodile());
+
+cObstacle* cTruck::bootstrapObjectcTruck = cObstacle::addObject(new cTruck());
+cObstacle* cHelicopter::bootstrapObjectcHelicopter = cObstacle::addObject(new cHelicopter());
+cObstacle* cMotorbike::bootstrapObjectcMotorbike = cObstacle::addObject(new cMotorbike());
+
+
 int main() {
 	Graphic gr;
 	cGameEngine::startEngine();
-	
+	cGameEngine::refreshBackGround(true);
+	//cButton rq({ 30, 30 }, 1, oncl);
+	//
 	cGame a;
 	a.MainGame();
-	
 
-	//cout << "---------" << endl;
-
-	//CONSOLE_SCREEN_BUFFER_INFO csbi1, csbi2;
-	//GetConsoleScreenBufferInfo(cGameEngine::Hbuffer1, &csbi1);
-	//GetConsoleScreenBufferInfo(cGameEngine::Hbuffer2, &csbi2);
-
-	//cout << csbi1.dwSize.X << endl;
-	//cout << csbi2.dwSize.X << endl;
-
+	//while (runing)
+	//{
+	//	rq.drawButton(cGameEngine::curHandle);
+	//	if (GetAsyncKeyState(0x51) < 0)
+	//		break;
+	//	if (GetAsyncKeyState(0x0D) < 0)
+	//	{
+	//		rq.drawBorder(cGameEngine::curHandle);
+	//		Sleep(1000);
+	//		rq.cleanButton(cGameEngine::curHandle);
+	//		rq.onEnter();
+	//	}
+	//	Sleep(100);
+	//}
+	//_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
+	//_CrtDumpMemoryLeaks();
 }
 
-//#include <iostream>
-//#include <windows.h>
-//#include <mmsystem.h>
-//
-//#pragma comment(lib, "winmm.lib")
-//
-//class Sound {
-//public:
-//    Sound(const char* filename) {
-//        m_filename = filename;
-//    }
-//
-//    void play() {
-//        PlaySound(LPCWSTR(m_filename), NULL, SND_FILENAME | SND_ASYNC);
-//    }
-//
-//private:
-//    const char* m_filename;
-//};
-
-//int main() {
-//        mciSendString(TEXT("open mywavsound.mp3 type mpegvideo alias mp3"), NULL, 0, NULL);
-//        mciSendString(TEXT("play mp3 repeat"), NULL, 0, NULL);
-//    
-//   
-//    system("pause");
-//    return 0;
-//}

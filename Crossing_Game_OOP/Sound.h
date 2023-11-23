@@ -1,9 +1,6 @@
-#pragma once
 #include "setup.h"
-#include <mmsystem.h>
-#include <future>
 
-#pragma comment(lib, "winmm.lib")
+
 
  
 

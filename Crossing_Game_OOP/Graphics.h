@@ -1,4 +1,3 @@
-#pragma once
 #ifndef _GRAPHICS_H
 #define _GRAPHICS_H
 
@@ -11,19 +10,17 @@ public:
 		SetConsoleTitle(L"Crossing Road");
 		fixConsoleWindow();
 		showScrollBar(false);
-		hideCursor(true);
+		hideCursor(GetStdHandle(STD_OUTPUT_HANDLE), true);
 		DisableCtrButton(false, true, true);
 		disableUserSelection();
 		disableCtrlHandler();
 	}
-	~Graphic() {
-
-	}
+	~Graphic();
 	void textSize(int);
 	void setWindowSize(short width, short height);
 	void DisableCtrButton(bool Close, bool Min, bool Max);
 	void showScrollBar(BOOL Show);
-	void hideCursor(bool isHideCursor);
+	static void hideCursor(HANDLE h, bool isHideCursor = true);
 	void fixConsoleWindow();
 	void disableUserSelection();
 

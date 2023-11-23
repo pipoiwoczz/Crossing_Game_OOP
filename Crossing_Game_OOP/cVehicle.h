@@ -1,16 +1,10 @@
 #ifndef _CVEHICLE_H
 #define _CVEHICLE_H
 #include "cObstacle.h"
-
 class cVehicle: public cObstacle {
 public:
-    cVehicle() {};
-	//cVehicle(COORD In_pos, int difficulty, int ttm) : cObstacle(In_pos, difficulty, ttm) {}
-	cVehicle(COORD In_pos, int speed) : cObstacle(In_pos, speed) {
-	
-	};
+    cVehicle(COORD In_pos, int speed);
 
-	virtual void playSound() {}
 };
 
 class cTruck : public cVehicle {
@@ -22,30 +16,17 @@ public:
 	cTruck();
 	//cTruck(COORD In_pos, int difficulty, int ttm);
     cTruck (COORD In_pos, int speed);
-	~cTruck() {
+    ~cTruck();
+    
+    virtual char getType();
+    
+    virtual cObstacle* copy(COORD pos);
 
-	}
+    virtual cObstacle* construct(COORD pos, int spd);
     
-    virtual char getType ()
-    {
-        return 'T';
-    }
-    
-    virtual cObstacle * copy (COORD pos)
-    {
-        cTruck * obj = new cTruck (*this);
-        obj -> topleft = pos;
-        return obj;
-    }
-    virtual cObstacle * construct (COORD pos, int spd)
-    {
-        cTruck * obj = new cTruck (*this);
-        obj -> topleft = pos;
-        obj -> speed = spd;
-        return obj;
-    }
-    
-    virtual void hitEffect() {}
+    virtual void hitEffect(cPeople* pVictim);
+
+    virtual void hitSound();
 };
 
 class cHelicopter : public cVehicle {
@@ -56,30 +37,17 @@ public:
 	cHelicopter();
 	//cHelicopter(COORD In_pos, int difficulty, int ttm);
     cHelicopter (COORD In_pos, int speed);
-	~cHelicopter() {
+    ~cHelicopter();
+    
+    virtual char getType();
+    
+    virtual cObstacle* copy(COORD pos);
 
-	}
+    virtual cObstacle* construct(COORD pos, int spd);
     
-    virtual char getType ()
-    {
-        return 'H';
-    }
-    
-    virtual cObstacle * copy (COORD pos)
-    {
-        cHelicopter * obj = new cHelicopter (*this);
-        obj -> topleft = pos;
-        return obj;
-    }
-    virtual cObstacle * construct (COORD pos, int spd)
-    {
-        cHelicopter * obj = new cHelicopter (*this);
-        obj -> topleft = pos;
-        obj -> speed = spd;
-        return obj;
-    }
-    
-    virtual void hitEffect() {}
+    virtual void hitEffect(cPeople* pVictim);
+
+    virtual void hitSound();
 };
 
 class cMotorbike : public cVehicle {
@@ -91,29 +59,17 @@ public:
 	cMotorbike();
 	//cMotorbike(COORD In_pos, int difficulty, int ttm);
     cMotorbike (COORD In_pos, int speed);
-	~cMotorbike() {
+    ~cMotorbike();
+    
+    virtual char getType();
+    
+    virtual cObstacle* copy(COORD pos);
 
-	}
+    virtual cObstacle* construct(COORD pos, int spd);
     
-    virtual char getType ()
-    {
-        return 'M';
-    }
-    
-    virtual cObstacle * copy (COORD pos)
-    {
-        cMotorbike * obj = new cMotorbike (*this);
-        obj -> topleft = pos;
-        return obj;
-    }
-    virtual cObstacle * construct (COORD pos, int spd)
-    {
-        cMotorbike * obj = new cMotorbike (*this);
-        obj -> topleft = pos;
-        return obj;
-    }
-    
-    virtual void hitEffect() {}
+    virtual void hitEffect(cPeople* pVictim);
+
+    virtual void hitSound();
 };
 
 

@@ -1,24 +1,50 @@
 #include "cGame.h"
-
-//void cGame::getPeople() {
-//	short numOfPlayer = getGameOrder();
-//	if (numOfPlayer == 1) {
-//		people = new cPeople;
-//	} else {
-//		people = new cPeople[2];
-//		people[2].setPos({ 70, 50 });
-//	}
-//}
-//
-//void cGame::getLion() {
-//	lion = new cLion[7];
-//	for (int i = 0; i < 7; i++) {
-//		lion[i].setPos({ short(-20 - i * 40), 40 });
-//	}
-//}
-//
+#include "cObstacle.h"
+#include "cPeople.h"
+#include "Sound.h"
+#include "Map.h"
+#include "hitbox.h"
+#include "cAnimal.h"
+#include "cVehicle.h"
+#include "cAsset.h"
+#include "gameEngine.h"
 
 
+void cleanGame()
+{
+	/*cObstacle::cleanBootstrap();*/
+
+}
+
+cGame::cGame()
+{
+	gameOrder = 1;
+	gameLevel = 1;
+	map = 1;
+	isPause = false;
+	isExit = false;
+	totalPoint = 0;
+	timePause = 0;
+	totalTime = 0;
+}
+cGame::~cGame()
+{
+	for (int i = 0; i < liveObstacles.size(); i++)
+	{
+		delete liveObstacles[i];
+	}
+	for (int i = 0; i < livePeople.size(); i++)
+	{
+		delete livePeople[i];
+	}
+	liveObstacles.clear();
+	livePeople.clear();
+	//cleanGame();
+}
+short cGame::getGameOrder()
+{
+	return gameOrder;
+}
 
 int cGame::getMenuChoice() {
 	unsigned char MOVING;
@@ -134,7 +160,7 @@ void cGame::MainGame() {
 	spawnPeople();
 	spawnObstacle();
 	//resetTime();
-	thread drawingThread(&cGameEngine::drawT, this);
+	thread drawingThread(&cGameEngine::pizzaDraw, this);
 	Sound::playSoundList();
 	Sound::playIntroSound();
 	//Sound::musicThread();
@@ -177,10 +203,10 @@ void cGame::MainGame() {
 void cGame::gameThread() {
 	/*thread t1(&cGame::threadFunction1, this);
 	thread t2(&cGame::threadFunction2, this);*/
-	auto future1 = async(launch::async, &cGame::checkImpactThread, this);
-	auto future2 = async(launch::async, &cGame::drawThread, this);
-	auto future3 = async(launch::async, &cGame::movingThread, this);
-	movingThread();
+	//auto future1 = async(launch::async, &cGame::checkImpactThread, this);
+	//auto future2 = async(launch::async, &cGame::drawThread, this);
+	//auto future3 = async(launch::async, &cGame::movingThread, this);
+	//movingThread();
 }
 
 bool cGame::isImpact()
@@ -189,18 +215,22 @@ bool cGame::isImpact()
     {
 		int cnt = -1;
         if (livePeople[i] -> getState())
-			for (cObstacle * obstacle : liveObstacles)
+			for (cObstacle* obstacle : liveObstacles)
 			{
 				cnt++;
-				if (livePeople[i] -> isImpact(obstacle))
+				for (int j = 0; j < (livePeople[i])->mBoxes.size(); j++)
 				{
-					isPause = true;
-					livePeople[i] -> isDead();
-					Sound::playHitSound();
-					impactEffect(cnt);
-					return true;
-					//delete livePeople[i];
-					//livePeople.erase(livePeople.begin() + i);
+					for (int k = 0; k < obstacle->boxes.size(); k++)
+					{
+						if (obstacle->boxes[k].isOverlap(livePeople[i]->mBoxes[j]))
+						{
+							isPause = true;
+							livePeople[i]->isDead();
+							Sound::playHitSound();
+							impactEffect(cnt);
+							return true;
+						}
+					}
 				}
 			}
     }
@@ -214,7 +244,7 @@ void cGame::checkImpactThread() {
 			break;
 		}
 	}
-	stopDrawAnimal();
+	//stopDrawAnimal();
 	drawLosingTitle();
 }
 
@@ -242,7 +272,7 @@ void cGame::movingThread() {
 			//exitGame(t);
 		}
 		else {
-			updatePosPeople(MOVING);
+			//updatePosPeople(MOVING);
 		}
 	}
 }
@@ -333,7 +363,7 @@ void cGame::pauseGame() {
 	// draw pause game box
 	timePauseStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 	isPause = true;
-	stopDrawAnimal();
+	//stopDrawAnimal();
 }
 
 void cGame::resumeGame() {
@@ -342,7 +372,7 @@ void cGame::resumeGame() {
 	timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 	timePause += (timePauseEnd - timePauseStart) / 1000;
 	isPause = false;
-	continueDrawAnimal();
+	//continueDrawAnimal();
 }
 
 
@@ -577,15 +607,17 @@ void cGame::spawnObstacle() {
 
 			short offsetY;
 			levelIn >> offsetY;
-			cObstacle* pObj = nullptr;
-			switch (objname)
+			cObstacle* pObj = cObstacle::constructObject(objname, { cX, lineoffset[linecount]}, spd);
+			/*switch (objname)
 			{
 			case 'l': pObj = new cLion({ cX, lineoffset[linecount] }, spd); break;
 			case 'r': pObj = new cRhino({ cX, lineoffset[linecount] }, spd); break;
 			case 'c': pObj = new cCrocodile({ cX, lineoffset[linecount] }, spd); break;
+			
 			default:
 				break;
-			}
+			}*/
+
 			if (pObj)
 			{
 				liveObstacles.push_back(pObj);
@@ -630,3 +662,7 @@ void cGame::calculatePoint() {
 	totalPoint += 100 + bonus[count];
 	resetTime();
 }
+
+void foo()
+{}
+

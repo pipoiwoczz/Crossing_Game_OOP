@@ -4,20 +4,9 @@
 
 class cAnimal: public cObstacle {
 private:
-	
 
 public:
-	//cAnimal(COORD In_pos, int difficulty, int ttm): cObstacle(In_pos, difficulty, ttm)  {}
-    cAnimal() {};
-
-	cAnimal(COORD In_pos, int speed) : cObstacle(In_pos, speed) {
-	};
-
-	virtual void playSound() {
-	}
-    virtual void playHitEffect() {
-
-    }
+    cAnimal(COORD In_pos, int speed);
 };
 
 class cLion : public cAnimal {
@@ -29,31 +18,16 @@ public:
 	cLion();
 	//cLion(COORD In_pos, int difficulty, int ttm);
     cLion (COORD In_pos, int speed);
-	~cLion() {
+    ~cLion();
+    
+    virtual char getType();
 
-	}
+    virtual cObstacle* copy(COORD pos);
     
-    virtual char getType ()
-    {
-        return 'l';
-    }
-
-    virtual cObstacle * copy (COORD pos)
-    {
-        cLion * obj = new cLion (*this);
-        obj -> topleft = pos;
-        return obj;
-    }
+    virtual cObstacle* construct(COORD pos, int spd);
     
-    virtual cObstacle * construct (COORD pos, int spd)
-    {
-        cLion * obj = new cLion (*this);
-        obj -> topleft = pos;
-        obj -> speed = spd;
-        return obj;
-    }
-    
-    virtual void hitEffect() {}
+    virtual void hitEffect(cPeople* pVictim);
+    virtual void hitSound();
 };
 
 class cRhino : public cAnimal {
@@ -63,38 +37,15 @@ class cRhino : public cAnimal {
 
 public:
 	cRhino();
-	//cRhino(COORD In_pos, int difficulty, int ttm);
 	cRhino(COORD In_pos, int speed);
-	~cRhino() {
+    ~cRhino();
 
-	}
-	//void draw()
-	//{
-	//	//cObstacle::draw();
-	//	//currentFrame = (currentFrame + 1) % textureRhino.size();
-	//	//pTexture = &textureRhino[currentFrame];
-	//}
+    virtual char getType();
+    virtual cObstacle* copy(COORD pos);
+    virtual cObstacle* construct(COORD pos, int spd);
     
-    virtual char getType ()
-    {
-        return 'r';
-    }
-    
-    virtual cObstacle * copy (COORD pos)
-    {
-        cRhino * obj = new cRhino (*this);
-        obj -> topleft = pos;
-        return obj;
-    }
-    virtual cObstacle * construct (COORD pos, int spd)
-    {
-        cRhino * obj = new cRhino (*this);
-        obj -> topleft = pos;
-        obj -> speed = spd;
-        return obj;
-    }
-    
-    virtual void hitEffect() {}
+    virtual void hitEffect(cPeople* pVictim);
+    virtual void hitSound();
 };
 
 class cCrocodile : public cAnimal {
@@ -105,32 +56,15 @@ class cCrocodile : public cAnimal {
 
 public:
 	cCrocodile();
-	cCrocodile(COORD In_pos, int difficulty, int ttm);
 	cCrocodile(COORD In_pos, int speed);
-	~cCrocodile() {
-
-	}
+    ~cCrocodile();
+    virtual char getType();
     
-    virtual char getType ()
-    {
-        return 'c';
-    }
+    virtual cObstacle* copy(COORD pos);
+    virtual cObstacle* construct(COORD pos, int spd);
     
-    virtual cObstacle * copy (COORD pos)
-    {
-        cCrocodile * obj = new cCrocodile (*this);
-        obj -> topleft = pos;
-        return obj;
-    }
-    virtual cObstacle * construct (COORD pos, int spd)
-    {
-        cCrocodile * obj = new cCrocodile (*this);
-        obj -> topleft = pos;
-        obj -> speed = spd;
-        return obj;
-    }
-    
-    virtual void hitEffect() {}
+    virtual void hitEffect(cPeople* pVictim);
+    virtual void hitSound();
 };
 
 

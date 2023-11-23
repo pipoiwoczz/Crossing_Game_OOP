@@ -14,7 +14,10 @@ void Graphic::textSize(int size) {
     delete lpConsoleCurrentFontEx;
 }
 
+Graphic::~Graphic()
+{
 
+}
 
 void Graphic::disableUserSelection() {
     HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
@@ -23,12 +26,11 @@ void Graphic::disableUserSelection() {
     SetConsoleMode(hStdin, mode & (~ENABLE_QUICK_EDIT_MODE));
 }
 
-void Graphic::hideCursor(bool isHideCursor) {
-    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+void Graphic::hideCursor(HANDLE h, bool isHideCursor) {
     CONSOLE_CURSOR_INFO info;
     info.dwSize = 100;
     info.bVisible = !isHideCursor;
-    SetConsoleCursorInfo(consoleHandle, &info);
+    SetConsoleCursorInfo(h, &info);
 }
 
 void Graphic::setWindowSize(short width, short height) {

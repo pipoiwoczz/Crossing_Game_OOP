@@ -1,5 +1,12 @@
 #include "hitbox.h"
 
+
+Hitbox::Hitbox() {}
+Hitbox::Hitbox(COORD tl, COORD br)
+{
+    topleft = tl;
+    botright = br;
+}
 bool Hitbox::isOverlap(Hitbox h)
 {
     if (h.topleft.X <= botright.X && h.botright.X >= topleft.X

@@ -1,5 +1,10 @@
 #include "gameEngine.h"
-
+#include "Graphics.h"
+#include "Map.h"
+#include "cGame.h"
+#include "cObstacle.h"
+#include "cPeople.h"
+#include "cAsset.h"
 COORD cGameEngine::buffsize = { 0,0 };
 CHAR_INFO* cGameEngine::mainBuffer = nullptr;
 
@@ -25,34 +30,58 @@ void cGameEngine::startEngine()
 	SetConsoleScreenBufferSize(Hbuffer2, buffsize);
 	SetConsoleWindowInfo(Hbuffer2, TRUE, &My_Windows);
 
-	CONSOLE_CURSOR_INFO info;
-	info.dwSize = 100;
-	info.bVisible = false;
-	SetConsoleCursorInfo(Hbuffer1, &info);
-	SetConsoleCursorInfo(Hbuffer2, &info);
+	//Graphic::hideCursor(Hbuffer1);
+	//Graphic::hideCursor(Hbuffer2);
 
+	curHandle = Hbuffer1;
 	SetConsoleActiveScreenBuffer(Hbuffer1);
 
 }
 
-void cGameEngine::drawT(cGame* pGame)
+void cGameEngine::cleanEngine()
+{
+	delete[]mainBuffer;
+	CloseHandle(Hbuffer1);
+	CloseHandle(Hbuffer2);
+}
+
+void cGameEngine::swapHandle()
+{
+	count = 1 - count;
+	if (count % 2 == 0) {
+		curHandle = Hbuffer1;
+	}
+	else {
+		curHandle = Hbuffer2;
+	}
+}
+
+void cGameEngine::refreshBackGround(bool fillNow)
+{
+	memcpy(mainBuffer, gameMap::currentMap->mapArray, gameMap::currentMap->height * gameMap::currentMap->width * sizeof(CHAR_INFO));
+	WriteConsoleOutput(curHandle, mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, { 0,0 }, &My_Windows);
+	if (fillNow)
+	{
+		SetConsoleActiveScreenBuffer(curHandle);
+	}
+}
+
+void cGameEngine::pizzaDraw(cGame* pGame)
 {
 	while (!pGame->isExit)
 	{
 		if (pGame->isPause || pGame->isLose)
 			continue;
-		count = 1 - count;
+		 	count = 1 - count;
 		if (count % 2 == 0) {
 			curHandle = Hbuffer1;
 		}
 		else {
 			curHandle = Hbuffer2;
 		}
-		gameMap* curMap = gameMap::getCurrentMap();
-
 		//clear all entities
-		memcpy(mainBuffer, curMap->mapArray, curMap->height * curMap->width * sizeof(CHAR_INFO));
-
+		
+		memcpy(mainBuffer, gameMap::currentMap->mapArray, gameMap::currentMap->height * gameMap::currentMap->width * sizeof(CHAR_INFO));
 
 		//put obstacles onto screen buffer
 		for (int i = 0; i < pGame->liveObstacles.size(); i++)
@@ -68,7 +97,7 @@ void cGameEngine::drawT(cGame* pGame)
 			for (int j = 0; j < w * h; j++)
 			{
 				if (itera->pTexture->textureArray[j].Char.UnicodeChar != L' ') {
-					mainBuffer[itera->topleft.Y * curMap->width + (itera->topleft.X + (j % w)) % (curMap->width - 1) + (j / w) * curMap->width].Attributes = itera->pTexture->textureArray[j].Attributes;
+					mainBuffer[itera->topleft.Y * gameMap::currentMap->width + (itera->topleft.X + (j % w)) % (gameMap::currentMap->width - 1) + (j / w) * gameMap::currentMap->width].Attributes = itera->pTexture->textureArray[j].Attributes;
 				}
 			}
 
@@ -86,15 +115,15 @@ void cGameEngine::drawT(cGame* pGame)
 			for (int j = 0; j < w * h; j++)
 			{
 				if (itera->pTexture->textureArray[j].Char.UnicodeChar != L' ') {
-					mainBuffer[itera->topleft.Y * curMap->width + (itera->topleft.X + (j % w)) % (curMap->width - 1) + (j / w) * curMap->width].Attributes = itera->pTexture->textureArray[j].Attributes;
+					mainBuffer[itera->topleft.Y * gameMap::currentMap->width + (itera->topleft.X + (j % w)) % (gameMap::currentMap->width - 1) + (j / w) * gameMap::currentMap->width].Attributes = itera->pTexture->textureArray[j].Attributes;
 				}
 			}
 		/*	itera->currentFrame = (itera->currentFrame + 1) % itera->nFrame;
 			itera->pTexture = itera->pLTexture + itera->currentFrame; */
 		}
 		
-		WriteConsoleOutput(curHandle, mainBuffer, { curMap->width, curMap->height }, { 0,0 }, &My_Windows);
+		WriteConsoleOutput(curHandle, mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, { 0,0 }, &My_Windows);
 		SetConsoleActiveScreenBuffer(curHandle);
-		Sleep(15);
+		Sleep(25);
 	}
 }

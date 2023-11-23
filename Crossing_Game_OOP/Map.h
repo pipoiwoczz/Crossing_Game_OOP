@@ -1,6 +1,7 @@
 #ifndef MAP_H
 #define MAP_H
-#include "cAsset.h"
+#include "setup.h"
+class cAsset;
 class gameMap {
 private:
 public:
@@ -8,7 +9,7 @@ public:
 	static gameMap* currentMap;
 	static MapIndex currentMapIndex;
 
-	CHAR_INFO* mapArray;
+	CHAR_INFO* mapArray = nullptr;
 	short width;
 	short height;
 
@@ -16,29 +17,10 @@ public:
 	friend class cGame;
 	friend class cPeople;
 	friend class cGameEngine;
-	gameMap() {
-		mapArray = nullptr;
-	}
-	~gameMap()
-	{
-		if (mapArray)
-			delete[]mapArray;
-	}
-	gameMap(const gameMap& a)
-	{
-		height = a.height;
-		width = a.width;
-		mapArray = new CHAR_INFO[height * width];
-		memcpy(mapArray, a.mapArray, a.height * a.width * sizeof(CHAR_INFO));
-	}
-	gameMap& operator=(const gameMap& a)
-	{
-		height = a.height;
-		width = a.width;
-		delete[]mapArray;
-		mapArray = new CHAR_INFO[height * width];
-		memcpy(mapArray, a.mapArray, a.height * a.width * sizeof(CHAR_INFO));
-	}
+	gameMap();
+	~gameMap();
+	gameMap(const gameMap& a);
+	gameMap& operator=(const gameMap& a);
 
 	static vector<gameMap> loadMap();
 	static gameMap* getCurrentMap();

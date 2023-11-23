@@ -1,10 +1,11 @@
 #ifndef _SETUP_H
 #define _SETUP_H
 #define _CRT_SECURE_NO_WARNINGS
+//#define _CRTDBG_MAP_ALLOC
+//#include <crtdbg.h>	
 
 
-//#include "Windows.h"
-#include <iostream>
+#include <iostream>	
 #include <string>
 #include <wchar.h>
 #include <Windows.h>
@@ -18,11 +19,17 @@
 #include <vector>
 #include <mutex>
 #include <algorithm>
+#include <mmsystem.h>
+#include <future>
 
+#pragma comment(lib, "winmm.lib")
+
+//#ifdef _DEBUG
+//#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+//#define new DEBUG_NEW
+//#endif
 
 using namespace std;
-
-static mutex mtx;	
 
 extern SMALL_RECT My_Windows;
 const HANDLE mainHandle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -44,6 +51,23 @@ enum class Color {
 	light_yellow = 14,
 	bright_white = 15,
 };
+
+enum class MapIndex {
+	Jungle = 0
+};
+
+enum class AnimalIndex {
+	Lion = 0,
+	Rhino = 1,
+	Crocodile = 2
+};
+
+enum class VehicleIndex {
+	Truck = 0,
+	Heli = 1,
+	Motorbike = 2
+};
+
 void gotoXY(int x, int y);
 
 void printCharacter(wstring content, COORD spot, Color textColor, Color backgroundColor, short maxlength = -1);
@@ -63,10 +87,4 @@ void drawLoadMenu(int choice);
 void drawScoreboardMenu();
 void drawGameTitle();
 void drawLosingTitle();
-
-static COORD toTopleft(COORD &center)
-{
-	COORD topleft = { short(center.X - center.X / 2), short(center.Y - center.Y / 2) };
-	return topleft;
-}
 #endif

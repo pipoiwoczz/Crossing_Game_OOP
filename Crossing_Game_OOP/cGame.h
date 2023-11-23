@@ -1,15 +1,11 @@
 #ifndef _CGAME_H
 #define _CGAME_H
-#include "Graphics.h"
-#include "cAnimal.h"
-#include "cVehicle.h"
-#include "cPeople.h"
-#include "cObstacle.h"
-#include "Sound.h"
-#include "Map.h"
-#include "gameEngine.h"
-//#include "Map.h"
+#include "setup.h"
+class cObstacle;
+class cPeople;
+void cleanGame();
 
+class cGameEngine;
 class cGame {
 
 	friend cGameEngine;
@@ -30,31 +26,11 @@ class cGame {
 	double timePause;
 
 	public:
-		cGame() {
-			gameOrder = 1;
-			gameLevel = 1;
-			map = 1;
-			isPause = false;
-			isExit = false;	
-			totalPoint = 0;
-			timePause = 0;
-			totalTime = 0;
-		}
+		cGame();
     
         cGame (string saveFile);
     
-		~cGame() {
-			for (int i = 0; i < liveObstacles.size(); i++)
-			{
-				delete liveObstacles[i];
-			}
-			for (int i = 0; i < livePeople.size(); i++)
-			{
-				delete livePeople[i];
-			}
-			liveObstacles.clear();
-			livePeople.clear();
-		}
+		~cGame();
 
 
 		void gameThread();
@@ -80,12 +56,8 @@ class cGame {
 //		void getHelicopter();
 //		void getMotorbike();
 		
-		void stopDrawAnimal() {
-			//lion->stop();
-		}
-		void continueDrawAnimal() {
-			//lion->resume();
-		}
+		//void stopDrawAnimal();
+		//void continueDrawAnimal();
 
 		void resetGame();
 		void exitGame(HANDLE t);
@@ -95,19 +67,17 @@ class cGame {
 		void pauseGame();	
 		void resumeGame();
 
-		void updatePosPeople(char MOVING) {
-			if (!isPause) {
+		//void updatePosPeople(char MOVING) {
+		//	if (!isPause) {
 
-			}
-				//people->move(MOVING);
-		}
+		//	}
+		//		//people->move(MOVING);
+		//}
         bool isImpact();
 		
 		void updatePosObstacle();
 
-		short getGameOrder() {
-			return gameOrder;
-		}
+		short getGameOrder();
 
 		int getMenuChoice();
 
@@ -127,7 +97,6 @@ class cGame {
 		void resetTime();
 		void calculatePoint();
 
-#define refreshBackGround drawBackGround
 };
 //cObstacle * createObject (short type, COORD position, int speed);
 

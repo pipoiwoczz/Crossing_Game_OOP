@@ -1,12 +1,13 @@
 #include "cObstacle.h"
-
-vector<cObstacle *> cObstacle::objects;
+#include "cAsset.h"
+#include "hitbox.h"
 
 cObstacle * cObstacle::addObject (cObstacle * obj)
 {
     if (obj == nullptr)
         return nullptr;
     objects.push_back(obj);
+    cout << objects.size() << endl;
     return obj;
 }
 
@@ -30,15 +31,20 @@ cObstacle * cObstacle::constructObject(char type, COORD pos, int spd)
     return nullptr;
 }
 
-void cObstacle::cleanBootstrap()
+cObstacle::~cObstacle()
 {
-    for (cObstacle * sample : objects)
-    {
-        delete sample;
-        sample = nullptr;
-    }
-    objects.clear();
+
 }
+
+//void cObstacle::cleanBootstrap()
+//{
+//    for (int i = 0; i < objects.size(); i++)
+//    {
+//        cObstacle* pT = objects[i];
+//        delete objects[i];
+//    }
+//    objects.clear();
+//}
 
 cObstacle::cObstacle(COORD In_pos, /* int difficulty, int ttm */ int speed) {
     topleft = In_pos;
@@ -96,22 +102,24 @@ void cObstacle::advanceTime(int time)
 
 void cObstacle::move() {
     if (isStop) return;
-    topleft.X = (topleft.X + 1) % (My_Windows.Right + 1);
-    
+    topleft.X = (topleft.X + 1) % (My_Windows.Right);
     for (int i = 0; i < boxes.size(); i++)
     {
-        boxes[i].set({ short(topleft.X + 10), short(topleft.Y + 10)}, { short((topleft.X + pTexture->getWidth() - 10) % My_Windows.Right), short((topleft.Y + pTexture->getHeight() - 10) % My_Windows.Bottom) });
+        boxes[i].set({ short(topleft.X + 10), short(topleft.Y + 10) }, { short((topleft.X + pTexture->getWidth() - 10) % My_Windows.Right), short((topleft.Y + pTexture->getHeight() - 10) % My_Windows.Bottom) });
     }
-
-    /*if (topleft.X >= cAsset::currentMap->width)
-    {
-		topleft.X = -100;
-        for (int i = 0; i < boxes.size(); i++)
-            boxes[i].setHitHox(topleft.X);
-        return;
-	}*/
-
-    
 }
- 
+
+void cObstacle::moveHitBox()
+{
+
+}
+
+void cObstacle::stop() {
+    isStop = true;
+}
+
+void cObstacle::resume() {
+    isStop = false;
+}
+
 

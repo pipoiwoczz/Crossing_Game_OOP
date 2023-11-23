@@ -1,11 +1,11 @@
 #ifndef GAME_ENGINE_H
 #define GAME_ENGINE_H
-#include "cAsset.h"
-#include "Map.h"
-#include "cObstacle.h"
-#include "cPeople.h"
-#include "cGame.h"
-
+#include "setup.h"
+//#include "cGame.h"
+//#include "cAsset.h"
+//#include "Graphics.h"
+//#include "Map.h"
+class cGame;
 class cGameEngine {
 private:
 	static COORD buffsize;
@@ -19,22 +19,20 @@ private:
 	//handles for double-buffs tech
 	static HANDLE Hbuffer1;
 	static HANDLE Hbuffer2;
+	
 	//count for double-buffs tech
 	static int count;
 public:
 	static HANDLE curHandle;
 
-	~cGameEngine()
-	{
-		delete[]mainBuffer;
-		CloseHandle(Hbuffer1);
-		CloseHandle(Hbuffer2);
-	}
-
 	static void startEngine();
 
-	static void drawT(cGame* pGame);
-	static void drawHitEffect(const cObstacle* &pObstacle);
+	static void cleanEngine();
+	
+	static void swapHandle();
+
+	static void refreshBackGround(bool fillNow = false);
+	static void pizzaDraw(cGame* pGame);
 };
 
-#endif // !GAME_ENGINE_H
+#endif
