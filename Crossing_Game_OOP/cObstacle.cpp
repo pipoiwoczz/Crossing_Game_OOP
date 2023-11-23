@@ -7,7 +7,6 @@ cObstacle * cObstacle::addObject (cObstacle * obj)
     if (obj == nullptr)
         return nullptr;
     objects.push_back(obj);
-    cout << objects.size() << endl;
     return obj;
 }
 

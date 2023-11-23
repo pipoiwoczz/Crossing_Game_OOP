@@ -58,13 +58,18 @@ public:
 		Sound::BGSoundVolume -= 250;
 		Sound::BGSoundVolume = max(Sound::BGSoundVolume, 0);
 		wstring volume = L"setaudio test volume to " + to_wstring(Sound::BGSoundVolume);
-		mciSendString(volume.c_str(), 0, 0, 0);
+		const wchar_t* test = volume.c_str();
+		//mciSendString(volume.c_str(), 0, 0, 0);
+		mciSendString(test, 0, 0, 0);
 	}
 	static void increaseSoundBackground() {
-		Sound::BGSoundVolume -= 250;
+		Sound::BGSoundVolume += 250;
 		Sound::BGSoundVolume = min(Sound::BGSoundVolume, 1000);
-		wstring volume = L"setaudio test volume to " + to_wstring(Sound::BGSoundVolume);
-		mciSendString(volume.c_str(), 0, 0, 0);
+		wstring volume = L"setaudio test volume to " + to_wstring(Sound::BGSoundVolume) ;
+		const wchar_t* test = volume.c_str();
+		//mciSendString(volume.c_str(), 0, 0, 0);
+		mciSendString(test, 0, 0, 0);
+
 	}
 	static void reduceEffectSound() {
 		wstring effect[5] = { L"hitsound", L"bombhitsound", L"finishgamesound", L"finishlevelsound", L"diesound" };

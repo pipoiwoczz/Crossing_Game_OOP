@@ -7,7 +7,7 @@ cWidget::cWidget(COORD In_topleft, int borderDensity)
 	OTopleft = {short(In_topleft.X - 2 * bordDensity), short(In_topleft.Y - bordDensity)};
 }
 
-cButton::cButton(COORD In_topleft, int borderDensity, void (*pFunction) ()) : cWidget(In_topleft, borderDensity)
+cButton::cButton(COORD In_topleft, int borderDensity, void (*pFunction) (void)) : cWidget(In_topleft, borderDensity)
 {
 	buttonFunction = pFunction;
 	textures.push_back(cAsset::assetLoader("Sprites//button.txt"));

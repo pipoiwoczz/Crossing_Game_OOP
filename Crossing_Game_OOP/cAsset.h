@@ -2,6 +2,7 @@
 #define CASSET_H
 #include "setup.h"
 
+const string menuBackGround { "menuBG.txt" };
 const vector<string> lionFile { "unk1.txt", "unk2.txt" };
 const vector<string> rhinoFile { "rhino.txt" };
 const vector<string> crocoFile { "croco.txt" };

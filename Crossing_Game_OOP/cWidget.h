@@ -24,7 +24,7 @@ private:
 	void (*buttonFunction) (void) = nullptr;
 public:
 	friend cGameEngine;
-	cButton(COORD In_topleft, int borderDensity, void (*pFunction) ());
+	cButton(COORD In_topleft, int borderDensity, void (*pFunction) (void));
 	void onSelect();
 
 	void onDeSelect();

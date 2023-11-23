@@ -162,7 +162,7 @@ void cGame::MainGame() {
 	//resetTime();
 	thread drawingThread(&cGameEngine::pizzaDraw, this);
 	Sound::playSoundList();
-	Sound::playIntroSound();
+	Sound::playBackGroundSound();
 	//Sound::musicThread();
 	DWORD his;
 	while (true) {
@@ -174,7 +174,12 @@ void cGame::MainGame() {
 			isExit = true;
 			break;
 		}
-			
+		if (GetAsyncKeyState(0x10) < 0) {
+			Sound::increaseSoundBackground();
+		}
+		if (GetAsyncKeyState(0x11) < 0) {
+			Sound::reduceSoundBackground();
+		}
 			if (isImpact())
 		{
 			isLose = true;
@@ -685,7 +690,7 @@ void cGame::endlessMode() {
 	spawnPeople();
 	spawnObstacle();
 	//resetTime();
-	thread drawingThread(&cGameEngine::drawT, this);
+	thread drawingThread(&cGameEngine::pizzaDraw, this);
 	Sound::playSoundList();
 	Sound::playIntroSound();
 	//Sound::musicThread();
@@ -766,7 +771,7 @@ void cGame::ScoreBoard() {
 	// draw score board menu // has a box to show score and time of game
 	// has choices: back to previous menu
 }
-void cGame::exitGame() {
+void cGame::exitGame(HANDLE t) {
 	// draw exit game menu // has a box to ask user want to save game or not
 	// has choices: save game and exit, exit without save game, back to previous menu
 	// if user choose save game and exit => save game and exit
