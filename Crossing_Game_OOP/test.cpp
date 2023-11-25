@@ -49,27 +49,44 @@ int main() {
 	//Graphic gr;
 	cGameEngine::startEngine();
 	cWidget::createMainWindow("mainmenu");
-	cDWindow br({ 0,0 }, "bg", "Sprites//menuBg.txt");
+	cDWindow br({ 0, 0 }, "bg", "Sprites//menuBg.txt");
 	br.show();
-	cDWindow infortab({ 324, 0 }, "infortab", "Sprites//info.txt");
-	cLabel scr(&infortab, { 10, 5 }, "src", "TOTAL SCORES", 1, Color::red);
-	cLabel num(&infortab, { 10,15 }, "num", "999999999", 2, Color::red);
-	infortab.show();
-	scr.show();
-	num.show();
-
+	//cDWindow l1(&br, { 401, 55 }, "l1", "Sprites//playbutton.txt");
+	//l1.show();
+	cButton b1(&br, { 402, 55 }, "b1", "Sprites//playbutton.txt", 1, oncl);
+	b1.show();
+	cButton b2(&br, { 402, 90 }, "b2", "Sprites//loadbutton.txt", 1, oncl);
+	b2.show();
+	cButton b3(&br, { 402, 125 }, "b3", "Sprites//settingbutton.txt", 1, oncl);
+	b3.show();
 	//cButton but(&pan , {10, 10}, "map1", "Sprites//jungleicon.txt", 2, oncl);
 	//but.show();
+	cButton buttonlist[3] = { b1, b2, b3 };
 	int i = 0;
+	buttonlist[i].onSelect();
 	while (runing)
 	{
 		if (GetAsyncKeyState(0x51) < 0)
 			break;
-		Sleep(100);
 		if (GetAsyncKeyState(0x0D) < 0)
 		{
-			scr.updateText("YOU LOSE");
+			Sleep(200);
+			b1.onDeSelect();
 		}
+		if (GetAsyncKeyState(VK_UP) && i > 0)
+		{
+			buttonlist[i].onDeSelect();
+			i--;
+			buttonlist[i].onSelect();
+		}
+		if (GetAsyncKeyState(VK_DOWN) && i < 2)
+		{
+			buttonlist[i].onDeSelect();
+			i++;
+			buttonlist[i].onSelect();
+		}
+		Sleep(100);
+
 		
 
 
