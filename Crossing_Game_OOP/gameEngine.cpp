@@ -114,7 +114,7 @@ void cGameEngine::disableCtrlHandler()
 	SetConsoleMode(hInput, prev_mode & ~ENABLE_MOUSE_INPUT);
 }
 
-void cGameEngine::startEngine()
+bool cGameEngine::startEngine()
 {
 	system("color f0");
 	HideScrollBar();
@@ -153,6 +153,7 @@ void cGameEngine::startEngine()
 
 	cAsset::alphabetLoader();
 	cAsset::numberLoader();
+	return true;
 }
 
 void cGameEngine::cleanEngine()

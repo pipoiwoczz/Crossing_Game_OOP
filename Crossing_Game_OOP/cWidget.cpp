@@ -2,8 +2,7 @@
 #include "gameEngine.h"
 #include "Map.h"
 
-bool cWidget::hasWd = false;
-cWidget cWidget::window;
+
 
 cWidget::cWidget(cWidget* parent, COORD offsetFromParentTopleft, const string& tagName, const string& imgSrc)
 {
@@ -29,19 +28,18 @@ cWidget::cWidget(cWidget* parent, COORD offsetFromParentTopleft, const string& t
 	}
 }
 
-void cWidget::createMainWindow(const string& tagName)
+bool cWidget::createMainWindow(const string& tagName)
 {
-	if (!hasWd)
-	{
+	if (!hasWd) {
 		hasWd = true;
 		window.IsVisible = true;
 		window.pHandle = &cGameEngine::curHandle;
-		window.tag = tagName;
 		window.topleft = { My_Windows.Left, My_Windows.Top };
 		window.botright = { My_Windows.Right, My_Windows.Bottom };
 		window.tag = tagName;
 		window.parentWindow = nullptr;
 	}
+	return true;
 }
 
 void cWidget::show()
@@ -55,13 +53,14 @@ void cWidget::show()
 void cWidget::unshow()
 {
 	IsVisible = false;
+	COORD erasepos = { topleft.X - parentWindow->topleft.X, topleft.Y - parentWindow->topleft.Y };
 	SMALL_RECT region = { topleft.X, topleft.Y, botright.X, botright.Y };
 	short W = WidgetFace.getWidth();
 	short H = WidgetFace.getHeight();
 
 	for (int i = 0; i < W * H; i++)
 	{
-		cGameEngine::reservedBuffer[i].Attributes = parentWindow->WidgetFace.textureArray[(topleft.Y + i / W) * parentWindow->WidgetFace.getWidth() + topleft.X - parentWindow->topleft.X + i % W].Attributes;
+		cGameEngine::reservedBuffer[i].Attributes = parentWindow->WidgetFace.textureArray[(erasepos.Y + i / W) * parentWindow->WidgetFace.getWidth() + erasepos.X - parentWindow->topleft.X + i % W].Attributes;
 	}
 	WriteConsoleOutput(cGameEngine::curHandle, cGameEngine::reservedBuffer, { W, H }, { 0, 0 }, &region);
 	SetConsoleActiveScreenBuffer(*pHandle);
@@ -69,8 +68,8 @@ void cWidget::unshow()
 
 
 cDWindow::cDWindow(cWidget* parent, COORD Topleft, const string& tagName, const string& imgSrc) : cWidget(parent, Topleft, tagName, imgSrc) {}
+cDWindow::cDWindow(cDWindow* parent, COORD Topleft, const string& tagName, const string& imgSrc) : cWidget(static_cast<cWidget*> (parent), Topleft, tagName, imgSrc) {}
 
-cDWindow::cDWindow(COORD Topleft, const string& tagName, const string& imgSrc) : cDWindow(&cWidget::window, Topleft, tagName, imgSrc) {}
 
 void cDWindow::show()
 {
@@ -137,13 +136,15 @@ void cButton::highLight()
 
 void cButton::unHighLight()
 {
+	COORD erasepos = { OTopleft.X - parentWindow->topleft.X, OTopleft.Y - parentWindow->topleft.Y };
+
 	short ow = OBotright.X - OTopleft.X + 1;
 	short oh = OBotright.Y - OTopleft.Y + 1;
 	SMALL_RECT outerRect = { OTopleft.X, OTopleft.Y, OBotright.X, OBotright.Y };
 
 	for (int i = 0; i < ow * oh; i++)
 	{
-		cGameEngine::reservedBuffer[i].Attributes = parentWindow->WidgetFace.textureArray[(OTopleft.Y + i / ow) * parentWindow->WidgetFace.getWidth() + OTopleft.X + i % ow].Attributes;
+		cGameEngine::reservedBuffer[i].Attributes = parentWindow->WidgetFace.textureArray[(erasepos.Y + i / ow) * parentWindow->WidgetFace.getWidth() + erasepos.X + i % ow].Attributes;
 	}
 
 	WriteConsoleOutput(*pHandle, cGameEngine::reservedBuffer, { ow , oh }, { 0, 0 }, &outerRect);
@@ -192,9 +193,9 @@ void cLabel::createTextline()
 	botright = { short(min(topleft.X + length - 1, parentWindow->botright.X)), short(min(topleft.Y + textLine[0].pChar->getHeight() - 1, parentWindow->botright.Y))};
 }
 
-cLabel::cLabel(cWidget* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& text, const short& align, Color textColor)
+cLabel::cLabel(cDWindow* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& text, const short& align, Color textColor)
 {
-	this->parentWindow = parentWindow;
+	this->parentWindow = static_cast<cWidget*> (parentWindow);
 	IsVisible = false;
 	pHandle = &cGameEngine::curHandle;
 	tag = tagName;
@@ -205,9 +206,6 @@ cLabel::cLabel(cWidget* parentWindow, COORD offsetFromParentTopleft, const strin
 	topleft = { max(topleft.X, parentWindow->topleft.X), max(topleft.Y, parentWindow->topleft.Y) };
 	createTextline();
 }
-
-cLabel::cLabel(cDWindow* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& text, const short& align, Color textColor)
-: cLabel(static_cast<cWidget*> (parentWindow), offsetFromParentTopleft, tagName, text, align, textColor) {}
 
 void cLabel::updateText(const string& newText)
 {

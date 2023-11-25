@@ -25,7 +25,7 @@ protected:
 	cWidget(cWidget* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& imgSrc);
 public:
 	static cWidget window;
-	static void createMainWindow(const string& tagName);
+	static bool createMainWindow(const string& tagName);
 	virtual void show();
 	virtual void unshow();
 	friend cDWindow;
@@ -39,7 +39,8 @@ class cDWindow : public cWidget {
 private:
 public:
 	cDWindow(cWidget* parent, COORD Topleft, const string& tagName, const string& imgSrc);
-	cDWindow(COORD Topleft, const string& tagName, const string& imgSrc);
+	cDWindow(cDWindow* parent, COORD Topleft, const string& tagName, const string& imgSrc);
+
 	void show();
 	void unshow();
 };
@@ -85,7 +86,6 @@ private:
 
 	vector<tchar> textLine;
 	void createTextline();
-	cLabel(cWidget* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& text, const short& align, Color textColor);
 public:
 	cLabel(cDWindow* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& text, const short& align, Color textColor);
 	void show();

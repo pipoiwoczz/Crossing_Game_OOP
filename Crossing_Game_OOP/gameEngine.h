@@ -42,7 +42,7 @@ public:
 	friend cGame;
 	static HANDLE curHandle;
 
-	static void startEngine();
+	static bool startEngine();
 
 	static void cleanEngine();
 	
