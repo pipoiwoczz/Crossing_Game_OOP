@@ -1,7 +1,7 @@
 #include "hitbox.h"
 
 
-Hitbox::Hitbox() {}
+Hitbox::Hitbox() : Hitbox({ 0,0 }, { 0,0 }) {}
 Hitbox::Hitbox(COORD tl, COORD br)
 {
     topleft = tl;

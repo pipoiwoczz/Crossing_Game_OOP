@@ -1,7 +1,6 @@
 #ifndef _COBSTACLE_H
 #define _COBSTACLE_H
 
-#include "setup.h"
 #include "hitbox.h"
 
 class cPeople;

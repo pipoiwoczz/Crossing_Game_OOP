@@ -2,7 +2,7 @@
 #include "cAsset.h"
 	vector<gameMap> gameMap::listMap = gameMap::loadMap();
 	gameMap* gameMap::currentMap = &gameMap::listMap[0];
-	MapIndex gameMap::currentMapIndex = MapIndex::Jungle;
+    int gameMap::currentMapIndex = int(BGIndex::BGMenu);
 
     gameMap::gameMap()
     {
@@ -67,12 +67,15 @@
         return gameMap::currentMap;
     }
 
-    void gameMap::changeMap(MapIndex newMapIndex)
+    void gameMap::changeMap(BGIndex newMapIndex)
     {
-        currentMap = &listMap[int(newMapIndex) % maplist.size()];
+        currentMapIndex = int(newMapIndex);
+        currentMap = &listMap[currentMapIndex];
     }
 
     void gameMap::nextMap() {
-        currentMapIndex = MapIndex((int(currentMapIndex) + 1) % maplist.size());
-        currentMap = &listMap[int(currentMapIndex) % maplist.size()];
+        if (int(currentMapIndex + 1 >= maplist.size()))
+            return;
+        currentMapIndex += 1;
+        currentMap = &listMap[currentMapIndex];
     }

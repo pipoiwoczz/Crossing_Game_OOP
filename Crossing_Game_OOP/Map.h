@@ -7,7 +7,7 @@ private:
 public:
 	static vector<gameMap> listMap;
 	static gameMap* currentMap;
-	static MapIndex currentMapIndex;
+	static int currentMapIndex;
 
 	CHAR_INFO* mapArray = nullptr;
 	short width;
@@ -24,10 +24,10 @@ public:
 
 	static vector<gameMap> loadMap();
 	static gameMap* getCurrentMap();
-	static void changeMap(MapIndex newMapIndex);
+	static void changeMap(BGIndex newMapIndex);
 	static void nextMap();
 
 	friend cAsset;
 };
 
-#endif
+#endif	

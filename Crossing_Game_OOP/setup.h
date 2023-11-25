@@ -52,8 +52,9 @@ enum class Color {
 	bright_white = 15,
 };
 
-enum class MapIndex {
-	Jungle = 0
+enum class BGIndex {
+	BGMenu = 0,
+	Jungle = 1
 };
 
 enum class AnimalIndex {

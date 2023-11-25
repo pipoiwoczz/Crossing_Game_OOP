@@ -2,6 +2,7 @@
 #include "cAsset.h"
 #include "hitbox.h"
 
+cPeople::cPeople() : cPeople({0, 145}) {}
 cPeople::cPeople(COORD In_pos) {
 	topleft = In_pos;
 	mState = true;
@@ -55,7 +56,7 @@ bool cPeople::move() {
 		ismove = true;
 	}
 
-	if (GetAsyncKeyState(VK_RIGHT) < 0 && topleft.X < 479 - pTexture->getWidth() + 1) {
+	if (GetAsyncKeyState(VK_RIGHT) < 0 && topleft.X < My_Windows.Right - pTexture->getWidth()) {
 		dx++;	
 		horizon = true;
 		ismove = true;
@@ -78,12 +79,12 @@ bool cPeople::move() {
 	if (ismove)
 	{
 		if (horizon)
-			topleft.X += dx*pTexture->getWidth();
+			topleft.X += dx * pTexture->getWidth();
 		else
 			topleft.Y += dy * pTexture->getHeight();
 		for (int i = 0; i < mBoxes.size(); i++)
 		{
-			mBoxes[i].set({ short(topleft.X), short(topleft.Y) }, { short(pTexture->getWidth() + topleft.X), short(pTexture->getHeight() + topleft.Y) });
+			mBoxes[i].set({ short(topleft.X), short(topleft.Y) }, { short(pTexture->getWidth() + topleft.X - 1), short(pTexture->getHeight() + topleft.Y - 1) });
 		}
 		return ismove;
 	}

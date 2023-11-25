@@ -1,5 +1,4 @@
 ﻿#include "setup.h"
-#include "Graphics.h"
 
 void gotoXY(int x, int y) {
     static HANDLE h = NULL;

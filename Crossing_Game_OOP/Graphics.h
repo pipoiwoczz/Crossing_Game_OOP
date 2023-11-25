@@ -6,7 +6,7 @@
 class Graphic {
 public:
 	Graphic() {
-		textSize(6);
+		textSize(GetStdHandle(STD_OUTPUT_HANDLE), 6);
 		SetConsoleTitle(L"Crossing Road");
 		fixConsoleWindow();
 		showScrollBar(false);
@@ -16,12 +16,12 @@ public:
 		disableCtrlHandler();
 	}
 	~Graphic();
-	void textSize(int);
+	static void textSize(HANDLE hStdOut, int fsize);
 	void setWindowSize(short width, short height);
 	void DisableCtrButton(bool Close, bool Min, bool Max);
-	void showScrollBar(BOOL Show);
+	static void showScrollBar(BOOL Show);
 	static void hideCursor(HANDLE h, bool isHideCursor = true);
-	void fixConsoleWindow();
+	static void fixConsoleWindow();
 	void disableUserSelection();
 
 	void disableCtrlHandler();

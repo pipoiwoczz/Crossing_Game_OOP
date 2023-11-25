@@ -1,41 +1,95 @@
 #ifndef CWIDGET_H
 #define CWIDGET_H
 
-#include "setup.h"
 #include "cAsset.h"
 
 class cGameEngine;
+
+class cButton;
+class cLabel;
+class cDWindow;
+
 class cWidget {
-
+private:
+	static bool hasWd;
+	cWidget() {}
 protected:
-	COORD OTopleft;
-	int bordDensity;
+	bool IsVisible;
+	PHANDLE pHandle;
+	string tag;
 	COORD topleft;
-	vector<Texture> textures;
-	Texture* pTexture = nullptr;
-public:
-	
+	COORD botright;
+	cWidget* parentWindow = nullptr;;
+	Texture WidgetFace;
 
-	cWidget(COORD In_topleft, int borderDensity);
+	cWidget(cWidget* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& imgSrc);
+public:
+	static cWidget window;
+	static void createMainWindow(const string& tagName);
+	virtual void show();
+	virtual void unshow();
+	friend cDWindow;
+	friend cButton;
+	friend cLabel;
 };
 
+
+
+class cDWindow : public cWidget {
+private:
+public:
+	cDWindow(cWidget* parent, COORD Topleft, const string& tagName, const string& imgSrc);
+	cDWindow(COORD Topleft, const string& tagName, const string& imgSrc);
+	void show();
+	void unshow();
+};
+ 
 class cButton: public cWidget {
 private:
+
+	COORD OTopleft;
+	COORD OBotright;
+	int bordDensity;
 	void (*buttonFunction) (void) = nullptr;
+	void highLight();
+	void unHighLight();
 public:
 	friend cGameEngine;
-	cButton(COORD In_topleft, int borderDensity, void (*pFunction) (void));
+	cButton(cDWindow* parent, COORD offsetFromParentTopleft,const string& tagName, const string& imgSrc, int borderDensity, void (*pFunction) (void));
+
+	void show();
+	void unshow();
+
 	void onSelect();
-
 	void onDeSelect();
-
 	void onEnter();
-
-	void cleanButton(HANDLE curHandle);
-
-	void drawButton(HANDLE curHandle);
-
-	void drawBorder(HANDLE curHandle);
 };
 
+
+class cLabel {
+private:
+	cWidget* parentWindow = nullptr;
+	struct tchar {
+		Texture* pChar = nullptr;
+		COORD pos;
+	};
+	short align;
+	short color;
+	string text;
+
+	bool IsVisible;
+	PHANDLE pHandle;
+	string tag;
+	COORD topleft;
+	COORD botright;
+
+	vector<tchar> textLine;
+	void createTextline();
+	cLabel(cWidget* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& text, const short& align, Color textColor);
+public:
+	cLabel(cDWindow* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& text, const short& align, Color textColor);
+	void show();
+	void unshow();
+	void updateText(const string& newText);
+};
 #endif

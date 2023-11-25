@@ -3,13 +3,13 @@
 
 SMALL_RECT My_Windows = { 0, 0, 0, 0 };
 
-void Graphic::textSize(int size) {
-    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+void Graphic::textSize(HANDLE hStdout, int fsize) {
+  //  HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     PCONSOLE_FONT_INFOEX lpConsoleCurrentFontEx = new CONSOLE_FONT_INFOEX();
     lpConsoleCurrentFontEx->cbSize = sizeof(CONSOLE_FONT_INFOEX);
     GetCurrentConsoleFontEx(hStdout, 0, lpConsoleCurrentFontEx);
-    lpConsoleCurrentFontEx->dwFontSize.X = size;
-    lpConsoleCurrentFontEx->dwFontSize.Y = size;
+    lpConsoleCurrentFontEx->dwFontSize.X = 1;
+    lpConsoleCurrentFontEx->dwFontSize.Y = 1;
     SetCurrentConsoleFontEx(hStdout, 0, lpConsoleCurrentFontEx);
     delete lpConsoleCurrentFontEx;
 }
@@ -43,26 +43,33 @@ void Graphic::setWindowSize(short width, short height) {
 }
 
 void Graphic::fixConsoleWindow() {
-    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-
-    
-
     ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
     HWND consoleWindow = GetConsoleWindow();
     LONG style = GetWindowLong(consoleWindow, GWL_STYLE);
     style = style & ~(WS_MAXIMIZEBOX) & ~(WS_THICKFRAME);
     SetWindowLong(consoleWindow, GWL_STYLE, style);
   
-    GetConsoleScreenBufferInfo(consoleHandle, &csbi);
-    SetConsoleScreenBufferSize(consoleHandle, csbi.dwMaximumWindowSize);
-    My_Windows.Bottom = csbi.srWindow.Bottom;
-    My_Windows.Right = csbi.srWindow.Right;
-
+    //CONSOLE_SCREEN_BUFFER_INFOEX csbie;
+    //csbie.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
+    //GetConsoleScreenBufferInfoEx(consoleHandle, &csbie);
+    //csbie.dwSize.X = 432;
+    //csbie.dwSize.Y = 126;
+    ////csbie.srWindow = My_Windows;
+    //csbie.dwMaximumWindowSize.X = 432;
+    //csbie.dwMaximumWindowSize.Y = 126;
+    //SetConsoleScreenBufferInfoEx(consoleHandle, &csbie);
+    //SetConsoleScreenBufferSize(consoleHandle, csbie.dwSize);
+    //GetConsoleScreenBufferInfo(consoleHandle, &csbi);
+    //csbi.dwSize.X = 432;
+    //csbi.dwSize.Y = 126;
+    //
+    //SetConsoleScreenBufferSize(consoleHandle, csbi.dwSize);
+    //My_Windows.Bottom = csbi.srWindow.Bottom;
+    //My_Windows.Right = csbi.srWindow.Right;
    // SetWindowPos(consoleWindow, 0, 0, 0, 480, 131, SWP_NOSIZE | SWP_NOZORDER);
-    DWORD g;
+
     system("color f0");
-    //0,0 479-130
+    //432, 126
 }
 
 void Graphic::showScrollBar(BOOL Show) {

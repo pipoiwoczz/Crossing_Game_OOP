@@ -1,5 +1,9 @@
 ﻿#include "cAsset.h"
 
+vector<Texture> cAsset::alphabet;
+vector<Texture> cAsset::number;
+Texture cAsset::blankchar = cAsset::assetLoader("Sprites//Char//Alphabet//blank.txt");
+
 Texture::Texture() {
     height = 0;
     width = 0;
@@ -58,6 +62,8 @@ Texture cAsset::assetLoader(string filename)
     Texture loaded;
     if (inGate.is_open()) {
         inGate >> loaded.height >> loaded.width;
+        //if (filename == "land.txt")
+        //    loaded.height /= 2;
         loaded.textureArray = new CHAR_INFO[loaded.height * loaded.width];
         for (int i = 0; i < loaded.height; i++)
         {
@@ -72,12 +78,22 @@ Texture cAsset::assetLoader(string filename)
 
                 }
                 else {
-                    CHAR_INFO t = { L' ', x * 16 };
+                    CHAR_INFO t = { L' ', x * 16 + 0 };
                     loaded.textureArray[i * loaded.width + j] = t;
                 }
-                
-                
             }
+            /*if (filename == "land.txt")
+            {
+                for (int j = 0; j < loaded.width; j++)
+                {
+                    int x;
+                    inGate >> x;
+                    if (x != 16)
+                    {
+                        loaded.textureArray[i * loaded.width + j].Attributes += x;
+                    }
+                }
+            }*/
         }
     }
     inGate.close();
@@ -96,3 +112,22 @@ vector<Texture> cAsset::assetLoaders(const vector<string> &textureList)
     return multiFrame;
 }
 
+void cAsset::alphabetLoader()
+{
+    for (int i = 0; i < 26; i++)
+    {
+        char c = 'A' + i;
+        string filepath = "Sprites//Char//Alphabet//";
+        filepath += c;
+        filepath += ".txt";
+        alphabet.push_back(assetLoader(filepath));
+    }
+}
+
+void cAsset::numberLoader()
+{
+    for (int i = 0; i <= 9; i++)
+    {
+        number.push_back(assetLoader("Sprites//Char//Number//" + to_string(i) + ".txt"));    
+    }
+}

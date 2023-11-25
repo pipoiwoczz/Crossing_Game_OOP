@@ -158,13 +158,19 @@ void cGame::updatePosObstacle()
 void cGame::MainGame() {
 	//drawBackGround();
 	spawnPeople();
-	spawnObstacle();
+	//spawnObstacle();
 	//resetTime();
+	for (int i = 0; i < livePeople.size(); i++)
+	{
+		cGameEngine::renderPeople(livePeople[i]);
+		}
+	gameMap::changeMap(BGIndex::Jungle);
 	thread drawingThread(&cGameEngine::pizzaDraw, this);
 	Sound::playSoundList();
 	Sound::playBackGroundSound();
 	//Sound::musicThread();
 	DWORD his;
+
 	while (true) {
 		//if (GetAsyncKeyState(0x50) < 0) {
 		//	pauseGame();
@@ -733,7 +739,7 @@ void cGame::endlessMode() {
 			resetTime();
 			srand(NULL);
 			int random = rand() % 7 + 1;
-			gameMap::changeMap(MapIndex(random));
+			gameMap::changeMap(BGIndex(random));
 			for (int i = 0; i < livePeople.size(); i++) {
 				livePeople[i]->setPos({ short(200 - 100 * i), 100 });
 			}

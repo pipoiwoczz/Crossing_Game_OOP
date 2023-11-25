@@ -2,15 +2,10 @@
 #define _CPEOPLE_H
 
 #include "setup.h"
-//#include "hitbox.h"
-//#include "cAsset.h"
 
 class Hitbox;
 class Texture;
 class cPeople {
-	//int mX, mY;
-
-
 	vector<Texture> skin;
 	Texture* pTexture;
 	int currentFrame;
@@ -22,7 +17,7 @@ class cPeople {
 		friend class cGameEngine;
 		/*vector<Hitbox> mBoxes;*/
 		vector<Hitbox> mBoxes;
-		cPeople() : cPeople({ 200, 100 }) {}
+		cPeople();
 		cPeople(COORD In_pos);
 		~cPeople();
 
