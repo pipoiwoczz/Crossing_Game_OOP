@@ -134,6 +134,7 @@
     <ClInclude Include="cObstacle.h" />
     <ClInclude Include="cPeople.h" />
     <ClInclude Include="cVehicle.h" />
+    <ClInclude Include="cWidget.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="hitbox.h" />
     <ClInclude Include="Map.h" />
@@ -149,6 +150,7 @@
     <ClCompile Include="cObstacle.cpp" />
     <ClCompile Include="cPeople.cpp" />
     <ClCompile Include="cVehicle.cpp" />
+    <ClCompile Include="cWidget.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="hitbox.cpp" />
     <ClCompile Include="main.cpp" />
