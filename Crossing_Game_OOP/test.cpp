@@ -163,6 +163,7 @@ int main() {
 	////_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
 	////_CrtDumpMemoryLeaks();
 	br.unshow();
-	cGameEngine::cleanEngine();
+
+	cleanGame();
 }
 

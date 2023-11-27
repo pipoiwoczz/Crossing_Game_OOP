@@ -12,14 +12,15 @@ class cDWindow;
 class cWidget {
 private:
 	static bool hasWd;
-	cWidget() {}
+	cWidget() {
+		IsVisible = false;
+	}
 protected:
 	bool IsVisible;
-	PHANDLE pHandle;
 	string tag;
-	COORD topleft;
-	COORD offset;
-	COORD botright;
+	COORD topleft = { 0,0 };
+	COORD offset = { 0, 0 };
+	COORD botright = { 0, 0 };
 	cWidget* parentWindow = nullptr;;
 	Texture WidgetFace;
 
@@ -82,11 +83,10 @@ private:
 	string text;
 
 	bool IsVisible;
-	PHANDLE pHandle;
 	string tag;
-	COORD topleft;
-	COORD offset;
-	COORD botright;
+	COORD topleft = { 0,0 };
+	COORD offset = { 0, 0 };
+	COORD botright = { 0, 0 };
 
 	vector<tchar> textLine;
 	void createTextline();

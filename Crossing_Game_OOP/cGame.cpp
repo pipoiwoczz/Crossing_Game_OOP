@@ -12,8 +12,8 @@
 
 void cleanGame()
 {
-	/*cObstacle::cleanBootstrap();*/
-
+	cGameEngine::cleanEngine();
+	cObstacle::cleanBootstrap();
 }
 
 cGame::cGame()
@@ -164,7 +164,6 @@ void cGame::MainGame() {
 		cGameEngine::renderPeople(livePeople[i]);
 		}
 	gameMap::changeMap(BGIndex::Jungle);
-	thread drawingThread(&cGameEngine::maindraw, this);
 	Sound::playSoundList();
 	Sound::playBackGroundSound();
 	//Sound::musicThread();
@@ -175,10 +174,13 @@ void cGame::MainGame() {
 	cLabel t2(&rr, { 10, 15 }, "t2", "999999999", 2, Color::red);
 
 	listWidget.push_back(&rr);
+	rr.show();
 	listLabel.push_back(&t1);
+	t1.show();
 	listLabel.push_back(&t2);
-
+	t2.unshow();
 	int i = 0;
+	thread drawingThread(&cGameEngine::maindraw, this);
 	while (true) {
 		//if (GetAsyncKeyState(0x50) < 0) {d
 		//	pauseGame();
@@ -602,7 +604,7 @@ void cGame::impactEffect(int i) {
 							   encounter = false;
 							   loaded.blankTexture[i].push_back(bla);
 						   }*/
-						CHAR_INFO t = { L'█', x * 16 + x };
+						CHAR_INFO t = { L'█', WORD( x * 16 + x)};
 						a.textureArray[i * a.width + j] = t;
 
 					}
@@ -613,7 +615,7 @@ void cGame::impactEffect(int i) {
 							 bla.end = bla.start - 1;
 						 }
 						 bla.end++;*/
-						CHAR_INFO t = { L' ', 11 * 16 + 11 };
+						CHAR_INFO t = { L' ', WORD(0)};
 						a.textureArray[i * a.width + j] = t;
 					}
 				}
@@ -782,7 +784,6 @@ void cGame::endlessMode() {
 	Sound::playSoundList();
 	Sound::playIntroSound();
 	//Sound::musicThread();
-	DWORD his;
 	while (true) {
 		if (GetAsyncKeyState(0x50) < 0) {
 			pauseGame();

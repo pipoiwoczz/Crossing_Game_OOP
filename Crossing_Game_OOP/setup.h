@@ -34,7 +34,7 @@ using namespace std;
 extern SMALL_RECT My_Windows;
 extern SMALL_RECT PlayBoxRect;
 
-const HANDLE mainHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+extern const HANDLE mainHandle;
 enum class Color {
 	black = 0,
 	blue = 1,

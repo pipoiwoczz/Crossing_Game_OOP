@@ -58,6 +58,13 @@ public:
     
     bool collide (Hitbox h); // (unused) check collision with other obstacles
     void advanceTime (int time); // (unused) counts down timeUntilMove and executes move if it reaches 0. does nothing while obstacle is stopped
+    static void cleanBootstrap()
+    {
+        for (int i = 0; i < objects.size(); i++)
+        {
+            delete objects[i];
+        }
+    }
 };
 
 

@@ -1,5 +1,7 @@
 ﻿#include "setup.h"
 
+const HANDLE mainHandle = GetStdHandle(STD_OUTPUT_HANDLE);;
+
 void gotoXY(int x, int y) {
     static HANDLE h = NULL;
     if (!h)

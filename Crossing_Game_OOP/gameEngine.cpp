@@ -246,11 +246,14 @@ void cGameEngine::maindraw(cGame* pGame)
 				curHandle = Hbuffer2;
 			}
 
-			thread g1(&cGameEngine::pizzaDraw, pGame);
-			thread g2(&cGameEngine::updateInfo, pGame);
+			pizzaDraw(pGame);
+			updateInfo(pGame);
 
-			g1.join();
-			g2.join();
+			//thread g1(&cGameEngine::pizzaDraw, pGame);
+			//thread g2(&cGameEngine::updateInfo, pGame);
+
+			//g1.join();
+			//g2.join();
 
 			WriteConsoleOutput(curHandle, mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, { 0,0 }, &PlayBoxRect);
 			SetConsoleActiveScreenBuffer(curHandle);

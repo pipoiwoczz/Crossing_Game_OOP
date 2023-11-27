@@ -10,7 +10,6 @@ cWidget::cWidget(cWidget* parent, COORD offsetFromParentTopleft, const string& t
 		return;
 	offset = offsetFromParentTopleft;
 	IsVisible = false;
-	pHandle = &cGameEngine::curHandle;
 	tag = tagName;
 
 	this->parentWindow = parent;
@@ -34,7 +33,6 @@ bool cWidget::createMainWindow(const string& tagName)
 	if (!hasWd) {
 		hasWd = true;
 		window.IsVisible = true;
-		window.pHandle = &cGameEngine::curHandle;
 		window.topleft = { My_Windows.Left, My_Windows.Top };
 		window.botright = { My_Windows.Right, My_Windows.Bottom };
 		window.tag = tagName;
@@ -161,7 +159,6 @@ cLabel::cLabel(cDWindow* parentWindow, COORD offsetFromParentTopleft, const stri
 {
 	this->parentWindow = static_cast<cWidget*> (parentWindow);
 	IsVisible = false;
-	pHandle = &cGameEngine::curHandle;
 	tag = tagName;
 	this->text = text;
 	color = short(textColor);
