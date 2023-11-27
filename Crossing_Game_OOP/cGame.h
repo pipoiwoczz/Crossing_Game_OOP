@@ -35,28 +35,19 @@ class cGame {
 		~cGame();
 
 
-		void gameThread();
-		void checkImpactThread();
-		void drawThread();
-		void movingThread();
-		void getMainMenuActionThread();
         void despawnThread(); // loops objects that have gone offscreen to the other side
         void randomStopThread(); // stops a row of objects at random (or set) intervals
 		
-
-		void drawGame();
-		void drawMap();
 
 		vector<cPeople *> getPeople();
         vector<cObstacle *> getObstacles();
 
 		void resetGame();
 		void exitGame(HANDLE t);
-		void startGame();
-		void loadGame();
 		void saveGame();
 		void pauseGame();	
 		void resumeGame();
+		void save(void);
 
 		//void updatePosPeople(char MOVING) {
 		//	if (!isPause) {
@@ -70,8 +61,6 @@ class cGame {
 
 		short getGameOrder();
 
-		int getMenuChoice();
-
 		void ScoreBoard();
 		void MainGame();
 		void LoadGame();
@@ -80,7 +69,7 @@ class cGame {
 		void GameWin();
 
 		void drawBackGround();
-		void impactEffect(int i);
+		void impactEffect(cObstacle* obsta);
 		void spawnPeople();
 		void spawnObstacle();
 		bool isFinishLevel();

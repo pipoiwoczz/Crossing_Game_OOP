@@ -16,6 +16,16 @@ cObstacle* cCrocodile::bootstrapObjectcCrocodile = cObstacle::addObject(new cCro
 cObstacle* cTruck::bootstrapObjectcTruck = cObstacle::addObject(new cTruck());
 cObstacle* cHelicopter::bootstrapObjectcHelicopter = cObstacle::addObject(new cHelicopter());
 cObstacle* cMotorbike::bootstrapObjectcMotorbike = cObstacle::addObject(new cMotorbike());
+
+vector<Texture> cMotorbike::impactEffect = cAsset::assetLoaders(lionImpactEffect);
+vector<Texture> cHelicopter::impactEffect = cAsset::assetLoaders(lionImpactEffect);
+vector<Texture> cTruck::impactEffect = cAsset::assetLoaders(lionImpactEffect);
+
+vector<Texture> cLion::impactEffect = cAsset::assetLoaders(lionImpactEffect);
+vector<Texture> cCrocodile::impactEffect = cAsset::assetLoaders(lionImpactEffect);
+vector<Texture> cRhino::impactEffect = cAsset::assetLoaders(lionImpactEffect);
+
+
 int Sound::BGSoundVolume = 1000;
 int Sound::EffectSoundVolume = 1000;
 
@@ -24,7 +34,7 @@ bool enginecheck = cGameEngine::startEngine();
 cWidget cWidget::window;
 bool cWidget::hasWd = cWidget::createMainWindow("mainbg");
 
-cDWindow br(&cWidget::window, { 0, 0 }, "bg", "Sprites//menuBg.txt");
+cDWindow br(&cWidget::window, { 0, 0 }, "bg", "menuBg.txt");
 
 void pmap1()
 {
@@ -43,11 +53,11 @@ void pmap3()
 }
 void b1F(void)
 {
-	cDWindow mapMenu(&br, { 240, 55 }, "menumap", "Sprites//mapPanel.txt");
+	cDWindow mapMenu(&br, { 240, 55 }, "menumap", "mapPanel.txt");
 	mapMenu.show();
-	cButton map1(&mapMenu, { 10, 20 }, "map1", "Sprites//jungleicon.txt", 1, pmap1);
-	cButton map2(&mapMenu, { 84, 20 }, "map1", "Sprites//jungleicon.txt", 1, pmap2);
-	cButton map3(&mapMenu, { 158, 20 }, "map1", "Sprites//jungleicon.txt", 1, pmap3);
+	cButton map1(&mapMenu, { 10, 20 }, "map1", "jungleicon.txt", 1, pmap1);
+	cButton map2(&mapMenu, { 84, 20 }, "map1", "jungleicon.txt", 1, pmap2);
+	cButton map3(&mapMenu, { 158, 20 }, "map1", "jungleicon.txt", 1, pmap3);
 
 	cButton buttonlist[3] = { map1, map2, map3 };
 
@@ -55,6 +65,7 @@ void b1F(void)
 	int x = 0;
 	for (int i = 0; i < 3; i++)
 	{
+
 		buttonlist[i].show();
 	}
 	buttonlist[x].onSelect();
@@ -111,9 +122,9 @@ void b3F(void)
 int main() {
 	br.show();
 
-	cButton b1(&br, { 516, 55 }, "b1", "Sprites//playbutton.txt", 1, b1F);
-	cButton b2(&br, { 516, 90 }, "b2", "Sprites//loadbutton.txt", 1, b2F);
-	cButton b3(&br, { 516, 125 }, "b3", "Sprites//settingbutton.txt", 1, b3F);
+	cButton b1(&br, { 516, 55 }, "b1", "playbutton.txt", 1, b1F);
+	cButton b2(&br, { 516, 90 }, "b2", "loadbutton.txt", 1, b2F);
+	cButton b3(&br, { 516, 125 }, "b3", "settingbutton.txt", 1, b3F);
 
 	cButton buttonlist[3] = { b1, b2, b3 };
 	int x = 0;

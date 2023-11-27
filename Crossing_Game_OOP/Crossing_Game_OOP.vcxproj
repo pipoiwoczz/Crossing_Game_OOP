@@ -135,7 +135,6 @@
     <ClInclude Include="cPeople.h" />
     <ClInclude Include="cVehicle.h" />
     <ClInclude Include="cWidget.h" />
-    <ClInclude Include="Graphics.h" />
     <ClInclude Include="hitbox.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="setup.h" />
@@ -151,11 +150,9 @@
     <ClCompile Include="cPeople.cpp" />
     <ClCompile Include="cVehicle.cpp" />
     <ClCompile Include="cWidget.cpp" />
-    <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="hitbox.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main2.cpp" />
-    <ClCompile Include="setup.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="gameEngine.cpp" />
     <ClCompile Include="Sound.cpp" />

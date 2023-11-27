@@ -2,7 +2,7 @@
 
 vector<Texture> cAsset::alphabet;
 vector<Texture> cAsset::number;
-Texture cAsset::blankchar = cAsset::assetLoader("Sprites//Char//Alphabet//blank.txt");
+Texture cAsset::blankchar = cAsset::assetLoader("Char//Alphabet//blank.txt");
 
 Texture::Texture() {
     height = 0;
@@ -58,7 +58,7 @@ short Texture::getWidth() {
 Texture cAsset::assetLoader(string filename)
 {
     ifstream inGate;
-    inGate.open(filename);
+    inGate.open("Sprites//" + filename);
     Texture loaded;
     if (inGate.is_open()) {
         inGate >> loaded.height >> loaded.width;
@@ -103,7 +103,7 @@ void cAsset::alphabetLoader()
     for (int i = 0; i < 26; i++)
     {
         char c = 'A' + i;
-        string filepath = "Sprites//Char//Alphabet//";
+        string filepath = "Char//Alphabet//";
         filepath += c;
         filepath += ".txt";
         alphabet.push_back(assetLoader(filepath));
@@ -114,6 +114,6 @@ void cAsset::numberLoader()
 {
     for (int i = 0; i <= 9; i++)
     {
-        number.push_back(assetLoader("Sprites//Char//Number//" + to_string(i) + ".txt"));    
+        number.push_back(assetLoader("Char//Number//" + to_string(i) + ".txt"));    
     }
 }

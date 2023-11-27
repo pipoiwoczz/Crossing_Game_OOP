@@ -46,105 +46,6 @@ short cGame::getGameOrder()
 	return gameOrder;
 }
 
-//int cGame::getMenuChoice() {
-//	unsigned char MOVING;
-//	int choice = 0;
-//	while (true) {
-//		cout << choice << endl;
-//		drawMainMenu(choice);
-//		MOVING = _getch();
-//		if (MOVING == 224) {
-//			MOVING = _getch();
-//			if (MOVING == 'P')
-//			{
-//				choice = (++choice) % 3;
-//			}
-//			else if (MOVING == 'H') {
-//				choice = (--choice + 3) % 3;
-//			}
-//		}
-//		else if (toupper(MOVING) == 'W') {
-//			choice = (--choice + 3) % 3;
-//		}
-//		else if (toupper(MOVING) == 'S') {
-//			choice = (++choice) % 3;
-//		}
-//		
-//		if (MOVING == 13) {
-//			return choice;
-//		}
-//		//if (toupper(MOVING) == 'S' || MOVING == 40) {
-//		//	if (choice == 5) {
-//		//		choice = 1;
-//		//	}
-//		//	else {
-//		//		choice++;
-//		//	}
-//		//}
-//		//else if (toupper(MOVING) || MOVING == 38) {
-//		//	if (choice == 1) {
-//		//		choice = 5;
-//		//	}
-//		//	else {
-//		//		choice--;
-//		//	}
-//		//}
-//	}
-//}
-
-void cGame::drawMap() {
-	switch (gameLevel) {
-	case 1:
-		break;
-	case 2:
-		break;
-	case 3:
-		break;
-	case 4:
-		break;
-	case 5:
-		break;
-	case 6:
-		break;
-	case 7:
-		break;
-	default:
-		break;
-	}
-}
-
-void cGame::startGame() {
-	// create mainmenu with option
-	system("cls");
-	//int choice = getMenuChoice();
-	//clearConsole();
-	//switch (choice) {
-	//case 0: 
-	//	// Start new game
-	//	MainGame();
-	//	break;
-	//case 1:
-	//	// Load game
-	//	//LoadGame();
-	//	break;
-	//case 2:
-	//	// Setting
-	//	//Setting();
-	//	break;
-	//case 3:
-	//	// Scoreboard
-	//	//ScoreBoard();
-	//	break;
-	//case 4:
-	//	/*HANDLE t = GetStdHandle(STD_OUTPUT_HANDLE);
-	//	exitGame(t);*/
-	//	break;
-	//default:
-	//	break;
-	//}
-}
-
-
 
 void cGame::updatePosObstacle()
 {
@@ -162,16 +63,16 @@ void cGame::MainGame() {
 	for (int i = 0; i < livePeople.size(); i++)
 	{
 		cGameEngine::renderPeople(livePeople[i]);
-		}
+	}
 	gameMap::changeMap(BGIndex::Jungle);
 	Sound::playSoundList();
 	Sound::playBackGroundSound();
 	//Sound::musicThread();
 	DWORD his;
-	cDWindow rr(&cWidget::window, { 504, 0 }, "te", "Sprites//info.txt");
+	cDWindow rr(&cWidget::window, { 504, 0 }, "te", "info.txt");
 	cLabel t1(&rr, { 10, 5 }, "t1", "SCORES", 1, Color::red);
-	
-	cLabel t2(&rr, { 10, 15 }, "t2", "999999999", 2, Color::red);
+	string point = to_string(totalPoint);
+	cLabel t2(&rr, { 10, 15 }, "t2", point, 2, Color::red);
 
 	listWidget.push_back(&rr);
 	rr.show();
@@ -188,7 +89,6 @@ void cGame::MainGame() {
 		//}
 
 
-
 		if (GetAsyncKeyState(0x51) < 0) {
 			isExit = true;
 			break;
@@ -203,8 +103,8 @@ void cGame::MainGame() {
 			isLose = true;
 			Sleep(2000);
 			cGameEngine::refreshBackGround(true);
-			cDWindow a(&cWidget::window, { 0,0 }, "tr", "Sprites//map_forest.txt");
-			cDWindow pa(&a, { 101, 31 }, "ttq", "Sprites//failedbox.txt");
+			cDWindow a(&cWidget::window, { 0,0 }, "tr", "map_forest.txt");
+			cDWindow pa(&a, { 101, 31 }, "ttq", "failedbox.txt");
 			pa.show();
 			while (true)
 			{
@@ -239,15 +139,10 @@ void cGame::MainGame() {
 			livePeople[i]->move();
 		}
 
-		if (isFinishLevel()) {
-			this->gameLevel++;
-			gameMap::nextMap();
-			calculatePoint();
-			cout << "Total point: " << totalPoint << endl;
-			cout << "Total time: " << totalTime << endl;
-			isPause = true;
-			std::system("pause");
-			break;
+		if (livePeople[0]->passLevel) {
+			t2.updateText(to_string(totalPoint));
+			nextLevel();
+			livePeople[0]->passLevel = false;
 		}
 		Sleep(10);
 	}
@@ -262,14 +157,7 @@ void cGame::MainGame() {
 	}
 }
 
-void cGame::gameThread() {
-	/*thread t1(&cGame::threadFunction1, this);
-	thread t2(&cGame::threadFunction2, this);*/
-	//auto future1 = async(launch::async, &cGame::checkImpactThread, this);
-	//auto future2 = async(launch::async, &cGame::drawThread, this);
-	//auto future3 = async(launch::async, &cGame::movingThread, this);
-	//movingThread();
-}
+
 
 bool cGame::isImpact()
 {
@@ -289,7 +177,7 @@ bool cGame::isImpact()
 							isPause = true;
 							livePeople[i]->isDead();
 							Sound::playHitSound();
-							impactEffect(cnt);
+							cGameEngine::playEffect(obstacle, livePeople[i]);
 							return true;
 						}
 					}
@@ -299,45 +187,8 @@ bool cGame::isImpact()
 	return false;
     //return livePeople.empty();
 }
-//
-//void cGame::checkImpactThread() {
-//	while (true) {
-//		if (isImpact()) {
-//			break;
-//		}
-//	}
-//	//stopDrawAnimal();
-//	drawLosingTitle();
-//}
 
-void cGame::drawThread() {
 
-}
-
-void cGame::movingThread() {
-	char MOVING;
-	while (true) {
-		MOVING = toupper(_getch());
-		if (MOVING == 'P') {
-			pauseGame();
-		}
-		else if (MOVING == 'R') {
-			resumeGame();
-		}
-		else if (MOVING == 'L') {
-			//loadGame();
-		}
-		else if (MOVING == 'O') {
-			//saveGame();
-		}
-		else if (MOVING == 27) {
-			//exitGame(t);
-		}
-		else {
-			//updatePosPeople(MOVING);
-		}
-	}
-}
 
 void cGame::despawnThread()
 {
@@ -437,15 +288,74 @@ void cGame::resumeGame() {
 	//continueDrawAnimal();
 }
 
+void cGame::save(void) {
+	string filename = "test.bin"; // placeholder filename
 
+	ofstream ofs;
+	ofs.open(filename, ios::binary);
+
+	ofs.write((char*)&gameOrder, sizeof(short));
+	ofs.write((char*)&gameLevel, sizeof(short));
+	ofs.write((char*)&map, sizeof(int));
+	ofs.write((char*)&totalPoint, sizeof(long));
+	ofs.write((char*)&totalTime, sizeof(double));
+
+	short* peoplePosition = new short[gameOrder * 2];
+	int count = 0;
+	for (cPeople* element : livePeople)
+	{
+		peoplePosition[count] = element->getPos().X;
+		count++;
+		peoplePosition[count] = element->getPos().Y;
+		count++;
+	}
+	ofs.write((char*)peoplePosition, sizeof(short) * gameOrder * 2);
+	delete[] peoplePosition;
+	peoplePosition = nullptr;
+
+	int obstacleCount = (int)liveObstacles.size();
+	ofs.write((char*)&obstacleCount, sizeof(int));
+
+	char* obstacleType = new char[obstacleCount];
+
+	short* obstacleInfo = new short[obstacleCount * 3];
+	for (int count = 0; count < obstacleCount; count++)
+	{
+		obstacleType[count] = liveObstacles[count]->getType();
+		obstacleInfo[3 * count] = liveObstacles[count]->getPos().X;
+		obstacleInfo[3 * count + 1] = liveObstacles[count]->getPos().Y;
+		obstacleInfo[3 * count + 2] = liveObstacles[count]->getSpeed();
+	}
+
+	ofs.write(obstacleType, obstacleCount);
+	ofs.write((char*)obstacleInfo, sizeof(short) * obstacleCount * 3);
+
+	delete[] obstacleType;
+	obstacleType = nullptr;
+	delete[] obstacleInfo;
+	obstacleInfo = nullptr;
+
+	ofs.close();
+	resumeGame();
+}
+
+void saveTest() {
+	return;
+}
 
 void cGame::saveGame() {
     pauseGame();
     
-    string filename = "test.bin"; // placeholder filename
     
-    ofstream ofs;
-    ofs.open(filename, ios::binary);
+    cDWindow saveWindow(&cWidget::window, { 0, 0 }, "saveWindow", "saveWindow.txt");
+	saveWindow.show();
+	cLabel saveLabel(&saveWindow, { 10, 5 }, "saveLabel", "SAVE GAME", 1, Color::red);
+	saveLabel.show();
+	void *saveTestPtr = saveTest;
+	cButton button1(&saveWindow, { 10, 10 }, "button1", "saveButton.txt", 3, saveTest);
+	cButton button2(&saveWindow, { 10, 15 }, "button2", "saveButton.txt", 3, saveTest);
+	cButton button3(&saveWindow, { 10, 15 }, "button2", "saveButton.txt", 3, saveTest);
+
     
     // draw a mini box in center as an input field
     // user input save name <= 20 characters
@@ -465,49 +375,38 @@ void cGame::saveGame() {
     
     // note: stop status not recorded yet
     
-    ofs.write((char *) &gameOrder, sizeof(short));
-    ofs.write((char *) &gameLevel, sizeof(short));
-    ofs.write((char *) &map, sizeof(int));
-    ofs.write((char *) &totalPoint, sizeof(long));
-    ofs.write((char *) &totalTime, sizeof(double));
-    
-    short * peoplePosition = new short [gameOrder * 2];
-    int count = 0;
-    for (cPeople* element : livePeople)
-    {
-        peoplePosition[count] = element->getPos().X;
-        count++;
-        peoplePosition[count] = element->getPos().Y;
-        count++;
-    }
-    ofs.write((char *) peoplePosition, sizeof(short) * gameOrder * 2);
-    delete [] peoplePosition;
-    peoplePosition = nullptr;
-    
-    int obstacleCount = (int) liveObstacles.size();
-    ofs.write((char *) &obstacleCount, sizeof(int));
-    
-    char * obstacleType = new char [obstacleCount];
-    
-    short * obstacleInfo = new short [obstacleCount * 3];
-    for (int count = 0; count < obstacleCount; count++)
-    {
-        obstacleType[count] = liveObstacles[count] -> getType();
-        obstacleInfo[3 * count] = liveObstacles[count] -> getPos().X;
-        obstacleInfo[3 * count + 1] = liveObstacles[count] -> getPos().Y;
-        obstacleInfo[3 * count + 2] = liveObstacles[count] -> getSpeed();
-    }
-    
-    ofs.write(obstacleType, obstacleCount);
-    ofs.write((char *) obstacleInfo, sizeof(short) * obstacleCount * 3);
-    
-    delete [] obstacleType;
-    obstacleType = nullptr;
-    delete [] obstacleInfo;
-    obstacleInfo = nullptr;
+	
+}
 
-	ofs.close();
-	resumeGame();
+void cGame::LoadGame() {
+	// draw load game menu // has a box to show list of save game
+	// has choices: choose save game and load, back to previous menu
+	// if user choose choose save game and load => load game to play
+	// if user choose back to previous menu => back to previous menu
+
+	// show files saved before
+	ifstream ifs("saved.txt");
+	string line;
+	while (getline(ifs, line)) {
+		cout << line << endl;
+	}
+	ifs.close();
+
+	// choose file to load 
+	string filename;
+	// draw a box for user to choose file to load
+	// if name is not exist => ask user to enter again
+	// if name is exist => load game
+
+	ifs.open(filename);
+	if (ifs.is_open()) {
+		// load game and start game
+	}
+	else {
+		// ask user to enter again
+	}
+	ifs.close();
+
 }
 
 cGame::cGame (string saveFile) // load game (create cGame object) from save file
@@ -576,110 +475,9 @@ void cGame::spawnPeople() {
 	}
 }
 
-void cGame::impactEffect(int i) {
-	string effectList[]{ "fxframe.txt", "base.txt", "purple.txt", "blast.txt", "explosion1.txt","explosion2.txt", "explosion3.txt","fade1.txt", "fade2.txt", "fade3.txt", "dissappear.txt" };
-	vector<Texture> f;
-	ifstream test;
-	for (auto name : effectList)
-	{
-		test.open(name);
-		if (test.is_open())
-		{
-			Texture a;
-			test >> a.height >> a.width;
-			a.textureArray = new CHAR_INFO[a.height * a.width];
+void cGame::impactEffect(cObstacle* obsta) {
 
-			for (int i = 0; i < a.height; i++)
-			{
-				//  BlankSegment bla;
-				//  bool encounter = false;
-
-				for (int j = 0; j < a.width; j++)
-				{
-					int x;
-					test >> x;
-					if (x != 16 && x != 17)
-					{
-						/*   if (encounter) {
-							   encounter = false;
-							   loaded.blankTexture[i].push_back(bla);
-						   }*/
-						CHAR_INFO t = { L'█', WORD( x * 16 + x)};
-						a.textureArray[i * a.width + j] = t;
-
-					}
-					else {
-						/* if (!encounter) {
-							 encounter = true;
-							 bla.start = j;
-							 bla.end = bla.start - 1;
-						 }
-						 bla.end++;*/
-						CHAR_INFO t = { L' ', WORD(0)};
-						a.textureArray[i * a.width + j] = t;
-					}
-				}
-			}
-			f.push_back(a);
-		}
-		test.close();
-	}
-	short w = f[0].width;
-	short h = f[0].height;
-	COORD writepos = { 100, 31 };
-	CHAR_INFO* fxBG = new CHAR_INFO[w*h];
-	memcpy(fxBG, f[0].textureArray, w * h * sizeof(CHAR_INFO));
-	for (int i = 0; i < w * h; i++)
-	{
-		if (fxBG[i].Char.UnicodeChar == L' ')
-		{
-			fxBG[i].Attributes = cGameEngine::mainBuffer[(writepos.Y + i / w) * gameMap::getCurrentMap()->width + writepos.X + (i % w)].Attributes;
-		}
-	}
-	SMALL_RECT fxframe = { writepos.X, writepos.Y, writepos.X + w - 1, writepos.Y + h - 1 };
-	WriteConsoleOutput(cGameEngine::curHandle, fxBG, { w, h }, { 0,0 }, &fxframe);
-
-	COORD p{ writepos.X + 120, writepos.Y + 40 };
-	for (int i = 0; i < livePeople.size(); i++)
-	{
-		short pw = livePeople[i]->pTexture->width;
-		short ph = livePeople[i]->pTexture->height;
-
-		CHAR_INFO* framePlayer = new CHAR_INFO[pw * ph];
-		memcpy(framePlayer, livePeople[i]->pTexture->textureArray, pw * ph * sizeof(CHAR_INFO));
-		for (int j = 0; j < pw * ph; j++)
-		{
-			if (framePlayer[j].Char.UnicodeChar == L' ')
-			{
-				framePlayer[i].Attributes = fxBG[(p.Y - writepos.Y + j / pw) * w + p.X - writepos.X + (j % pw)].Attributes;
-			}
-		}
-		SMALL_RECT playerRect = { p.X, p.Y, p.X + pw - 1, p.Y + ph - 1 };
-		WriteConsoleOutput(cGameEngine::curHandle, framePlayer, { pw, ph }, { 0, 0 }, &playerRect);
-		delete[]framePlayer;
-	}
-	Sleep(200);
-	for (int j = 1; j < f.size(); j++)
-	{
-		COORD topleft = {writepos.X + 50, writepos.Y + 25};
-		CHAR_INFO* readyBuffer = new CHAR_INFO[f[j].width * f[j].height];
-		memcpy(readyBuffer, f[j].textureArray, f[j].width * f[j].height * sizeof(CHAR_INFO));
-
-		for (int i = 0; i < f[j].width * f[j].height; i++)
-		{
-			if (readyBuffer[i].Char.UnicodeChar == L' ') {
-				readyBuffer[i].Attributes = fxBG[((topleft.Y - writepos.Y) + i / f[j].width) * w + topleft.X - writepos.X + (i % f[j].width)].Attributes;
-			}
-		}
-
-		SMALL_RECT reg = { topleft.X , topleft.Y,  topleft.X + f[j].width - 1, topleft.Y + f[j].height - 1 };
-		WriteConsoleOutput(cGameEngine::curHandle, fxBG, { w, h }, { 0,0 }, &fxframe);
-		WriteConsoleOutput(cGameEngine::curHandle, readyBuffer, { f[j].width , f[j].height }, { 0,0 }, &reg);
-		delete[]readyBuffer;
-		//system("pause");
-		Sleep(100);
-	}
-	delete[]fxBG;
+	
 
 }
 
@@ -729,7 +527,7 @@ void cGame::spawnObstacle() {
 }
 
 bool cGame::isFinishLevel() {
-	return (livePeople[0]->getPos().Y == 0);
+	return (livePeople[0]->getPos().Y <= 2);
 	
 }
 
@@ -767,15 +565,21 @@ void cGame::nextLevel() {
 	calculatePoint();
 	// set position of people
 	for (int i = 0; i < livePeople.size(); i++) {
-		livePeople[i]->setPos({ 200, 100 });
+		livePeople[i]->setPos({ 0, 145 });
+		for (int i = 0; i < livePeople[i]->mBoxes.size(); i++)
+		{
+			livePeople[i]->mBoxes[i].set({ short(livePeople[i]->topleft.X), short(livePeople[i]->topleft.Y) }, { short(livePeople[i]->pTexture->getWidth() + livePeople[i]->topleft.X - 1), short(livePeople[i]->pTexture->getHeight() + livePeople[i]->topleft.Y - 1) });
+		}
 	};
 	// respawn obstacle
 	for (int i = 0; i < liveObstacles.size(); i++) {
 		delete liveObstacles[i];
 	};
+	
 	liveObstacles.clear();
 	spawnObstacle();
 }
+
 void cGame::endlessMode() {
 	spawnPeople();
 	spawnObstacle();
@@ -890,10 +694,4 @@ void cGame::resetGame() {
 		endlessMode();
 	}*/
 	MainGame();
-}
-void cGame::LoadGame() {
-	// draw load game menu // has a box to show list of save game
-	// has choices: choose save game and load, back to previous menu
-	// if user choose choose save game and load => load game to play
-	// if user choose back to previous menu => back to previous menu
 }

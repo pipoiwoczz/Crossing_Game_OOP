@@ -63,12 +63,19 @@ bool cPeople::move() {
 
 	}
 
-	if (GetAsyncKeyState(VK_UP) < 0 && topleft.Y > 1) {
-		dy--;
-		horizon = false;
-		ismove = true;
+	if (GetAsyncKeyState(VK_UP) < 0) {
+		if (topleft.Y > 1) 
+		{
+			dy--;
+			horizon = false;
+			ismove = true;
+		}
+		else {
+			passLevel = true;
+			
+		}
 
-	}
+	} 
 
 	if (GetAsyncKeyState(VK_DOWN) < 0 && topleft.Y < PlayBoxRect.Bottom - pTexture->getHeight() + 1) {
 		dy++;
@@ -76,7 +83,7 @@ bool cPeople::move() {
 		ismove = true;
 
 	}
-	if (ismove)
+	if (ismove )
 	{
 		if (horizon)
 			topleft.X += dx * pTexture->getWidth();

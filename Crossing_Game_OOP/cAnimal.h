@@ -1,7 +1,7 @@
 #ifndef _CANIMAL_H
 #define _CANIMAL_H
 #include "cObstacle.h"
-
+#include "cAsset.h"
 class cAnimal: public cObstacle {
 private:
 
@@ -13,8 +13,9 @@ class cLion : public cAnimal {
     static cObstacle * bootstrapObjectcLion;
     static vector<Texture> hitEffectFrame;
 	static vector<Texture> textureLion;
-
+    
 public:
+    static vector<Texture> impactEffect;
 	cLion();
     cLion (COORD In_pos, int speed);
     ~cLion();
@@ -33,7 +34,7 @@ class cRhino : public cAnimal {
     static cObstacle * bootstrapObjectcRhino;
 
 	static vector<Texture> textureRhino;
-
+    static vector<Texture> impactEffect;
 public:
 	cRhino();
 	cRhino(COORD In_pos, int speed);
@@ -51,7 +52,7 @@ class cCrocodile : public cAnimal {
     static cObstacle * bootstrapObjectcCrocodile;
 
 	static vector<Texture> textureCroco;
-
+    static vector<Texture> impactEffect;
 
 public:
 	cCrocodile();

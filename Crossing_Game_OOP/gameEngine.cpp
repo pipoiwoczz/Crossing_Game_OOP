@@ -361,3 +361,46 @@ void cGameEngine::unshowLabel(cLabel* pLabel, bool instant)
 		SetConsoleActiveScreenBuffer(curHandle);
 }
 
+void cGameEngine::playEffect(cObstacle* obsta, cPeople* player) {
+	vector<Texture> f;
+	if (obsta->getType() == 'l')
+		f = cAsset::assetLoaders(lionImpactEffect);
+	short w = f[0].width;
+	short h = f[0].height;
+	COORD writepos = { 100, 31 };
+	memcpy(mainBuffer, f[0].textureArray, w * h * sizeof(CHAR_INFO));
+	for (int i = 0; i < w * h; i++)
+	{
+		if (mainBuffer[i].Char.UnicodeChar == L' ')
+		{
+			mainBuffer[i].Attributes = cGameEngine::mainBuffer[(writepos.Y + i / w) * gameMap::getCurrentMap()->width + writepos.X + (i % w)].Attributes;
+		}
+	}
+	
+
+	SMALL_RECT fxframe = { writepos.X, writepos.Y, writepos.X + w - 1, writepos.Y + h - 1 };
+	WriteConsoleOutput(cGameEngine::curHandle, mainBuffer, { w, h }, { 0,0 }, &fxframe);
+
+	COORD p{ writepos.X + 120, writepos.Y + 40 };
+	//cGameEngine::renderPeople(player);
+
+	Sleep(200);
+	for (int j = 1; j < f.size(); j++)
+	{
+		COORD topleft = {writepos.X + 50, writepos.Y + 25};
+		memcpy(reservedBuffer, f[j].textureArray, f[j].width * f[j].height * sizeof(CHAR_INFO));
+
+		for (int i = 0; i < f[j].width * f[j].height; i++)
+		{
+			if (reservedBuffer[i].Char.UnicodeChar == L' ') {
+				reservedBuffer[i].Attributes = mainBuffer[((topleft.Y - writepos.Y) + i / f[j].width) * w + topleft.X - writepos.X + (i % f[j].width)].Attributes;
+			}
+		}
+
+		SMALL_RECT reg = { topleft.X , topleft.Y,  topleft.X + f[j].width - 1, topleft.Y + f[j].height - 1 };
+		WriteConsoleOutput(cGameEngine::curHandle, mainBuffer, { w, h }, { 0,0 }, &fxframe);
+		WriteConsoleOutput(cGameEngine::curHandle, reservedBuffer, { f[j].width , f[j].height }, { 0,0 }, &reg);
+		//system("pause");
+		Sleep(100);
+	}
+}

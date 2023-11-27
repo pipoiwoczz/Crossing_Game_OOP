@@ -73,6 +73,7 @@ public:
 	static void maindraw(cGame* pGame);
 	static void updateInfo(cGame* pGame);
 	static void pizzaDraw(cGame* pGame);
+	static void playEffect(cObstacle* obsta, cPeople* people);
 	//For label rendering
 };
 

@@ -8,10 +8,10 @@ const vector<string> crocoFile { "croco.txt" };
 const vector<string> truckFile { "truck.txt" };
 const vector<string> heliFile { "heli.txt" };
 const vector<string> motorbFile { "motorb.txt" };
+const vector<string> lionImpactEffect { "fxframe.txt", "base.txt", "purple.txt", "blast.txt", "explosion1.txt","explosion2.txt", "explosion3.txt","fade1.txt", "fade2.txt", "fade3.txt", "dissappear.txt" };
+const vector<string> maplist { "menuBG.txt", "map_forest.txt" };
 
-const vector<string> maplist { "Sprites//menuBG.txt", "Sprites//map_forest.txt" };
-
-const vector<string> peopleFile { "Sprites//player.txt" };
+const vector<string> peopleFile { "player.txt" };
 
 class cGameEngine;
 class Texture {

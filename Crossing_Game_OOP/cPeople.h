@@ -12,6 +12,7 @@ class cPeople {
     COORD topleft;
 	bool mState; // true is alive, false is dead =))
 	int moveCooldown;
+	bool passLevel = false;
 
 	public:
 		friend class cGame;
