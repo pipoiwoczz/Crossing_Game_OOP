@@ -154,42 +154,83 @@ void cGame::updatePosObstacle()
 	}
 }
 
-
 void cGame::MainGame() {
 	//drawBackGround();
 	spawnPeople();
-	//spawnObstacle();
+	spawnObstacle();
 	//resetTime();
 	for (int i = 0; i < livePeople.size(); i++)
 	{
 		cGameEngine::renderPeople(livePeople[i]);
 		}
 	gameMap::changeMap(BGIndex::Jungle);
-	thread drawingThread(&cGameEngine::pizzaDraw, this);
+	thread drawingThread(&cGameEngine::maindraw, this);
 	Sound::playSoundList();
 	Sound::playBackGroundSound();
 	//Sound::musicThread();
 	DWORD his;
+	cDWindow rr(&cWidget::window, { 504, 0 }, "te", "Sprites//info.txt");
+	cLabel t1(&rr, { 10, 5 }, "t1", "SCORES", 1, Color::red);
+	
+	cLabel t2(&rr, { 10, 15 }, "t2", "999999999", 2, Color::red);
 
+	listWidget.push_back(&rr);
+	listLabel.push_back(&t1);
+	listLabel.push_back(&t2);
+
+	int i = 0;
 	while (true) {
-		//if (GetAsyncKeyState(0x50) < 0) {
+		//if (GetAsyncKeyState(0x50) < 0) {d
 		//	pauseGame();
 		//	break;
 		//}
+
+
+
 		if (GetAsyncKeyState(0x51) < 0) {
 			isExit = true;
 			break;
 		}
 		if (GetAsyncKeyState(0x10) < 0) {
-			Sound::increaseSoundBackground();
+			t2.updateText(to_string(i++));
 		}
 		if (GetAsyncKeyState(0x11) < 0) {
-			Sound::reduceSoundBackground();
 		}
-			if (isImpact())
+		if (isImpact())
 		{
 			isLose = true;
-			
+			Sleep(2000);
+			cGameEngine::refreshBackGround(true);
+			cDWindow a(&cWidget::window, { 0,0 }, "tr", "Sprites//map_forest.txt");
+			cDWindow pa(&a, { 101, 31 }, "ttq", "Sprites//failedbox.txt");
+			pa.show();
+			while (true)
+			{
+				if (GetAsyncKeyState(0x51) < 0)
+				{
+					break;
+				}
+
+				if (GetAsyncKeyState(0x11) < 0)
+				{
+					for (int i = 0; i < liveObstacles.size(); i++)
+					{
+						delete liveObstacles[i];
+					}
+					for (int i = 0; i < livePeople.size(); i++)
+					{
+						delete livePeople[i];
+					}
+					liveObstacles.resize(0);
+					livePeople.resize(0);
+					spawnObstacle();
+					spawnPeople();
+					isLose = false;
+					isPause = false;
+					break;
+				}
+			}
+			pa.unshow();
 		}
 		
 		for (int i = 0; i < gameOrder; i++) {
@@ -209,6 +250,14 @@ void cGame::MainGame() {
 		Sleep(10);
 	}
 	drawingThread.join();
+	for (int i = 0; i < listWidget.size(); i++)
+	{
+		listWidget[i]->unshow();
+	}
+	for (int i = 0; i < listLabel.size(); i++)
+	{
+		listLabel[i]->unshow();
+	}
 }
 
 void cGame::gameThread() {
@@ -526,7 +575,7 @@ void cGame::spawnPeople() {
 }
 
 void cGame::impactEffect(int i) {
-	string effectList[]{ "base.txt", "purple.txt", "blast.txt", "explosion1.txt","explosion2.txt", "explosion3.txt","fade1.txt", "fade2.txt", "fade3.txt", "dissappear.txt" };
+	string effectList[]{ "fxframe.txt", "base.txt", "purple.txt", "blast.txt", "explosion1.txt","explosion2.txt", "explosion3.txt","fade1.txt", "fade2.txt", "fade3.txt", "dissappear.txt" };
 	vector<Texture> f;
 	ifstream test;
 	for (auto name : effectList)
@@ -573,29 +622,62 @@ void cGame::impactEffect(int i) {
 		}
 		test.close();
 	}
-
-
-	for (auto e : f)
+	short w = f[0].width;
+	short h = f[0].height;
+	COORD writepos = { 100, 31 };
+	CHAR_INFO* fxBG = new CHAR_INFO[w*h];
+	memcpy(fxBG, f[0].textureArray, w * h * sizeof(CHAR_INFO));
+	for (int i = 0; i < w * h; i++)
 	{
-		COORD topleft = this->liveObstacles[i]->getPos();
-		topleft = {short(max(topleft.X, 0)), short(max(topleft.Y, 0))};
-		CHAR_INFO* readyBuffer = new CHAR_INFO[e.width * e.height];
-		memcpy(readyBuffer, e.textureArray, e.width * e.height * sizeof(CHAR_INFO));
+		if (fxBG[i].Char.UnicodeChar == L' ')
+		{
+			fxBG[i].Attributes = cGameEngine::mainBuffer[(writepos.Y + i / w) * gameMap::getCurrentMap()->width + writepos.X + (i % w)].Attributes;
+		}
+	}
+	SMALL_RECT fxframe = { writepos.X, writepos.Y, writepos.X + w - 1, writepos.Y + h - 1 };
+	WriteConsoleOutput(cGameEngine::curHandle, fxBG, { w, h }, { 0,0 }, &fxframe);
 
-		for (int i = 0; i < e.width * e.height; i++)
+	COORD p{ writepos.X + 120, writepos.Y + 40 };
+	for (int i = 0; i < livePeople.size(); i++)
+	{
+		short pw = livePeople[i]->pTexture->width;
+		short ph = livePeople[i]->pTexture->height;
+
+		CHAR_INFO* framePlayer = new CHAR_INFO[pw * ph];
+		memcpy(framePlayer, livePeople[i]->pTexture->textureArray, pw * ph * sizeof(CHAR_INFO));
+		for (int j = 0; j < pw * ph; j++)
+		{
+			if (framePlayer[j].Char.UnicodeChar == L' ')
+			{
+				framePlayer[i].Attributes = fxBG[(p.Y - writepos.Y + j / pw) * w + p.X - writepos.X + (j % pw)].Attributes;
+			}
+		}
+		SMALL_RECT playerRect = { p.X, p.Y, p.X + pw - 1, p.Y + ph - 1 };
+		WriteConsoleOutput(cGameEngine::curHandle, framePlayer, { pw, ph }, { 0, 0 }, &playerRect);
+		delete[]framePlayer;
+	}
+	Sleep(200);
+	for (int j = 1; j < f.size(); j++)
+	{
+		COORD topleft = {writepos.X + 50, writepos.Y + 25};
+		CHAR_INFO* readyBuffer = new CHAR_INFO[f[j].width * f[j].height];
+		memcpy(readyBuffer, f[j].textureArray, f[j].width * f[j].height * sizeof(CHAR_INFO));
+
+		for (int i = 0; i < f[j].width * f[j].height; i++)
 		{
 			if (readyBuffer[i].Char.UnicodeChar == L' ') {
-				readyBuffer[i].Attributes = gameMap::getCurrentMap()->mapArray[(topleft.Y + i / e.width) * gameMap::getCurrentMap()->width + topleft.X + (i % e.width)].Attributes;
+				readyBuffer[i].Attributes = fxBG[((topleft.Y - writepos.Y) + i / f[j].width) * w + topleft.X - writepos.X + (i % f[j].width)].Attributes;
 			}
 		}
 
-		SMALL_RECT reg = { topleft.X , topleft.Y,  topleft.X + e.width - 1, topleft.Y + e.height - 1 };
-
-		WriteConsoleOutput(cGameEngine::curHandle, readyBuffer, { e.width , e.height }, { 0,0 }, &reg);
+		SMALL_RECT reg = { topleft.X , topleft.Y,  topleft.X + f[j].width - 1, topleft.Y + f[j].height - 1 };
+		WriteConsoleOutput(cGameEngine::curHandle, fxBG, { w, h }, { 0,0 }, &fxframe);
+		WriteConsoleOutput(cGameEngine::curHandle, readyBuffer, { f[j].width , f[j].height }, { 0,0 }, &reg);
 		delete[]readyBuffer;
 		//system("pause");
-		Sleep(120);
+		Sleep(100);
 	}
+	delete[]fxBG;
 
 }
 
@@ -757,6 +839,7 @@ void cGame::endlessMode() {
 		Sleep(10);
 	}
 	drawingThread.join();
+
 }
 void cGame::GameOver() {
 	// draw game over animation // has  a box to know game point and time

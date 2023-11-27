@@ -101,10 +101,10 @@ void cObstacle::advanceTime(int time)
 
 void cObstacle::move() {
     if (isStop) return;
-    topleft.X = (topleft.X + 1) % (My_Windows.Right);
+    topleft.X = (topleft.X + 1) % (PlayBoxRect.Right);
     for (int i = 0; i < boxes.size(); i++)
     {
-        boxes[i].set({ short(topleft.X + 10), short(topleft.Y + 10) }, { short((topleft.X + pTexture->getWidth() - 10) % My_Windows.Right), short((topleft.Y + pTexture->getHeight() - 10) % My_Windows.Bottom) });
+        boxes[i].set({ short(topleft.X + 10), short(topleft.Y + 10) }, { short((topleft.X + pTexture->getWidth() - 10) % PlayBoxRect.Right), short((topleft.Y + pTexture->getHeight() - 10) % PlayBoxRect.Bottom) });
     }
 }
 

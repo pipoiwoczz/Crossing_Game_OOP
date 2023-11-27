@@ -56,7 +56,7 @@ bool cPeople::move() {
 		ismove = true;
 	}
 
-	if (GetAsyncKeyState(VK_RIGHT) < 0 && topleft.X < My_Windows.Right - pTexture->getWidth()) {
+	if (GetAsyncKeyState(VK_RIGHT) < 0 && topleft.X < PlayBoxRect.Right - pTexture->getWidth()) {
 		dx++;	
 		horizon = true;
 		ismove = true;
@@ -70,7 +70,7 @@ bool cPeople::move() {
 
 	}
 
-	if (GetAsyncKeyState(VK_DOWN) < 0 && topleft.Y < My_Windows.Bottom - pTexture->getHeight() + 1) {
+	if (GetAsyncKeyState(VK_DOWN) < 0 && topleft.Y < PlayBoxRect.Bottom - pTexture->getHeight() + 1) {
 		dy++;
 		horizon = false;
 		ismove = true;

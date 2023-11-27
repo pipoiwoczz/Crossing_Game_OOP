@@ -18,6 +18,7 @@ protected:
 	PHANDLE pHandle;
 	string tag;
 	COORD topleft;
+	COORD offset;
 	COORD botright;
 	cWidget* parentWindow = nullptr;;
 	Texture WidgetFace;
@@ -26,11 +27,13 @@ protected:
 public:
 	static cWidget window;
 	static bool createMainWindow(const string& tagName);
-	virtual void show();
-	virtual void unshow();
+	virtual void show(bool showNow = true);
+	virtual void unshow(bool showNow = true);
 	friend cDWindow;
 	friend cButton;
 	friend cLabel;
+
+	friend cGameEngine;
 };
 
 
@@ -41,8 +44,8 @@ public:
 	cDWindow(cWidget* parent, COORD Topleft, const string& tagName, const string& imgSrc);
 	cDWindow(cDWindow* parent, COORD Topleft, const string& tagName, const string& imgSrc);
 
-	void show();
-	void unshow();
+	void show(bool showNow = true);
+	void unshow(bool showNow = true);
 };
  
 class cButton: public cWidget {
@@ -52,14 +55,14 @@ private:
 	COORD OBotright;
 	int bordDensity;
 	void (*buttonFunction) (void) = nullptr;
-	void highLight();
-	void unHighLight();
+	void highLight(bool showNow = true);
+	void unHighLight(bool showNow = true);
 public:
 	friend cGameEngine;
 	cButton(cDWindow* parent, COORD offsetFromParentTopleft,const string& tagName, const string& imgSrc, int borderDensity, void (*pFunction) (void));
 
-	void show();
-	void unshow();
+	void show(bool showNow = true);
+	void unshow(bool showNow = true);
 
 	void onSelect();
 	void onDeSelect();
@@ -82,14 +85,16 @@ private:
 	PHANDLE pHandle;
 	string tag;
 	COORD topleft;
+	COORD offset;
 	COORD botright;
 
 	vector<tchar> textLine;
 	void createTextline();
 public:
+	friend cGameEngine;
 	cLabel(cDWindow* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& text, const short& align, Color textColor);
-	void show();
-	void unshow();
+	void show(bool showNow = true);
+	void unshow(bool showNow = true);
 	void updateText(const string& newText);
 };
 #endif

@@ -48,6 +48,8 @@ void b1F(void)
 	cButton map3(&mapMenu, { 158, 20 }, "map1", "Sprites//jungleicon.txt", 1, pmap3);
 
 	cButton buttonlist[3] = { map1, map2, map3 };
+
+
 	int x = 0;
 	for (int i = 0; i < 3; i++)
 	{
@@ -88,9 +90,12 @@ void b1F(void)
 		}
 		Sleep(100);
 	}
-	map1.unshow();
+	for (int i = 0; i < 3; i++)
+	{
+		buttonlist[i].unshow();
+	}
 	mapMenu.unshow();
-	
+
 }
 void b2F(void)
 {
@@ -102,7 +107,6 @@ void b3F(void)
 }
 
 int main() {
-	//Graphic gr;
 	br.show();
 
 	cButton b1(&br, { 402, 55 }, "b1", "Sprites//playbutton.txt", 1, b1F);
@@ -116,6 +120,7 @@ int main() {
 		buttonlist[i].show();
 	}
 	buttonlist[x].onSelect();
+
 	while (running)
 	{
 		if (GetAsyncKeyState(0x51) < 0)
@@ -148,14 +153,16 @@ int main() {
 			buttonlist[x].onSelect();
 		}
 		Sleep(200);
-
-		
-
-
+	}
+	buttonlist[x].onDeSelect();
+	for (int i = 0; i < 3; i++)
+	{
+		buttonlist[i].unshow();
 	}
 	//b.unshow();
 	////_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
 	////_CrtDumpMemoryLeaks();
+	br.unshow();
 	cGameEngine::cleanEngine();
 }
 

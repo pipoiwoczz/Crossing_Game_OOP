@@ -5,15 +5,17 @@ class cObstacle;
 class cPeople;
 void cleanGame();
 
+class cWidget;
 class cGameEngine;
+class cLabel;
 class cGame {
 
 	friend cGameEngine;
-    
     vector<cObstacle *> liveObstacles;
     
     vector<cPeople *> livePeople;
-
+	vector<cWidget*> listWidget;
+	vector<cLabel*> listLabel;
 	short gameOrder, gameLevel; // order: 1 or 2 player
 	bool isPause, isExit;
 	int map = 0; // map = 1 -> city, map = 2 -> forest, map = 3 -> beach

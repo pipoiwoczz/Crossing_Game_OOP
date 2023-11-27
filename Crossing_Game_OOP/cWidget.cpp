@@ -8,6 +8,7 @@ cWidget::cWidget(cWidget* parent, COORD offsetFromParentTopleft, const string& t
 {
 	if (!parent)
 		return;
+	offset = offsetFromParentTopleft;
 	IsVisible = false;
 	pHandle = &cGameEngine::curHandle;
 	tag = tagName;
@@ -38,47 +39,34 @@ bool cWidget::createMainWindow(const string& tagName)
 		window.botright = { My_Windows.Right, My_Windows.Bottom };
 		window.tag = tagName;
 		window.parentWindow = nullptr;
+		window.WidgetFace.textureArray = nullptr;
 	}
 	return true;
 }
 
-void cWidget::show()
+void cWidget::show(bool showNow)
 {
 	IsVisible = true;
-	SMALL_RECT region = { topleft.X, topleft.Y, botright.X, botright.Y };
-	WriteConsoleOutput(*pHandle, WidgetFace.textureArray, { WidgetFace.getWidth(), WidgetFace.getHeight() }, { 0,0 }, &region);
-	SetConsoleActiveScreenBuffer(*pHandle);	
+	cGameEngine::showWidget(this, showNow);
 }
 
-void cWidget::unshow()
+void cWidget::unshow(bool showNow)
 {
 	IsVisible = false;
-	COORD erasepos = { topleft.X - parentWindow->topleft.X, topleft.Y - parentWindow->topleft.Y };
-	SMALL_RECT region = { topleft.X, topleft.Y, botright.X, botright.Y };
-	short W = WidgetFace.getWidth();
-	short H = WidgetFace.getHeight();
-
-	for (int i = 0; i < W * H; i++)
-	{
-		cGameEngine::reservedBuffer[i].Attributes = parentWindow->WidgetFace.textureArray[(erasepos.Y + i / W) * parentWindow->WidgetFace.getWidth() + erasepos.X - parentWindow->topleft.X + i % W].Attributes;
-	}
-	WriteConsoleOutput(cGameEngine::curHandle, cGameEngine::reservedBuffer, { W, H }, { 0, 0 }, &region);
-	SetConsoleActiveScreenBuffer(*pHandle);
+	cGameEngine::unshowWidget(this, showNow);
 }
-
 
 cDWindow::cDWindow(cWidget* parent, COORD Topleft, const string& tagName, const string& imgSrc) : cWidget(parent, Topleft, tagName, imgSrc) {}
 cDWindow::cDWindow(cDWindow* parent, COORD Topleft, const string& tagName, const string& imgSrc) : cWidget(static_cast<cWidget*> (parent), Topleft, tagName, imgSrc) {}
 
-
-void cDWindow::show()
+void cDWindow::show(bool showNow)
 {
-	cWidget::show();
+	cWidget::show(showNow);
 }
 
-void cDWindow::unshow()
+void cDWindow::unshow(bool showNow)
 {
-	cWidget::unshow();
+	cWidget::unshow(showNow);
 }
 
 
@@ -93,14 +81,14 @@ cButton::cButton(cDWindow* parent, COORD offsetFromParentTopleft, const string& 
 	buttonFunction = pFunction;
 }
 
-void cButton::show()
+void cButton::show(bool showNow)
 {
-	cWidget::show();
+	cWidget::show(showNow);
 }
 
-void cButton::unshow()
+void cButton::unshow(bool showNow)
 {
-	cWidget::unshow();
+	cWidget::unshow(showNow);
 }
 
 void cButton::onSelect()
@@ -115,42 +103,18 @@ void cButton::onDeSelect()
 
 void cButton::onEnter()
 {
-	Sleep(200);
 	buttonFunction();
 }
 
-void cButton::highLight()
+void cButton::highLight(bool showNow)
 {
-	short ow = OBotright.X - OTopleft.X + 1;
-	short oh = OBotright.Y - OTopleft.Y + 1;
-	SMALL_RECT outerRect = { OTopleft.X, OTopleft.Y, OBotright.X, OBotright.Y };
-
-	for (int i = 0; i < ow * oh; i++)
-	{
-		cGameEngine::reservedBuffer[i].Attributes = 16 * 4 + 4;
-	}
-
-	WriteConsoleOutput(*pHandle, cGameEngine::reservedBuffer, { ow , oh }, { 0, 0 }, &outerRect);
-	cWidget::show();
+	cGameEngine::HighLightButton(this, showNow);
 }
 
-void cButton::unHighLight()
+void cButton::unHighLight(bool showNow)
 {
-	COORD erasepos = { OTopleft.X - parentWindow->topleft.X, OTopleft.Y - parentWindow->topleft.Y };
-
-	short ow = OBotright.X - OTopleft.X + 1;
-	short oh = OBotright.Y - OTopleft.Y + 1;
-	SMALL_RECT outerRect = { OTopleft.X, OTopleft.Y, OBotright.X, OBotright.Y };
-
-	for (int i = 0; i < ow * oh; i++)
-	{
-		cGameEngine::reservedBuffer[i].Attributes = parentWindow->WidgetFace.textureArray[(erasepos.Y + i / ow) * parentWindow->WidgetFace.getWidth() + erasepos.X + i % ow].Attributes;
-	}
-
-	WriteConsoleOutput(*pHandle, cGameEngine::reservedBuffer, { ow , oh }, { 0, 0 }, &outerRect);
-	show();
+	cGameEngine::UnHighLightButton(this, showNow);
 }
-
 
 void cLabel::createTextline()
 {
@@ -202,6 +166,7 @@ cLabel::cLabel(cDWindow* parentWindow, COORD offsetFromParentTopleft, const stri
 	this->text = text;
 	color = short(textColor);
 	this->align = align;
+	offset = offsetFromParentTopleft;
 	topleft = { short(parentWindow->topleft.X + offsetFromParentTopleft.X), short(parentWindow->topleft.Y + offsetFromParentTopleft.Y) };
 	topleft = { max(topleft.X, parentWindow->topleft.X), max(topleft.Y, parentWindow->topleft.Y) };
 	createTextline();
@@ -215,50 +180,19 @@ void cLabel::updateText(const string& newText)
 	show();
 }
 
-void cLabel::show()
+void cLabel::show(bool showNow)
 {
 	if (textLine.size() == 0)
 		return;
 	IsVisible = true;
-	for (int i = 0; i < textLine.size(); i++)
-	{
-		if (textLine[i].pos.X > botright.X - textLine[i].pChar->getWidth())
-			break;
-		short iw = textLine[i].pChar->getWidth();
-		short ih = textLine[i].pChar->getHeight();
-		SMALL_RECT charBox = {parentWindow->topleft.X + textLine[i].pos.X, parentWindow->topleft.Y + textLine[i].pos.Y, parentWindow->topleft.X + textLine[i].pos.X + iw - 1, parentWindow->topleft.X + textLine[i].pos.Y + ih - 1};
-		memcpy(cGameEngine::reservedBuffer, textLine[i].pChar->textureArray, iw * ih * sizeof(CHAR_INFO));
-		for (int j = 0; j < iw * ih; j++)
-		{
-			if (textLine[i].pChar->textureArray[j].Char.UnicodeChar != L' ')
-			{
-				cGameEngine::reservedBuffer[j].Attributes = 16 * color + color;
-			}
-			else {
-				cGameEngine::reservedBuffer[j].Attributes = parentWindow->WidgetFace.textureArray[(textLine[i].pos.Y + j / iw) * parentWindow->WidgetFace.getWidth() + textLine[i].pos.X + j % iw].Attributes;
-			}
-		}
-
-		WriteConsoleOutput(cGameEngine::curHandle, cGameEngine::reservedBuffer, {iw, ih}, {0,0}, &charBox);
-		SetConsoleActiveScreenBuffer(cGameEngine::curHandle);
-	}
+	cGameEngine::showLabel(this, showNow);
 }
 
-void cLabel::unshow()
+void cLabel::unshow(bool showNow)
 {
 	if (textLine.size() == 0)
 		return;
 	IsVisible = false;
-	COORD erasepos = { topleft.X - parentWindow->topleft.X, topleft.Y - parentWindow->topleft.Y };
-	SMALL_RECT region = { topleft.X, topleft.Y, botright.X, botright.Y };
-	short W = botright.X - topleft.X + 1;
-	short H = botright.Y - topleft.Y + 1;
-
-	for (int i = 0; i < W * H; i++)
-	{
-		cGameEngine::reservedBuffer[i].Attributes = parentWindow->WidgetFace.textureArray[(erasepos.Y + i / W) * parentWindow->WidgetFace.getWidth() + erasepos.X + i % W].Attributes;
-	}
-	WriteConsoleOutput(cGameEngine::curHandle, cGameEngine::reservedBuffer, { W, H }, { 0, 0 }, &region);
-	SetConsoleActiveScreenBuffer(*pHandle);
+	cGameEngine::showLabel(this, showNow);
 }
 

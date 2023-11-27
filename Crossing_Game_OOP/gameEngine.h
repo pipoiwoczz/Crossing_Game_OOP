@@ -4,22 +4,24 @@
 #include "cWidget.h"
 
 class cGame;
+
+
+
+class cWidget;
 class cButton;
 class cDWindow;
 class cLabel;
+
+
 class cPeople;
 class cObstacle;
 
 class cGameEngine {
 private:
 	static COORD buffsize;
-
 	//Buffer
 	static CHAR_INFO* mainBuffer;
 	static CHAR_INFO* reservedBuffer;
-	static short h;
-	static short w;
-
 
 	//handles for double-buffs tech
 	static HANDLE Hbuffer1;
@@ -38,10 +40,28 @@ private:
 	static void DisableCtrButton(bool Close, bool Min, bool Max);
 	static void disableUserSelection();
 	static void disableCtrlHandler();
+
+	static void showWidget(cWidget* pWidget, bool instant = true);
+	static void unshowWidget(cWidget* pWidget, bool instant = true);
+
+	static void HighLightButton(cButton* pButton, bool instant = true);
+	static void UnHighLightButton(cButton* pButton, bool instant = true);
+
+	static void showLabel(cLabel* pLabel, bool instant = true);
+	static void unshowLabel(cLabel* pLabel, bool instant = true);
+
+	static void fillEffectivePixel(CHAR_INFO*& des, const COORD& desSize, CHAR_INFO*& src, const COORD& srcSize, const COORD& StartCoord);
+
 public:
+	
 	friend cGame;
+	friend cWidget;
+	friend cButton;
+	friend cLabel;
+
 	static HANDLE curHandle;
 
+	//For game rendering
 	static bool startEngine();
 
 	static void cleanEngine();
@@ -49,17 +69,11 @@ public:
 	static void swapHandle();
 
 	static void refreshBackGround(bool fillNow = false);
+
+	static void maindraw(cGame* pGame);
+	static void updateInfo(cGame* pGame);
 	static void pizzaDraw(cGame* pGame);
-
-	friend void cWidget::unshow();
-
-	friend void cButton::highLight();
-	friend void cButton::unHighLight();
-
-	friend void cDWindow::unshow();
-
-	friend void cLabel::show();
-	friend void cLabel::unshow();
+	//For label rendering
 };
 
 #endif

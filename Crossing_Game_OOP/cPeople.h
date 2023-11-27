@@ -14,6 +14,7 @@ class cPeople {
 	int moveCooldown;
 
 	public:
+		friend class cGame;
 		friend class cGameEngine;
 		/*vector<Hitbox> mBoxes;*/
 		vector<Hitbox> mBoxes;
