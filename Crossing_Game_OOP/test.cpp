@@ -6,6 +6,8 @@
 #include "cVehicle.h"
 #include "Sound.h"
 #include "Map.h"
+
+const HANDLE mainHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 vector<cObstacle*> cObstacle::objects;
 cObstacle* cLion::bootstrapObjectcLion = cObstacle::addObject(new cLion());
 cObstacle* cRhino::bootstrapObjectcRhino = cObstacle::addObject(new cRhino());
@@ -109,9 +111,9 @@ void b3F(void)
 int main() {
 	br.show();
 
-	cButton b1(&br, { 402, 55 }, "b1", "Sprites//playbutton.txt", 1, b1F);
-	cButton b2(&br, { 402, 90 }, "b2", "Sprites//loadbutton.txt", 1, b2F);
-	cButton b3(&br, { 402, 125 }, "b3", "Sprites//settingbutton.txt", 1, b3F);
+	cButton b1(&br, { 516, 55 }, "b1", "Sprites//playbutton.txt", 1, b1F);
+	cButton b2(&br, { 516, 90 }, "b2", "Sprites//loadbutton.txt", 1, b2F);
+	cButton b3(&br, { 516, 125 }, "b3", "Sprites//settingbutton.txt", 1, b3F);
 
 	cButton buttonlist[3] = { b1, b2, b3 };
 	int x = 0;

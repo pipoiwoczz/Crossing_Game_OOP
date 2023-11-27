@@ -16,7 +16,6 @@ class cLion : public cAnimal {
 
 public:
 	cLion();
-	//cLion(COORD In_pos, int difficulty, int ttm);
     cLion (COORD In_pos, int speed);
     ~cLion();
     

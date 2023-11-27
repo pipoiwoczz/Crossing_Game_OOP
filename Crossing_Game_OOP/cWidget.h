@@ -16,7 +16,7 @@ private:
 		IsVisible = false;
 	}
 protected:
-	bool IsVisible;
+	bool IsVisible = false;
 	string tag;
 	COORD topleft = { 0,0 };
 	COORD offset = { 0, 0 };
@@ -54,13 +54,13 @@ private:
 
 	COORD OTopleft;
 	COORD OBotright;
-	int bordDensity;
+	short bordDensity;
 	void (*buttonFunction) (void) = nullptr;
 	void highLight(bool showNow = true);
 	void unHighLight(bool showNow = true);
 public:
 	friend cGameEngine;
-	cButton(cDWindow* parent, COORD offsetFromParentTopleft,const string& tagName, const string& imgSrc, int borderDensity, void (*pFunction) (void));
+	cButton(cDWindow* parent, COORD offsetFromParentTopleft,const string& tagName, const string& imgSrc, short borderDensity, void (*pFunction) (void));
 
 	void show(bool showNow = true);
 	void unshow(bool showNow = true);

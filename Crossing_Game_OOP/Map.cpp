@@ -52,7 +52,7 @@
                 {
                     int x;
                     mapIn >> x;
-                    CHAR_INFO t = { L' ', x * 16 };
+                    CHAR_INFO t = { L' ', WORD(x * 16)};
                     map.mapArray[i] = t;
                 }
             }

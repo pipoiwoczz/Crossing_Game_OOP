@@ -62,8 +62,6 @@ Texture cAsset::assetLoader(string filename)
     Texture loaded;
     if (inGate.is_open()) {
         inGate >> loaded.height >> loaded.width;
-        //if (filename == "land.txt")
-        //    loaded.height /= 2;
         loaded.textureArray = new CHAR_INFO[loaded.height * loaded.width];
         for (int i = 0; i < loaded.height; i++)
         {
@@ -73,27 +71,15 @@ Texture cAsset::assetLoader(string filename)
                 inGate >> x;
                 if (x != 16)
                 {
-                    CHAR_INFO t = { L'█', x * 16 + x};
+                    CHAR_INFO t = { L'█', WORD(x * 16 + x)};
                     loaded.textureArray[i * loaded.width + j] = t;
 
                 }
                 else {
-                    CHAR_INFO t = { L' ', x * 16 + 0 };
+                    CHAR_INFO t = { L' ', WORD(0)};
                     loaded.textureArray[i * loaded.width + j] = t;
                 }
             }
-            /*if (filename == "land.txt")
-            {
-                for (int j = 0; j < loaded.width; j++)
-                {
-                    int x;
-                    inGate >> x;
-                    if (x != 16)
-                    {
-                        loaded.textureArray[i * loaded.width + j].Attributes += x;
-                    }
-                }
-            }*/
         }
     }
     inGate.close();

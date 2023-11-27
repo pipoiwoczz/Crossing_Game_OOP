@@ -49,17 +49,6 @@ class cGame {
 
 		vector<cPeople *> getPeople();
         vector<cObstacle *> getObstacles();
-//		void getVehicle();
-//		void getAnimal();
-//		void getTruck();
-//		void getLion();
-//		void getRhino();
-//		void getCrocodile();
-//		void getHelicopter();
-//		void getMotorbike();
-		
-		//void stopDrawAnimal();
-		//void continueDrawAnimal();
 
 		void resetGame();
 		void exitGame(HANDLE t);
@@ -103,6 +92,5 @@ class cGame {
 		void endlessMode();
 
 };
-//cObstacle * createObject (short type, COORD position, int speed);
 
 #endif

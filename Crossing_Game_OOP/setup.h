@@ -70,24 +70,4 @@ enum class VehicleIndex {
 	Heli = 1,
 	Motorbike = 2
 };
-
-void gotoXY(int x, int y);
-
-void printCharacter(wstring content, COORD spot, Color textColor, Color backgroundColor, short maxlength = -1);
-void printCharacter2(wstring content, COORD spot, Color textColor, Color backgroundColor, short maxlength = -1);
-void printCenterCharacters(wstring content, Color textColor, Color backgroundColor, short y, SMALL_RECT box, short maxlength = -1);
-
-void clearConsole();
-
-void drawMainMenu(int choice); 
-void drawBorder(Color color);
-void drawPlay(Color color);
-void drawLoad(Color color);
-void drawSetting(Color color);
-void drawScoreBoard(Color color);
-void drawSettingMenu(int choice, bool On);
-void drawLoadMenu(int choice);
-void drawScoreboardMenu();
-void drawGameTitle();
-void drawLosingTitle();
 #endif
