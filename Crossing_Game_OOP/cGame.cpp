@@ -127,6 +127,9 @@ void cGame::MainGame() {
 					livePeople.resize(0);
 					spawnObstacle();
 					spawnPeople();
+					totalPoint = 0;
+					resetTime();
+					t2.updateText(to_string(totalPoint));
 					isLose = false;
 					isPause = false;
 					break;
@@ -135,13 +138,9 @@ void cGame::MainGame() {
 			pa.unshow();
 		}
 		
-		for (int i = 0; i < gameOrder; i++) {
-			livePeople[i]->move();
-		}
-
 		if (livePeople[0]->passLevel) {
-			t2.updateText(to_string(totalPoint));
 			nextLevel();
+			t2.updateText(to_string(totalPoint));
 			livePeople[0]->passLevel = false;
 		}
 		Sleep(10);
@@ -175,7 +174,9 @@ bool cGame::isImpact()
 						if (obstacle->boxes[k].isOverlap(livePeople[i]->mBoxes[j]))
 						{
 							isPause = true;
+							isLose = true;
 							livePeople[i]->isDead();
+							Sleep(100);
 							Sound::playHitSound();
 							cGameEngine::playEffect(obstacle, livePeople[i]);
 							return true;
@@ -564,13 +565,13 @@ void cGame::nextLevel() {
 	gameMap::nextMap();
 	calculatePoint();
 	// set position of people
-	for (int i = 0; i < livePeople.size(); i++) {
-		livePeople[i]->setPos({ 0, 145 });
-		for (int i = 0; i < livePeople[i]->mBoxes.size(); i++)
-		{
-			livePeople[i]->mBoxes[i].set({ short(livePeople[i]->topleft.X), short(livePeople[i]->topleft.Y) }, { short(livePeople[i]->pTexture->getWidth() + livePeople[i]->topleft.X - 1), short(livePeople[i]->pTexture->getHeight() + livePeople[i]->topleft.Y - 1) });
-		}
-	};
+	//for (int i = 0; i < livePeople.size(); i++) {
+	//	livePeople[i]->setPos({ 0, 145 });
+	//	for (int i = 0; i < livePeople[i]->mBoxes.size(); i++)
+	//	{
+	//		livePeople[i]->mBoxes[i].set({ short(livePeople[i]->topleft.X), short(livePeople[i]->topleft.Y) }, { short(livePeople[i]->pTexture->getWidth() + livePeople[i]->topleft.X - 1), short(livePeople[i]->pTexture->getHeight() + livePeople[i]->topleft.Y - 1) });
+	//	}
+	//};
 	// respawn obstacle
 	for (int i = 0; i < liveObstacles.size(); i++) {
 		delete liveObstacles[i];
@@ -578,6 +579,7 @@ void cGame::nextLevel() {
 	
 	liveObstacles.clear();
 	spawnObstacle();
+	
 }
 
 void cGame::endlessMode() {

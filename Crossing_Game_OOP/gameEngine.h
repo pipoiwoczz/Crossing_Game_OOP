@@ -50,14 +50,21 @@ private:
 	static void showLabel(cLabel* pLabel, bool instant = true);
 	static void unshowLabel(cLabel* pLabel, bool instant = true);
 
-	static void fillEffectivePixel(CHAR_INFO*& des, const COORD& desSize, CHAR_INFO*& src, const COORD& srcSize, const COORD& StartCoord);
+	//Processing type
 
+	//fill des buffer with non-blank pixel of src
+	static void fillEffectivePixel(CHAR_INFO*& des, const COORD& desSize, CHAR_INFO*& src, const COORD& srcSize, const COORD& StartCoord);
+	//fill blank pixel of des buffer with a  position-equivalent pixel in src
+	static void replaceBlankPixel(CHAR_INFO*& des, const COORD& desSize, CHAR_INFO*& src, const COORD& srcSize, const COORD& StartCoord);
+	//fill all pixels of des with their position-equilvalent pixels in src
+	static void replaceAllPixel(CHAR_INFO*& des, const COORD& desSize, CHAR_INFO*& src, const COORD& srcSize, const COORD& StartCoord);
 public:
 	
 	friend cGame;
 	friend cWidget;
 	friend cButton;
 	friend cLabel;
+	friend cPeople;
 
 	static HANDLE curHandle;
 

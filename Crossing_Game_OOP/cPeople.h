@@ -10,8 +10,12 @@ class cPeople {
 	Texture* pTexture;
 	int currentFrame;
     COORD topleft;
+	COORD moveVector = { 0, 0 };
+	bool isMoving = false;
 	bool mState; // true is alive, false is dead =))
 	int moveCooldown;
+	int step = 2;
+	int moveFuncCooldown;
 	bool passLevel = false;
 
 	public:

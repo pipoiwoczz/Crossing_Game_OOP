@@ -185,6 +185,23 @@ void cGameEngine::fillEffectivePixel(CHAR_INFO*& des, const COORD& desSize, CHAR
 		}
 	}
 }
+void cGameEngine::replaceBlankPixel(CHAR_INFO*& des, const COORD& desSize, CHAR_INFO*& src, const COORD& srcSize, const COORD& StartCoord)
+{
+	for (int i = 0; i < desSize.X * desSize.Y; i++)
+	{
+		if (des[i].Char.UnicodeChar == L' ')
+		{
+			des[i].Attributes = src[(StartCoord.Y + i / desSize.X) * srcSize.X + StartCoord.X + (i % desSize.X)].Attributes;
+		}
+	}
+}
+void cGameEngine::replaceAllPixel(CHAR_INFO*& des, const COORD& desSize, CHAR_INFO*& src, const COORD& srcSize, const COORD& StartCoord)
+{
+	for (int i = 0; i < desSize.X * desSize.Y; i++)
+	{
+		des[i].Attributes = src[(StartCoord.Y + i / desSize.X) * srcSize.X + StartCoord.X + i % desSize.X].Attributes;
+	}
+}
 
 void cGameEngine::renderPeople(cPeople* pPeople)
 {
@@ -216,7 +233,6 @@ void cGameEngine::pizzaDraw(cGame* pGame)
 {
 	//clear all entities
 
-	memcpy(mainBuffer, gameMap::currentMap->mapArray, gameMap::currentMap->height * gameMap::currentMap->width * sizeof(CHAR_INFO));
 
 	//put obstacles onto screen buffer
 	for (int i = 0; i < pGame->liveObstacles.size(); i++)
@@ -228,7 +244,56 @@ void cGameEngine::pizzaDraw(cGame* pGame)
 	//put people onto buffer
 	for (int i = 0; i < pGame->livePeople.size(); i++)
 	{
-		renderPeople(pGame->livePeople[i]);
+		cPeople* itera = pGame->livePeople[i];
+		itera->move();
+
+		if (itera->isMoving && itera->moveCooldown == 0)
+		{
+			if (itera->moveVector.Y == 0)
+			{
+				itera->topleft.X += itera->moveVector.X / 2;
+				if (itera->step == 0)
+					itera->topleft.Y -= itera->pTexture->getHeight() / 2;
+				else
+					itera->topleft.Y += itera->pTexture->getHeight() / 2;
+
+			}
+			else if (itera->moveVector.X == 0)
+			{
+				itera->topleft.Y += itera->moveVector.Y / 2;
+				if (itera->step == 0)
+					itera->topleft.Y -= itera->pTexture->getHeight() / 3;
+				else
+					itera->topleft.Y += itera->pTexture->getHeight() / 3;
+			}
+
+			itera->step++;
+
+			//itera->moveVector = { short(itera->moveVector.X / 2), short(itera->moveVector.Y / 2) };
+			itera->moveCooldown = 2;
+		}
+
+		if (itera->moveCooldown > 0)
+		{
+			itera->moveCooldown--;
+		}
+
+		if (itera->moveFuncCooldown > 0)
+		{
+			itera->moveFuncCooldown--;
+		}
+		renderPeople(itera);
+
+		if (itera->step == 2)
+		{
+			itera->step = 0;
+			for (int j = 0; j < itera->mBoxes.size(); j++)
+			{
+				itera->mBoxes[j].set({ short(itera->topleft.X), short(itera->topleft.Y) }, { short(itera->pTexture->getWidth() + itera->topleft.X - 1), short(itera->pTexture->getHeight() + itera->topleft.Y - 1) });
+
+			}
+			itera->isMoving = false;
+		}
 	}
 }
 
@@ -245,7 +310,7 @@ void cGameEngine::maindraw(cGame* pGame)
 			else {
 				curHandle = Hbuffer2;
 			}
-
+			memcpy(mainBuffer, gameMap::currentMap->mapArray, gameMap::currentMap->height * gameMap::currentMap->width * sizeof(CHAR_INFO));
 			pizzaDraw(pGame);
 			updateInfo(pGame);
 
@@ -257,6 +322,13 @@ void cGameEngine::maindraw(cGame* pGame)
 
 			WriteConsoleOutput(curHandle, mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, { 0,0 }, &PlayBoxRect);
 			SetConsoleActiveScreenBuffer(curHandle);
+			gameMap::mapLoopCooldown--;
+
+			if (gameMap::mapLoopCooldown == 0)
+			{
+				gameMap::mapLoopCooldown = 15;
+				gameMap::nextMap();
+			}
 			Sleep(25);
 		}		
 	}
@@ -275,14 +347,9 @@ void cGameEngine::unshowWidget(cWidget* pWidget, bool instant)
 	if (!pWidget->parentWindow->WidgetFace.textureArray)
 		return;
 	SMALL_RECT region = { pWidget->topleft.X, pWidget->topleft.Y, pWidget->botright.X, pWidget->botright.Y };
-	short W = pWidget->WidgetFace.getWidth();
-	short H = pWidget->WidgetFace.getHeight();
+	replaceAllPixel(reservedBuffer, { pWidget->WidgetFace.width,  pWidget->WidgetFace.height }, pWidget->parentWindow->WidgetFace.textureArray, { pWidget->parentWindow->WidgetFace.width, pWidget->parentWindow->WidgetFace.height }, pWidget->offset);
 
-	for (int i = 0; i < W * H; i++)
-	{
-		cGameEngine::reservedBuffer[i].Attributes = pWidget->parentWindow->WidgetFace.textureArray[(pWidget->offset.Y + i / W) * pWidget->parentWindow->WidgetFace.width + pWidget->offset.X - pWidget->parentWindow->topleft.X + i % W].Attributes;
-	}
-	WriteConsoleOutput(cGameEngine::curHandle, cGameEngine::reservedBuffer, { W, H }, { 0, 0 }, &region);
+	WriteConsoleOutput(cGameEngine::curHandle, cGameEngine::reservedBuffer, {pWidget->WidgetFace.width, pWidget->WidgetFace.height }, { 0, 0 }, &region);
 	if (instant)
 		SetConsoleActiveScreenBuffer(curHandle);
 }
@@ -306,16 +373,10 @@ void cGameEngine::UnHighLightButton(cButton* pButton, bool instant)
 {
 	COORD erasepos = {pButton->offset.X - pButton->bordDensity, pButton->offset.Y - pButton->bordDensity};
 
-	short W = pButton->OBotright.X - pButton->OTopleft.X + 1;
-	short H = pButton->OBotright.Y - pButton->OTopleft.Y + 1;
 	SMALL_RECT outerRect = { pButton->OTopleft.X, pButton->OTopleft.Y, pButton->OBotright.X, pButton->OBotright.Y };
+	replaceAllPixel(reservedBuffer, {short(pButton->OBotright.X - pButton->OTopleft.X + 1), short(pButton->OBotright.Y - pButton->OTopleft.Y + 1)}, pButton->parentWindow->WidgetFace.textureArray, { pButton->parentWindow->WidgetFace.width, pButton->parentWindow->WidgetFace.height }, erasepos);
 
-	for (int i = 0; i < W * H; i++)
-	{
-		cGameEngine::reservedBuffer[i].Attributes = pButton->parentWindow->WidgetFace.textureArray[(erasepos.Y + i / W) * pButton->parentWindow->WidgetFace.width + erasepos.X + i % W].Attributes;
-	}
-
-	WriteConsoleOutput(curHandle, cGameEngine::reservedBuffer, { W , H }, { 0, 0 }, &outerRect);
+	WriteConsoleOutput(curHandle, cGameEngine::reservedBuffer, {short(pButton->OBotright.X - pButton->OTopleft.X + 1), short(pButton->OBotright.Y - pButton->OTopleft.Y + 1)}, { 0, 0 }, &outerRect);
 	pButton->show(instant);
 }
 
@@ -349,14 +410,10 @@ void cGameEngine::showLabel(cLabel* pLabel, bool instant)
 void cGameEngine::unshowLabel(cLabel* pLabel, bool instant)
 {
 	SMALL_RECT region = { pLabel->topleft.X, pLabel->topleft.Y, pLabel->botright.X, pLabel->botright.Y };
-	short W = pLabel->botright.X - pLabel->topleft.X + 1;
-	short H = pLabel->botright.Y - pLabel->topleft.Y + 1;
 
-	for (int i = 0; i < W * H; i++)
-	{
-		cGameEngine::reservedBuffer[i].Attributes = pLabel->parentWindow->WidgetFace.textureArray[(pLabel->offset.Y + i / W) * pLabel->parentWindow->WidgetFace.getWidth() + pLabel->offset.X + i % W].Attributes;
-	}
-	WriteConsoleOutput(cGameEngine::curHandle, cGameEngine::reservedBuffer, { W, H }, { 0, 0 }, &region);
+	replaceAllPixel(reservedBuffer, { short(pLabel->botright.X - pLabel->topleft.X + 1), short(pLabel->botright.Y - pLabel->topleft.Y + 1)}, pLabel->parentWindow->WidgetFace.textureArray, {pLabel->parentWindow->WidgetFace.width, pLabel->parentWindow->WidgetFace.height}, pLabel->offset);
+
+	WriteConsoleOutput(cGameEngine::curHandle, cGameEngine::reservedBuffer, { short(pLabel->botright.X - pLabel->topleft.X + 1), short(pLabel->botright.Y - pLabel->topleft.Y + 1) }, { 0, 0 }, &region);
 	if (instant)
 		SetConsoleActiveScreenBuffer(curHandle);
 }
@@ -368,18 +425,11 @@ void cGameEngine::playEffect(cObstacle* obsta, cPeople* player) {
 	short w = f[0].width;
 	short h = f[0].height;
 	COORD writepos = { 100, 31 };
-	memcpy(mainBuffer, f[0].textureArray, w * h * sizeof(CHAR_INFO));
-	for (int i = 0; i < w * h; i++)
-	{
-		if (mainBuffer[i].Char.UnicodeChar == L' ')
-		{
-			mainBuffer[i].Attributes = cGameEngine::mainBuffer[(writepos.Y + i / w) * gameMap::getCurrentMap()->width + writepos.X + (i % w)].Attributes;
-		}
-	}
-	
+
+	replaceBlankPixel(f[0].textureArray, { w,h }, mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, { 100,31 });
 
 	SMALL_RECT fxframe = { writepos.X, writepos.Y, writepos.X + w - 1, writepos.Y + h - 1 };
-	WriteConsoleOutput(cGameEngine::curHandle, mainBuffer, { w, h }, { 0,0 }, &fxframe);
+	WriteConsoleOutput(cGameEngine::curHandle, f[0].textureArray, {w, h}, {0,0}, &fxframe);
 
 	COORD p{ writepos.X + 120, writepos.Y + 40 };
 	//cGameEngine::renderPeople(player);
@@ -387,20 +437,16 @@ void cGameEngine::playEffect(cObstacle* obsta, cPeople* player) {
 	Sleep(200);
 	for (int j = 1; j < f.size(); j++)
 	{
-		COORD topleft = {writepos.X + 50, writepos.Y + 25};
+		COORD startpos = { 50, 25 };
 		memcpy(reservedBuffer, f[j].textureArray, f[j].width * f[j].height * sizeof(CHAR_INFO));
 
-		for (int i = 0; i < f[j].width * f[j].height; i++)
-		{
-			if (reservedBuffer[i].Char.UnicodeChar == L' ') {
-				reservedBuffer[i].Attributes = mainBuffer[((topleft.Y - writepos.Y) + i / f[j].width) * w + topleft.X - writepos.X + (i % f[j].width)].Attributes;
-			}
-		}
+		replaceBlankPixel(reservedBuffer, { f[j].width, f[j].height }, f[0].textureArray, { w, h }, { 50, 25 });
 
-		SMALL_RECT reg = { topleft.X , topleft.Y,  topleft.X + f[j].width - 1, topleft.Y + f[j].height - 1 };
-		WriteConsoleOutput(cGameEngine::curHandle, mainBuffer, { w, h }, { 0,0 }, &fxframe);
+		SMALL_RECT reg = { writepos.X + startpos.X , writepos.Y + startpos.Y,   writepos.X + startpos.X + f[j].width - 1,  writepos.X + startpos.X + f[j].height - 1 };
 		WriteConsoleOutput(cGameEngine::curHandle, reservedBuffer, { f[j].width , f[j].height }, { 0,0 }, &reg);
 		//system("pause");
 		Sleep(100);
+		WriteConsoleOutput(cGameEngine::curHandle, f[0].textureArray, { w, h }, { 0,0 }, &fxframe);
+
 	}
 }

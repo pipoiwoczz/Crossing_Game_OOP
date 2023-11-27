@@ -2,8 +2,8 @@
 #include "cAsset.h"
 	vector<gameMap> gameMap::listMap = gameMap::loadMap();
 	gameMap* gameMap::currentMap = &gameMap::listMap[0];
-    int gameMap::currentMapIndex = int(BGIndex::BGMenu);
-
+    int gameMap::currentMapIndex = 0;
+    int gameMap::mapLoopCooldown = 15;
     gameMap::gameMap()
     {
         mapArray = nullptr;
@@ -74,8 +74,6 @@
     }
 
     void gameMap::nextMap() {
-        if (int(currentMapIndex + 1 >= maplist.size()))
-            return;
-        currentMapIndex += 1;
+        currentMapIndex = (currentMapIndex + 1) % listMap.size();
         currentMap = &listMap[currentMapIndex];
     }

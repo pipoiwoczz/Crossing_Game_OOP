@@ -8,7 +8,7 @@ public:
 	static vector<gameMap> listMap;
 	static gameMap* currentMap;
 	static int currentMapIndex;
-
+	static int mapLoopCooldown;
 	CHAR_INFO* mapArray = nullptr;
 	short width;
 	short height;

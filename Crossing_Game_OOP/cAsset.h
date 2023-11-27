@@ -9,14 +9,13 @@ const vector<string> truckFile { "truck.txt" };
 const vector<string> heliFile { "heli.txt" };
 const vector<string> motorbFile { "motorb.txt" };
 const vector<string> lionImpactEffect { "fxframe.txt", "base.txt", "purple.txt", "blast.txt", "explosion1.txt","explosion2.txt", "explosion3.txt","fade1.txt", "fade2.txt", "fade3.txt", "dissappear.txt" };
-const vector<string> maplist { "menuBG.txt", "map_forest.txt" };
-
-const vector<string> peopleFile { "player.txt" };
+const vector<string> maplist {"Maps//jungle1.txt", "Maps//jungle2.txt", "Maps//jungle3.txt"};
+const vector<string> peopleFile { "Player//up.txt", "Player//right.txt", "Player//down.txt", "Player//left.txt"};
 
 class cGameEngine;
 class Texture {
 private:
-	short height;
+	short height;	
 	short width;
 public:
 	friend class gameMap;
