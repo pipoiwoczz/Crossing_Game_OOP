@@ -486,7 +486,7 @@ void cGame::spawnObstacle() {
 	ifstream levelIn;
 	levelIn.open("Level//jungle1.txt");
 	int linecount = 0;
-	short lineoffset[] = { 0, 50 };
+	short lineoffset[] = { 19, 55, 91, 127};
 	while (!levelIn.eof())
 	{
 		int objcount;
@@ -499,9 +499,9 @@ void cGame::spawnObstacle() {
 			char objname;
 			levelIn >> objname;
 
-			short offsetY;
-			levelIn >> offsetY;
-			cObstacle* pObj = cObstacle::constructObject(objname, { cX, lineoffset[linecount]}, spd);
+			short offsetF, offsetB;
+			levelIn >> offsetF >> offsetB;
+			cObstacle* pObj = cObstacle::constructObject(objname, { short(cX+offsetF), lineoffset[linecount]}, spd);
 			/*switch (objname)
 			{
 			case 'l': pObj = new cLion({ cX, lineoffset[linecount] }, spd); break;
@@ -515,7 +515,7 @@ void cGame::spawnObstacle() {
 			if (pObj)
 			{
 				liveObstacles.push_back(pObj);
-				cX += pObj->pTexture->width + offsetY;
+				cX += pObj->pTexture->width + offsetF + offsetB;;
 				pObj = nullptr;
 			}
 		}
