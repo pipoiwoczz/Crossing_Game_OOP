@@ -203,18 +203,29 @@ void cGameEngine::replaceAllPixel(CHAR_INFO*& des, const COORD& desSize, CHAR_IN
 	}
 }
 
-void cGameEngine::renderPeople(cPeople* pPeople)
+bool cGameEngine::renderPeople(cPeople* pPeople)
 {
 	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pPeople->pTexture->textureArray, { pPeople->pTexture->width, pPeople->pTexture->height }, pPeople->topleft);
 	/*	->currentFrame = (itera->currentFrame + 1) % itera->nFrame;
 	itera->pTexture = itera->pLTexture + itera->currentFrame; */
+	return true;
 }
 
 void cGameEngine::renderObstacle(cObstacle* pObstacle)
 {
 	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pObstacle->pTexture->textureArray, { pObstacle->pTexture->width, pObstacle->pTexture->height }, pObstacle->topleft);
-	pObstacle->currentFrame = (pObstacle->currentFrame + 1) % pObstacle->nFrame;
-	pObstacle->pTexture = pObstacle->pLTexture + pObstacle->currentFrame;
+
+	if (pObstacle->timeUntilRender == 0)
+	{
+		pObstacle->currentFrame = (pObstacle->currentFrame + 1) % pObstacle->nFrame;
+		pObstacle->pTexture = pObstacle->pLTexture + pObstacle->currentFrame;
+		
+		pObstacle->timeUntilRender = 2;
+	}
+	else {
+		pObstacle->timeUntilRender--;
+	}
+	pObstacle->move();
 }
 
 void cGameEngine::updateInfo(cGame* pGame)
@@ -238,7 +249,6 @@ void cGameEngine::pizzaDraw(cGame* pGame)
 	for (int i = 0; i < pGame->liveObstacles.size(); i++)
 	{
 		renderObstacle(pGame->liveObstacles[i]);
-		pGame->liveObstacles[i]->move();
 	}
 
 	//put people onto buffer
@@ -312,7 +322,7 @@ void cGameEngine::maindraw(cGame* pGame)
 			}
 			memcpy(mainBuffer, gameMap::currentMap->mapArray, gameMap::currentMap->height * gameMap::currentMap->width * sizeof(CHAR_INFO));
 			pizzaDraw(pGame);
-			updateInfo(pGame);
+				updateInfo(pGame);
 
 			//thread g1(&cGameEngine::pizzaDraw, pGame);
 			//thread g2(&cGameEngine::updateInfo, pGame);
@@ -429,24 +439,32 @@ void cGameEngine::playEffect(cObstacle* obsta, cPeople* player) {
 	replaceBlankPixel(f[0].textureArray, { w,h }, mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, { 100,31 });
 
 	SMALL_RECT fxframe = { writepos.X, writepos.Y, writepos.X + w - 1, writepos.Y + h - 1 };
-	WriteConsoleOutput(cGameEngine::curHandle, f[0].textureArray, {w, h}, {0,0}, &fxframe);
 
-	COORD p{ writepos.X + 120, writepos.Y + 40 };
-	//cGameEngine::renderPeople(player);
+	COORD p{ writepos.X + 150, writepos.Y + 30 };
 
-	Sleep(200);
+	player->topleft = { 214, 58 };
+	player->pTexture = &player->skin[3];
+	replaceBlankPixel(player->pTexture->textureArray, { player->pTexture->width, player->pTexture->height }, f[0].textureArray, { w, h }, { 120, 25 });
+	SMALL_RECT re = { p.X, p.Y, p.X + player->pTexture->width - 1, p.Y + player->pTexture->height - 1 };
+
+	COORD startpos = { 50, 25 };
+	
 	for (int j = 1; j < f.size(); j++)
 	{
-		COORD startpos = { 50, 25 };
+		WriteConsoleOutput(cGameEngine::curHandle, f[0].textureArray, { w, h }, { 0,0 }, &fxframe);
 		memcpy(reservedBuffer, f[j].textureArray, f[j].width * f[j].height * sizeof(CHAR_INFO));
 
 		replaceBlankPixel(reservedBuffer, { f[j].width, f[j].height }, f[0].textureArray, { w, h }, { 50, 25 });
 
 		SMALL_RECT reg = { writepos.X + startpos.X , writepos.Y + startpos.Y,   writepos.X + startpos.X + f[j].width - 1,  writepos.X + startpos.X + f[j].height - 1 };
+
 		WriteConsoleOutput(cGameEngine::curHandle, reservedBuffer, { f[j].width , f[j].height }, { 0,0 }, &reg);
-		//system("pause");
-		Sleep(100);
-		WriteConsoleOutput(cGameEngine::curHandle, f[0].textureArray, { w, h }, { 0,0 }, &fxframe);
+		if (j < 7)
+			WriteConsoleOutput(curHandle, player->pTexture->textureArray, { player->pTexture->width, player->pTexture->height }, { 0,0 }, &re);
+		if (j == 1)
+			Sleep(500);
+
+		Sleep(400);
 
 	}
 }

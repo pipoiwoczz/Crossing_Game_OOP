@@ -68,7 +68,7 @@ void cGame::MainGame() {
 	Sound::playSoundList();
 	Sound::playBackGroundSound();
 	//Sound::musicThread();
-	DWORD his;
+
 	cDWindow rr(&cWidget::window, { 504, 0 }, "te", "info.txt");
 	cLabel t1(&rr, { 10, 5 }, "t1", "SCORES", 1, Color::red);
 	string point = to_string(totalPoint);
@@ -177,7 +177,7 @@ bool cGame::isImpact()
 							isLose = true;
 							livePeople[i]->isDead();
 							Sleep(100);
-							Sound::playHitSound();
+							//Sound::playHitSound();
 							cGameEngine::playEffect(obstacle, livePeople[i]);
 							return true;
 						}

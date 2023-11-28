@@ -29,7 +29,7 @@ private:
 	
 	//count for double-buffs tech
 	static int count;
-	static void renderPeople(cPeople* pPeople);
+	static bool renderPeople(cPeople* pPeople);
 	static void renderObstacle(cObstacle* pObstacle);
 	
 	static COORD GetMonitorDimension();
