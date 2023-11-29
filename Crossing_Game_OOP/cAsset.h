@@ -2,6 +2,7 @@
 #define CASSET_H
 #include "setup.h"
 
+const vector<string> lilyFile{ "lily.txt" };
 const vector<string> lionFile { "lionmove1.txt", "lionmove2.txt","lionmove3.txt","lionmove4.txt","lionmove5.txt","lionmove6.txt","lionmove7.txt" };
 const vector<string> rhinoFile { "rhino.txt" };
 const vector<string> crocoFile { "croco.txt" };

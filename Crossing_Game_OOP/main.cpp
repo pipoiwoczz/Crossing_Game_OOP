@@ -3,20 +3,12 @@
 #include "cObstacle.h"
 #include "cWidget.h"
 #include "cAnimal.h"
+#include "cEnvironment.h"
 #include "cVehicle.h"
 #include "Sound.h"
 #include "Map.h"
 
 const HANDLE mainHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-
-vector<Texture> cMotorbike::impactEffect = cAsset::assetLoaders(lionImpactEffect);
-vector<Texture> cHelicopter::impactEffect = cAsset::assetLoaders(lionImpactEffect);
-vector<Texture> cTruck::impactEffect = cAsset::assetLoaders(lionImpactEffect);
-
-vector<Texture> cLion::impactEffect = cAsset::assetLoaders(lionImpactEffect);
-vector<Texture> cCrocodile::impactEffect = cAsset::assetLoaders(lionImpactEffect);
-vector<Texture> cRhino::impactEffect = cAsset::assetLoaders(lionImpactEffect);
-
 
 int Sound::BGSoundVolume = 1000;
 int Sound::EffectSoundVolume = 1000;
@@ -27,6 +19,22 @@ cWidget cWidget::window;
 bool cWidget::hasWd = cWidget::createMainWindow("mainbg");
 
 cDWindow br(&cWidget::window, { 0, 0 }, "bg", "menuBg.txt");
+
+vector<Texture> cLilyleaf::textureLily = cAsset::assetLoaders(lilyFile);
+vector<Texture> cLion::textureLion = cAsset::assetLoaders(lionFile);
+vector<Texture> cRhino::textureRhino = cAsset::assetLoaders(rhinoFile);
+vector<Texture> cCrocodile::textureCroco = cAsset::assetLoaders(crocoFile);
+vector<Texture> cTruck::textureTruck = cAsset::assetLoaders(truckFile);
+vector<Texture> cHelicopter::textureHeli = cAsset::assetLoaders(heliFile);
+vector<Texture> cMotorbike::textureMotorb = cAsset::assetLoaders(motorbFile);
+vector<Texture> cMotorbike::impactEffect = cAsset::assetLoaders(lionImpactEffect);
+vector<Texture> cHelicopter::impactEffect = cAsset::assetLoaders(lionImpactEffect);
+vector<Texture> cTruck::impactEffect = cAsset::assetLoaders(lionImpactEffect);
+vector<Texture> cLion::impactEffect = cAsset::assetLoaders(lionImpactEffect);
+vector<Texture> cCrocodile::impactEffect = cAsset::assetLoaders(lionImpactEffect);
+vector<Texture> cRhino::impactEffect = cAsset::assetLoaders(lionImpactEffect);
+
+
 
 void pmap1()
 {

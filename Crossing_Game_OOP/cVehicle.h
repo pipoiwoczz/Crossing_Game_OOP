@@ -1,8 +1,8 @@
 #ifndef _CVEHICLE_H
 #define _CVEHICLE_H
 #include "cObstacle.h"
-#include "cAsset.h"
 
+class Texture;
 class cVehicle: public cObstacle {
 public:
     cVehicle(COORD In_pos, int speed);
@@ -20,14 +20,8 @@ public:
     cTruck (COORD In_pos, int speed);
     ~cTruck();
     
-    virtual char getType();
-    
-    virtual cObstacle* copy(COORD pos);
-
-    virtual cObstacle* construct(COORD pos, int spd);
-    
+    unsigned char getType();
     virtual void hitEffect(cPeople* pVictim);
-
     virtual void hitSound();
 };
 
@@ -41,14 +35,8 @@ public:
     cHelicopter (COORD In_pos, int speed);
     ~cHelicopter();
     
-    virtual char getType();
-    
-    virtual cObstacle* copy(COORD pos);
-
-    virtual cObstacle* construct(COORD pos, int spd);
-    
+    unsigned char getType();
     virtual void hitEffect(cPeople* pVictim);
-
     virtual void hitSound();
 };
 
@@ -62,15 +50,9 @@ public:
 	//cMotorbike(COORD In_pos, int difficulty, int ttm);
     cMotorbike (COORD In_pos, int speed);
     ~cMotorbike();
-    
-    virtual char getType();
-    
-    virtual cObstacle* copy(COORD pos);
-
-    virtual cObstacle* construct(COORD pos, int spd);
-    
+ 
+    unsigned char getType();
     virtual void hitEffect(cPeople* pVictim);
-
     virtual void hitSound();
 };
 

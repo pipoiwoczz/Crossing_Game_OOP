@@ -1,10 +1,6 @@
 #include "cVehicle.h"
 #include "cAsset.h"
-vector<Texture> cTruck::textureTruck = cAsset::assetLoaders(truckFile);
-vector<Texture> cHelicopter::textureHeli = cAsset::assetLoaders(heliFile);
-vector<Texture> cMotorbike::textureMotorb = cAsset::assetLoaders(motorbFile);
-
-
+#include "hitbox.h"
 
 cVehicle::cVehicle(COORD In_pos, int speed) : cObstacle(In_pos, speed)
 {
@@ -18,27 +14,13 @@ cTruck::cTruck(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cVehicle(I
 	nFrame = textureTruck.size();
 }
 
-cTruck::~cTruck()
-{
-}
-
-char cTruck::getType()
+unsigned char cTruck::getType()
 {
 	return 'T';
 }
 
-cObstacle* cTruck::copy(COORD pos)
+cTruck::~cTruck()
 {
-	cTruck* obj = new cTruck(*this);
-	obj->topleft = pos;
-	return obj;
-}
-cObstacle* cTruck::construct(COORD pos, int spd)
-{
-	cTruck* obj = new cTruck(*this);
-	obj->topleft = pos;
-	obj->speed = spd;
-	return obj;
 }
 
 void cTruck::hitEffect(cPeople* pVictim) {}
@@ -52,27 +34,13 @@ cHelicopter::cHelicopter(COORD In_pos, /*int difficulty, int ttm*/ int speed) : 
 	nFrame = textureHeli.size();
 }
 
-cHelicopter::~cHelicopter()
-{
-}
-
-char cHelicopter::getType()
+unsigned char cHelicopter::getType()
 {
 	return 'H';
 }
 
-cObstacle* cHelicopter::copy(COORD pos)
+cHelicopter::~cHelicopter()
 {
-	cHelicopter* obj = new cHelicopter(*this);
-	obj->topleft = pos;
-	return obj;
-}
-cObstacle* cHelicopter::construct(COORD pos, int spd)
-{
-	cHelicopter* obj = new cHelicopter(*this);
-	obj->topleft = pos;
-	obj->speed = spd;
-	return obj;
 }
 
 void cHelicopter::hitEffect(cPeople* pVictim)
@@ -89,26 +57,13 @@ cMotorbike::cMotorbike(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cV
 	nFrame = textureMotorb.size();
 }
 
-cMotorbike::~cMotorbike()
-{
-}
-
-char cMotorbike::getType()
+unsigned char cMotorbike::getType()
 {
 	return 'M';
 }
 
-cObstacle* cMotorbike::copy(COORD pos)
+cMotorbike::~cMotorbike()
 {
-	cMotorbike* obj = new cMotorbike(*this);
-	obj->topleft = pos;
-	return obj;
-}
-cObstacle* cMotorbike::construct(COORD pos, int spd)
-{
-	cMotorbike* obj = new cMotorbike(*this);
-	obj->topleft = pos;
-	return obj;
 }
 
 void cMotorbike::hitEffect(cPeople* pVictim)

@@ -1,8 +1,8 @@
 #ifndef _CANIMAL_H
 #define _CANIMAL_H
 #include "cObstacle.h"
-#include "cAsset.h"
 
+class Texture;
 class cAnimal: public cObstacle {
 private:
 
@@ -21,12 +21,8 @@ public:
     cLion (COORD In_pos, int speed);
     ~cLion();
     
-    virtual char getType();
 
-    virtual cObstacle* copy(COORD pos);
-    
-    virtual cObstacle* construct(COORD pos, int spd);
-    
+    unsigned char getType();
     virtual void hitEffect(cPeople* pVictim);
     virtual void hitSound();
 };
@@ -41,10 +37,7 @@ public:
 	cRhino(COORD In_pos, int speed);
     ~cRhino();
 
-    virtual char getType();
-    virtual cObstacle* copy(COORD pos);
-    virtual cObstacle* construct(COORD pos, int spd);
-    
+    unsigned char getType();
     virtual void hitEffect(cPeople* pVictim);
     virtual void hitSound();
 };
@@ -59,11 +52,8 @@ public:
 	cCrocodile();
 	cCrocodile(COORD In_pos, int speed);
     ~cCrocodile();
-    virtual char getType();
     
-    virtual cObstacle* copy(COORD pos);
-    virtual cObstacle* construct(COORD pos, int spd);
-    
+    unsigned char getType();
     virtual void hitEffect(cPeople* pVictim);
     virtual void hitSound();
 };

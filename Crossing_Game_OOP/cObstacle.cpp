@@ -2,37 +2,10 @@
 #include "cAsset.h"
 #include "hitbox.h"
 
-//cObstacle * cObstacle::addObject (cObstacle * obj)
-//{
-//    if (obj == nullptr)
-//        return nullptr;
-//    objects.push_back(obj);
-//    return obj;
-//}
-//
-//cObstacle * cObstacle::copyObject(char type, COORD pos)
-//{
-//    for (cObstacle * sample : objects)
-//    {
-//        if (type == sample -> getType())
-//            return sample -> copy(pos);
-//    }
-//    return nullptr;
-//}
-//
-//cObstacle * cObstacle::constructObject(char type, COORD pos, int spd)
-//{
-//    for (cObstacle * sample : objects)
-//    {
-//        if (type == sample -> getType())
-//            return sample -> construct(pos, spd);
-//    }
-//    return nullptr;
-//}
+
 
 cObstacle::~cObstacle()
 {
-
 }
 
 cObstacle::cObstacle(COORD In_pos, /* int difficulty, int ttm */ int speed) {

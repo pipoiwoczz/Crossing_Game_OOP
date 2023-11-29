@@ -11,8 +11,8 @@ class cLabel;
 class cGame {
 
 	friend cGameEngine;
-    vector<cObstacle *> liveObstacles;
-    
+    vector<cObstacle*> liveObstacles;
+	vector<cObstacle*>  environmentObject;
     vector<cPeople *> livePeople;
 	vector<cWidget*> listWidget;
 	vector<cLabel*> listLabel;

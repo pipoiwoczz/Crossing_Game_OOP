@@ -6,6 +6,7 @@
 #include "hitbox.h"
 #include "cAnimal.h"
 #include "cVehicle.h"
+#include "cEnvironment.h"
 #include "cAsset.h"
 #include "gameEngine.h"
 
@@ -36,8 +37,13 @@ cGame::~cGame()
 	{
 		delete livePeople[i];
 	}
+	for (int i = 0; i < environmentObject.size(); i++)
+	{
+		delete environmentObject[i];
+	}
 	liveObstacles.clear();
 	livePeople.clear();
+	environmentObject.clear();
 	//cleanGame();
 }
 short cGame::getGameOrder()
@@ -58,6 +64,14 @@ void cGame::MainGame() {
 	//drawBackGround();
 	spawnPeople();
 	spawnObstacle();
+	cObstacle* lily = new cLilyleaf({ 0, 73 });
+	environmentObject.push_back(lily);
+	environmentObject.push_back(new cRiver(73, lily));
+	lily = new cLilyleaf({ 30, 55 });
+	environmentObject.push_back(lily);
+	environmentObject.push_back(new cRiver(55, lily));
+	lily = nullptr;
+
 	//resetTime();
 	for (int i = 0; i < livePeople.size(); i++)
 	{
@@ -97,9 +111,34 @@ void cGame::MainGame() {
 		}
 		if (GetAsyncKeyState(0x11) < 0) {
 		}
-		if (isImpact())
+		for (int j = 0; j < environmentObject.size(); j++)
 		{
-			isLose = true;
+			if (environmentObject[j]->getType() == 'R')
+			{
+				for (int k = 0; k < environmentObject[j]->boxes.size(); k++)
+				{
+					for (int u = 0; u < livePeople.size(); u++)
+					{
+						if (environmentObject[j]->boxes[k].isOverlap(livePeople[u]->mBox))
+						{
+							isLose = true;
+							for (int s = 0; s < environmentObject[j]->pSafe->boxes.size(); s++)
+							{
+								if (environmentObject[j]->pSafe->boxes[s].isOverlap(livePeople[u]->mBox))
+								{
+									isLose = false;
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		if (!isLose)
+			isImpact();
+		if (isLose)
+		{
 			Sleep(2000);
 			cGameEngine::refreshBackGround(true);
 			cDWindow a(&cWidget::window, { 0,0 }, "tr", "map_forest.txt");

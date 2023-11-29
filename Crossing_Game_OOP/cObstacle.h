@@ -20,6 +20,8 @@ protected:
     short currentFrame;
     short nFrame;
     bool movable = true;
+    bool friendly = false;
+    cObstacle* pSafe = nullptr;
 public:
     vector <Hitbox> boxes;
 
@@ -34,8 +36,6 @@ public:
     COORD getPos();
     int getSpeed();
     
-    virtual char getType() = 0; // returns the class the object belongs to as a char
-    
     void setPos(COORD new_Pos);
     virtual void determineHitbox();
 
@@ -46,8 +46,10 @@ public:
     //virtual cObstacle * construct (COORD pos, int spd) = 0; // create object at pos, with speed set to spd
     //// note: copy constructors have not been declared - currently using default copy constructors
 
-    void move(); // moves obstacle to new position
+    virtual void move(); // moves obstacle to new position
     void moveHitBox();
+
+    virtual unsigned char getType() = 0;
     virtual void hitEffect(cPeople* pVictim) = 0;// (optional) effect on collision with player
     virtual void hitSound() = 0;
     void stop();

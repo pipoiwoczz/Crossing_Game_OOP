@@ -203,16 +203,19 @@ void cGameEngine::replaceAllPixel(CHAR_INFO*& des, const COORD& desSize, CHAR_IN
 	}
 }
 
-bool cGameEngine::renderPeople(cPeople* pPeople)
+void cGameEngine::renderPeople(cPeople* pPeople)
 {
+	if (!pPeople->mState)
+		return;
 	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pPeople->pTexture->textureArray, { pPeople->pTexture->width, pPeople->pTexture->height }, pPeople->topleft);
 	/*	->currentFrame = (itera->currentFrame + 1) % itera->nFrame;
 	itera->pTexture = itera->pLTexture + itera->currentFrame; */
-	return true;
 }
 
 void cGameEngine::renderObstacle(cObstacle* pObstacle)
 {
+	if (pObstacle->pTexture == nullptr)
+		return;
 	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pObstacle->pTexture->textureArray, { pObstacle->pTexture->width, pObstacle->pTexture->height }, pObstacle->topleft);
 
 	if (pObstacle->timeUntilRender == 0)
@@ -225,6 +228,7 @@ void cGameEngine::renderObstacle(cObstacle* pObstacle)
 	else {
 		pObstacle->timeUntilRender--;
 	}
+	if (pObstacle->movable)
 	pObstacle->move();
 }
 
@@ -250,7 +254,10 @@ void cGameEngine::pizzaDraw(cGame* pGame)
 	{
 		renderObstacle(pGame->liveObstacles[i]);
 	}
-
+	for (int i = 0; i < pGame->environmentObject.size(); i++)
+	{
+		renderObstacle(pGame->environmentObject[i]);
+	}
 	//put people onto buffer
 	for (int i = 0; i < pGame->livePeople.size(); i++)
 	{
@@ -276,7 +283,7 @@ void cGameEngine::maindraw(cGame* pGame)
 			}
 			memcpy(mainBuffer, gameMap::currentMap->mapArray, gameMap::currentMap->height * gameMap::currentMap->width * sizeof(CHAR_INFO));
 			pizzaDraw(pGame);
-				updateInfo(pGame);
+			updateInfo(pGame);
 
 			//thread g1(&cGameEngine::pizzaDraw, pGame);
 			//thread g2(&cGameEngine::updateInfo, pGame);
@@ -384,7 +391,6 @@ void cGameEngine::unshowLabel(cLabel* pLabel, bool instant)
 
 void cGameEngine::playEffect(cObstacle* obsta, cPeople* player) {
 	vector<Texture> f;
-	if (obsta->getType() == 'l')
 		f = cAsset::assetLoaders(lionImpactEffect);
 	short w = f[0].width;
 	short h = f[0].height;

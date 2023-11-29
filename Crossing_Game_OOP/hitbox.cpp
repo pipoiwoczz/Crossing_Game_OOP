@@ -9,10 +9,23 @@ Hitbox::Hitbox(COORD tl, COORD br)
 }
 bool Hitbox::isOverlap(Hitbox h)
 {
-    if (h.topleft.X <= botright.X && h.botright.X >= topleft.X
-        && h.topleft.Y <= botright.Y && h.botright.Y >= topleft.Y)
-        return true;
-    return false;
+    if (topleft.X <= botright.X)
+    {
+        if (h.topleft.X <= botright.X && h.botright.X >= topleft.X
+            && h.topleft.Y <= botright.Y && h.botright.Y >= topleft.Y)
+            return true;
+        return false;
+    }
+    else {
+        if (h.topleft.X <= botright.X && h.botright.X >= 0
+            && h.topleft.Y <= botright.Y && h.botright.Y >= topleft.Y)
+            return true;
+        else if (h.topleft.X <= PlayBoxRect.Right && h.botright.X >= 0
+            && h.topleft.Y <= botright.Y && h.botright.Y >= topleft.Y)
+            return true;
+        return false;
+    }
+
 }
 
 void Hitbox::getHitbox(COORD &topleftGet, COORD &botrightGet)

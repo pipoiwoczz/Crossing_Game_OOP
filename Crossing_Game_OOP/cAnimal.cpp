@@ -1,10 +1,7 @@
 #include "cAnimal.h"
-#include "cAsset.h"
 #include "hitbox.h"
+#include "cAsset.h"
 
-vector<Texture> cLion::textureLion = cAsset::assetLoaders(lionFile);
-vector<Texture> cRhino::textureRhino = cAsset::assetLoaders(rhinoFile);
-vector<Texture> cCrocodile::textureCroco = cAsset::assetLoaders(crocoFile);
 
 
 
@@ -20,29 +17,16 @@ cLion::cLion(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In_p
 
     boxes.push_back(a);
 }
-cLion::~cLion()
-{
-}
 
-char cLion::getType()
+unsigned char cLion::getType()
 {
     return 'l';
 }
 
-cObstacle* cLion::copy(COORD pos)
+cLion::~cLion()
 {
-    cLion* obj = new cLion(*this);
-    obj->topleft = pos;
-    return obj;
 }
 
-cObstacle* cLion::construct(COORD pos, int spd)
-{
-    cLion* obj = new cLion(*this);
-    obj->topleft = pos;
-    obj->speed = spd;
-    return obj;
-}
 void cLion::hitEffect(cPeople* pVictim)
 {
 
@@ -61,26 +45,14 @@ cRhino::cRhino(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In
     currentFrame = 0;
     nFrame = textureRhino.size();
 }
-cRhino::~cRhino()
-{
-}
-char cRhino::getType()
+
+unsigned char cRhino::getType()
 {
     return 'r';
 }
 
-cObstacle* cRhino::copy(COORD pos)
+cRhino::~cRhino()
 {
-    cRhino* obj = new cRhino(*this);
-    obj->topleft = pos;
-    return obj;
-}
-cObstacle* cRhino::construct(COORD pos, int spd)
-{
-    cRhino* obj = new cRhino(*this);
-    obj->topleft = pos;
-    obj->speed = spd;
-    return obj;
 }
 
 void cRhino::hitEffect(cPeople* pVictim)
@@ -99,26 +71,14 @@ cCrocodile::cCrocodile(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cA
     currentFrame = 0;
     nFrame = textureCroco.size();
 }
-cCrocodile::~cCrocodile()
-{
-}
-char cCrocodile::getType()
+
+unsigned char cCrocodile::getType()
 {
     return 'c';
 }
 
-cObstacle* cCrocodile::copy(COORD pos)
+cCrocodile::~cCrocodile()
 {
-    cCrocodile* obj = new cCrocodile(*this);
-    obj->topleft = pos;
-    return obj;
-}
-cObstacle* cCrocodile::construct(COORD pos, int spd)
-{
-    cCrocodile* obj = new cCrocodile(*this);
-    obj->topleft = pos;
-    obj->speed = spd;
-    return obj;
 }
 
 void cCrocodile::hitEffect(cPeople* pVictim)
