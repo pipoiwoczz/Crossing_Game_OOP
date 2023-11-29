@@ -308,7 +308,9 @@ void cGameEngine::maindraw(cGame* pGame)
 void cGameEngine::showWidget(cWidget* pWidget, bool instant)
 {
 	SMALL_RECT region = { pWidget->topleft.X, pWidget->topleft.Y, pWidget->botright.X, pWidget->botright.Y };
-	WriteConsoleOutput(curHandle, pWidget->WidgetFace.textureArray, { pWidget->WidgetFace.width, pWidget->WidgetFace.height}, { 0,0 }, &region);
+	memcpy(reservedBuffer, pWidget->WidgetFace.textureArray, pWidget->WidgetFace.width * pWidget->WidgetFace.height * sizeof(CHAR_INFO));
+	replaceBlankPixel(reservedBuffer, { pWidget->WidgetFace.width, pWidget->WidgetFace.height }, pWidget->parentWindow->WidgetFace.textureArray, { pWidget->parentWindow->WidgetFace.width, pWidget->parentWindow->WidgetFace.height }, pWidget->offset);
+	WriteConsoleOutput(curHandle, reservedBuffer, { pWidget->WidgetFace.width, pWidget->WidgetFace.height}, { 0,0 }, &region);
 	if (instant)
 		SetConsoleActiveScreenBuffer(curHandle);
 }
@@ -391,7 +393,7 @@ void cGameEngine::unshowLabel(cLabel* pLabel, bool instant)
 
 void cGameEngine::playEffect(cObstacle* obsta, cPeople* player) {
 	vector<Texture> f;
-		f = cAsset::assetLoaders(lionImpactEffect);
+		f = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
 	short w = f[0].width;
 	short h = f[0].height;
 	COORD writepos = { 100, 31 };

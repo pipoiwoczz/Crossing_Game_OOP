@@ -7,7 +7,7 @@ cPeople::cPeople(COORD In_pos) {
 	topleft = In_pos;
 	mState = true;
 	moveCooldown = 0;
-	skin = cAsset::assetLoaders(peopleFile);
+	skin = cAsset::assetLoaders(peopleFile, PlayerPrefix);
 	pTexture = &skin[2];
 	currentFrame = 0;
 	mBox.set({ short(topleft.X + 4), short(2 + topleft.Y) }, { short(skin[0].getWidth() - 4 + topleft.X), short(skin[0].getHeight() - 2 + topleft.Y) });

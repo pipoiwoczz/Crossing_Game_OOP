@@ -86,12 +86,12 @@ Texture cAsset::assetLoader(string filename)
     return loaded;
 }
 
-vector<Texture> cAsset::assetLoaders(const vector<string> &textureList)
+vector<Texture> cAsset::assetLoaders(const vector<string> &textureList, const string& prefix)
 {
     vector<Texture> multiFrame;
     for (string filename: textureList)
     {
-        Texture a = cAsset::assetLoader(filename);
+        Texture a = cAsset::assetLoader(prefix + filename);
         multiFrame.push_back(a);
     }
 

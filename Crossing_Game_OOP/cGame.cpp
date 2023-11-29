@@ -80,7 +80,7 @@ void cGame::MainGame() {
 	gameMap::changeMap(BGIndex::Jungle);
 	Sound::playSoundList();
 	Sound::playBackGroundSound();
-	//Sound::musicThread();
+	//Sound::musicThread();	
 
 	cDWindow rr(&cWidget::window, { 504, 0 }, "te", "info.txt");
 	cLabel t1(&rr, { 10, 5 }, "t1", "SCORES", 1, Color::red);
@@ -184,14 +184,16 @@ void cGame::MainGame() {
 		Sleep(10);
 	}
 	drawingThread.join();
-	for (int i = 0; i < listWidget.size(); i++)
-	{
-		listWidget[i]->unshow();
-	}
+
 	for (int i = 0; i < listLabel.size(); i++)
 	{
 		listLabel[i]->unshow();
 	}
+	for (int i = 0; i < listWidget.size(); i++)
+	{
+		listWidget[i]->unshow();
+	}
+	Sound::pauseCurrentSound();
 }
 
 

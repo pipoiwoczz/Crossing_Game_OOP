@@ -18,22 +18,22 @@ bool enginecheck = cGameEngine::startEngine();
 cWidget cWidget::window;
 bool cWidget::hasWd = cWidget::createMainWindow("mainbg");
 
-cDWindow br(&cWidget::window, { 0, 0 }, "bg", "menuBg.txt");
+cDWindow br(&cWidget::window, { 0, 0 }, "bg","menuBg.txt");
 
-vector<Texture> cLilyleaf::textureLily = cAsset::assetLoaders(lilyFile);
-vector<Texture> cLion::textureLion = cAsset::assetLoaders(lionFile);
-vector<Texture> cRhino::textureRhino = cAsset::assetLoaders(rhinoFile);
-vector<Texture> cCrocodile::textureCroco = cAsset::assetLoaders(crocoFile);
-vector<Texture> cTruck::textureTruck = cAsset::assetLoaders(truckFile);
-vector<Texture> cHelicopter::textureHeli = cAsset::assetLoaders(heliFile);
-vector<Texture> cMotorbike::textureMotorb = cAsset::assetLoaders(motorbFile);
-vector<Texture> cMotorbike::impactEffect = cAsset::assetLoaders(lionImpactEffect);
-vector<Texture> cHelicopter::impactEffect = cAsset::assetLoaders(lionImpactEffect);
-vector<Texture> cTruck::impactEffect = cAsset::assetLoaders(lionImpactEffect);
-vector<Texture> cLion::impactEffect = cAsset::assetLoaders(lionImpactEffect);
-vector<Texture> cCrocodile::impactEffect = cAsset::assetLoaders(lionImpactEffect);
-vector<Texture> cRhino::impactEffect = cAsset::assetLoaders(lionImpactEffect);
+vector<Texture> cLilyleaf::textureLily = cAsset::assetLoaders(lilyFile, TexturePrefix);
+vector<Texture> cLion::textureLion = cAsset::assetLoaders(lionFile, TexturePrefix);
+vector<Texture> cRhino::textureRhino = cAsset::assetLoaders(rhinoFile, TexturePrefix);
+vector<Texture> cCrocodile::textureCroco = cAsset::assetLoaders(crocoFile, TexturePrefix);
+vector<Texture> cTruck::textureTruck = cAsset::assetLoaders(truckFile, TexturePrefix);
+vector<Texture> cHelicopter::textureHeli = cAsset::assetLoaders(heliFile, TexturePrefix);
+vector<Texture> cMotorbike::textureMotorb = cAsset::assetLoaders(motorbFile, TexturePrefix);
 
+vector<Texture> cMotorbike::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+vector<Texture> cHelicopter::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+vector<Texture> cTruck::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+vector<Texture> cLion::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+vector<Texture> cCrocodile::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+vector<Texture> cRhino::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
 
 
 void pmap1()
@@ -48,7 +48,7 @@ void pmap2()
 }
 
 void pmap3()
-{
+{				
 	Sleep(1000);
 }
 void b1F(void)
@@ -82,6 +82,7 @@ void b1F(void)
 				buttonlist[i].unshow();
 			}
 			buttonlist[x].onEnter();
+			br.show();
 			for (int i = 0; i < 3; i++)
 			{
 				buttonlist[i].show();
@@ -116,7 +117,72 @@ void b2F(void)
 }
 void b3F(void)
 {
-	Sleep(2000);
+
+	cDWindow settingpanel(&br, { 240,55 }, "settingpanel", "settingpanel.txt");
+	cLabel music(&settingpanel, { 20, 15 }, "music", "Music Volume", 1, Color::black);
+	cLabel musicvolume(&settingpanel, { 155,15 }, "musicvolume", "100", 1, Color::black);
+
+	cLabel FXsound(&settingpanel, { 20, 45 }, "fx", "Effect Volume", 1, Color::black);
+	cLabel FXvolume(&settingpanel, { 155, 45 }, "fxvolume", "100", 1, Color::black);
+
+	cButton selectarrow(&settingpanel, { 190, 15 }, "arrowL", "arrowL.txt", 1, pmap1);
+
+	short arrowPos[2] = { 15, 45 };
+
+	cLabel ValueBar[2] = { musicvolume, FXvolume };
+
+	int Value[2] = { 100, 100 };
+	int currentarrowpos = 0;
+
+	settingpanel.show();
+
+	music.show();
+	musicvolume.show();
+	FXsound.show();
+	FXvolume.show();
+
+	selectarrow.show();
+	while (true)
+	{
+		if (GetAsyncKeyState(0x51) < 0)
+		{
+			break;
+		}
+		if (GetAsyncKeyState(VK_DOWN) < 0 && currentarrowpos < 1)
+		{
+			currentarrowpos++;
+			selectarrow.unshow();
+			selectarrow.setPos({ selectarrow.getPos().X, 45 });
+			selectarrow.show();
+		}
+		if (GetAsyncKeyState(VK_UP) < 0 && currentarrowpos > 0)
+		{
+			currentarrowpos--;
+			selectarrow.unshow();
+			selectarrow.setPos({ selectarrow.getPos().X, 15 });
+			selectarrow.show();
+		}
+		if (GetAsyncKeyState(VK_LEFT) < 0 && Value[currentarrowpos] > 0)
+		{
+			Value[currentarrowpos] -= 25;
+			ValueBar[currentarrowpos].updateText(to_string(Value[currentarrowpos]));
+			Sleep(250);
+		}
+		if (GetAsyncKeyState(VK_RIGHT) < 0 && Value[currentarrowpos] < 100)
+		{
+			Value[currentarrowpos] += 25;
+			ValueBar[currentarrowpos].updateText(to_string(Value[currentarrowpos]));
+			Sleep(250);
+		}
+	}
+	selectarrow.show();
+
+	FXvolume.unshow();
+	FXsound.unshow();
+	musicvolume.unshow();
+	music.show();
+
+	settingpanel.unshow();
 }
 
 int main() {

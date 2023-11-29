@@ -30,6 +30,9 @@ public:
 	static bool createMainWindow(const string& tagName);
 	virtual void show(bool showNow = true);
 	virtual void unshow(bool showNow = true);
+	void reset(bool showNow = true);
+	void setPos(COORD In_topleft);
+	COORD getPos();
 	friend cDWindow;
 	friend cButton;
 	friend cLabel;

@@ -13,17 +13,15 @@ cWidget::cWidget(cWidget* parent, COORD offsetFromParentTopleft, const string& t
 	tag = tagName;
 
 	this->parentWindow = parent;
-	topleft = { short(parentWindow->topleft.X + offsetFromParentTopleft.X), short(parentWindow->topleft.Y + offsetFromParentTopleft.Y) };
+	topleft = { short(parentWindow->topleft.X + offset.X), short(parentWindow->topleft.Y + offset.Y) };
 	topleft = { max(topleft.X, parentWindow->topleft.X), max(topleft.Y, parentWindow->topleft.Y) };
 
 
 	if (imgSrc.length() !=0)
 	{
-		WidgetFace = cAsset::assetLoader(imgSrc);
-		short W = WidgetFace.getWidth();
-		short H = WidgetFace.getHeight();
+		WidgetFace = cAsset::assetLoader(ButtonPrefix + imgSrc);
 
-		botright = { short(topleft.X + W - 1), short(topleft.Y + H - 1) };
+		botright = { short(topleft.X + WidgetFace.getWidth() - 1), short(topleft.Y + WidgetFace.getHeight() - 1) };
 		botright = { min(botright.X, parentWindow->botright.X), min(botright.Y, parentWindow->botright.Y) };
 	}
 }
@@ -42,6 +40,20 @@ bool cWidget::createMainWindow(const string& tagName)
 	return true;
 }
 
+void cWidget::setPos(COORD In_topleft)
+{
+	offset = In_topleft;
+	topleft = { short(parentWindow->topleft.X + offset.X), short(parentWindow->topleft.Y + offset.Y) };
+	topleft = { max(topleft.X, parentWindow->topleft.X), max(topleft.Y, parentWindow->topleft.Y) };
+
+	botright = { short(topleft.X + WidgetFace.getWidth() - 1), short(topleft.Y + WidgetFace.getHeight() - 1) };
+	botright = { min(botright.X, parentWindow->botright.X), min(botright.Y, parentWindow->botright.Y) };
+}
+COORD cWidget::getPos()
+{
+	return offset;
+}
+
 void cWidget::show(bool showNow)
 {
 	IsVisible = true;
@@ -52,6 +64,10 @@ void cWidget::unshow(bool showNow)
 {
 	IsVisible = false;
 	cGameEngine::unshowWidget(this, showNow);
+}
+void cWidget::reset(bool showNow)
+{
+	show(showNow);
 }
 
 cDWindow::cDWindow(cWidget* parent, COORD Topleft, const string& tagName, const string& imgSrc) : cWidget(parent, Topleft, tagName, imgSrc) {}
@@ -190,6 +206,7 @@ void cLabel::unshow(bool showNow)
 	if (textLine.size() == 0)
 		return;
 	IsVisible = false;
-	cGameEngine::showLabel(this, showNow);
+	cGameEngine::unshowLabel(this, showNow);
 }
+
 
