@@ -115,21 +115,15 @@ void cGame::MainGame() {
 		{
 			if (environmentObject[j]->getType() == 'R')
 			{
-				for (int k = 0; k < environmentObject[j]->boxes.size(); k++)
-				{
+				
 					for (int u = 0; u < livePeople.size(); u++)
+				{
+					if (environmentObject[j]->Box.isOverlap(livePeople[u]->mBox))
 					{
-						if (environmentObject[j]->boxes[k].isOverlap(livePeople[u]->mBox))
+						isLose = true;
+						if (environmentObject[j]->pSafe->Box.isOverlap(livePeople[u]->mBox))
 						{
-							isLose = true;
-							for (int s = 0; s < environmentObject[j]->pSafe->boxes.size(); s++)
-							{
-								if (environmentObject[j]->pSafe->boxes[s].isOverlap(livePeople[u]->mBox))
-								{
-									isLose = false;
-									break;
-								}
-							}
+							isLose = false;
 						}
 					}
 				}
@@ -207,18 +201,15 @@ bool cGame::isImpact()
 			for (cObstacle* obstacle : liveObstacles)
 			{
 				cnt++;
-				for (int k = 0; k < obstacle->boxes.size(); k++)
+				if (obstacle->Box.isOverlap(livePeople[i]->mBox))
 				{
-					if (obstacle->boxes[k].isOverlap(livePeople[i]->mBox))
-					{
-						isPause = true;
-						isLose = true;
-						livePeople[i]->isDead();
-						Sound::pauseCurrentSound();
-						//Sound::playHitSound();
-						cGameEngine::playEffect(obstacle, livePeople[i]);
-						return true;
-					}
+					isPause = true;
+					isLose = true;
+					livePeople[i]->isDead();
+					Sound::pauseCurrentSound();
+					//Sound::playHitSound();
+					cGameEngine::playEffect(obstacle, livePeople[i]);
+					return true;
 				}
 			}
     }

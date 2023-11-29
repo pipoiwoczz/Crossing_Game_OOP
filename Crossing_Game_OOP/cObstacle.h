@@ -23,7 +23,7 @@ protected:
     bool friendly = false;
     cObstacle* pSafe = nullptr;
 public:
-    vector <Hitbox> boxes;
+    Hitbox Box;
 
     friend cPeople;
     friend class cGameEngine;

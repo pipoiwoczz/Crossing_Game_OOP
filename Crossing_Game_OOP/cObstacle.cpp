@@ -35,17 +35,12 @@ void cObstacle::setPos(COORD new_Pos) {
 
 void cObstacle::determineHitbox() // default function to determine an obstacle's hitbox, can be overridden for each subclass
 {
-    boxes.clear();
-    Hitbox a({short(topleft.X + 2), short(topleft.Y)}, {short(topleft.X + pTexture->getWidth() - 2), short(topleft.Y + pTexture->getHeight())});
-    boxes.push_back(a);
+
 }
 
 bool cObstacle::collide(Hitbox h)
 {
-    for (Hitbox check : boxes)
-        if (h.isOverlap(check))
-            return true;
-    return false;
+    return true;
 }
 
 void cObstacle::advanceTime(int time)
@@ -66,10 +61,7 @@ void cObstacle::move() {
     if (isStop) return;
     if (!movable) return;
     topleft.X = (topleft.X + 1) % (PlayBoxRect.Right);
-    for (int i = 0; i < boxes.size(); i++)
-    {
-        boxes[i].set({ short(topleft.X + 10), short(topleft.Y + 10) }, { short((topleft.X + pTexture->getWidth() - 10) % PlayBoxRect.Right), short((topleft.Y + pTexture->getHeight() - 10) % PlayBoxRect.Bottom) });
-    }
+    Box.set({ short(topleft.X + 10), short(topleft.Y + 10) }, { short((topleft.X + pTexture->getWidth() - 10) % PlayBoxRect.Right), short((topleft.Y + pTexture->getHeight() - 10) % PlayBoxRect.Bottom) });
 }
 
 void cObstacle::moveHitBox()

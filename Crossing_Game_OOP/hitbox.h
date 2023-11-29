@@ -16,7 +16,8 @@ public:
     Hitbox(COORD tl, COORD br);
     void getHitbox (COORD &topleftGet, COORD &botrightGet);
     void set(const COORD& newTopleft, const COORD& newBotright);
-    bool isOverlap (Hitbox h);
+    void move(const COORD& dPos);
+    bool isOverlap (const Hitbox &h);
 };
 
 #endif /* hitbox_hpp */

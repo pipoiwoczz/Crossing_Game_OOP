@@ -90,12 +90,14 @@ bool cPeople::move() {
 		{
 			moveCooldown = 8;
 			topleft.Y += dy * pTexture->getHeight();
+			dx = 0;
 		}
 		else
 		{
 			topleft.X += dx * 6;
+			dy = 0;
 		}
-		mBox.set({ topleft.X,topleft.Y }, { short(pTexture->getWidth() + topleft.X - 1), short(pTexture->getHeight() + topleft.Y - 1) });
+		mBox.move({ short(dx * 6), short(dy * pTexture->getHeight())});
 		return ismove;
 	}
 }

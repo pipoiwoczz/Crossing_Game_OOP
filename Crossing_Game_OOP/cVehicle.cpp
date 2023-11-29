@@ -12,6 +12,7 @@ cTruck::cTruck(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cVehicle(I
 	pLTexture = pTexture;
 	currentFrame = 0;
 	nFrame = textureTruck.size();
+	Box.set({ short(topleft.X + 2), short(topleft.Y) }, { short(topleft.X + pTexture->getWidth() - 2), short(topleft.Y + pTexture->getHeight()) });
 }
 
 unsigned char cTruck::getType()
@@ -32,6 +33,7 @@ cHelicopter::cHelicopter(COORD In_pos, /*int difficulty, int ttm*/ int speed) : 
 	pLTexture = pTexture;
 	currentFrame = 0;
 	nFrame = textureHeli.size();
+	Box.set({ short(topleft.X + 2), short(topleft.Y) }, { short(topleft.X + pTexture->getWidth() - 2), short(topleft.Y + pTexture->getHeight()) });
 }
 
 unsigned char cHelicopter::getType()
@@ -55,6 +57,7 @@ cMotorbike::cMotorbike(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cV
 	pLTexture = pTexture;
 	currentFrame = 0;
 	nFrame = textureMotorb.size();
+	Box.set({ short(topleft.X + 2), short(topleft.Y) }, { short(topleft.X + pTexture->getWidth() - 2), short(topleft.Y + pTexture->getHeight()) });
 }
 
 unsigned char cMotorbike::getType()

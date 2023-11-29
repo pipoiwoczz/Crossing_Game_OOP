@@ -13,9 +13,7 @@ cLion::cLion(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In_p
     pLTexture = pTexture;
     currentFrame = 0;
     nFrame = textureLion.size();
-    Hitbox a({short(topleft.X + 2), short(topleft.Y)}, {short(topleft.X + pTexture->getWidth() - 2), short(topleft.Y + pTexture->getHeight())});
-
-    boxes.push_back(a);
+    Box.set({ short(topleft.X + 2), short(topleft.Y) }, { short(topleft.X + pTexture->getWidth() - 2), short(topleft.Y + pTexture->getHeight()) });
 }
 
 unsigned char cLion::getType()
@@ -44,6 +42,7 @@ cRhino::cRhino(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In
     pLTexture = pTexture;
     currentFrame = 0;
     nFrame = textureRhino.size();
+    Box.set({ short(topleft.X + 2), short(topleft.Y) }, { short(topleft.X + pTexture->getWidth() - 2), short(topleft.Y + pTexture->getHeight()) });
 }
 
 unsigned char cRhino::getType()
@@ -70,6 +69,7 @@ cCrocodile::cCrocodile(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cA
     pLTexture = pTexture;
     currentFrame = 0;
     nFrame = textureCroco.size();
+    Box.set({ short(topleft.X + 2), short(topleft.Y) }, { short(topleft.X + pTexture->getWidth() - 2), short(topleft.Y + pTexture->getHeight()) });
 }
 
 unsigned char cCrocodile::getType()

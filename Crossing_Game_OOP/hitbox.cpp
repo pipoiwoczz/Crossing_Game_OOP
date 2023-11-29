@@ -7,7 +7,7 @@ Hitbox::Hitbox(COORD tl, COORD br)
     topleft = tl;
     botright = br;
 }
-bool Hitbox::isOverlap(Hitbox h)
+bool Hitbox::isOverlap(const Hitbox &h)
 {
     if (topleft.X <= botright.X)
     {
@@ -38,4 +38,11 @@ void Hitbox::set(const COORD &newTopleft, const COORD &newBotright)
 {
     topleft = newTopleft;
     botright = newBotright;
+}
+void Hitbox::move(const COORD& dPos)
+{
+    topleft.X = (topleft.X + dPos.X + PlayBoxRect.Right) % PlayBoxRect.Right;
+    topleft.Y = (topleft.Y + dPos.Y + PlayBoxRect.Bottom) % PlayBoxRect.Bottom;
+    botright.X = (botright.X + dPos.X + PlayBoxRect.Right) % PlayBoxRect.Right;
+    botright.Y = (botright.Y + dPos.Y + PlayBoxRect.Bottom) % PlayBoxRect.Bottom;
 }
