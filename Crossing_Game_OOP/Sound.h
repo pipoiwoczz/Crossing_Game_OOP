@@ -37,9 +37,12 @@ public:
 		wstring pauseL = L"pause " + currentSound;
 		mciSendString(pauseL.c_str(), 0, 0, 0);
 	}
-	static void playSound(const wstring &soundname)
+	static void playSound(const wstring &soundname, bool repeat = false)
 	{
+		pauseCurrentSound();
 		wstring playL = L"play " + soundname;
+		if (repeat)
+			playL += L" repeat";
 		currentSound = soundname;
 		mciSendString(playL.c_str(), 0, 0, 0);
 	}
@@ -92,8 +95,7 @@ public:
 		}
 	}
 	static void playBackGroundSound() {
-		mciSendString(TEXT("pause test"), 0, 0, 0);
-		mciSendString(TEXT("play test repeat"), 0, 0, 0);
+		playSound(L"test", true);
 	}
 	static void playVihecleSound();
 	static void musicThread() {

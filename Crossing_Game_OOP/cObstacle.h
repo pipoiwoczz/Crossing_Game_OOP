@@ -4,7 +4,6 @@
 #include "hitbox.h"
 
 class cPeople;
-//class Hitbox;
 class Texture;
 class cObstacle {
 private:
@@ -20,10 +19,8 @@ protected:
     Texture* pLTexture;
     short currentFrame;
     short nFrame;
-
-    static cObstacle* addObject(cObstacle*);
+    bool movable = true;
 public:
-    static vector<cObstacle*> objects;
     vector <Hitbox> boxes;
 
     friend cPeople;
@@ -41,12 +38,13 @@ public:
     
     void setPos(COORD new_Pos);
     virtual void determineHitbox();
-    
-    static cObstacle * copyObject (char, COORD);
-    static cObstacle * constructObject (char, COORD, int spd);
-    virtual cObstacle * copy (COORD pos) = 0; // create object at pos, copying speed of original object
-    virtual cObstacle * construct (COORD pos, int spd) = 0; // create object at pos, with speed set to spd
-    // note: copy constructors have not been declared - currently using default copy constructors
+
+    //static cObstacle* addObject(cObstacle*);
+    //static cObstacle * copyObject (char, COORD);
+    //static cObstacle * constructObject (char, COORD, int spd);
+    //virtual cObstacle * copy (COORD pos) = 0; // create object at pos, copying speed of original object
+    //virtual cObstacle * construct (COORD pos, int spd) = 0; // create object at pos, with speed set to spd
+    //// note: copy constructors have not been declared - currently using default copy constructors
 
     void move(); // moves obstacle to new position
     void moveHitBox();
@@ -59,14 +57,6 @@ public:
     
     bool collide (Hitbox h); // (unused) check collision with other obstacles
     void advanceTime (int time); // (unused) counts down timeUntilMove and executes move if it reaches 0. does nothing while obstacle is stopped
-    static void cleanBootstrap()
-    {
-        for (int i = 0; i < objects.size(); i++)
-        {
-            delete objects[i];
-        }
-    }
 };
-
 
 #endif

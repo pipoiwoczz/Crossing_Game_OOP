@@ -256,54 +256,8 @@ void cGameEngine::pizzaDraw(cGame* pGame)
 	{
 		cPeople* itera = pGame->livePeople[i];
 		itera->move();
-
-		if (itera->isMoving && itera->moveCooldown == 0)
-		{
-			if (itera->moveVector.Y == 0)
-			{
-				itera->topleft.X += itera->moveVector.X / 2;
-				if (itera->step == 0)
-					itera->topleft.Y -= itera->pTexture->getHeight() / 2;
-				else
-					itera->topleft.Y += itera->pTexture->getHeight() / 2;
-
-			}
-			else if (itera->moveVector.X == 0)
-			{
-				itera->topleft.Y += itera->moveVector.Y / 2;
-				if (itera->step == 0)
-					itera->topleft.Y -= itera->pTexture->getHeight() / 3;
-				else
-					itera->topleft.Y += itera->pTexture->getHeight() / 3;
-			}
-
-			itera->step++;
-
-			//itera->moveVector = { short(itera->moveVector.X / 2), short(itera->moveVector.Y / 2) };
-			itera->moveCooldown = 2;
-		}
-
-		if (itera->moveCooldown > 0)
-		{
-			itera->moveCooldown--;
-		}
-
-		if (itera->moveFuncCooldown > 0)
-		{
-			itera->moveFuncCooldown--;
-		}
+		
 		renderPeople(itera);
-
-		if (itera->step == 2)
-		{
-			itera->step = 0;
-			for (int j = 0; j < itera->mBoxes.size(); j++)
-			{
-				itera->mBoxes[j].set({ short(itera->topleft.X), short(itera->topleft.Y) }, { short(itera->pTexture->getWidth() + itera->topleft.X - 1), short(itera->pTexture->getHeight() + itera->topleft.Y - 1) });
-
-			}
-			itera->isMoving = false;
-		}
 	}
 }
 

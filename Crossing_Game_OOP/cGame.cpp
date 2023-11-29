@@ -13,7 +13,6 @@
 void cleanGame()
 {
 	cGameEngine::cleanEngine();
-	cObstacle::cleanBootstrap();
 }
 
 cGame::cGame()
@@ -167,20 +166,17 @@ bool cGame::isImpact()
 			for (cObstacle* obstacle : liveObstacles)
 			{
 				cnt++;
-				for (int j = 0; j < (livePeople[i])->mBoxes.size(); j++)
+				for (int k = 0; k < obstacle->boxes.size(); k++)
 				{
-					for (int k = 0; k < obstacle->boxes.size(); k++)
+					if (obstacle->boxes[k].isOverlap(livePeople[i]->mBox))
 					{
-						if (obstacle->boxes[k].isOverlap(livePeople[i]->mBoxes[j]))
-						{
-							isPause = true;
-							isLose = true;
-							livePeople[i]->isDead();
-							Sleep(100);
-							//Sound::playHitSound();
-							cGameEngine::playEffect(obstacle, livePeople[i]);
-							return true;
-						}
+						isPause = true;
+						isLose = true;
+						livePeople[i]->isDead();
+						Sound::pauseCurrentSound();
+						//Sound::playHitSound();
+						cGameEngine::playEffect(obstacle, livePeople[i]);
+						return true;
 					}
 				}
 			}
@@ -443,7 +439,7 @@ cGame::cGame (string saveFile) // load game (create cGame object) from save file
     for (int i = 0; i < obstacleCount; i++)
     {
         COORD pos = {obstacleInfo[3 * i], obstacleInfo[3 * i + 1]};
-        liveObstacles[i] = cObstacle::constructObject(obstacleType[i], pos, obstacleInfo[3 * i + 2]);
+       // liveObstacles[i] = cObstacle::constructObject(obstacleType[i], pos, obstacleInfo[3 * i + 2]);
     }
     
     delete [] obstacleType;
@@ -499,18 +495,18 @@ void cGame::spawnObstacle() {
 			char objname;
 			levelIn >> objname;
 
-			short offsetF, offsetB;
-			levelIn >> offsetF >> offsetB;
-			cObstacle* pObj = cObstacle::constructObject(objname, { short(cX+offsetF), lineoffset[linecount]}, spd);
-			/*switch (objname)
+			short offsetF, offsetB, offsetY;
+			levelIn >> offsetF >> offsetB >> offsetY;
+			cObstacle* pObj = nullptr;
+			switch (objname)
 			{
-			case 'l': pObj = new cLion({ cX, lineoffset[linecount] }, spd); break;
-			case 'r': pObj = new cRhino({ cX, lineoffset[linecount] }, spd); break;
-			case 'c': pObj = new cCrocodile({ cX, lineoffset[linecount] }, spd); break;
+			case 'l': pObj = new cLion({ short(cX + offsetF), short(lineoffset[linecount] - offsetY) }, spd); break;
+			case 'r': pObj = new cRhino({ short(cX + offsetF), short(lineoffset[linecount] - offsetY) }, spd); break;
+			case 'c': pObj = new cCrocodile({ short(cX + offsetF), short(lineoffset[linecount] - offsetY) }, spd); break;
 			
 			default:
 				break;
-			}*/
+			}
 
 			if (pObj)
 			{

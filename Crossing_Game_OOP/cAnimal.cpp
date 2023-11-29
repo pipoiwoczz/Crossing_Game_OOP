@@ -22,7 +22,6 @@ cLion::cLion(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In_p
 }
 cLion::~cLion()
 {
-    delete bootstrapObjectcLion;
 }
 
 char cLion::getType()
@@ -64,7 +63,6 @@ cRhino::cRhino(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In
 }
 cRhino::~cRhino()
 {
-    delete bootstrapObjectcRhino;
 }
 char cRhino::getType()
 {
@@ -103,7 +101,6 @@ cCrocodile::cCrocodile(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cA
 }
 cCrocodile::~cCrocodile()
 {
-    delete bootstrapObjectcCrocodile;
 }
 char cCrocodile::getType()
 {

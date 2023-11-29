@@ -20,7 +20,6 @@ cTruck::cTruck(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cVehicle(I
 
 cTruck::~cTruck()
 {
-	delete bootstrapObjectcTruck;
 }
 
 char cTruck::getType()
@@ -55,7 +54,6 @@ cHelicopter::cHelicopter(COORD In_pos, /*int difficulty, int ttm*/ int speed) : 
 
 cHelicopter::~cHelicopter()
 {
-	delete bootstrapObjectcHelicopter;
 }
 
 char cHelicopter::getType()
@@ -93,7 +91,6 @@ cMotorbike::cMotorbike(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cV
 
 cMotorbike::~cMotorbike()
 {
-	delete bootstrapObjectcMotorbike;
 }
 
 char cMotorbike::getType()

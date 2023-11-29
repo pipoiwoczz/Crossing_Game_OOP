@@ -2,6 +2,7 @@
 #define _CANIMAL_H
 #include "cObstacle.h"
 #include "cAsset.h"
+
 class cAnimal: public cObstacle {
 private:
 
@@ -10,7 +11,7 @@ public:
 };
 
 class cLion : public cAnimal {
-    static cObstacle * bootstrapObjectcLion;
+   // static cObstacle * bootstrapObjectcLion;
     static vector<Texture> hitEffectFrame;
 	static vector<Texture> textureLion;
     
@@ -31,7 +32,7 @@ public:
 };
 
 class cRhino : public cAnimal {
-    static cObstacle * bootstrapObjectcRhino;
+    //static cObstacle * bootstrapObjectcRhino;
 
 	static vector<Texture> textureRhino;
     static vector<Texture> impactEffect;
@@ -49,7 +50,7 @@ public:
 };
 
 class cCrocodile : public cAnimal {
-    static cObstacle * bootstrapObjectcCrocodile;
+   // static cObstacle * bootstrapObjectcCrocodile;
 
 	static vector<Texture> textureCroco;
     static vector<Texture> impactEffect;

@@ -2,48 +2,38 @@
 #include "cAsset.h"
 #include "hitbox.h"
 
-cObstacle * cObstacle::addObject (cObstacle * obj)
-{
-    if (obj == nullptr)
-        return nullptr;
-    objects.push_back(obj);
-    return obj;
-}
-
-cObstacle * cObstacle::copyObject(char type, COORD pos)
-{
-    for (cObstacle * sample : objects)
-    {
-        if (type == sample -> getType())
-            return sample -> copy(pos);
-    }
-    return nullptr;
-}
-
-cObstacle * cObstacle::constructObject(char type, COORD pos, int spd)
-{
-    for (cObstacle * sample : objects)
-    {
-        if (type == sample -> getType())
-            return sample -> construct(pos, spd);
-    }
-    return nullptr;
-}
+//cObstacle * cObstacle::addObject (cObstacle * obj)
+//{
+//    if (obj == nullptr)
+//        return nullptr;
+//    objects.push_back(obj);
+//    return obj;
+//}
+//
+//cObstacle * cObstacle::copyObject(char type, COORD pos)
+//{
+//    for (cObstacle * sample : objects)
+//    {
+//        if (type == sample -> getType())
+//            return sample -> copy(pos);
+//    }
+//    return nullptr;
+//}
+//
+//cObstacle * cObstacle::constructObject(char type, COORD pos, int spd)
+//{
+//    for (cObstacle * sample : objects)
+//    {
+//        if (type == sample -> getType())
+//            return sample -> construct(pos, spd);
+//    }
+//    return nullptr;
+//}
 
 cObstacle::~cObstacle()
 {
 
 }
-
-//void cObstacle::cleanBootstrap()
-//{
-//    for (int i = 0; i < objects.size(); i++)
-//    {
-//        cObstacle* pT = objects[i];
-//        delete objects[i];
-//    }
-//    objects.clear();
-//}
 
 cObstacle::cObstacle(COORD In_pos, /* int difficulty, int ttm */ int speed) {
     topleft = In_pos;
@@ -101,6 +91,7 @@ void cObstacle::advanceTime(int time)
 
 void cObstacle::move() {
     if (isStop) return;
+    if (!movable) return;
     topleft.X = (topleft.X + 1) % (PlayBoxRect.Right);
     for (int i = 0; i < boxes.size(); i++)
     {
