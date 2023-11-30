@@ -111,6 +111,7 @@ Texture cAsset::loader(string filename)
         else
             loaded.textureArray[i] = { L'█', WORD(info[i] * 16 + info[i])};
     }
+    delete[]info;
     return loaded;
 }
 
