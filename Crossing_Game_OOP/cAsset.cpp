@@ -1,4 +1,4 @@
-﻿#include "cAsset.h"
+#include "cAsset.h"
 
 vector<Texture> cAsset::alphabet;
 vector<Texture> cAsset::number;
@@ -83,6 +83,36 @@ Texture cAsset::assetLoader(string filename)
         }
     }
     inGate.close();
+    return loaded;
+}
+
+// binary loader
+Texture cAsset::loader(string filename)
+{
+    ifstream inGate;
+    inGate.open("Sprites//" + filename, ios::binary);
+    if (!inGate.is_open())
+        return Texture();
+    Texture loaded;
+    
+    inGate.read((char *) &loaded.height, 2);
+    inGate.read((char *) &loaded.width, 2);
+    int size = loaded.height * loaded.width;
+    if (size == 0)
+        return loaded;
+    
+    loaded.textureArray = new CHAR_INFO [size];
+    short * info = new short [size];
+    inGate.read((char *) info, 2 * size);
+    inGate.close();
+    
+    for (int i = 0; i < size; i++)
+    {
+        if (info[i] >= 16)
+            loaded.textureArray[i] = { L' ', WORD(0)};
+        else
+            loaded.textureArray[i] = { L'█', WORD(info[i] * 16 + info[i])};
+    }
     return loaded;
 }
 

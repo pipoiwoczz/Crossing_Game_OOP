@@ -54,6 +54,8 @@ public:
 	static vector<Texture> assetLoaders(const vector<string> &textureList, const string& prefix);
 	static void alphabetLoader();
 	static void numberLoader();
+    
+    Texture loader(string filename); // temporary (waiting for testing)
 };
 
 
