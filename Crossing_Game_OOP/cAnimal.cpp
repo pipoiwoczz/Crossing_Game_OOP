@@ -42,7 +42,7 @@ cRhino::cRhino(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In
     pTexture = &cRhino::textureRhino[0];
     pLTexture = pTexture;
     currentFrame = 0;
-    timeUntilRender = 10;
+    timeUntilRender = 5;
     nFrame = textureRhino.size();
     Box.set({ short(topleft.X + 2), short(topleft.Y) }, { short(topleft.X + pTexture->getWidth() - 2), short(topleft.Y + pTexture->getHeight()) });
 }
