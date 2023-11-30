@@ -43,7 +43,7 @@ public:
 class cLabel;
 class cAsset {
 private:
-	cAsset();	
+	cAsset();
 public:
 	static vector<Texture> alphabet;
 	static vector<Texture> number;
@@ -55,6 +55,5 @@ public:
 	static void alphabetLoader();
 	static void numberLoader();
 };
-
 
 #endif

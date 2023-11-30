@@ -1,4 +1,4 @@
-﻿#include "cAsset.h"
+#include "cAsset.h"
 
 vector<Texture> cAsset::alphabet;
 vector<Texture> cAsset::number;
@@ -58,31 +58,31 @@ short Texture::getWidth() {
 Texture cAsset::assetLoader(string filename)
 {
     ifstream inGate;
-    inGate.open("Sprites//" + filename);
-    Texture loaded;
-    if (inGate.is_open()) {
-        inGate >> loaded.height >> loaded.width;
-        loaded.textureArray = new CHAR_INFO[loaded.height * loaded.width];
-        for (int i = 0; i < loaded.height; i++)
-        {
-            for (int j = 0; j < loaded.width; j++)
-            {
-                int x;
-                inGate >> x;
-                if (x != 16)
-                {
-                    CHAR_INFO t = { L'█', WORD(x * 16 + x)};
-                    loaded.textureArray[i * loaded.width + j] = t;
+    inGate.open("Sprites//" + filename, ios::binary);
 
-                }
-                else {
-                    CHAR_INFO t = { L' ', WORD(0)};
-                    loaded.textureArray[i * loaded.width + j] = t;
-                }
-            }
-        }
-    }
+    if (!inGate.is_open())
+        return Texture();
+    Texture loaded;
+    
+    inGate.read((char *) &loaded.height, 2);
+    inGate.read((char *) &loaded.width, 2);
+    int size = loaded.height * loaded.width;
+    if (size == 0)
+        return loaded;
+    
+    loaded.textureArray = new CHAR_INFO [size];
+    short * info = new short [size];
+    inGate.read((char *) info, 2 * size);
     inGate.close();
+    
+    for (int i = 0; i < size; i++)
+    {
+        if (info[i] >= 16)
+            loaded.textureArray[i] = { L' ', WORD(0)};
+        else
+            loaded.textureArray[i] = { L'█', WORD(info[i] * 16 + info[i])};
+    }
+
     return loaded;
 }
 
