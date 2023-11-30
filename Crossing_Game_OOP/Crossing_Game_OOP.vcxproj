@@ -130,6 +130,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="cAnimal.h" />
+    <ClInclude Include="cEnvironment.h" />
     <ClInclude Include="cGame.h" />
     <ClInclude Include="cObstacle.h" />
     <ClInclude Include="cPeople.h" />
@@ -145,6 +146,7 @@
     <ClCompile Include="cAnimal.cpp" />
     <ClCompile Include="cAsset.cpp" />
     <ClCompile Include="cAsset.h" />
+    <ClCompile Include="cEnvironment.cpp" />
     <ClCompile Include="cGame.cpp" />
     <ClCompile Include="cObstacle.cpp" />
     <ClCompile Include="cPeople.cpp" />
@@ -152,11 +154,9 @@
     <ClCompile Include="cWidget.cpp" />
     <ClCompile Include="hitbox.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="main2.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="gameEngine.cpp" />
     <ClCompile Include="Sound.cpp" />
-    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
