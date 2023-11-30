@@ -13,7 +13,7 @@ cLion::cLion(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In_p
     pLTexture = pTexture;
     currentFrame = 0;
     nFrame = textureLion.size();
-    timeUntilRender = 2;
+    defaulttimeUntilRender = 3;
     Box.set({ short(topleft.X + 2), short(topleft.Y) }, { short(topleft.X + pTexture->getWidth() - 2), short(topleft.Y + pTexture->getHeight()) });
 }
 
@@ -42,7 +42,7 @@ cRhino::cRhino(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In
     pTexture = &cRhino::textureRhino[0];
     pLTexture = pTexture;
     currentFrame = 0;
-    timeUntilRender = 5;
+    defaulttimeUntilRender = 5;
     nFrame = textureRhino.size();
     Box.set({ short(topleft.X + 2), short(topleft.Y) }, { short(topleft.X + pTexture->getWidth() - 2), short(topleft.Y + pTexture->getHeight()) });
 }

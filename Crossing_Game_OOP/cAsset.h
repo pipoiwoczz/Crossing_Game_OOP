@@ -59,6 +59,8 @@ public:
 	static void numberLoader();
 	static void specialCharLoader();
 	static Texture* getChar(unsigned char In_char);
+    
+    Texture loader(string filename); // temporary (waiting for testing)
 };
 
 
