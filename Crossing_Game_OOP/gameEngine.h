@@ -11,7 +11,7 @@ class cWidget;
 class cButton;
 class cDWindow;
 class cLabel;
-
+class cBar;
 
 class cPeople;
 class cObstacle;
@@ -41,14 +41,17 @@ private:
 	static void disableUserSelection();
 	static void disableCtrlHandler();
 
-	static void showWidget(cWidget* pWidget, bool instant = true);
-	static void unshowWidget(cWidget* pWidget, bool instant = true);
+	static bool showWidget(cWidget* pWidget, bool instant = true);
+	static bool unshowWidget(cWidget* pWidget, bool instant = true);
 
-	static void HighLightButton(cButton* pButton, bool instant = true);
-	static void UnHighLightButton(cButton* pButton, bool instant = true);
+	static bool HighLightButton(cButton* pButton, bool instant = true);
+	static bool UnHighLightButton(cButton* pButton, bool instant = true);
 
-	static void showLabel(cLabel* pLabel, bool instant = true);
-	static void unshowLabel(cLabel* pLabel, bool instant = true);
+	static bool showLabel(cLabel* pLabel, bool instant = true);
+	static bool unshowLabel(cLabel* pLabel, bool instant = true);
+
+	static bool showBar(cBar* pBar, bool instant = true);
+	static bool unshowBar(cBar* pBar, bool instant = true);
 
 	//Processing type
 
@@ -56,8 +59,10 @@ private:
 	static void fillEffectivePixel(CHAR_INFO*& des, const COORD& desSize, CHAR_INFO*& src, const COORD& srcSize, const COORD& StartCoord);
 	//fill blank pixel of des buffer with a  position-equivalent pixel in src
 	static void replaceBlankPixel(CHAR_INFO*& des, const COORD& desSize, CHAR_INFO*& src, const COORD& srcSize, const COORD& StartCoord);
-	//fill all pixels of des with their position-equilvalent pixels in src
+	//fill all pixels of a size-restricted des with their position-equilvalent pixels in src
 	static void replaceAllPixel(CHAR_INFO*& des, const COORD& desSize, CHAR_INFO*& src, const COORD& srcSize, const COORD& StartCoord);
+	//fill pixels of a size-restricted des with designated color
+	static void paintBucket(CHAR_INFO* des, const COORD& desSize, short color);
 public:
 	
 	friend cGame;
@@ -65,6 +70,7 @@ public:
 	friend cButton;
 	friend cLabel;
 	friend cPeople;
+	friend cBar;
 
 	static HANDLE curHandle;
 

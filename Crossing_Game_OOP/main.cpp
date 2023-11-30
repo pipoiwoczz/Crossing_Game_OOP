@@ -1,3 +1,4 @@
+﻿#include "cAsset.h"
 #include "cGame.h"
 #include "gameEngine.h"
 #include "cObstacle.h"
@@ -7,13 +8,12 @@
 #include "cVehicle.h"
 #include "Sound.h"
 #include "Map.h"
-
+//Game Core
 const HANDLE mainHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
 int Sound::BGSoundVolume = 1000;
 int Sound::EffectSoundVolume = 1000;
 
-bool running = true;
 SMALL_RECT My_Windows = { 0, 0, 0, 0 };
 SMALL_RECT PlayBoxRect = { 0, 0, 0, 0 };
 COORD cGameEngine::buffsize = { 0,0 };
@@ -21,32 +21,74 @@ CHAR_INFO* cGameEngine::mainBuffer = nullptr;
 CHAR_INFO* cGameEngine::reservedBuffer = nullptr;
 HANDLE cGameEngine::Hbuffer1 = 0;
 HANDLE cGameEngine::Hbuffer2 = 0;
-
+vector<Texture> cAsset::alphabet;
+vector<Texture> cAsset::number;
+vector<Texture> cAsset::special;
 int cGameEngine::count = 0;
 HANDLE cGameEngine::curHandle = 0;
-bool enginecheck = cGameEngine::startEngine();
-cWidget cWidget::loadingscreen;
-
 cWidget cWidget::window;
-bool cWidget::hasWd = cWidget::createMainWindow("mainbg");
-cDWindow br(&cWidget::window, { 0, 0 }, "bg","menuBg.txt");
-cDWindow settingpanel(&cWidget::window, {0,0}, "settingpanel", "settingframe.txt");
 
-vector<Texture> cLilyleaf::textureLily = cAsset::assetLoaders(lilyFile, TexturePrefix);
-vector<Texture> cLion::textureLion = cAsset::assetLoaders(lionFile, TexturePrefix);
-vector<Texture> cRhino::textureRhino = cAsset::assetLoaders(rhinoFile, TexturePrefix);
-vector<Texture> cCrocodile::textureCroco = cAsset::assetLoaders(crocoFile, TexturePrefix);
-vector<Texture> cTruck::textureTruck = cAsset::assetLoaders(truckFile, TexturePrefix);
-vector<Texture> cHelicopter::textureHeli = cAsset::assetLoaders(heliFile, TexturePrefix);
-vector<Texture> cMotorbike::textureMotorb = cAsset::assetLoaders(motorbFile, TexturePrefix);
+bool enginecheck = cGameEngine::startEngine();
+bool cWidget::hasWd = cWidget::createMainWindow("main");
 
-vector<Texture> cMotorbike::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-vector<Texture> cHelicopter::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-vector<Texture> cTruck::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-vector<Texture> cLion::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-vector<Texture> cCrocodile::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-vector<Texture> cRhino::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+//GameAsset
+Texture cAsset::blankchar;
+vector<Texture> cLilyleaf::textureLily;
+vector<Texture> cLion::textureLion;
+vector<Texture> cRhino::textureRhino;
+vector<Texture> cCrocodile::textureCroco;
+vector<Texture> cTruck::textureTruck;
+vector<Texture> cHelicopter::textureHeli;
+vector<Texture> cMotorbike::textureMotorb;
+vector<Texture> cMotorbike::impactEffect;
+vector<Texture> cHelicopter::impactEffect;
+vector<Texture> cTruck::impactEffect;
+vector<Texture> cLion::impactEffect;
+vector<Texture> cCrocodile::impactEffect;
+vector<Texture> cRhino::impactEffect;
+vector<gameMap> gameMap::listMap;
 
+
+cDWindow mainMenu(&cWidget::window, { 0, 0 }, "bg", "menuBg.txt", true);
+bool mainLoader()
+{
+	cBar loadingBar(&mainMenu, { 20, 140 }, "loadingbar", 500, 8, Color::red, Color::white);
+	cAsset::alphabetLoader();
+	cAsset::numberLoader();
+	cAsset::specialCharLoader();
+	cAsset::blankchar = cAsset::assetLoader("Char//Alphabet//blank.txt");
+	loadingBar.setProgress(false, 10);
+	cLilyleaf::textureLily = cAsset::assetLoaders(lilyFile, TexturePrefix);
+	cLion::textureLion = cAsset::assetLoaders(lionFile, TexturePrefix);
+	cRhino::textureRhino = cAsset::assetLoaders(rhinoFile, TexturePrefix);
+	cCrocodile::textureCroco = cAsset::assetLoaders(crocoFile, TexturePrefix);
+	cTruck::textureTruck = cAsset::assetLoaders(truckFile, TexturePrefix);
+	cHelicopter::textureHeli = cAsset::assetLoaders(heliFile, TexturePrefix);
+	cMotorbike::textureMotorb = cAsset::assetLoaders(motorbFile, TexturePrefix);
+	loadingBar.setProgress(false, 50);
+	cMotorbike::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+	cHelicopter::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+	cTruck::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+	cLion::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+	cCrocodile::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+	cRhino::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+	loadingBar.setProgress(false, 80);
+	gameMap::listMap = gameMap::loadMap(maplist);
+	loadingBar.setProgress(false, 100);
+	Sleep(100);
+	loadingBar.unshow();
+	return true;
+}
+
+bool running = mainLoader();
+
+gameMap* gameMap::currentMap = &gameMap::listMap[0];
+
+
+int gameMap::currentMapIndex = 0;
+int gameMap::mapLoopCooldown = 15;
+
+cDWindow settingpanel(&cWidget::window, { 0,0 }, "settingpanel", "settingframe.txt");
 
 void pmap1()
 {
@@ -56,7 +98,7 @@ void pmap1()
 
 void pmap2()
 {
-	Sleep(1000);
+
 }
 
 void pmap3()
@@ -65,7 +107,7 @@ void pmap3()
 }
 void b1F(void)
 {
-	cDWindow mapMenu(&br, { 240, 55 }, "menumap", "mapPanel.txt");
+	/*cDWindow mapMenu(&br, { 240, 55 }, "menumap", "mapPanel.txt");
 	mapMenu.show();
 	cButton map1(&mapMenu, { 10, 20 }, "map1", "jungleicon.txt", 1, pmap1);
 	cButton map2(&mapMenu, { 84, 20 }, "map1", "jungleicon.txt", 1, pmap2);
@@ -120,12 +162,17 @@ void b1F(void)
 	{
 		buttonlist[i].unshow();
 	}
-	mapMenu.unshow();
+	mapMenu.unshow();*/
 
 }
 void b2F(void)
 {
-	Sleep(2000);
+	//cBar bar(&br, { 20, 140 }, "bar", 150, 8, 2, Color::red, Color::white);
+	//bar.show();
+	//Sleep(3000);
+	//bar.progressing(true);
+	//bar.unshow();
+	//Sleep(3000);
 }
 void b3F(void)
 {
@@ -171,14 +218,14 @@ void b3F(void)
 		{
 			currentarrowpos++;
 			selectarrow.unshow();
-			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos]});
+			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
 			selectarrow.show();
 		}
 		if (GetAsyncKeyState(VK_UP) < 0 && currentarrowpos > 0)
 		{
 			currentarrowpos--;
 			selectarrow.unshow();
-			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos]});
+			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
 			selectarrow.show();
 		}
 		if (GetAsyncKeyState(VK_LEFT) < 0)
@@ -205,11 +252,10 @@ void b3F(void)
 }
 
 int main() {
-	br.show();
-
-	cButton b1(&br, { 516, 55 }, "b1", "playbutton.txt", 1, b1F);
-	cButton b2(&br, { 516, 90 }, "b2", "loadbutton.txt", 1, b2F);
-	cButton b3(&br, { 516, 125 }, "b3", "settingbutton.txt", 1, b3F);
+	mainMenu.show();
+	cButton b1(&mainMenu, { 516, 55 }, "b1", "playbutton.txt", 1, b1F);
+	cButton b2(&mainMenu, { 516, 90 }, "b2", "loadbutton.txt", 1, b2F);
+	cButton b3(&mainMenu, { 516, 125 }, "b3", "settingbutton.txt", 1, b3F);
 
 	cButton buttonlist[3] = { b1, b2, b3 };
 	int x = 0;
@@ -231,7 +277,7 @@ int main() {
 				buttonlist[i].unshow();
 			}
 			buttonlist[x].onEnter();
-			br.show();
+			mainMenu.show();
 			for (int i = 0; i < 3; i++)
 			{
 				buttonlist[i].show();
@@ -261,7 +307,7 @@ int main() {
 	//b.unshow();
 	////_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
 	////_CrtDumpMemoryLeaks();
-	br.unshow();
+	mainMenu.unshow();
 
 	cleanGame();
 }

@@ -26,15 +26,6 @@ cWidget::cWidget(cWidget* parent, COORD offsetFromParentTopleft, const string& t
 	}
 }
 
-bool cWidget::Loadstart()
-{
-	loadingscreen.IsVisible = true;
-	loadingscreen.topleft = { My_Windows.Left, My_Windows.Top };
-	loadingscreen.botright = { My_Windows.Right, My_Windows.Bottom };
-	window.parentWindow = nullptr;
-	window.WidgetFace = cAsset::assetLoader(UIPrefix + "loadingscreen.txt");
-	return true;
-}
 bool cWidget::createMainWindow(const string& tagName)
 {
 	if (!hasWd) {
@@ -63,33 +54,37 @@ COORD cWidget::getPos()
 	return offset;
 }
 
-void cWidget::show(bool showNow)
+bool cWidget::show(bool showNow)
 {
 	IsVisible = true;
-	cGameEngine::showWidget(this, showNow);
+	return cGameEngine::showWidget(this, showNow);
 }
 
-void cWidget::unshow(bool showNow)
+bool cWidget::unshow(bool showNow)
 {
 	IsVisible = false;
-	cGameEngine::unshowWidget(this, showNow);
-}
-void cWidget::reset(bool showNow)
-{
-	show(showNow);
+	return cGameEngine::unshowWidget(this, showNow);
 }
 
-cDWindow::cDWindow(cWidget* parent, COORD Topleft, const string& tagName, const string& imgSrc) : cWidget(parent, Topleft, tagName, imgSrc) {}
-cDWindow::cDWindow(cDWindow* parent, COORD Topleft, const string& tagName, const string& imgSrc) : cWidget(static_cast<cWidget*> (parent), Topleft, tagName, imgSrc) {}
-
-void cDWindow::show(bool showNow)
+cDWindow::cDWindow(cWidget* parent, COORD Topleft, const string& tagName, const string& imgSrc, bool showNow) : cWidget(parent, Topleft, tagName, imgSrc)
 {
-	cWidget::show(showNow);
+	if (showNow)
+		show();
+}
+cDWindow::cDWindow(cDWindow* parent, COORD Topleft, const string& tagName, const string& imgSrc, bool showNow) : cWidget(static_cast<cWidget*> (parent), Topleft, tagName, imgSrc)
+{
+	if (showNow)
+		show();
 }
 
-void cDWindow::unshow(bool showNow)
+bool cDWindow::show(bool showNow)
 {
-	cWidget::unshow(showNow);
+	return cWidget::show(showNow);
+}
+
+bool cDWindow::unshow(bool showNow)
+{
+	return cWidget::unshow(showNow);
 }
 
 
@@ -104,14 +99,14 @@ cButton::cButton(cDWindow* parent, COORD offsetFromParentTopleft, const string& 
 	buttonFunction = pFunction;
 }
 
-void cButton::show(bool showNow)
+bool cButton::show(bool showNow)
 {
-	cWidget::show(showNow);
+	return cWidget::show(showNow);
 }
 
-void cButton::unshow(bool showNow)
+bool cButton::unshow(bool showNow)
 {
-	cWidget::unshow(showNow);
+	return cWidget::unshow(showNow);
 }
 
 void cButton::onSelect()
@@ -149,24 +144,18 @@ void cLabel::createTextline()
 	COORD pos = { topleft.X - parentWindow->topleft.X, topleft.Y - parentWindow->topleft.Y};
 	for (int i = 0; i < text.length(); i++)
 	{
-		Texture* pChar = nullptr;
-		if (toupper(text[i]) >= 'A' && toupper(text[i]) <= 'Z')
-		{
-			pChar = &cAsset::alphabet[toupper(text[i]) - 'A'];
-			offset = pChar->getWidth() + align;
-
-		}
-		else if (text[i] >= '0' && text[i] <= '9')
-		{
-			pChar = &cAsset::number[text[i] - '0'];
-			offset = pChar->getWidth() + align;
-		}
-		else if (text[i] == ' ')
+		Texture* pChar = cAsset::getChar(text[i]);
+		if (text[i] == ' ')
 		{
 			pChar = &cAsset::blankchar;
-			
 			offset = 5 + align;
-
+		}
+		else {
+			pChar = cAsset::getChar(text[i]);
+			if (pChar)
+			{
+				offset = pChar->getWidth() + align;
+			}
 		}
 		if (pChar)
 		{
@@ -177,7 +166,8 @@ void cLabel::createTextline()
 	}
 	if (offset == 0)
 		return;
-	botright = { short(min(topleft.X + length - 1, parentWindow->botright.X)), short(min(topleft.Y + textLine[0].pChar->getHeight() - 1, parentWindow->botright.Y))};
+	botright = { short(topleft.X + length - 1), short(topleft.Y + textLine[0].pChar->getHeight() - 1)};
+	botright = { min(botright.X, parentWindow->botright.X), min(botright.Y, parentWindow->botright.Y) };
 }
 
 cLabel::cLabel(cDWindow* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& text, const short& align, Color textColor)
@@ -202,20 +192,71 @@ void cLabel::updateText(const string& newText)
 	show();
 }
 
-void cLabel::show(bool showNow)
+bool cLabel::show(bool showNow)
 {
 	if (textLine.size() == 0)
-		return;
+		return false;
 	IsVisible = true;
-	cGameEngine::showLabel(this, showNow);
+	return cGameEngine::showLabel(this, showNow);
 }
 
-void cLabel::unshow(bool showNow)
+bool cLabel::unshow(bool showNow)
 {
 	if (textLine.size() == 0)
-		return;
+		return false;
 	IsVisible = false;
-	cGameEngine::unshowLabel(this, showNow);
+	return cGameEngine::unshowLabel(this, showNow);
+}
+
+cBar::cBar(cDWindow* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const short& length, const short& width, Color barColor, Color BarBGColor)
+{
+	this->parentWindow = static_cast<cWidget*> (parentWindow);
+	IsVisible = false;
+	tag = tagName;
+	this->length = length;
+	this->width = width;
+	currentFill = 0;
+	forecolor = short(barColor);
+	backcolor = short(BarBGColor);
+
+	offset = offsetFromParentTopleft;
+
+	topleft = { short(parentWindow->topleft.X + offsetFromParentTopleft.X), short(parentWindow->topleft.Y + offsetFromParentTopleft.Y) };
+	topleft = { max(topleft.X, parentWindow->topleft.X), max(topleft.Y, parentWindow->topleft.Y) };
+	botright = { short(topleft.X + length * width - 1), short(topleft.Y + width - 1) };
+	botright = { min(botright.X, parentWindow->botright.X), min(botright.Y, parentWindow->botright.Y) };
+
 }
 
 
+bool cBar::show(bool showNow)
+{
+	return cGameEngine::showBar(this, showNow);
+}
+
+bool cBar::unshow(bool showNow)
+{
+	return cGameEngine::unshowBar(this, showNow);
+}
+
+bool cBar::setProgress(bool autoRun, short percentage, bool showNow)
+{
+	if (autoRun)
+	{
+		for (short i = 1; i <= length; i++)
+		{
+			currentFill = i;
+			show(showNow);
+			Sleep(150);
+		}
+	}
+	else {
+		currentFill = percentage * length / 100;
+		if (showNow)
+		{
+			unshow();
+			show();
+		}
+	}
+	return true;
+}

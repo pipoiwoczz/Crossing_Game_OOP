@@ -1,9 +1,6 @@
 #include "Map.h"
 #include "cAsset.h"
-	vector<gameMap> gameMap::listMap = gameMap::loadMap();
-	gameMap* gameMap::currentMap = &gameMap::listMap[0];
-    int gameMap::currentMapIndex = 0;
-    int gameMap::mapLoopCooldown = 15;
+
     gameMap::gameMap()
     {
         mapArray = nullptr;
@@ -37,7 +34,7 @@
         return *this;
     }
 
-    vector<gameMap> gameMap::loadMap()
+    vector<gameMap> gameMap::loadMap(const vector<string> &maplist)
     {
         vector<gameMap> loadedMap;
         for (string filename: maplist)

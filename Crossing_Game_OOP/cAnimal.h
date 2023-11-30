@@ -16,6 +16,7 @@ class cLion : public cAnimal {
 	static vector<Texture> textureLion;
     
 public:
+    friend bool mainLoader();
     static vector<Texture> impactEffect;
 	cLion();
     cLion (COORD In_pos, int speed);
@@ -33,6 +34,9 @@ class cRhino : public cAnimal {
 	static vector<Texture> textureRhino;
     static vector<Texture> impactEffect;
 public:
+    friend bool mainLoader();
+
+
 	cRhino();
 	cRhino(COORD In_pos, int speed);
     ~cRhino();
@@ -49,6 +53,9 @@ class cCrocodile : public cAnimal {
     static vector<Texture> impactEffect;
 
 public:
+    friend bool mainLoader();
+
+
 	cCrocodile();
 	cCrocodile(COORD In_pos, int speed);
     ~cCrocodile();

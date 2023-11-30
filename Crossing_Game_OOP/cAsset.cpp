@@ -1,8 +1,6 @@
 ﻿#include "cAsset.h"
 
-vector<Texture> cAsset::alphabet;
-vector<Texture> cAsset::number;
-Texture cAsset::blankchar = cAsset::assetLoader("Char//Alphabet//blank.txt");
+
 
 Texture::Texture() {
     height = 0;
@@ -116,4 +114,33 @@ void cAsset::numberLoader()
     {
         number.push_back(assetLoader("Char//Number//" + to_string(i) + ".txt"));    
     }
+}
+void cAsset::specialCharLoader()
+{
+    for (int i = 1; i < 9   ; i++)
+    {
+        special.push_back(assetLoader("Char//Special//sc" + to_string(i) + ".txt"));
+    }
+}
+
+Texture* cAsset::getChar(unsigned char In_char)
+{
+    if (toupper(In_char) >= 'A' && toupper(In_char) <= 'Z')
+        return &alphabet[toupper(In_char) - 'A'];
+    if (In_char >= '0' && In_char <= '9')
+        return &number[In_char - '0'];
+    switch (In_char)
+    {
+        case '%': return &special[0];
+        case ':': return &special[1];
+        case '<': return &special[2];
+        case '>': return &special[3];
+        case '=': return &special[4];
+        case '+': return &special[5];
+        case '-': return &special[6];
+        case '\0': return &special[7];
+    default:
+        break;
+    }
+    return nullptr;
 }

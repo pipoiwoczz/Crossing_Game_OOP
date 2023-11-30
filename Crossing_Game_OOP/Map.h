@@ -22,12 +22,13 @@ public:
 	gameMap(const gameMap& a);
 	gameMap& operator=(const gameMap& a);
 
-	static vector<gameMap> loadMap();
+	static vector<gameMap> loadMap(const vector<string>& maplist);
 	static gameMap* getCurrentMap();
 	static void changeMap(BGIndex newMapIndex);
 	static void nextMap();
 
 	friend cAsset;
+	friend bool mainLoader();
 };
 
 #endif	

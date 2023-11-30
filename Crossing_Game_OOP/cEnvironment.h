@@ -2,6 +2,7 @@
 #define C_ENVIRONMENT_H
 #include "cObstacle.h"
 
+class cGameEngine;
 class Texture;
 class cRiver : public cObstacle {
 private:
@@ -19,6 +20,9 @@ class cLilyleaf : public cObstacle {
 private:
     static vector<Texture> textureLily;
 public:
+    friend bool mainLoader();
+
+
     cLilyleaf(COORD In_pos);
     unsigned char getType();
 

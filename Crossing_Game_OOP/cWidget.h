@@ -8,6 +8,7 @@ class cGameEngine;
 class cButton;
 class cLabel;
 class cDWindow;
+class cBar;
 
 class cWidget {
 private:
@@ -26,18 +27,17 @@ protected:
 
 	cWidget(cWidget* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& imgSrc);
 public:
-	static cWidget loadingscreen;
 	static cWidget window;
-	static bool Loadstart();
 	static bool createMainWindow(const string& tagName);
-	virtual void show(bool showNow = true);
-	virtual void unshow(bool showNow = true);
-	void reset(bool showNow = true);
+	virtual bool show(bool showNow = true);
+	virtual bool unshow(bool showNow = true);
 	void setPos(COORD In_topleft);
 	COORD getPos();
+
 	friend cDWindow;
 	friend cButton;
 	friend cLabel;
+	friend cBar;
 
 	friend cGameEngine;
 };
@@ -47,11 +47,11 @@ public:
 class cDWindow : public cWidget {
 private:
 public:
-	cDWindow(cWidget* parent, COORD Topleft, const string& tagName, const string& imgSrc);
-	cDWindow(cDWindow* parent, COORD Topleft, const string& tagName, const string& imgSrc);
+	cDWindow(cWidget* parent, COORD Topleft, const string& tagName, const string& imgSrc, bool showNow = false);
+	cDWindow(cDWindow* parent, COORD Topleft, const string& tagName, const string& imgSrc, bool showNow = false);
 
-	void show(bool showNow = true);
-	void unshow(bool showNow = true);
+	bool show(bool showNow = true);
+	bool unshow(bool showNow = true);
 };
  
 class cButton: public cWidget {
@@ -67,8 +67,8 @@ public:
 	friend cGameEngine;
 	cButton(cDWindow* parent, COORD offsetFromParentTopleft,const string& tagName, const string& imgSrc, short borderDensity, void (*pFunction) (void));
 
-	void show(bool showNow = true);
-	void unshow(bool showNow = true);
+	bool show(bool showNow = true);
+	bool unshow(bool showNow = true);
 
 	void onSelect();
 	void onDeSelect();
@@ -77,7 +77,7 @@ public:
 
 
 class cLabel {
-private:
+protected:
 	cWidget* parentWindow = nullptr;
 	struct tchar {
 		Texture* pChar = nullptr;
@@ -98,8 +98,31 @@ private:
 public:
 	friend cGameEngine;
 	cLabel(cDWindow* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& text, const short& align, Color textColor);
-	void show(bool showNow = true);
-	void unshow(bool showNow = true);
+	bool show(bool showNow = true);
+	bool unshow(bool showNow = true);
 	void updateText(const string& newText);
+};
+
+class cBar {
+private:
+	cWidget* parentWindow = nullptr;
+	short forecolor;
+	short backcolor;
+	bool IsVisible;
+	short length;
+	short width;
+	short currentFill;
+	string tag;
+	COORD topleft;
+	COORD offset;
+	COORD botright;
+public:	
+
+	friend cGameEngine;
+	
+	cBar(cDWindow* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const short& length, const short& width, Color barColor, Color BarBGColor);
+	bool setProgress(bool autoRun = true, short percentage = 0, bool showNow = true);
+	bool show(bool showNow = true);
+	bool unshow(bool showNow = true);
 };
 #endif

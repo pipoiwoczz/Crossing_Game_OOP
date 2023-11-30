@@ -70,4 +70,6 @@ enum class VehicleIndex {
 	Heli = 1,
 	Motorbike = 2
 };
+
+
 #endif
