@@ -23,15 +23,16 @@ private:
 	static CHAR_INFO* mainBuffer;
 	static CHAR_INFO* reservedBuffer;
 
-	//handles for double-buffs tech
+	//Double-buffers stuffs
 	static HANDLE Hbuffer1;
 	static HANDLE Hbuffer2;
-	
-	//count for double-buffs tech
 	static int count;
+
+	//Object rendering
 	static void renderPeople(cPeople* pPeople);
 	static void renderObstacle(cObstacle* pObstacle);
 	
+	//Initialization Phase
 	static COORD GetMonitorDimension();
 	static void FixConsoleBuffer(HANDLE H);
 	static void FixConsoleFont(HANDLE H);
@@ -41,6 +42,7 @@ private:
 	static void disableUserSelection();
 	static void disableCtrlHandler();
 
+	//Widgets rendering
 	static bool showWidget(cWidget* pWidget, bool instant = true);
 	static bool unshowWidget(cWidget* pWidget, bool instant = true);
 
@@ -53,7 +55,7 @@ private:
 	static bool showBar(cBar* pBar, bool instant = true);
 	static bool unshowBar(cBar* pBar, bool instant = true);
 
-	//Processing type
+	//Pixel Processing
 
 	//fill des buffer with non-blank pixel of src
 	static void fillEffectivePixel(CHAR_INFO*& des, const COORD& desSize, CHAR_INFO*& src, const COORD& srcSize, const COORD& StartCoord);
@@ -64,7 +66,7 @@ private:
 	//fill pixels of a size-restricted des with designated color
 	static void paintBucket(CHAR_INFO* des, const COORD& desSize, short color);
 public:
-	
+	//Friends for fast accessing
 	friend cGame;
 	friend cWidget;
 	friend cButton;
@@ -79,8 +81,6 @@ public:
 
 	static void cleanEngine();
 	
-	static void swapHandle();
-
 	static void refreshBackGround(bool fillNow = false);
 
 	static void maindraw(cGame* pGame);

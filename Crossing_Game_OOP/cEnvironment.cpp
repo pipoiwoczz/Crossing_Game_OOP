@@ -6,7 +6,8 @@ cRiver::cRiver(short line, cObstacle*& safeThingAboveThis) : cObstacle({ 0, line
 {
     movable = false;
     pSafe = safeThingAboveThis;
-    pTexture = nullptr;
+    pMotionFrame = nullptr;
+
     Box.set({ 0, line }, { PlayBoxRect.Right, short(line + 17) });
 }
 unsigned char cRiver::getType()
@@ -25,11 +26,12 @@ void cRiver::hitSound()
 cLilyleaf::cLilyleaf(COORD In_pos) : cObstacle(In_pos, 0)
 {
     friendly = true;
-    pTexture = &cLilyleaf::textureLily[0];
-    pLTexture = pTexture;
+
+    pMotionFrame = &motionFrames[0];
+    pLMotionFrames = pMotionFrame;
     currentFrame = 0;
-    nFrame = textureLily.size();
-    Box.set(topleft, { short(topleft.X + pTexture->getWidth() - 1), short(topleft.Y + pTexture->getHeight() - 1) });
+    numMotionFrame = motionFrames.size();
+    Box.set(topleft, { short(topleft.X + pMotionFrame->getWidth() - 1), short(topleft.Y + pMotionFrame->getHeight() - 1) });
 }
 unsigned char cLilyleaf::getType() {
     return '\0';

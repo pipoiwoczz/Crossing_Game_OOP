@@ -543,7 +543,7 @@ void cGame::spawnObstacle() {
 			if (pObj)
 			{
 				liveObstacles.push_back(pObj);
-				cX += pObj->pTexture->width + offsetF + offsetB;;
+				cX += pObj->pMotionFrame->width + offsetF + offsetB;;
 				pObj = nullptr;
 			}
 		}

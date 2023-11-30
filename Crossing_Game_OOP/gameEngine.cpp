@@ -205,20 +205,20 @@ void cGameEngine::renderPeople(cPeople* pPeople)
 {
 	if (!pPeople->mState)
 		return;
-	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pPeople->pTexture->textureArray, { pPeople->pTexture->width, pPeople->pTexture->height }, pPeople->topleft);
+	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pPeople->pMotionFrame->textureArray, { pPeople->pMotionFrame->width, pPeople->pMotionFrame->height }, pPeople->topleft);
 	/*	->currentFrame = (itera->currentFrame + 1) % itera->nFrame;
-	itera->pTexture = itera->pLTexture + itera->currentFrame; */
+	itera->pMotionFrame = itera->pLMotionFrames + itera->currentFrame; */
 }
 
 void cGameEngine::renderObstacle(cObstacle* pObstacle)
 {
-	if (pObstacle->pTexture == nullptr)
+	if (pObstacle->pMotionFrame == nullptr)
 		return;
 
 	if (pObstacle->timeUntilRender == 0)
 	{
-		pObstacle->currentFrame = (pObstacle->currentFrame + 1) % pObstacle->nFrame;
-		pObstacle->pTexture = pObstacle->pLTexture + pObstacle->currentFrame;
+		pObstacle->currentFrame = (pObstacle->currentFrame + 1) % pObstacle->numMotionFrame;
+		pObstacle->pMotionFrame = pObstacle->pLMotionFrames + pObstacle->currentFrame;
 		
 		pObstacle->timeUntilRender = pObstacle->defaulttimeUntilRender;
 	}
@@ -226,7 +226,7 @@ void cGameEngine::renderObstacle(cObstacle* pObstacle)
 		pObstacle->timeUntilRender--;
 	}
 
-	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pObstacle->pTexture->textureArray, { pObstacle->pTexture->width, pObstacle->pTexture->height }, pObstacle->topleft);
+	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pObstacle->pMotionFrame->textureArray, { pObstacle->pMotionFrame->width, pObstacle->pMotionFrame->height }, pObstacle->topleft);
 
 	if (pObstacle->movable)
 	pObstacle->move();
@@ -307,6 +307,8 @@ void cGameEngine::maindraw(cGame* pGame)
 
 bool cGameEngine::showWidget(cWidget* pWidget, bool instant)
 {
+	if (!pWidget->WidgetFace.textureArray || !pWidget->parentWindow->WidgetFace.textureArray)
+		return false;
 	SMALL_RECT region = { pWidget->topleft.X, pWidget->topleft.Y, pWidget->botright.X, pWidget->botright.Y };
 	memcpy(reservedBuffer, pWidget->WidgetFace.textureArray, pWidget->WidgetFace.width * pWidget->WidgetFace.height * sizeof(CHAR_INFO));
 	if (pWidget->parentWindow)
@@ -319,7 +321,7 @@ bool cGameEngine::showWidget(cWidget* pWidget, bool instant)
 
 bool cGameEngine::unshowWidget(cWidget* pWidget, bool instant)
 {
-	if (!pWidget->parentWindow->WidgetFace.textureArray)
+	if (!pWidget->WidgetFace.textureArray || !pWidget->parentWindow->WidgetFace.textureArray)
 		return false;
 	SMALL_RECT region = { pWidget->topleft.X, pWidget->topleft.Y, pWidget->botright.X, pWidget->botright.Y };
 	replaceAllPixel(reservedBuffer, { pWidget->WidgetFace.width,  pWidget->WidgetFace.height }, pWidget->parentWindow->WidgetFace.textureArray, { pWidget->parentWindow->WidgetFace.width, pWidget->parentWindow->WidgetFace.height }, pWidget->offset);
@@ -333,6 +335,8 @@ bool cGameEngine::unshowWidget(cWidget* pWidget, bool instant)
 
 bool cGameEngine::HighLightButton(cButton* pButton, bool instant)
 {
+	if (!pButton->WidgetFace.textureArray || !pButton->parentWindow->WidgetFace.textureArray)
+		return false;
 	short W = pButton->OBotright.X - pButton->OTopleft.X + 1;
 	short H = pButton->OBotright.Y - pButton->OTopleft.Y + 1;
 	SMALL_RECT outerRect = { pButton->OTopleft.X, pButton->OTopleft.Y, pButton->OBotright.X, pButton->OBotright.Y };
@@ -350,6 +354,8 @@ bool cGameEngine::HighLightButton(cButton* pButton, bool instant)
 
 bool cGameEngine::UnHighLightButton(cButton* pButton, bool instant)
 {
+	if (!pButton->WidgetFace.textureArray || !pButton->parentWindow->WidgetFace.textureArray)
+		return false;
 	COORD erasepos = {pButton->offset.X - pButton->bordDensity, pButton->offset.Y - pButton->bordDensity};
 
 	SMALL_RECT outerRect = { pButton->OTopleft.X, pButton->OTopleft.Y, pButton->OBotright.X, pButton->OBotright.Y };
@@ -363,6 +369,9 @@ bool cGameEngine::UnHighLightButton(cButton* pButton, bool instant)
 
 bool cGameEngine::showLabel(cLabel* pLabel, bool instant)
 {
+	if (pLabel->textLine.size() == 0)
+		return false;
+
 	for (int i = 0; i < pLabel->textLine.size(); i++)
 	{
 		if (pLabel->textLine[i].pos.X > pLabel->botright.X - pLabel->textLine[i].pChar->width)
@@ -392,6 +401,8 @@ bool cGameEngine::showLabel(cLabel* pLabel, bool instant)
 
 bool cGameEngine::unshowLabel(cLabel* pLabel, bool instant)
 {
+	if (!pLabel->parentWindow->WidgetFace.textureArray)
+		return false;
 	SMALL_RECT region = { pLabel->topleft.X, pLabel->topleft.Y, pLabel->botright.X, pLabel->botright.Y };
 
 	replaceAllPixel(reservedBuffer, { short(pLabel->botright.X - pLabel->topleft.X + 1), short(pLabel->botright.Y - pLabel->topleft.Y + 1)}, pLabel->parentWindow->WidgetFace.textureArray, {pLabel->parentWindow->WidgetFace.width, pLabel->parentWindow->WidgetFace.height}, pLabel->offset);
@@ -403,9 +414,11 @@ bool cGameEngine::unshowLabel(cLabel* pLabel, bool instant)
 
 }
 
-
 bool cGameEngine::showBar(cBar* pBar, bool instant)
 {
+	if (pBar->length == 0 || !pBar->parentWindow->WidgetFace.textureArray)
+		return false;
+
 	SMALL_RECT region = { pBar->topleft.X,  pBar->topleft.Y,  pBar->botright.X,  pBar->botright.Y };
 	COORD writepos = pBar->topleft;
 
@@ -424,6 +437,8 @@ bool cGameEngine::showBar(cBar* pBar, bool instant)
 
 bool cGameEngine::unshowBar(cBar* pBar, bool instant)
 {
+	if (pBar->length == 0 || !pBar->parentWindow->WidgetFace.textureArray)
+		return false;
 	SMALL_RECT region = { pBar->topleft.X,  pBar->topleft.Y,  pBar->botright.X,  pBar->botright.Y };
 	replaceAllPixel(reservedBuffer, { pBar->length, pBar->width }, pBar->parentWindow->WidgetFace.textureArray, { pBar->parentWindow->WidgetFace.width, pBar->parentWindow->WidgetFace.height }, pBar->offset);
 	WriteConsoleOutput(curHandle, reservedBuffer, { pBar->length, pBar->width }, { 0,0 }, &region);
@@ -434,37 +449,36 @@ bool cGameEngine::unshowBar(cBar* pBar, bool instant)
 }
 
 void cGameEngine::playEffect(cObstacle* obsta, cPeople* player) {
-	vector<Texture> f;
-		f = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-	short w = f[0].width;
-	short h = f[0].height;
+
+	short w = cAsset::FxFrame.width;
+	short h = cAsset::FxFrame.height;
 	COORD writepos = { 100, 31 };
 
-	replaceBlankPixel(f[0].textureArray, { w,h }, mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, { 100,31 });
+	replaceBlankPixel(cAsset::FxFrame.textureArray, { w,h }, mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, { 100,31 });
 
 	SMALL_RECT fxframe = { writepos.X, writepos.Y, writepos.X + w - 1, writepos.Y + h - 1 };
 
 	COORD p{ writepos.X + 150, writepos.Y + 30 };
 
 	player->topleft = { 214, 58 };
-	player->pTexture = &player->skin[3];
-	replaceBlankPixel(player->pTexture->textureArray, { player->pTexture->width, player->pTexture->height }, f[0].textureArray, { w, h }, { 120, 25 });
-	SMALL_RECT re = { p.X, p.Y, p.X + player->pTexture->width - 1, p.Y + player->pTexture->height - 1 };
+	player->pMotionFrame = &player->skin[3];
+	replaceBlankPixel(player->pMotionFrame->textureArray, { player->pMotionFrame->width, player->pMotionFrame->height }, cAsset::FxFrame.textureArray, { w, h }, { 120, 25 });
+	SMALL_RECT re = { p.X, p.Y, p.X + player->pMotionFrame->width - 1, p.Y + player->pMotionFrame->height - 1 };
 
 	COORD startpos = { 50, 25 };
-	
-	for (int j = 1; j < f.size(); j++)
+
+	for (int j = 0; j < obsta->numFxFrame; j++)
 	{
-		WriteConsoleOutput(cGameEngine::curHandle, f[0].textureArray, { w, h }, { 0,0 }, &fxframe);
-		memcpy(reservedBuffer, f[j].textureArray, f[j].width * f[j].height * sizeof(CHAR_INFO));
+		WriteConsoleOutput(cGameEngine::curHandle, cAsset::FxFrame.textureArray, { w, h }, { 0,0 }, &fxframe);
+		memcpy(reservedBuffer, (obsta->pLFxFrames + j)->textureArray, (obsta->pLFxFrames + j)->width * (obsta->pLFxFrames + j)->height * sizeof(CHAR_INFO));
 
-		replaceBlankPixel(reservedBuffer, { f[j].width, f[j].height }, f[0].textureArray, { w, h }, { 50, 25 });
+		replaceBlankPixel(reservedBuffer, { (obsta->pLFxFrames + j)->width, (obsta->pLFxFrames + j)->height }, cAsset::FxFrame.textureArray, { w, h }, { 50, 25 });
 
-		SMALL_RECT reg = { writepos.X + startpos.X , writepos.Y + startpos.Y,   writepos.X + startpos.X + f[j].width - 1,  writepos.X + startpos.X + f[j].height - 1 };
+		SMALL_RECT reg = { writepos.X + startpos.X , writepos.Y + startpos.Y,   writepos.X + startpos.X + (obsta->pLFxFrames + j)->width - 1,  writepos.X + startpos.X + (obsta->pLFxFrames + j)->height - 1 };
 
-		WriteConsoleOutput(cGameEngine::curHandle, reservedBuffer, { f[j].width , f[j].height }, { 0,0 }, &reg);
+		WriteConsoleOutput(cGameEngine::curHandle, reservedBuffer, { (obsta->pLFxFrames + j)->width , (obsta->pLFxFrames + j)->height }, { 0,0 }, &reg);
 		if (j < 7)
-			WriteConsoleOutput(curHandle, player->pTexture->textureArray, { player->pTexture->width, player->pTexture->height }, { 0,0 }, &re);
+			WriteConsoleOutput(curHandle, player->pMotionFrame->textureArray, { player->pMotionFrame->width, player->pMotionFrame->height }, { 0,0 }, &re);
 		if (j == 1)
 			Sleep(500);
 

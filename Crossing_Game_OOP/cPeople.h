@@ -6,8 +6,12 @@
 class Texture;
 class cPeople {
 	vector<Texture> skin;
-	Texture* pTexture;
+
+
+	Texture* pMotionFrame;
 	int currentFrame;
+
+
     COORD topleft;
 	bool isMoving = false;
 	bool mState; // true is alive, false is dead =))

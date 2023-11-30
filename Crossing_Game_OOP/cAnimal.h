@@ -12,12 +12,11 @@ public:
 
 class cLion : public cAnimal {
    // static cObstacle * bootstrapObjectcLion;
-    static vector<Texture> hitEffectFrame;
-	static vector<Texture> textureLion;
-    
+	static vector<Texture> motionFrames;
+    static vector<Texture> impactFx;
+
 public:
     friend bool mainLoader();
-    static vector<Texture> impactEffect;
 	cLion();
     cLion (COORD In_pos, int speed);
     ~cLion();
@@ -31,8 +30,8 @@ public:
 class cRhino : public cAnimal {
     //static cObstacle * bootstrapObjectcRhino;
 
-	static vector<Texture> textureRhino;
-    static vector<Texture> impactEffect;
+	static vector<Texture> motionFrames;
+    static vector<Texture> impactFx;
 public:
     friend bool mainLoader();
 
@@ -49,8 +48,8 @@ public:
 class cCrocodile : public cAnimal {
    // static cObstacle * bootstrapObjectcCrocodile;
 
-	static vector<Texture> textureCroco;
-    static vector<Texture> impactEffect;
+	static vector<Texture> motionFrames;
+    static vector<Texture> impactFx;
 
 public:
     friend bool mainLoader();

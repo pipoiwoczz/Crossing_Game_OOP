@@ -8,8 +8,11 @@ cPeople::cPeople(COORD In_pos) {
 	mState = true;
 	moveCooldown = 0;
 	skin = cAsset::assetLoaders(peopleFile, PlayerPrefix);
-	pTexture = &skin[2];
+
+
+	pMotionFrame = &skin[2];
 	currentFrame = 0;
+
 	mBox.set({ short(topleft.X + 4), short(2 + topleft.Y) }, { short(skin[0].getWidth() - 4 + topleft.X), short(skin[0].getHeight() - 2 + topleft.Y) });
 }
 cPeople::~cPeople() {
@@ -50,14 +53,14 @@ bool cPeople::move() {
 		dx--;
 		horizon = true;
 		ismove = true;
-		pTexture = &skin[3];
+		pMotionFrame = &skin[3];
 	}
 
-	if (GetAsyncKeyState(VK_RIGHT) < 0 && topleft.X < PlayBoxRect.Right - pTexture->getWidth()) {
+	if (GetAsyncKeyState(VK_RIGHT) < 0 && topleft.X < PlayBoxRect.Right - pMotionFrame->getWidth()) {
 		dx++;	
 		horizon = true;
 		ismove = true;
-		pTexture = &skin[1];
+		pMotionFrame = &skin[1];
 
 	}
 
@@ -73,15 +76,15 @@ bool cPeople::move() {
 			dy--;
 			horizon = false;
 			ismove = true;
-			pTexture = &skin[0];
+			pMotionFrame = &skin[0];
 		}
 	} 
 
-	if (GetAsyncKeyState(VK_DOWN) < 0 && topleft.Y < PlayBoxRect.Bottom - pTexture->getHeight() + 1) {
+	if (GetAsyncKeyState(VK_DOWN) < 0 && topleft.Y < PlayBoxRect.Bottom - pMotionFrame->getHeight() + 1) {
 		dy++;
 		horizon = false;
 		ismove = true;
-		pTexture = &skin[2];
+		pMotionFrame = &skin[2];
 	}
 	if (ismove )
 	{
@@ -89,7 +92,7 @@ bool cPeople::move() {
 		if (!horizon)
 		{
 			moveCooldown = 8;
-			topleft.Y += dy * pTexture->getHeight();
+			topleft.Y += dy * pMotionFrame->getHeight();
 			dx = 0;
 		}
 		else
@@ -97,7 +100,7 @@ bool cPeople::move() {
 			topleft.X += dx * 6;
 			dy = 0;
 		}
-		mBox.move({ short(dx * 6), short(dy * pTexture->getHeight())});
+		mBox.move({ short(dx * 6), short(dy * pMotionFrame->getHeight())});
 		return ismove;
 	}
 }

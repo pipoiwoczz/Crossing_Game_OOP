@@ -9,6 +9,8 @@ const vector<string> crocoFile { "croco.txt" };
 const vector<string> truckFile { "truck.txt" };
 const vector<string> heliFile { "heli.txt" };
 const vector<string> motorbFile { "motorb.txt" };
+
+const string FxFrameFile { "fxframe.txt" };
 const vector<string> hedgeImpactEffect { "fxframe.txt", "base.txt", "purple.txt", "blast.txt", "explosion1.txt","explosion2.txt", "explosion3.txt","fade1.txt", "fade2.txt", "fade3.txt", "dissappear.txt" };
 const vector<string> lionImpactEffect{ "fxframe.txt", "lioneffect1.txt", "lioneffect2.txt","lioneffect3.txt","lioneffect4.txt","lioneffect5.txt" ,"lioneffect6.txt" ,"lioneffect7.txt","lioneffect8.txt","lioneffect9.txt","lioneffect10.txt" };
 
@@ -51,6 +53,7 @@ public:
 	static vector<Texture> number;
 	static vector<Texture> special;
 	static Texture blankchar;
+	static Texture FxFrame;
 	friend cLabel;
 	friend cGameEngine;
 	static Texture assetLoader(string filename);

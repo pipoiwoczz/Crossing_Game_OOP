@@ -18,7 +18,7 @@ public:
 
 class cLilyleaf : public cObstacle {
 private:
-    static vector<Texture> textureLily;
+    static vector<Texture> motionFrames;
 public:
     friend bool mainLoader();
 

@@ -12,8 +12,8 @@ public:
 
 class cTruck : public cVehicle {
     //static cObstacle * bootstrapObjectcTruck;
-    static vector<Texture> impactEffect;
-	static vector<Texture> textureTruck;
+    static vector<Texture> motionFrames;
+	static vector<Texture> impactFx;
 
 public:
     friend bool mainLoader();
@@ -31,8 +31,8 @@ public:
 
 class cHelicopter : public cVehicle {
    // static cObstacle * bootstrapObjectcHelicopter;
-    static vector<Texture> impactEffect;
-	static vector<Texture> textureHeli;
+    static vector<Texture> motionFrames;
+	static vector<Texture> impactFx;
 public:
     friend bool mainLoader();
 
@@ -50,8 +50,8 @@ public:
 class cMotorbike : public cVehicle {
     //static cObstacle * bootstrapObjectcMotorbike;
 
-	static vector<Texture> textureMotorb;
-    static vector<Texture> impactEffect;
+	static vector<Texture> motionFrames;
+    static vector<Texture> impactFx;
 public:
     friend bool mainLoader();
 

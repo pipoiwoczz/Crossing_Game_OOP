@@ -148,7 +148,7 @@ void cAsset::numberLoader()
 }
 void cAsset::specialCharLoader()
 {
-    for (int i = 1; i < 9   ; i++)
+    for (int i = 1; i < 10   ; i++)
     {
         special.push_back(assetLoader("Char//Special//sc" + to_string(i) + ".txt"));
     }
@@ -170,6 +170,7 @@ Texture* cAsset::getChar(unsigned char In_char)
         case '+': return &special[5];
         case '-': return &special[6];
         case '\0': return &special[7];
+        case '?': return &special[8];
     default:
         break;
     }

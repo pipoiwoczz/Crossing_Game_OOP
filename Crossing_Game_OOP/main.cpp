@@ -33,19 +33,21 @@ bool cWidget::hasWd = cWidget::createMainWindow("main");
 
 //GameAsset
 Texture cAsset::blankchar;
-vector<Texture> cLilyleaf::textureLily;
-vector<Texture> cLion::textureLion;
-vector<Texture> cRhino::textureRhino;
-vector<Texture> cCrocodile::textureCroco;
-vector<Texture> cTruck::textureTruck;
-vector<Texture> cHelicopter::textureHeli;
-vector<Texture> cMotorbike::textureMotorb;
-vector<Texture> cMotorbike::impactEffect;
-vector<Texture> cHelicopter::impactEffect;
-vector<Texture> cTruck::impactEffect;
-vector<Texture> cLion::impactEffect;
-vector<Texture> cCrocodile::impactEffect;
-vector<Texture> cRhino::impactEffect;
+vector<Texture> cLilyleaf::motionFrames;
+vector<Texture> cLion::motionFrames;
+vector<Texture> cRhino::motionFrames;
+vector<Texture> cCrocodile::motionFrames;
+vector<Texture> cTruck::motionFrames;
+vector<Texture> cHelicopter::motionFrames;
+vector<Texture> cMotorbike::motionFrames;
+
+Texture cAsset::FxFrame;
+vector<Texture> cMotorbike::impactFx;
+vector<Texture> cHelicopter::impactFx;
+vector<Texture> cTruck::impactFx;
+vector<Texture> cLion::impactFx;
+vector<Texture> cCrocodile::impactFx;
+vector<Texture> cRhino::impactFx;
 vector<gameMap> gameMap::listMap;
 
 
@@ -58,21 +60,24 @@ bool mainLoader()
 	cAsset::specialCharLoader();
 	cAsset::blankchar = cAsset::assetLoader("Char//Alphabet//blank.txt");
 	loadingBar.setProgress(false, 10);
-	cLilyleaf::textureLily = cAsset::assetLoaders(lilyFile, TexturePrefix);
-	cLion::textureLion = cAsset::assetLoaders(lionFile, TexturePrefix);
-	cRhino::textureRhino = cAsset::assetLoaders(rhinoFile, TexturePrefix);
-	cCrocodile::textureCroco = cAsset::assetLoaders(crocoFile, TexturePrefix);
-	cTruck::textureTruck = cAsset::assetLoaders(truckFile, TexturePrefix);
-	cHelicopter::textureHeli = cAsset::assetLoaders(heliFile, TexturePrefix);
-	cMotorbike::textureMotorb = cAsset::assetLoaders(motorbFile, TexturePrefix);
+	cLilyleaf::motionFrames = cAsset::assetLoaders(lilyFile, TexturePrefix);
+	cLion::motionFrames = cAsset::assetLoaders(lionFile, TexturePrefix);
+	cRhino::motionFrames = cAsset::assetLoaders(rhinoFile, TexturePrefix);
+	cCrocodile::motionFrames = cAsset::assetLoaders(crocoFile, TexturePrefix);
+	cTruck::motionFrames = cAsset::assetLoaders(truckFile, TexturePrefix);
+	cHelicopter::motionFrames = cAsset::assetLoaders(heliFile, TexturePrefix);
+	cMotorbike::motionFrames = cAsset::assetLoaders(motorbFile, TexturePrefix);
 	loadingBar.setProgress(false, 50);
-	cMotorbike::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-	cHelicopter::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-	cTruck::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-	cLion::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-	cCrocodile::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-	cRhino::impactEffect = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+
+	cAsset::FxFrame = cAsset::assetLoader(FxPrefix + FxFrameFile);
+	cMotorbike::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+	cHelicopter::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+	cTruck::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+	cLion::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+	cCrocodile::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+	cRhino::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
 	loadingBar.setProgress(false, 80);
+
 	gameMap::listMap = gameMap::loadMap(maplist);
 	loadingBar.setProgress(false, 100);
 	Sleep(100);
@@ -165,16 +170,8 @@ void b1F(void)
 	mapMenu.unshow();*/
 
 }
+
 void b2F(void)
-{
-	//cBar bar(&br, { 20, 140 }, "bar", 150, 8, 2, Color::red, Color::white);
-	//bar.show();
-	//Sleep(3000);
-	//bar.progressing(true);
-	//bar.unshow();
-	//Sleep(3000);
-}
-void b3F(void)
 {
 	settingpanel.show();
 
@@ -190,7 +187,7 @@ void b3F(void)
 	cLabel FXsound(&settingpanel, { 200, 91 }, "fx", "Effect Volume", 1, Color::black);
 	cLabel FXvolume(&settingpanel, { 335, 91 }, "fxvolume", to_string(pSoundVolume[1]() / 10), 1, Color::black);
 
-	cButton selectarrow(&settingpanel, { 370, 61 }, "arrowL", "arrowL.txt", 1, pmap1);
+	cDWindow selectarrow(&settingpanel, { 370, 61 }, "selectarrow", "arrowL.txt");
 
 
 
@@ -210,10 +207,7 @@ void b3F(void)
 	selectarrow.show();
 	while (true)
 	{
-		if (GetAsyncKeyState(0x51) < 0)
-		{
-			break;
-		}
+
 		if (GetAsyncKeyState(VK_DOWN) < 0 && currentarrowpos < 1)
 		{
 			currentarrowpos++;
@@ -240,6 +234,11 @@ void b3F(void)
 			ValueBar[currentarrowpos].updateText(to_string(pSoundVolume[currentarrowpos]() / 10));
 			Sleep(250);
 		}
+		Sleep(150);
+		if (GetAsyncKeyState(0x0D) < 0)
+		{
+			break;
+		}
 	}
 	selectarrow.show();
 
@@ -251,11 +250,47 @@ void b3F(void)
 	settingpanel.unshow();
 }
 
+void b3F(void)
+{
+	cDWindow exitpanel(&cWidget::window, { 233, 60 }, "exitpanel", "exitpanel.txt", true);
+	cDWindow selectarrow(&exitpanel, { 96, 37 }, "selectarrow", "enterarrow.txt", true);
+	
+	short arrowPos[2] = { 24, 37 };
+	int currentarrowpos = 1;
+	while (true)
+	{
+		if (GetAsyncKeyState(VK_DOWN) < 0 && currentarrowpos < 1)
+		{
+			currentarrowpos++;
+			selectarrow.unshow();
+			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
+			selectarrow.show();
+		}
+		if (GetAsyncKeyState(VK_UP) < 0 && currentarrowpos > 0)
+		{
+			currentarrowpos--;
+			selectarrow.unshow();
+			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
+			selectarrow.show();
+		}
+		Sleep(150);
+		if (GetAsyncKeyState(0x0D) < 0)
+		{
+			if (currentarrowpos == 0)
+			{
+				running = false;
+			}
+			break;
+
+		}
+	}
+	exitpanel.unshow();	
+}
 int main() {
 	mainMenu.show();
 	cButton b1(&mainMenu, { 516, 55 }, "b1", "playbutton.txt", 1, b1F);
-	cButton b2(&mainMenu, { 516, 90 }, "b2", "loadbutton.txt", 1, b2F);
-	cButton b3(&mainMenu, { 516, 125 }, "b3", "settingbutton.txt", 1, b3F);
+	cButton b2(&mainMenu, { 516, 90 }, "b2", "settingbutton.txt", 1, b2F);
+	cButton b3(&mainMenu, { 516, 125 }, "b3", "exitbutton.txt", 1, b3F);
 
 	cButton buttonlist[3] = { b1, b2, b3 };
 	int x = 0;
@@ -267,8 +302,19 @@ int main() {
 
 	while (running)
 	{
-		if (GetAsyncKeyState(0x51) < 0)
-			break;
+		if (GetAsyncKeyState(VK_UP) && x > 0)
+		{
+			buttonlist[x].onDeSelect();
+			x--;
+			buttonlist[x].onSelect();
+		}
+		if (GetAsyncKeyState(VK_DOWN) && x < 2)
+		{
+			buttonlist[x].onDeSelect();
+			x++;
+			buttonlist[x].onSelect();
+		}
+		Sleep(150);
 		if (GetAsyncKeyState(0x0D) < 0)
 		{
 			buttonlist[x].onDeSelect();
@@ -283,21 +329,9 @@ int main() {
 				buttonlist[i].show();
 			}
 			buttonlist[x].onSelect();
-
 		}
-		if (GetAsyncKeyState(VK_UP) && x > 0)
-		{
-			buttonlist[x].onDeSelect();
-			x--;
-			buttonlist[x].onSelect();
-		}
-		if (GetAsyncKeyState(VK_DOWN) && x < 2)
-		{
-			buttonlist[x].onDeSelect();
-			x++;
-			buttonlist[x].onSelect();
-		}
-		Sleep(200);
+		if (GetAsyncKeyState(0x51) < 0)
+			break;
 	}
 	buttonlist[x].onDeSelect();
 	for (int i = 0; i < 3; i++)
