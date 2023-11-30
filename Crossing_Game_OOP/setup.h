@@ -54,9 +54,10 @@ enum class Color {
 	bright_white = 15,
 };
 
-enum class BGIndex {
-	BGMenu = 0,
-	Jungle = 1
+enum class MapTheme {
+	Jungle = 0,
+	Beach = 1,
+	City = 2
 };
 
 enum class AnimalIndex {

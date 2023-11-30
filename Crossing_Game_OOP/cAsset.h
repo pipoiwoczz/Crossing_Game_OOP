@@ -2,6 +2,12 @@
 #define CASSET_H
 #include "setup.h"
 
+extern const string UIPrefix; 
+extern const string TexturePrefix;
+extern const string FxPrefix;
+extern const string PlayerPrefix;
+extern const string MapPrefix;
+
 const vector<string> lilyFile { "lily.txt" };		
 const vector<string> lionFile { "lionmove1.txt", "lionmove2.txt","lionmove3.txt","lionmove4.txt","lionmove5.txt","lionmove6.txt","lionmove7.txt" };
 const vector<string> rhinoFile { "RhinoR1.txt","RhinoR2.txt","RhinoR3.txt" };
@@ -11,17 +17,16 @@ const vector<string> heliFile { "heli.txt" };
 const vector<string> motorbFile { "motorb.txt" };
 
 const string FxFrameFile { "fxframe.txt" };
-const vector<string> hedgeImpactEffect { "fxframe.txt", "base.txt", "purple.txt", "blast.txt", "explosion1.txt","explosion2.txt", "explosion3.txt","fade1.txt", "fade2.txt", "fade3.txt", "dissappear.txt" };
-const vector<string> lionImpactEffect{ "fxframe.txt", "lioneffect1.txt", "lioneffect2.txt","lioneffect3.txt","lioneffect4.txt","lioneffect5.txt" ,"lioneffect6.txt" ,"lioneffect7.txt","lioneffect8.txt","lioneffect9.txt","lioneffect10.txt" };
+const vector<string> hedgeImpactEffect {"base.txt", "purple.txt", "blast.txt", "explosion1.txt","explosion2.txt", "explosion3.txt","fade1.txt", "fade2.txt", "fade3.txt", "dissappear.txt" };
+const vector<string> lionImpactEffect{"lioneffect1.txt", "lioneffect2.txt","lioneffect3.txt","lioneffect4.txt","lioneffect5.txt" ,"lioneffect6.txt" ,"lioneffect7.txt","lioneffect8.txt","lioneffect9.txt","lioneffect10.txt" };
 
-const vector<string> maplist {"jungle1.txt", "jungle2.txt", "jungle3.txt"};
+const vector<vector<string>> mapFiles{
+	{"jungle1.txt", "jungle2.txt", "jungle3.txt"},
+	{"beach1.txt", "beach2.txt", "beach3.txt"}
+};
 const vector<string> peopleFile { "up.txt", "right.txt", "down.txt", "left.txt"};
 
-const string UIPrefix = "UI//";
-const string TexturePrefix = "Obstacles//";
-const string FxPrefix = "FX//";
-const string PlayerPrefix = "Player//";
-const string MapPrefix = "Maps//";
+
 
 class cGameEngine;
 class Texture {

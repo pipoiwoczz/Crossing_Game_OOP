@@ -34,10 +34,10 @@
         return *this;
     }
 
-    vector<gameMap> gameMap::loadMap(const vector<string> &maplist)
+    vector<gameMap> gameMap::loadMap(const vector<string> &mapFrame)
     {
         vector<gameMap> loadedMap;
-        for (string filename: maplist)
+        for (string filename: mapFrame)
         {
             ifstream mapIn;
             gameMap map;
@@ -45,7 +45,7 @@
             if (mapIn.is_open()) {
                 mapIn >> map.height >> map.width;
                 map.mapArray = new CHAR_INFO[map.height * map.width];
-                for (int i = 0; i < map.height * map.width; i++)
+                    for (int i = 0; i < map.height * map.width; i++)
                 {
                     int x;
                     mapIn >> x;
@@ -64,13 +64,15 @@
         return gameMap::currentMap;
     }
 
-    void gameMap::changeMap(BGIndex newMapIndex)
+    void gameMap::changeMapTheme(MapTheme newTheme)
     {
-        currentMapIndex = int(newMapIndex);
-        currentMap = &listMap[currentMapIndex];
+        currentTheme = int(newTheme);
+        numCurrentMapFrame = listMap[currentTheme].size();
+        currentMap = &listMap[currentTheme][0];
+        currentMapIndex = 0;
     }
 
-    void gameMap::nextMap() {
-        currentMapIndex = (currentMapIndex + 1) % listMap.size();
-        currentMap = &listMap[currentMapIndex];
+    void gameMap::nextMapFrame() {
+        currentMapIndex = (currentMapIndex + 1) % numCurrentMapFrame;
+        currentMap = &listMap[currentTheme][currentMapIndex];
     }

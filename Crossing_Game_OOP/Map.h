@@ -5,9 +5,13 @@ class cAsset;
 class gameMap {
 private:
 public:
-	static vector<gameMap> listMap;
+	static vector<vector<gameMap>> listMap;
+
+	static int currentTheme;
 	static gameMap* currentMap;
 	static int currentMapIndex;
+	static int numCurrentMapFrame;
+
 	static int mapLoopCooldown;
 	CHAR_INFO* mapArray = nullptr;
 	short width;
@@ -22,10 +26,10 @@ public:
 	gameMap(const gameMap& a);
 	gameMap& operator=(const gameMap& a);
 
-	static vector<gameMap> loadMap(const vector<string>& maplist);
+	static vector<gameMap> loadMap(const vector<string>& mapFrames);
 	static gameMap* getCurrentMap();
-	static void changeMap(BGIndex newMapIndex);
-	static void nextMap();
+	static void changeMapTheme(MapTheme newTheme);
+	static void nextMapFrame();
 
 	friend cAsset;
 	friend bool mainLoader();

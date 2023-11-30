@@ -9,6 +9,13 @@
 #include "Sound.h"
 #include "Map.h"
 //Game Core
+
+const string UIPrefix = "UI//";
+const string TexturePrefix = "Obstacles//";
+const string FxPrefix = "FX//";
+const string PlayerPrefix = "Player//";
+const string MapPrefix = "Maps//";
+
 const HANDLE mainHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
 int Sound::BGSoundVolume = 1000;
@@ -48,8 +55,14 @@ vector<Texture> cTruck::impactFx;
 vector<Texture> cLion::impactFx;
 vector<Texture> cCrocodile::impactFx;
 vector<Texture> cRhino::impactFx;
-vector<gameMap> gameMap::listMap;
+vector<vector<gameMap>> gameMap::listMap;
 
+int gameMap::currentTheme;
+gameMap* gameMap::currentMap;
+int gameMap::currentMapIndex;
+int gameMap::numCurrentMapFrame;
+
+int gameMap::mapLoopCooldown = 15;
 
 cDWindow mainMenu(&cWidget::window, { 0, 0 }, "bg", "menuBg.txt", true);
 bool mainLoader()
@@ -78,7 +91,13 @@ bool mainLoader()
 	cRhino::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
 	loadingBar.setProgress(false, 80);
 
-	gameMap::listMap = gameMap::loadMap(maplist);
+	gameMap::listMap;
+	for (int i = 0; i < mapFiles.size(); i++)
+	{
+		gameMap::listMap.push_back(gameMap::loadMap(mapFiles[i]));
+	}
+	
+
 	loadingBar.setProgress(false, 100);
 	Sleep(100);
 	loadingBar.unshow();
@@ -87,11 +106,8 @@ bool mainLoader()
 
 bool running = mainLoader();
 
-gameMap* gameMap::currentMap = &gameMap::listMap[0];
 
 
-int gameMap::currentMapIndex = 0;
-int gameMap::mapLoopCooldown = 15;
 
 cDWindow settingpanel(&cWidget::window, { 0,0 }, "settingpanel", "settingframe.txt");
 
@@ -112,7 +128,7 @@ void pmap3()
 }
 void b1F(void)
 {
-	/*cDWindow mapMenu(&br, { 240, 55 }, "menumap", "mapPanel.txt");
+	cDWindow mapMenu(&mainMenu, { 240, 55 }, "menumap", "mapPanel.txt");
 	mapMenu.show();
 	cButton map1(&mapMenu, { 10, 20 }, "map1", "jungleicon.txt", 1, pmap1);
 	cButton map2(&mapMenu, { 84, 20 }, "map1", "jungleicon.txt", 1, pmap2);
@@ -141,12 +157,7 @@ void b1F(void)
 				buttonlist[i].unshow();
 			}
 			buttonlist[x].onEnter();
-			br.show();
-			for (int i = 0; i < 3; i++)
-			{
-				buttonlist[i].show();
-			}
-			buttonlist[x].onSelect();
+			break;
 
 		}
 		if (GetAsyncKeyState(VK_LEFT) && x > 0)
@@ -167,7 +178,7 @@ void b1F(void)
 	{
 		buttonlist[i].unshow();
 	}
-	mapMenu.unshow();*/
+	mapMenu.unshow();
 
 }
 
@@ -315,6 +326,8 @@ int main() {
 			buttonlist[x].onSelect();
 		}
 		Sleep(150);
+		if (GetAsyncKeyState(0x51) < 0)
+			break;
 		if (GetAsyncKeyState(0x0D) < 0)
 		{
 			buttonlist[x].onDeSelect();
@@ -330,8 +343,7 @@ int main() {
 			}
 			buttonlist[x].onSelect();
 		}
-		if (GetAsyncKeyState(0x51) < 0)
-			break;
+
 	}
 	buttonlist[x].onDeSelect();
 	for (int i = 0; i < 3; i++)

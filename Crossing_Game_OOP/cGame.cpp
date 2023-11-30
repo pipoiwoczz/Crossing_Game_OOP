@@ -73,11 +73,8 @@ void cGame::MainGame() {
 	lily = nullptr;
 
 	//resetTime();
-	for (int i = 0; i < livePeople.size(); i++)
-	{
-		cGameEngine::renderPeople(livePeople[i]);
-	}
-	gameMap::changeMap(BGIndex::Jungle);
+	gameMap::changeMapTheme(MapTheme::Jungle);
+
 	Sound::playSoundList();
 	Sound::playBackGroundSound();
 	//Sound::musicThread();	
@@ -590,7 +587,7 @@ void foo()
 
 void cGame::nextLevel() {
 	this->gameLevel++;
-	gameMap::nextMap();
+	//gameMap::nextMap();
 	calculatePoint();
 	// set position of people
 	//for (int i = 0; i < livePeople.size(); i++) {
@@ -656,7 +653,7 @@ void cGame::endlessMode() {
 			resetTime();
 			srand(NULL);
 			int random = rand() % 7 + 1;
-			gameMap::changeMap(BGIndex(random));
+			//gameMap::changeMap(BGIndex(random));
 			for (int i = 0; i < livePeople.size(); i++) {
 				livePeople[i]->setPos({ short(200 - 100 * i), 100 });
 			}

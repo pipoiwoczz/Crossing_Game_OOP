@@ -298,7 +298,7 @@ void cGameEngine::maindraw(cGame* pGame)
 			if (gameMap::mapLoopCooldown == 0)
 			{
 				gameMap::mapLoopCooldown = 15;
-				gameMap::nextMap();
+				gameMap::nextMapFrame();
 			}
 			Sleep(25);
 		}		
