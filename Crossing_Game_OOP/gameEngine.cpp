@@ -207,18 +207,20 @@ void cGameEngine::renderObstacle(cObstacle* pObstacle)
 {
 	if (pObstacle->pTexture == nullptr)
 		return;
-	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pObstacle->pTexture->textureArray, { pObstacle->pTexture->width, pObstacle->pTexture->height }, pObstacle->topleft);
 
 	if (pObstacle->timeUntilRender == 0)
 	{
 		pObstacle->currentFrame = (pObstacle->currentFrame + 1) % pObstacle->nFrame;
 		pObstacle->pTexture = pObstacle->pLTexture + pObstacle->currentFrame;
 		
-		pObstacle->timeUntilRender = 2;
+		pObstacle->timeUntilRender = pObstacle->defaulttimeUntilRender;
 	}
 	else {
 		pObstacle->timeUntilRender--;
 	}
+
+	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pObstacle->pTexture->textureArray, { pObstacle->pTexture->width, pObstacle->pTexture->height }, pObstacle->topleft);
+
 	if (pObstacle->movable)
 	pObstacle->move();
 }
