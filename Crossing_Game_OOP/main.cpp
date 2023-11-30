@@ -14,11 +14,23 @@ int Sound::BGSoundVolume = 1000;
 int Sound::EffectSoundVolume = 1000;
 
 bool running = true;
+SMALL_RECT My_Windows = { 0, 0, 0, 0 };
+SMALL_RECT PlayBoxRect = { 0, 0, 0, 0 };
+COORD cGameEngine::buffsize = { 0,0 };
+CHAR_INFO* cGameEngine::mainBuffer = nullptr;
+CHAR_INFO* cGameEngine::reservedBuffer = nullptr;
+HANDLE cGameEngine::Hbuffer1 = 0;
+HANDLE cGameEngine::Hbuffer2 = 0;
+
+int cGameEngine::count = 0;
+HANDLE cGameEngine::curHandle = 0;
 bool enginecheck = cGameEngine::startEngine();
+cWidget cWidget::loadingscreen;
+
 cWidget cWidget::window;
 bool cWidget::hasWd = cWidget::createMainWindow("mainbg");
-
 cDWindow br(&cWidget::window, { 0, 0 }, "bg","menuBg.txt");
+cDWindow settingpanel(&cWidget::window, {0,0}, "settingpanel", "settingframe.txt");
 
 vector<Texture> cLilyleaf::textureLily = cAsset::assetLoaders(lilyFile, TexturePrefix);
 vector<Texture> cLion::textureLion = cAsset::assetLoaders(lionFile, TexturePrefix);
@@ -117,21 +129,28 @@ void b2F(void)
 }
 void b3F(void)
 {
+	settingpanel.show();
 
-	cDWindow settingpanel(&br, { 240,55 }, "settingpanel", "settingpanel.txt");
-	cLabel music(&settingpanel, { 20, 15 }, "music", "Music Volume", 1, Color::black);
-	cLabel musicvolume(&settingpanel, { 155,15 }, "musicvolume", "100", 1, Color::black);
+	void (*pSoundSetting[2][2])() = {
+	{ Sound::reduceSoundBackground, Sound::increaseSoundBackground},
+	{Sound::reduceEffectSound, Sound::increaseEffectSound}
+	};
+	int (*pSoundVolume[2])() = { Sound::getCurrentMusicVolume, Sound::getCurrentEffectVolume };
 
-	cLabel FXsound(&settingpanel, { 20, 45 }, "fx", "Effect Volume", 1, Color::black);
-	cLabel FXvolume(&settingpanel, { 155, 45 }, "fxvolume", "100", 1, Color::black);
+	cLabel music(&settingpanel, { 200, 61 }, "music", "Music Volume", 1, Color::black);
+	cLabel musicvolume(&settingpanel, { 335,61 }, "musicvolume", to_string(pSoundVolume[0]() / 10), 1, Color::black);
 
-	cButton selectarrow(&settingpanel, { 190, 15 }, "arrowL", "arrowL.txt", 1, pmap1);
+	cLabel FXsound(&settingpanel, { 200, 91 }, "fx", "Effect Volume", 1, Color::black);
+	cLabel FXvolume(&settingpanel, { 335, 91 }, "fxvolume", to_string(pSoundVolume[1]() / 10), 1, Color::black);
 
-	short arrowPos[2] = { 15, 45 };
+	cButton selectarrow(&settingpanel, { 370, 61 }, "arrowL", "arrowL.txt", 1, pmap1);
+
+
+
+	short arrowPos[2] = { 61, 91 };
 
 	cLabel ValueBar[2] = { musicvolume, FXvolume };
 
-	int Value[2] = { 100, 100 };
 	int currentarrowpos = 0;
 
 	settingpanel.show();
@@ -152,26 +171,26 @@ void b3F(void)
 		{
 			currentarrowpos++;
 			selectarrow.unshow();
-			selectarrow.setPos({ selectarrow.getPos().X, 45 });
+			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos]});
 			selectarrow.show();
 		}
 		if (GetAsyncKeyState(VK_UP) < 0 && currentarrowpos > 0)
 		{
 			currentarrowpos--;
 			selectarrow.unshow();
-			selectarrow.setPos({ selectarrow.getPos().X, 15 });
+			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos]});
 			selectarrow.show();
 		}
-		if (GetAsyncKeyState(VK_LEFT) < 0 && Value[currentarrowpos] > 0)
+		if (GetAsyncKeyState(VK_LEFT) < 0)
 		{
-			Value[currentarrowpos] -= 25;
-			ValueBar[currentarrowpos].updateText(to_string(Value[currentarrowpos]));
+			pSoundSetting[currentarrowpos][0]();
+			ValueBar[currentarrowpos].updateText(to_string(pSoundVolume[currentarrowpos]() / 10));
 			Sleep(250);
 		}
-		if (GetAsyncKeyState(VK_RIGHT) < 0 && Value[currentarrowpos] < 100)
+		if (GetAsyncKeyState(VK_RIGHT) < 0)
 		{
-			Value[currentarrowpos] += 25;
-			ValueBar[currentarrowpos].updateText(to_string(Value[currentarrowpos]));
+			pSoundSetting[currentarrowpos][1]();
+			ValueBar[currentarrowpos].updateText(to_string(pSoundVolume[currentarrowpos]() / 10));
 			Sleep(250);
 		}
 	}
@@ -212,6 +231,7 @@ int main() {
 				buttonlist[i].unshow();
 			}
 			buttonlist[x].onEnter();
+			br.show();
 			for (int i = 0; i < 3; i++)
 			{
 				buttonlist[i].show();

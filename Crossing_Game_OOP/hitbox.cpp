@@ -7,23 +7,37 @@ Hitbox::Hitbox(COORD tl, COORD br)
     topleft = tl;
     botright = br;
 }
+
 bool Hitbox::isOverlap(const Hitbox &h)
 {
+    if (topleft.Y > h.botright.Y || botright.Y < h.topleft.Y)
+        return false;
+
     if (topleft.X <= botright.X)
     {
-        if (h.topleft.X <= botright.X && h.botright.X >= topleft.X
+        /*if (h.topleft.X <= botright.X && h.botright.X >= topleft.X
             && h.topleft.Y <= botright.Y && h.botright.Y >= topleft.Y)
+            return true;
+        return false;*/
+        if (h.topleft.X <= botright.X && h.topleft.X >= topleft.X)
+            return true;
+        if (h.botright.X >= topleft.X && h.botright.X <= botright.X)
             return true;
         return false;
     }
     else {
-        if (h.topleft.X <= botright.X && h.botright.X >= 0
-            && h.topleft.Y <= botright.Y && h.botright.Y >= topleft.Y)
+        if (h.topleft.X <= botright.X && h.topleft.X >= 0)
             return true;
-        else if (h.topleft.X <= PlayBoxRect.Right && h.botright.X >= 0
-            && h.topleft.Y <= botright.Y && h.botright.Y >= topleft.Y)
+        if (h.botright.X >= topleft.X && h.botright.X <= PlayBoxRect.Right)
             return true;
         return false;
+        //if (h.topleft.X <= botright.X && h.botright.X >= 0
+        //    && h.topleft.Y <= botright.Y && h.botright.Y >= topleft.Y)
+        //    return true;
+        //else if (h.topleft.X <= PlayBoxRect.Right && h.botright.X >= 0
+        //    && h.topleft.Y <= botright.Y && h.botright.Y >= topleft.Y)
+        //    return true;
+        //return false;
     }
 
 }

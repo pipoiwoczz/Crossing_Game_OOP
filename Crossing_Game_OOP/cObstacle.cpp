@@ -61,7 +61,7 @@ void cObstacle::move() {
     if (isStop) return;
     if (!movable) return;
     topleft.X = (topleft.X + 1) % (PlayBoxRect.Right);
-    Box.set({ short(topleft.X + 10), short(topleft.Y + 10) }, { short((topleft.X + pTexture->getWidth() - 10) % PlayBoxRect.Right), short((topleft.Y + pTexture->getHeight() - 10) % PlayBoxRect.Bottom) });
+    Box.move({ 1, 0 });
 }
 
 void cObstacle::moveHitBox()

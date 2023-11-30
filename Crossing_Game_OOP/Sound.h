@@ -26,6 +26,14 @@ private:
 public:
 	Sound() {};
 	~Sound() {};
+	static int getCurrentMusicVolume()
+	{
+		return BGSoundVolume;
+	}
+	static int getCurrentEffectVolume()
+	{
+		return EffectSoundVolume;
+	}
 	static void playSoundList() {
 
 		mciSendString(TEXT("open \"sound/test.mp3\" type mpegvideo alias test"), 0, 0, 0);

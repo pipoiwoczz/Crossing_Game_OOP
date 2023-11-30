@@ -5,16 +5,7 @@
 #include "cPeople.h"
 #include "cAsset.h"
 
-SMALL_RECT My_Windows = { 0, 0, 0, 0 };
-SMALL_RECT PlayBoxRect = { 0, 0, 0, 0 };
-COORD cGameEngine::buffsize = { 0,0 };
-CHAR_INFO* cGameEngine::mainBuffer = nullptr;
-CHAR_INFO* cGameEngine::reservedBuffer = nullptr;
-HANDLE cGameEngine::Hbuffer1 = 0;
-HANDLE cGameEngine::Hbuffer2 = 0;
 
-int cGameEngine::count = 0;
-HANDLE cGameEngine::curHandle = 0;
 
 COORD cGameEngine::GetMonitorDimension()
 {

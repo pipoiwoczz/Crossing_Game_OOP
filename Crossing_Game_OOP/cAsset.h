@@ -14,7 +14,7 @@ const vector<string> lionImpactEffect{ "fxframe.txt", "lioneffect1.txt", "lionef
 
 const vector<string> maplist {"jungle1.txt", "jungle2.txt", "jungle3.txt"};
 const vector<string> peopleFile { "up.txt", "right.txt", "down.txt", "left.txt"};
-const string ButtonPrefix = "UI//";
+const string UIPrefix = "UI//";
 const string TexturePrefix = "Obstacles//";
 const string FxPrefix = "FX//";
 const string PlayerPrefix = "Player//";

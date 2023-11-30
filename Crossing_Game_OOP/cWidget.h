@@ -26,7 +26,9 @@ protected:
 
 	cWidget(cWidget* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& imgSrc);
 public:
+	static cWidget loadingscreen;
 	static cWidget window;
+	static bool Loadstart();
 	static bool createMainWindow(const string& tagName);
 	virtual void show(bool showNow = true);
 	virtual void unshow(bool showNow = true);

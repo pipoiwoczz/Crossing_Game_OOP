@@ -19,13 +19,22 @@ cWidget::cWidget(cWidget* parent, COORD offsetFromParentTopleft, const string& t
 
 	if (imgSrc.length() !=0)
 	{
-		WidgetFace = cAsset::assetLoader(ButtonPrefix + imgSrc);
+		WidgetFace = cAsset::assetLoader(UIPrefix + imgSrc);
 
 		botright = { short(topleft.X + WidgetFace.getWidth() - 1), short(topleft.Y + WidgetFace.getHeight() - 1) };
 		botright = { min(botright.X, parentWindow->botright.X), min(botright.Y, parentWindow->botright.Y) };
 	}
 }
 
+bool cWidget::Loadstart()
+{
+	loadingscreen.IsVisible = true;
+	loadingscreen.topleft = { My_Windows.Left, My_Windows.Top };
+	loadingscreen.botright = { My_Windows.Right, My_Windows.Bottom };
+	window.parentWindow = nullptr;
+	window.WidgetFace = cAsset::assetLoader(UIPrefix + "loadingscreen.txt");
+	return true;
+}
 bool cWidget::createMainWindow(const string& tagName)
 {
 	if (!hasWd) {
@@ -35,7 +44,7 @@ bool cWidget::createMainWindow(const string& tagName)
 		window.botright = { My_Windows.Right, My_Windows.Bottom };
 		window.tag = tagName;
 		window.parentWindow = nullptr;
-		window.WidgetFace.textureArray = nullptr;
+		window.WidgetFace = cAsset::assetLoader(UIPrefix + "mainWD.txt");
 	}
 	return true;
 }
