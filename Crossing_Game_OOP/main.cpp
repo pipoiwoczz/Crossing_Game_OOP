@@ -147,9 +147,9 @@ void b1F(void)
 		
 	while (true)
 	{
-		if (GetAsyncKeyState(0x51) < 0)
+		if (GetAsyncKeyState(0x51) && 0x8000)
 			break;
-		if (GetAsyncKeyState(0x0D) < 0)
+		if (GetAsyncKeyState(0x0D) && 0x8000)
 		{
 			buttonlist[x].onDeSelect();
 			for (int i = 0; i < 3; i++)
@@ -246,7 +246,7 @@ void b2F(void)
 			Sleep(250);
 		}
 		Sleep(150);
-		if (GetAsyncKeyState(0x0D) < 0)
+		if (GetAsyncKeyState(0x0D) && 0x8000)
 		{
 			break;
 		}
@@ -285,7 +285,7 @@ void b3F(void)
 			selectarrow.show();
 		}
 		Sleep(150);
-		if (GetAsyncKeyState(0x0D) < 0)
+		if (GetAsyncKeyState(0x0D) && 0x8000)
 		{
 			if (currentarrowpos == 0)
 			{
@@ -326,9 +326,9 @@ int main() {
 			buttonlist[x].onSelect();
 		}
 		Sleep(150);
-		if (GetAsyncKeyState(0x51) < 0)
+		if (GetAsyncKeyState(0x51) && 0x8000)
 			break;
-		if (GetAsyncKeyState(0x0D) < 0)
+		if (GetAsyncKeyState(0x0D) && 0x8000)
 		{
 			buttonlist[x].onDeSelect();
 			for (int i = 0; i < 3; i++)
