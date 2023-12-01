@@ -61,7 +61,6 @@ void cGame::updatePosObstacle()
 }
 
 void cGame::MainGame() {
-	//drawBackGround();
 	spawnPeople();
 	spawnObstacle();
 	cObstacle* lily = new cLilyleaf({ 0, 73 });
@@ -103,6 +102,10 @@ void cGame::MainGame() {
 			isExit = true;
 			break;
 		}
+		if (GetAsyncKeyState(0x50) < 0) {
+			pauseGame();
+		}
+	
 		if (GetAsyncKeyState(0x10) < 0) {
 			t2.updateText(to_string(i++));
 		}
@@ -298,24 +301,101 @@ void cGame::randomStopThread()
     }
 }
 
-void cGame::pauseGame() {
-	// draw pause game box
-	timePauseStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
-	isPause = true;
-	//stopDrawAnimal();
+void exit() {
+	return;
 }
 
-void cGame::resumeGame() {
-	// draw a box to count down 3 sec 
-	// then continue game
+
+void doNothing() {
+}
+
+void cGame::pauseGame() {
+	timePauseStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+	isPause = true;
+
+	cDWindow pauseWindow(&cGameEngine::pWindow, { 100, 30 }, "pauseWindow", "mapPanel.txt");
+	pauseWindow.show();
+	cLabel pauseLabel(&pauseWindow, { 50, 10 }, "pauseLabel", "PAUSE", 1, Color::red);
+	pauseLabel.show();
+	// change playNButton with correct one
+	cButton resumeButton(&pauseWindow, { 78, 15  }, "resumeButton", "continueButton.txt", 3, doNothing);
+	cButton saveButton(&pauseWindow, { 60, 40 }, "saveButton", "saveButton.txt", 3, saveGame);
+	cButton exitButton(&pauseWindow, { 147, 40 }, "exitButton", "backButton.txt", 3, exit);
+	resumeButton.show();
+	saveButton.show();
+	exitButton.show();
+	cButton buttonList[] = { resumeButton, saveButton, exitButton };
+	int x = 0;
+	buttonList[0].onSelect();
+	while (true) {
+		if (GetAsyncKeyState(0x51) < 0)
+			break;
+		if (GetAsyncKeyState(0x0D) < 0)
+		{
+			buttonList[x].onDeSelect();
+			for (int i = 0; i < 3; i++)
+			{
+				buttonList[i].unshow();
+			}
+			pauseLabel.unshow();
+			pauseWindow.unshow();
+			buttonList[x].onEnter();
+			break;
+		}
+		if (GetAsyncKeyState(VK_LEFT) && x > 0)
+		{
+			buttonList[x].onDeSelect();
+			x--;
+			buttonList[x].onSelect();
+		}
+		if (GetAsyncKeyState(VK_RIGHT) && x < 2)
+		{
+			buttonList[x].onDeSelect();
+			x++;
+			buttonList[x].onSelect();
+		}
+		Sleep(100);
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		buttonList[i].unshow();
+	}
+	pauseLabel.unshow();
+	pauseWindow.unshow();
+	resumeFunction();
+}
+
+
+void cGame::resumeFunction()
+{
+	cDWindow continueBox(&cGameEngine::pWindow, { 100, 30 }, "continueBox", "mapPanel.txt");
+	continueBox.show();
+	string countDown[4] = { "Count3.txt", "Count2.txt", "Count1.txt", "GO.txt" };
+	for (int i = 0; i < 4; i++) {
+		cButton temp(&continueBox, { 110, 15 }, "temp", countDown[i], 0, doNothing);
+		temp.show();
+		Sleep(1000);
+		temp.unshow();
+	}
+	continueBox.unshow();
+
 	timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 	timePause += (timePauseEnd - timePauseStart) / 1000;
 	isPause = false;
+	
+}
+
+void cGame::resumeGame(cGame *pGame) {
+	// draw a box to count down 3 sec 
+	// then continue game
+	pGame->resumeFunction();
 	//continueDrawAnimal();
 }
 
-void cGame::save(void) {
-	string filename = "test.bin"; // placeholder filename
+
+void cGame::save(string fileName) {
+	string filename = fileName; // placeholder filename
 
 	ofstream ofs;
 	ofs.open(filename, ios::binary);
@@ -345,12 +425,12 @@ void cGame::save(void) {
 	char* obstacleType = new char[obstacleCount];
 
 	short* obstacleInfo = new short[obstacleCount * 3];
-	for (int count = 0; count < obstacleCount; count++)
+	for (int i = 0; i < obstacleCount; i++)
 	{
-		obstacleType[count] = liveObstacles[count]->getType();
-		obstacleInfo[3 * count] = liveObstacles[count]->getPos().X;
-		obstacleInfo[3 * count + 1] = liveObstacles[count]->getPos().Y;
-		obstacleInfo[3 * count + 2] = liveObstacles[count]->getSpeed();
+		obstacleType[i] = liveObstacles[i]->getType();
+		obstacleInfo[3 * i] = liveObstacles[i]->getPos().X;
+		obstacleInfo[3 * i + 1] = liveObstacles[i]->getPos().Y;
+		obstacleInfo[3 * i + 2] = liveObstacles[i]->getSpeed();
 	}
 
 	ofs.write(obstacleType, obstacleCount);
@@ -362,44 +442,96 @@ void cGame::save(void) {
 	obstacleInfo = nullptr;
 
 	ofs.close();
-	resumeGame();
+	resumeFunction();
 }
 
 void saveTest() {
 	return;
 }
 
-void cGame::saveGame() {
-    pauseGame();
-    
-    
-    cDWindow saveWindow(&cWidget::window, { 0, 0 }, "saveWindow", "saveWindow.txt");
-	saveWindow.show();
-	cLabel saveLabel(&saveWindow, { 10, 5 }, "saveLabel", "SAVE GAME", 1, Color::red);
-	saveLabel.show();
-	void *saveTestPtr = saveTest;
-	cButton button1(&saveWindow, { 10, 10 }, "button1", "saveButton.txt", 3, saveTest);
-	cButton button2(&saveWindow, { 10, 15 }, "button2", "saveButton.txt", 3, saveTest);
-	cButton button3(&saveWindow, { 10, 15 }, "button2", "saveButton.txt", 3, saveTest);
+void onSave1(cGame* pGame) {
+	pGame->save("test1.bin");
+}
+void onSave2(cGame* pGame) {
+	pGame->save("test2.bin");
+}
+void onSave3(cGame* pGame) {
+	pGame->save("test3.bin");
+}
 
-    
-    // draw a mini box in center as an input field
-    // user input save name <= 20 characters
-    // check this save name exist before or not
-    // => enter save name again or save successfully
-    // press ESC to exit save menu
-    
-    // suggestion: have limited save slots with their own pre-designated save files. no name-checking needed, easier to manage.
-    
-    // testing simple version of save file
-    // file format (binary)
-    // [gameOrder] [gameLevel] [map] [score] [time]
-    // [player 1 coord X] [player 1 coord Y] ...
-    // [number of obstacles]
-    // [obstacle 1 type] [obstacle 2 type] ...
-    // [obstacle 1 coord X] [obstacle 1 coord Y] [obstacle 1 speed] ...
-    
-    // note: stop status not recorded yet
+void cGame::saveGame(cGame *pGame) {
+    cDWindow saveWindow(&cGameEngine::pWindow, { 100, 30 }, "saveWindow", "mapPanel.txt");
+	saveWindow.show();
+	cLabel saveLabel(&saveWindow, { 78, -3 }, "saveLabel", "SAVE GAME", 1, Color::red);
+	saveLabel.show();
+	
+	// check file is save or not
+	// if not icon = empty map
+	// if yes icon = map saved
+
+	/*string mapSaved[4] = { "emptyIcon.txt", "emptyIcon.txt" , "emptyIcon.txt" , "emptyIcon.txt" };
+	string saved[3] = { "save2.bin" ,"save2.bin" , "save2.bin" };
+	ifstream ifs;
+	for (int i = 0; i < 3; i++) {
+		ifs.open(saved[i]);
+		if (ifs.is_open()) {
+			mapSaved[i] = "jungleIcon.txt";
+		}
+		ifs.close();
+	}*/
+
+
+	cButton button1(&saveWindow, { 90, 10 }, "button1", "jungleIcon.txt", 3, onSave1);
+	cButton button2(&saveWindow, { 40, 40 }, "button2", "jungleIcon.txt", 3, onSave2);
+	cButton button3(&saveWindow, { 147, 40 }, "button2", "jungleIcon.txt", 3, onSave3);
+	string label[3] = { "save1", "save2", "save3" };
+	cLabel Label1(&button1, { 5, 1 }, label[0], "SAVE 1", 1, Color::bright_white);
+	cLabel Label2(&button2, { 5, 1 }, label[1], "SAVE 2", 1, Color::bright_white);
+	cLabel Label3(&button3, { 5, 1 }, label[2], "SAVE 3", 1, Color::bright_white);
+	cButton buttonList[] = { button1, button2, button3 };
+	cLabel labelList[] = { Label1, Label2, Label3 };
+	int x = 0;
+	for (int i = 0; i < 3; i++) {
+		buttonList[i].show();
+		labelList[i].show();
+	}
+
+	buttonList[0].onSelect();
+	while (true) {
+		if (GetAsyncKeyState(0x51) < 0)
+			break;
+		if (GetAsyncKeyState(0x0D) < 0)
+		{
+			buttonList[x].onDeSelect();
+			for (int i = 0; i < 3; i++)
+			{
+				buttonList[i].unshow();
+				labelList[i].unshow();
+			}
+			saveLabel.unshow();
+			saveWindow.unshow();
+			buttonList[x].onEnter();
+			break;
+		}
+		if (GetAsyncKeyState(VK_LEFT) && x > 0)
+		{
+			buttonList[x].onDeSelect();
+			x--;
+			buttonList[x].onSelect();
+			
+		}
+		if (GetAsyncKeyState(VK_RIGHT) && x < 2)
+		{
+			buttonList[x].onDeSelect();
+			x++;
+			buttonList[x].onSelect();
+		}
+		for (int i = 0; i < 3; i++) {
+			labelList[i].show();
+		}
+		Sleep(100);
+	}
+	resumeGame(&cGameEngine::pGame);
     
 	
 }
@@ -558,7 +690,7 @@ bool cGame::isFinishLevel() {
 }
 
 double cGame::calculateTime() {
-	double time = timeEnd - timeStart - timePauseStart - timePauseEnd;
+	double time = timeEnd - timeStart + timePauseStart - timePauseEnd;
 	return time / 1000.0;
 	return 0;
 }
@@ -620,7 +752,7 @@ void cGame::endlessMode() {
 			pauseGame();
 		}
 		if (GetAsyncKeyState(0x53) < 0) {
-			resumeGame();
+			resumeGame(&cGameEngine::pGame);
 		}
 		if (GetAsyncKeyState(0x51) < 0) {
 			// isExit = true;

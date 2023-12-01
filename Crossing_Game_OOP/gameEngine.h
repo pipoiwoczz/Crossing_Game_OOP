@@ -18,6 +18,10 @@ class cObstacle;
 
 class cGameEngine {
 private:
+	// game control
+	static cGame pGame;
+	static cDWindow pWindow;
+
 	static COORD buffsize;
 	//Buffer
 	static CHAR_INFO* mainBuffer;

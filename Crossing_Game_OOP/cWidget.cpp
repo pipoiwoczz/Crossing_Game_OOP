@@ -99,6 +99,18 @@ cButton::cButton(cDWindow* parent, COORD offsetFromParentTopleft, const string& 
 	buttonFunction = pFunction;
 }
 
+cButton::cButton(cDWindow* parent, COORD offsetFromParentTopleft, const string& tagName, const string& imgSrc, short borderDensity, void(*pFunction)(cGame*)) : cWidget(static_cast<cWidget*> (parent), offsetFromParentTopleft, tagName, imgSrc)
+{
+	bordDensity = borderDensity;
+	OTopleft = { short(topleft.X - 2 * bordDensity), short(topleft.Y - bordDensity) };
+	OTopleft = { max(OTopleft.X, parentWindow->topleft.X), max(OTopleft.Y, parentWindow->topleft.Y) };
+	OBotright = { short(topleft.X + WidgetFace.getWidth() + 2 * bordDensity - 1), short(topleft.Y + WidgetFace.getHeight() + bordDensity - 1) };
+	OBotright = { min(OBotright.X, parentWindow->botright.X), min(OBotright.Y, parentWindow->botright.Y) };
+	buttonFunction2 = pFunction;
+	buttonFunction = nullptr;
+}
+
+
 bool cButton::show(bool showNow)
 {
 	return cWidget::show(showNow);
@@ -121,7 +133,10 @@ void cButton::onDeSelect()
 
 void cButton::onEnter()
 {
-	buttonFunction();
+	if (buttonFunction2)
+		buttonFunction2(&cGameEngine::pGame);
+	else if (buttonFunction)
+		buttonFunction();
 }
 
 void cButton::highLight(bool showNow)
@@ -184,6 +199,19 @@ cLabel::cLabel(cDWindow* parentWindow, COORD offsetFromParentTopleft, const stri
 	createTextline();
 }
 
+cLabel::cLabel(cButton* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& text, const short& align, Color textColor)
+{
+	this->parentWindow = static_cast<cWidget*> (parentWindow);
+	IsVisible = false;
+	tag = tagName;
+	this->text = text;
+	color = short(textColor);
+	this->align = align;
+	offset = offsetFromParentTopleft;
+	topleft = { short(parentWindow->topleft.X + offsetFromParentTopleft.X), short(parentWindow->topleft.Y + offsetFromParentTopleft.Y) };
+	topleft = { max(topleft.X, parentWindow->topleft.X), max(topleft.Y, parentWindow->topleft.Y) };
+	createTextline();
+}
 void cLabel::updateText(const string& newText)
 {
 	unshow();

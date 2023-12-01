@@ -65,6 +65,9 @@ int gameMap::numCurrentMapFrame;
 int gameMap::mapLoopCooldown = 15;
 
 cDWindow mainMenu(&cWidget::window, { 0, 0 }, "bg", "menuBg.txt", true);
+cGame cGameEngine::pGame;
+cDWindow cGameEngine::pWindow(&cWidget::window, { 0, 0 }, "bg", "menuBg.txt", true);
+
 bool mainLoader()
 {
 	cBar loadingBar(&mainMenu, { 20, 140 }, "loadingbar", 500, 8, Color::red, Color::white);

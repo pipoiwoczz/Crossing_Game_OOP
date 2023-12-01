@@ -44,10 +44,12 @@ class cGame {
 
 		void resetGame();
 		void exitGame(HANDLE t);
-		void saveGame();
+		static void saveGame(cGame *pGame);
 		void pauseGame();	
-		void resumeGame();
-		void save(void);
+		static void resumeGame(cGame *pGame);
+		void resumeFunction();
+		void save(string fileName);
+
 
 		//void updatePosPeople(char MOVING) {
 		//	if (!isPause) {
