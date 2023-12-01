@@ -88,7 +88,7 @@ bool cDWindow::unshow(bool showNow)
 }
 
 
-cButton::cButton(cDWindow* parent, COORD offsetFromParentTopleft, const string& tagName, const string& imgSrc, short borderDensity, void (*pFunction) (void)) : cWidget(static_cast<cWidget*> (parent), offsetFromParentTopleft, tagName, imgSrc)
+cButton::cButton(cDWindow* parent, COORD offsetFromParentTopleft, const string& tagName, const string& imgSrc, short borderDensity, void (*pFunction) ()) : cWidget(static_cast<cWidget*> (parent), offsetFromParentTopleft, tagName, imgSrc)
 {
 	bordDensity = borderDensity;
 	

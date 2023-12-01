@@ -60,6 +60,7 @@ void cGame::updatePosObstacle()
 	}
 }
 
+
 void cGame::MainGame() {
 	//drawBackGround();
 	spawnPeople();
@@ -92,7 +93,7 @@ void cGame::MainGame() {
 	t2.unshow();
 	int i = 0;
 	thread drawingThread(&cGameEngine::maindraw, this);
-	while (true) {
+	while (!isExit) {
 		//if (GetAsyncKeyState(0x50) < 0) {d
 		//	pauseGame();
 		//	break;
@@ -103,11 +104,94 @@ void cGame::MainGame() {
 			isExit = true;
 			break;
 		}
-		if (GetAsyncKeyState(0x10) < 0) {
-			t2.updateText(to_string(i++));
+		if (GetSpecificKeyPress(13)) {
+			isPause = true;
+			cDWindow pausePanel(&cWidget::window, { 121, 30 }, "pausemenu", "pausemenu.txt");
+
+			pausePanel.show();
+			
+			cButton menuchoice[4]{
+					cButton(&pausePanel, { 42, 25 }, "resumebutton", "resume.txt", 1,NULL),
+					cButton(&pausePanel, { 42, 43 }, "saveload", "saveload.txt", 1, NULL),
+					cButton(&pausePanel, { 42, 61 }, "exitdesktop", "exitdesktop.txt", 1, NULL),
+					cButton(&pausePanel, { 42, 79 }, "exitmain", "exitmain.txt", 1, NULL)
+			};
+
+			pPausePanel = &pausePanel;
+			std::function<void()> menufunct[4];
+			menufunct[0] = [this] {this->isPause = false; };
+			menufunct[1] = [this] {  };
+			menufunct[3] = [this] {this->isPause = false; this->isExit = true; };
+			menufunct[2] = [this] {
+				
+				cDWindow confirm(this->pPausePanel, { 55, 30 }, "confirm", "exitpanel.txt", true);
+				cDWindow selectarrow(&confirm, { 96, 37 }, "selectarrow", "enterarrow.txt", true);
+
+				short arrowPos[2] = { 24, 37 };
+				int currentarrowpos = 1;
+				while (true)
+				{
+					if (GetAsyncKeyState(VK_DOWN) < 0 && currentarrowpos < 1)
+					{
+						currentarrowpos++;
+						selectarrow.unshow();
+						selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
+						selectarrow.show();
+					}
+					if (GetAsyncKeyState(VK_UP) < 0 && currentarrowpos > 0)
+					{
+						currentarrowpos--;
+						selectarrow.unshow();
+						selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
+						selectarrow.show();
+					}
+					Sleep(75);
+					if (GetSpecificKeyPress(13))
+					{
+						if (currentarrowpos == 0)
+						{
+							this->isPause = false;
+							this->isExit = true;
+							cGame::mainloop = false;
+						}
+						pPausePanel->show();
+						break;
+					}
+					Sleep(75);
+				}
+				};
+				
+			int choice = 0;
+			menuchoice[choice].show();
+			while (isPause)
+			{
+				if (GetAsyncKeyState(0x51))
+					break;
+				if (GetAsyncKeyState(VK_DOWN) < 0 && choice < 3)
+				{
+					menuchoice[choice].unshow();
+					choice++;
+					menuchoice[choice].show();
+				}
+				if (GetAsyncKeyState(VK_UP) < 0 && choice > 0)
+				{
+					menuchoice[choice].unshow();
+					choice--;
+					menuchoice[choice].show();
+				}
+				if (GetSpecificKeyPress(13))
+				{
+					menufunct[choice]();
+					if (choice == 0)
+						break;
+					menuchoice[choice].show();
+				}
+				Sleep(150);
+			}
+
+
 		}
-		if (GetAsyncKeyState(0x11) < 0) {
-		}
+
 		for (int j = 0; j < environmentObject.size(); j++)
 		{
 			if (environmentObject[j]->getType() == 'R')

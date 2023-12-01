@@ -72,5 +72,5 @@ enum class VehicleIndex {
 	Motorbike = 2
 };
 
-
+bool GetSpecificKeyPress(int key);
 #endif

@@ -8,8 +8,21 @@
 #include "cVehicle.h"
 #include "Sound.h"
 #include "Map.h"
-//Game Core
 
+bool GetSpecificKeyPress(int key)
+{
+	if (_kbhit())
+	{
+		int k = _getch();
+		if (k == key)
+			return true;
+	}
+
+
+	return false;
+}
+
+//Game Core
 const string UIPrefix = "UI//";
 const string TexturePrefix = "Obstacles//";
 const string FxPrefix = "FX//";
@@ -104,7 +117,7 @@ bool mainLoader()
 	return true;
 }
 
-bool running = mainLoader();
+bool cGame::mainloop = mainLoader();
 
 
 
@@ -124,7 +137,7 @@ void pmap2()
 
 void pmap3()
 {				
-	Sleep(1000);
+	Sleep(750);
 }
 void b1F(void)
 {
@@ -147,19 +160,6 @@ void b1F(void)
 		
 	while (true)
 	{
-		if (GetAsyncKeyState(0x51) && 0x8000)
-			break;
-		if (GetAsyncKeyState(0x0D) && 0x8000)
-		{
-			buttonlist[x].onDeSelect();
-			for (int i = 0; i < 3; i++)
-			{
-				buttonlist[i].unshow();
-			}
-			buttonlist[x].onEnter();
-			break;
-
-		}
 		if (GetAsyncKeyState(VK_LEFT) && x > 0)
 		{
 			buttonlist[x].onDeSelect();
@@ -172,7 +172,21 @@ void b1F(void)
 			x++;
 			buttonlist[x].onSelect();
 		}
-		Sleep(100);
+		Sleep(75);
+		if (GetAsyncKeyState(0x51) && 0x8000)
+			break;
+		if (GetSpecificKeyPress(13))
+		{
+			buttonlist[x].onDeSelect();
+			for (int i = 0; i < 3; i++)
+			{
+				buttonlist[i].unshow();
+			}
+			buttonlist[x].onEnter();
+			break;
+
+		}
+		Sleep(75);
 	}
 	for (int i = 0; i < 3; i++)
 	{
@@ -184,81 +198,83 @@ void b1F(void)
 
 void b2F(void)
 {
-	settingpanel.show();
 
-	void (*pSoundSetting[2][2])() = {
-	{ Sound::reduceSoundBackground, Sound::increaseSoundBackground},
-	{Sound::reduceEffectSound, Sound::increaseEffectSound}
-	};
-	int (*pSoundVolume[2])() = { Sound::getCurrentMusicVolume, Sound::getCurrentEffectVolume };
+	//settingpanel.show();
 
-	cLabel music(&settingpanel, { 200, 61 }, "music", "Music Volume", 1, Color::black);
-	cLabel musicvolume(&settingpanel, { 335,61 }, "musicvolume", to_string(pSoundVolume[0]() / 10), 1, Color::black);
+	//void (*pSoundSetting[2][2])() = {
+	//{ Sound::reduceSoundBackground, Sound::increaseSoundBackground},
+	//{Sound::reduceEffectSound, Sound::increaseEffectSound}
+	//};
+	//int (*pSoundVolume[2])() = { Sound::getCurrentMusicVolume, Sound::getCurrentEffectVolume };
 
-	cLabel FXsound(&settingpanel, { 200, 91 }, "fx", "Effect Volume", 1, Color::black);
-	cLabel FXvolume(&settingpanel, { 335, 91 }, "fxvolume", to_string(pSoundVolume[1]() / 10), 1, Color::black);
+	//cLabel music(&settingpanel, { 200, 61 }, "music", "Music Volume", 1, Color::black);
+	//cLabel musicvolume(&settingpanel, { 335,61 }, "musicvolume", to_string(pSoundVolume[0]() / 10), 1, Color::black);
 
-	cDWindow selectarrow(&settingpanel, { 370, 61 }, "selectarrow", "arrowL.txt");
+	//cLabel FXsound(&settingpanel, { 200, 91 }, "fx", "Effect Volume", 1, Color::black);
+	//cLabel FXvolume(&settingpanel, { 335, 91 }, "fxvolume", to_string(pSoundVolume[1]() / 10), 1, Color::black);
+
+	//cDWindow selectarrow(&settingpanel, { 370, 61 }, "selectarrow", "arrowL.txt");
 
 
 
-	short arrowPos[2] = { 61, 91 };
+	//short arrowPos[2] = { 61, 91 };
 
-	cLabel ValueBar[2] = { musicvolume, FXvolume };
+	//cLabel ValueBar[2] = { musicvolume, FXvolume };
 
-	int currentarrowpos = 0;
+	//int currentarrowpos = 0;
 
-	settingpanel.show();
+	//settingpanel.show();
 
-	music.show();
-	musicvolume.show();
-	FXsound.show();
-	FXvolume.show();
+	//music.show();
+	//musicvolume.show();
+	//FXsound.show();
+	//FXvolume.show();
 
-	selectarrow.show();
-	while (true)
-	{
+	//selectarrow.show();
+	//while (true)
+	//{
 
-		if (GetAsyncKeyState(VK_DOWN) < 0 && currentarrowpos < 1)
-		{
-			currentarrowpos++;
-			selectarrow.unshow();
-			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
-			selectarrow.show();
-		}
-		if (GetAsyncKeyState(VK_UP) < 0 && currentarrowpos > 0)
-		{
-			currentarrowpos--;
-			selectarrow.unshow();
-			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
-			selectarrow.show();
-		}
-		if (GetAsyncKeyState(VK_LEFT) < 0)
-		{
-			pSoundSetting[currentarrowpos][0]();
-			ValueBar[currentarrowpos].updateText(to_string(pSoundVolume[currentarrowpos]() / 10));
-			Sleep(250);
-		}
-		if (GetAsyncKeyState(VK_RIGHT) < 0)
-		{
-			pSoundSetting[currentarrowpos][1]();
-			ValueBar[currentarrowpos].updateText(to_string(pSoundVolume[currentarrowpos]() / 10));
-			Sleep(250);
-		}
-		Sleep(150);
-		if (GetAsyncKeyState(0x0D) && 0x8000)
-		{
-			break;
-		}
-	}
-	selectarrow.show();
+	//	if (GetAsyncKeyState(VK_DOWN) < 0 && currentarrowpos < 1)
+	//	{
+	//		currentarrowpos++;
+	//		selectarrow.unshow();
+	//		selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
+	//		selectarrow.show();
+	//	}
+	//	if (GetAsyncKeyState(VK_UP) < 0 && currentarrowpos > 0)
+	//	{
+	//		currentarrowpos--;
+	//		selectarrow.unshow();
+	//		selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
+	//		selectarrow.show();
+	//	}
+	//	if (GetAsyncKeyState(VK_LEFT) < 0)
+	//	{
+	//		pSoundSetting[currentarrowpos][0]();
+	//		ValueBar[currentarrowpos].updateText(to_string(pSoundVolume[currentarrowpos]() / 10));
+	//		Sleep(250);
+	//	}
+	//	if (GetAsyncKeyState(VK_RIGHT) < 0)
+	//	{
+	//		pSoundSetting[currentarrowpos][1]();
+	//		ValueBar[currentarrowpos].updateText(to_string(pSoundVolume[currentarrowpos]() / 10));
+	//		Sleep(250);
+	//	}
+	//	Sleep(75);
+	//	if (GetSpecificKeyPress(13))
+	//	{
+	//		break;
+	//	}
+	//	Sleep(75);
+	//}
+	//selectarrow.show();
 
-	FXvolume.unshow();
-	FXsound.unshow();
-	musicvolume.unshow();
-	music.show();
+	//FXvolume.unshow();
+	//FXsound.unshow();
+	//musicvolume.unshow();
+	//music.show();
 
-	settingpanel.unshow();
+	//settingpanel.unshow();
 }
 
 void b3F(void)
@@ -284,16 +300,17 @@ void b3F(void)
 			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
 			selectarrow.show();
 		}
-		Sleep(150);
-		if (GetAsyncKeyState(0x0D) && 0x8000)
+		Sleep(75);
+		if (GetSpecificKeyPress(13))
 		{
 			if (currentarrowpos == 0)
 			{
-				running = false;
+				cGame::mainloop = false;
 			}
 			break;
 
 		}
+		Sleep(75);
 	}
 	exitpanel.unshow();	
 }
@@ -311,7 +328,7 @@ int main() {
 	}
 	buttonlist[x].onSelect();
 
-	while (running)
+	while (cGame::mainloop)
 	{
 		if (GetAsyncKeyState(VK_UP) && x > 0)
 		{
@@ -325,10 +342,10 @@ int main() {
 			x++;
 			buttonlist[x].onSelect();
 		}
-		Sleep(150);
+		Sleep(75);
 		if (GetAsyncKeyState(0x51) && 0x8000)
 			break;
-		if (GetAsyncKeyState(0x0D) && 0x8000)
+		if (GetSpecificKeyPress(13))
 		{
 			buttonlist[x].onDeSelect();
 			for (int i = 0; i < 3; i++)
@@ -343,6 +360,7 @@ int main() {
 			}
 			buttonlist[x].onSelect();
 		}
+		Sleep(75);
 
 	}
 	buttonlist[x].onDeSelect();

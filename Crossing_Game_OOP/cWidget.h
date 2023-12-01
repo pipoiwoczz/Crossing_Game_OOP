@@ -65,7 +65,7 @@ private:
 	void unHighLight(bool showNow = true);
 public:
 	friend cGameEngine;
-	cButton(cDWindow* parent, COORD offsetFromParentTopleft,const string& tagName, const string& imgSrc, short borderDensity, void (*pFunction) (void));
+	cButton(cDWindow* parent, COORD offsetFromParentTopleft,const string& tagName, const string& imgSrc, short borderDensity, void (*pFunction) ());
 
 	bool show(bool showNow = true);
 	bool unshow(bool showNow = true);

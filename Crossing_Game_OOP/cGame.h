@@ -5,11 +5,11 @@ class cObstacle;
 class cPeople;
 void cleanGame();
 
+class cDWindow;
 class cWidget;
 class cGameEngine;
 class cLabel;
 class cGame {
-
 	friend cGameEngine;
     vector<cObstacle*> liveObstacles;
 	vector<cObstacle*>  environmentObject;
@@ -21,13 +21,17 @@ class cGame {
 	int map = 0; // map = 1 -> city, map = 2 -> forest, map = 3 -> beach
 	bool isLose = false;
 
+
 	long totalPoint;
 	double totalTime;
 	double timeStart, timeEnd;
 	double timePauseStart, timePauseEnd;
 	double timePause;
 
+	cDWindow* pPausePanel;
+
 	public:
+		static bool mainloop;
 		cGame();
     
         cGame (string saveFile);
