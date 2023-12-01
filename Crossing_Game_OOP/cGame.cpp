@@ -210,8 +210,8 @@ void cGame::LoadGame()
 	// if not icon = empty map
 	// if yes icon = map saved
 
-	string mapSaved[4] = { "emptyIcon.txt", "emptyIcon.txt" , "emptyIcon.txt" , "emptyIcon.txt" };
-	string saved[3] = { "save2.txt" ,"save2.txt" , "save3.txt" };
+	string mapSaved[3] = { "emptyLoadIcon.txt", "emptyLoadIcon.txt" , "emptyLoadIcon.txt" };
+	string saved[3] = { "save1.txt" ,"save2.txt" , "save3.txt" };
 	string labelText[3] = { "empty", "empty", "empty" };
 	ifstream ifs;
 	for (int i = 0; i < 3; i++) {
@@ -220,31 +220,29 @@ void cGame::LoadGame()
 			Time t;
 			ifs >> t;
 			labelText[i] = t.dateString();
-			/*int j;
+			int j;
 			for (int k = 0; k < 3; k++) {
 				ifs >> j;
 			}
-			if (j == 1) {
-				mapSaved[i] = "jungleIcon.txt";
+			if (j == 0) {
+				mapSaved[i] = "jungleMapIcon.txt";
+			}
+			else if (j == 1) {
+				mapSaved[i] = "cityMapIcon.txt";
 			}
 			else if (j == 2) {
-				mapSaved[i] = "cityIcon.txt";
+				mapSaved[i] = "beachMapIcon.txt";
 			}
-			else if (j == 3) {
-				mapSaved[i] = "beachIcon.txt";
-			}*/
 			ifs.close();
 		}
 	}
 
-		cDWindow loadWindow(&cGameEngine::pWindow, { 100, 30 }, "saveWindow", "mapPanel.txt");
+		cDWindow loadWindow(&cGameEngine::pWindow, { 200, 40 }, "loadWindow", "LoadPanel.txt");
 		loadWindow.show();
-		cLabel saveLabel(&loadWindow, { 78, -3 }, "saveLabel", "SAVE GAME", 1, Color::red);
-		saveLabel.show();
 
-		cButton button1(&loadWindow, { 90, 10 }, "button1", "jungleIcon.txt", 3, onLoad1);
-		cButton button2(&loadWindow, { 40, 40 }, "button2", "jungleIcon.txt", 3, onLoad2);
-		cButton button3(&loadWindow, { 147, 40 }, "button2", "jungleIcon.txt", 3, onLoad3);
+		cButton button1(&loadWindow, { 10, 25 }, "button1", mapSaved[0], 2, onLoad1);
+		cButton button2(&loadWindow, { 10, 50 }, "button2", mapSaved[1], 2, onLoad2);
+		cButton button3(&loadWindow, { 10, 75 }, "button2", mapSaved[2], 2, onLoad3);
 		string label[3] = { "save1", "save2", "save3" };
 		cLabel Label1(&button1, { 5, 1 }, label[0], labelText[0], 1, Color::bright_white);
 		cLabel Label2(&button2, { 5, 1 }, label[1], labelText[1], 1, Color::bright_white);
@@ -269,7 +267,6 @@ void cGame::LoadGame()
 					buttonList[i].unshow();
 					labelList[i].unshow();
 				}
-				saveLabel.unshow();
 				loadWindow.unshow();
 				isLoad = true;
 				buttonList[x].onEnter();

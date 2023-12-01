@@ -166,6 +166,11 @@ void b1F(void)
 				buttonlist[i].unshow();
 			}
 			buttonlist[x].onEnter();
+			for (int i = 0; i < 3; i++)
+			{
+				buttonlist[i].unshow();
+			}
+			mapMenu.unshow();
 			break;
 
 		}
@@ -183,11 +188,7 @@ void b1F(void)
 		}
 		Sleep(100);
 	}
-	for (int i = 0; i < 3; i++)
-	{
-		buttonlist[i].unshow();
-	}
-	mapMenu.unshow();
+	
 
 }
 
@@ -309,11 +310,11 @@ void b3F(void)
 
 
 void testLoadGame() {
-	cDWindow loadGameMenu(&mainMenu, { 240, 55 }, "menumap", "mapPanel.txt");
+	cDWindow loadGameMenu(&mainMenu, { 240, 55 }, "menumap", "NewGamePanel.txt");
 	loadGameMenu.show();
-	cButton newgame(&loadGameMenu, { 10, 20 }, "map1", "newGameButton.txt", 1, b1F);
-	cButton loadGame(&loadGameMenu, { 10, 50 }, "map1", "loadGameButton.txt", 1, test);
-	cButton back(&loadGameMenu, { 10, 70 }, "map1", "jungleicon.txt", 1, pmap3);
+	cButton newgame(&loadGameMenu, { 25, 22 }, "map1", "newGameButton.txt", 1, b1F);
+	cButton loadGame(&loadGameMenu, { 25, 48 }, "map1", "loadGameButton.txt", 1, test);
+	cButton back(&loadGameMenu, { 62, 72 }, "map1", "LoadGameBackButton.txt", 1, pmap3);
 	cButton buttonlist[3] = { newgame, loadGame, back };
 	int x = 0;
 	for (int i = 0; i < 3; i++)
@@ -332,6 +333,7 @@ void testLoadGame() {
 			{
 				buttonlist[i].unshow();
 			}
+			loadGameMenu.unshow();
 			buttonlist[x].onEnter();
 			break;
 
@@ -350,11 +352,8 @@ void testLoadGame() {
 		}
 		Sleep(100);
 	}
-	for (int i = 0; i < 3; i++)
-	{
-		buttonlist[i].unshow();
-	}
-	mainMenu.unshow();
+	loadGameMenu.unshow();
+	
 }
 
 int main() {
@@ -390,6 +389,11 @@ int main() {
 			break;
 		if (GetAsyncKeyState(0x0D) && 0x8000)
 		{
+			buttonlist[x].onDeSelect();
+			for (int i = 0; i < 3; i++)
+			{
+				buttonlist[i].unshow();
+			}
 			buttonlist[x].onDeSelect();
 			for (int i = 0; i < 3; i++)
 			{
