@@ -18,6 +18,8 @@ cObstacle::cObstacle(COORD In_pos, /* int difficulty, int ttm */ int speed) {
     timeUntilMove = speed;
 }
 
+
+
 COORD cObstacle::getPos() {
     return topleft;
 }

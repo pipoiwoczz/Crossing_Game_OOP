@@ -61,11 +61,13 @@ private:
 	COORD OBotright;
 	short bordDensity;
 	void (*buttonFunction) (void) = nullptr;
+	void (*buttonFunction2)(cGame*) = nullptr;
 	void highLight(bool showNow = true);
 	void unHighLight(bool showNow = true);
 public:
 	friend cGameEngine;
-	cButton(cDWindow* parent, COORD offsetFromParentTopleft,const string& tagName, const string& imgSrc, short borderDensity, void (*pFunction) ());
+	cButton(cDWindow* parent, COORD offsetFromParentTopleft,const string& tagName, const string& imgSrc, short borderDensity, void (*pFunction) (void));
+	cButton(cDWindow* parent, COORD offsetFromParentTopleft, const string& tagName, const string& imgSrc, short borderDensity, void(*pFunction)(cGame*));
 
 	bool show(bool showNow = true);
 	bool unshow(bool showNow = true);
@@ -98,6 +100,7 @@ protected:
 public:
 	friend cGameEngine;
 	cLabel(cDWindow* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& text, const short& align, Color textColor);
+	cLabel(cButton* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& text, const short& align, Color textColor);
 	bool show(bool showNow = true);
 	bool unshow(bool showNow = true);
 	void updateText(const string& newText);

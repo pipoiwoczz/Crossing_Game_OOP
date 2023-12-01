@@ -17,7 +17,7 @@ class cGame {
 	vector<cWidget*> listWidget;
 	vector<cLabel*> listLabel;
 	short gameOrder, gameLevel; // order: 1 or 2 player
-	bool isPause, isExit;
+	bool isPause, isExit, isLoad;
 	int map = 0; // map = 1 -> city, map = 2 -> forest, map = 3 -> beach
 	bool isLose = false;
 
@@ -48,10 +48,12 @@ class cGame {
 
 		void resetGame();
 		void exitGame(HANDLE t);
-		void saveGame();
+		static void saveGame(cGame *pGame);
 		void pauseGame();	
-		void resumeGame();
-		void save(void);
+		static void resumeGame(cGame *pGame);
+		void resumeFunction();
+		void save(string fileName);
+
 
 		//void updatePosPeople(char MOVING) {
 		//	if (!isPause) {
@@ -68,6 +70,7 @@ class cGame {
 		void ScoreBoard();
 		void MainGame();
 		void LoadGame();
+		static void load(string fileName);
 		void Setting();
 		void GameOver();
 		void GameWin();
