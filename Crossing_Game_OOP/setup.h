@@ -72,5 +72,89 @@ enum class VehicleIndex {
 	Motorbike = 2
 };
 
+class Time {
+	int year;
+	int month;
+	int day;
+	int hour;
+	int minute;
+	int second;
+
+public:
+	Time() {
+		year = 0;
+		month = 0;
+		day = 0;
+		hour = 0;
+		minute = 0;
+		second = 0;
+	}
+
+	void getTime() {
+		time_t now = time(0);
+		std::time_t currentTime = std::time(nullptr);
+
+		// Initialize tm structure
+		std::tm timeInfo = {};
+
+		// Convert time_t to tm structure
+		if (localtime_s(&timeInfo, &currentTime) == 0) {
+			year = timeInfo.tm_year + 1900;
+			month = timeInfo.tm_mon + 1;
+			day = timeInfo.tm_mday;
+			hour = timeInfo.tm_hour;
+			minute = timeInfo.tm_min;
+			second = timeInfo.tm_sec;
+		}
+		else {
+			year = 0;
+			month = 0;
+			day = 0;
+			hour = 0;
+			minute = 0;
+			second = 0;
+		}
+	}
+
+	friend ostream& operator<<(ostream& ofs, const Time& time) {
+		/*ofs.write((char*)&time.year, sizeof(int));
+		ofs.write((char*)&time.month, sizeof(int));
+		ofs.write((char*)&time.day, sizeof(int));
+		ofs.write((char*)&time.hour, sizeof(int));
+		ofs.write((char*)&time.minute, sizeof(int));
+		ofs.write((char*)&time.second, sizeof(int));*/
+		ofs << time.year << " " << time.month << " " << time.day << " " << time.hour << " " << time.minute << " " << time.second;
+		return ofs;
+	}
+
+	friend istream& operator>>(istream& ifs, Time& time) {
+		/*ifs.read((char*)&time.year, sizeof(int));
+		ifs.read((char*)&time.month, sizeof(int));
+		ifs.read((char*)&time.day, sizeof(int));
+		ifs.read((char*)&time.hour, sizeof(int));
+		ifs.read((char*)&time.minute, sizeof(int));
+		ifs.read((char*)&time.second, sizeof(int));*/
+		ifs >> time.year >> time.month >> time.day >> time.hour >> time.minute >> time.second;
+		return ifs;
+	}
+
+	string timeToString() {
+		string temp;
+		temp = to_string(year) + "-" + to_string(month) + "-" + to_string(day) + "\n" + to_string(hour) + ":" + to_string(minute) + ":" + to_string(second);
+		return temp;
+	}
+
+	string dateString() {
+		string temp;
+		temp = to_string(year) + ":" + to_string(month) + ":" + to_string(day);
+		return temp;
+	}
+
+	string timeString() {
+		string temp;
+		temp = to_string(hour) + ":" + to_string(minute) + ":" + to_string(second);
+		return temp;
+	}
+};
 
 #endif

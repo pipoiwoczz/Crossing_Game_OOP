@@ -18,10 +18,7 @@ class cObstacle;
 
 class cGameEngine {
 private:
-	// game control
-	static cGame pGame;
-	static cDWindow pWindow;
-
+	
 	static COORD buffsize;
 	//Buffer
 	static CHAR_INFO* mainBuffer;
@@ -77,6 +74,13 @@ public:
 	friend cLabel;
 	friend cPeople;
 	friend cBar;
+
+	// game control
+	static cGame pGame;
+	static cDWindow pWindow;
+
+	static cObstacle* createObject(char type, COORD pos, int spd);
+
 
 	static HANDLE curHandle;
 

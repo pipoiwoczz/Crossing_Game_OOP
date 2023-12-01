@@ -9,7 +9,7 @@
 #include "cEnvironment.h"
 #include "cAsset.h"
 #include "gameEngine.h"
-
+#include "cTime"
 
 void cleanGame()
 {
@@ -61,8 +61,12 @@ void cGame::updatePosObstacle()
 }
 
 void cGame::MainGame() {
-	spawnPeople();
-	spawnObstacle();
+	if (!isLoad)
+	{
+		spawnPeople();
+		spawnObstacle();
+	}
+	isLoad = false;
 	cObstacle* lily = new cLilyleaf({ 0, 73 });
 	environmentObject.push_back(lily);
 	environmentObject.push_back(new cRiver(73, lily));
@@ -188,6 +192,108 @@ void cGame::MainGame() {
 		listWidget[i]->unshow();
 	}
 	Sound::pauseCurrentSound();
+}
+
+void onLoad1(cGame* pGame) {
+	pGame->load("save1.txt");
+}
+void onLoad2(cGame* pGame) {
+	pGame->load("save2.txt");
+}
+void onLoad3(cGame* pGame) {
+	pGame->load("save3.txt");
+}
+
+void cGame::LoadGame()
+{
+	// check file is save or not
+	// if not icon = empty map
+	// if yes icon = map saved
+
+	string mapSaved[4] = { "emptyIcon.txt", "emptyIcon.txt" , "emptyIcon.txt" , "emptyIcon.txt" };
+	string saved[3] = { "save2.txt" ,"save2.txt" , "save3.txt" };
+	string labelText[3] = { "empty", "empty", "empty" };
+	ifstream ifs;
+	for (int i = 0; i < 3; i++) {
+		ifs.open("Save//" +saved[i]);
+		if (ifs.is_open()) {
+			Time t;
+			ifs >> t;
+			labelText[i] = t.dateString();
+			/*int j;
+			for (int k = 0; k < 3; k++) {
+				ifs >> j;
+			}
+			if (j == 1) {
+				mapSaved[i] = "jungleIcon.txt";
+			}
+			else if (j == 2) {
+				mapSaved[i] = "cityIcon.txt";
+			}
+			else if (j == 3) {
+				mapSaved[i] = "beachIcon.txt";
+			}*/
+			ifs.close();
+		}
+	}
+
+		cDWindow loadWindow(&cGameEngine::pWindow, { 100, 30 }, "saveWindow", "mapPanel.txt");
+		loadWindow.show();
+		cLabel saveLabel(&loadWindow, { 78, -3 }, "saveLabel", "SAVE GAME", 1, Color::red);
+		saveLabel.show();
+
+		cButton button1(&loadWindow, { 90, 10 }, "button1", "jungleIcon.txt", 3, onLoad1);
+		cButton button2(&loadWindow, { 40, 40 }, "button2", "jungleIcon.txt", 3, onLoad2);
+		cButton button3(&loadWindow, { 147, 40 }, "button2", "jungleIcon.txt", 3, onLoad3);
+		string label[3] = { "save1", "save2", "save3" };
+		cLabel Label1(&button1, { 5, 1 }, label[0], labelText[0], 1, Color::bright_white);
+		cLabel Label2(&button2, { 5, 1 }, label[1], labelText[1], 1, Color::bright_white);
+		cLabel Label3(&button3, { 5, 1 }, label[2], labelText[2], 1, Color::bright_white);
+		cButton buttonList[] = { button1, button2, button3 };
+		cLabel labelList[] = { Label1, Label2, Label3 };
+		int x = 0;
+		for (int i = 0; i < 3; i++) {
+			buttonList[i].show();
+			labelList[i].show();
+		}
+
+		buttonList[0].onSelect();
+		while (true) {
+			if (GetAsyncKeyState(0x51) < 0)
+				break;
+			if (GetAsyncKeyState(0x0D) < 0)
+			{
+				buttonList[x].onDeSelect();
+				for (int i = 0; i < 3; i++)
+				{
+					buttonList[i].unshow();
+					labelList[i].unshow();
+				}
+				saveLabel.unshow();
+				loadWindow.unshow();
+				isLoad = true;
+				buttonList[x].onEnter();
+				break;
+			}
+			if (GetAsyncKeyState(VK_LEFT) && x > 0)
+			{
+				buttonList[x].onDeSelect();
+				x--;
+				buttonList[x].onSelect();
+
+			}
+			if (GetAsyncKeyState(VK_RIGHT) && x < 2)
+			{
+				buttonList[x].onDeSelect();
+				x++;
+				buttonList[x].onSelect();
+			}
+			for (int i = 0; i < 3; i++) {
+				labelList[i].show();
+			}
+			Sleep(100);
+		}
+		cGameEngine::pGame.MainGame();
 }
 
 
@@ -395,10 +501,52 @@ void cGame::resumeGame(cGame *pGame) {
 
 
 void cGame::save(string fileName) {
-	string filename = fileName; // placeholder filename
+	ofstream ofs("Save//" + fileName);
+	if (!ofs.is_open())
+		return;
 
-	ofstream ofs;
+	Time time;
+	time.getTime();
+	ofs << time << endl;
+
+	ofs << gameOrder << " " << gameLevel << " " << map << " " << totalPoint << " " << totalTime << " " << timePause << endl;
+	// people and their position
+	ofs << livePeople.size() << endl;
+	for (cPeople* element : livePeople)
+	{
+		ofs << element->getPos().X << " " << element->getPos().Y << endl;
+	}
+
+	// obstacles and their position
+	int obstacleCount = (int)liveObstacles.size();
+
+	ofs << obstacleCount << endl;
+
+	for (int i = 0; i < obstacleCount; i++)
+	{
+		ofs << liveObstacles[i]->getType() << " " << liveObstacles[i]->getPos().X << " " << liveObstacles[i]->getPos().Y << " " << liveObstacles[i]->getSpeed() << endl;
+	}
+
+	/*int environmentCount = (int)environmentObject.size();
+	ofs << environmentCount << endl;
+	for (int i = 0; i < environmentCount; i++)
+	{
+		ofs << environmentObject[i]->getType() << " " << environmentObject[i]->getPos().X << " " << environmentObject[i]->getPos().Y << " " << environmentObject[i]->getSpeed() << endl;
+	}*/
+
+	ofs.close();
+
+
+	//string filename = "Save//" + fileName; // placeholder filename
+
+	/*ofstream ofs;
 	ofs.open(filename, ios::binary);
+
+
+	Time time;
+	time.getTime();
+	ofs << time;
+	
 
 	ofs.write((char*)&gameOrder, sizeof(short));
 	ofs.write((char*)&gameLevel, sizeof(short));
@@ -441,8 +589,9 @@ void cGame::save(string fileName) {
 	delete[] obstacleInfo;
 	obstacleInfo = nullptr;
 
-	ofs.close();
-	resumeFunction();
+	ofs.close();*/
+
+	
 }
 
 void saveTest() {
@@ -450,20 +599,34 @@ void saveTest() {
 }
 
 void onSave1(cGame* pGame) {
-	pGame->save("test1.bin");
+	pGame->save("save1.txt");
 }
 void onSave2(cGame* pGame) {
-	pGame->save("test2.bin");
+	pGame->save("save2.txt");
 }
 void onSave3(cGame* pGame) {
-	pGame->save("test3.bin");
+	pGame->save("save3.txt");
 }
 
 void cGame::saveGame(cGame *pGame) {
-    cDWindow saveWindow(&cGameEngine::pWindow, { 100, 30 }, "saveWindow", "mapPanel.txt");
-	saveWindow.show();
-	cLabel saveLabel(&saveWindow, { 78, -3 }, "saveLabel", "SAVE GAME", 1, Color::red);
-	saveLabel.show();
+	Time time[3];
+	string savedFile[3] = { "save1.txt", "save2.txt", "save3.txt" };
+	for (int i = 0; i < 3; i++) {
+		ifstream in("Save//" + savedFile[i], ios::binary);
+		if (!in.is_open()) {
+			time[i];
+			continue;
+		}
+		Time t;
+		in >> t;
+		time[i] = t;
+		in.close();
+	}
+	string timeString[3];
+	for (int i = 0; i < 3; i++) {
+		timeString[i] = time[i].timeString();
+	}
+
 	
 	// check file is save or not
 	// if not icon = empty map
@@ -480,14 +643,18 @@ void cGame::saveGame(cGame *pGame) {
 		ifs.close();
 	}*/
 
+	cDWindow saveWindow(&cGameEngine::pWindow, { 100, 30 }, "saveWindow", "mapPanel.txt");
+	saveWindow.show();
+	cLabel saveLabel(&saveWindow, { 78, -3 }, "saveLabel", "SAVE GAME", 1, Color::red);
+	saveLabel.show();
 
 	cButton button1(&saveWindow, { 90, 10 }, "button1", "jungleIcon.txt", 3, onSave1);
 	cButton button2(&saveWindow, { 40, 40 }, "button2", "jungleIcon.txt", 3, onSave2);
 	cButton button3(&saveWindow, { 147, 40 }, "button2", "jungleIcon.txt", 3, onSave3);
 	string label[3] = { "save1", "save2", "save3" };
-	cLabel Label1(&button1, { 5, 1 }, label[0], "SAVE 1", 1, Color::bright_white);
-	cLabel Label2(&button2, { 5, 1 }, label[1], "SAVE 2", 1, Color::bright_white);
-	cLabel Label3(&button3, { 5, 1 }, label[2], "SAVE 3", 1, Color::bright_white);
+	cLabel Label1(&button1, { 0, 1 }, label[0], timeString[0], 1, Color::bright_white);
+	cLabel Label2(&button2, { 0, 1 }, label[1], timeString[1], 1, Color::bright_white);
+	cLabel Label3(&button3, { 0, 1 }, label[2], timeString[2], 1, Color::bright_white);
 	cButton buttonList[] = { button1, button2, button3 };
 	cLabel labelList[] = { Label1, Label2, Label3 };
 	int x = 0;
@@ -536,41 +703,14 @@ void cGame::saveGame(cGame *pGame) {
 	
 }
 
-void cGame::LoadGame() {
-	// draw load game menu // has a box to show list of save game
-	// has choices: choose save game and load, back to previous menu
-	// if user choose choose save game and load => load game to play
-	// if user choose back to previous menu => back to previous menu
 
-	// show files saved before
-	ifstream ifs("saved.txt");
-	string line;
-	while (getline(ifs, line)) {
-		cout << line << endl;
-	}
-	ifs.close();
-
-	// choose file to load 
-	string filename;
-	// draw a box for user to choose file to load
-	// if name is not exist => ask user to enter again
-	// if name is exist => load game
-
-	ifs.open(filename);
-	if (ifs.is_open()) {
-		// load game and start game
-	}
-	else {
-		// ask user to enter again
-	}
-	ifs.close();
-
-}
 
 cGame::cGame (string saveFile) // load game (create cGame object) from save file
 {
     ifstream ifs;
     ifs.open(saveFile, ios::binary);
+	Time t;
+	ifs >> t;
     ifs.read((char *) &gameOrder, sizeof(short));
     ifs.read((char *) &gameLevel, sizeof(short));
     ifs.read((char *) &map, sizeof(int));
@@ -813,6 +953,43 @@ void cGame::GameOver() {
 void cGame::GameWin() {
 	// draw game win animation //
 	// draw game win menu has choices: exit game, start new game with next map, back to main menu, save game score and time
+}
+void cGame::load(string fileName)
+{
+	
+	ifstream ifs("Save//" + fileName);
+	if (!ifs.is_open())
+		return;
+
+	Time time;
+	ifs >> time;
+
+	ifs >> cGameEngine::pGame.gameOrder >> cGameEngine::pGame.gameLevel >> cGameEngine::pGame.map >> cGameEngine::pGame.totalPoint >> cGameEngine::pGame.totalTime >> cGameEngine::pGame.timePause;
+
+	cGameEngine::pGame.livePeople.resize(cGameEngine::pGame.gameOrder);
+	int dump;
+	ifs >> dump;
+	for (int i = 0; i < cGameEngine::pGame.gameOrder; i++)
+	{
+		short x, y;
+		ifs >> x >> y;
+		cGameEngine::pGame.livePeople[i] = new cPeople({ x, y });
+	}
+
+	int obstacleCount;
+	ifs >> obstacleCount;
+
+	cGameEngine::pGame.liveObstacles.resize(obstacleCount);
+	for (int i = 0; i < obstacleCount; i++)
+	{
+		char type;
+		short x, y, speed;
+		ifs >> type >> x >> y >> speed;
+		COORD pos = { x, y };
+		cGameEngine::pGame.liveObstacles[i] = cGameEngine::createObject(type, pos, speed);
+	}
+
+	ifs.close();
 }
 void cGame::Setting() {
 	// draw setting menu	// has a tutorial box to know how to play game

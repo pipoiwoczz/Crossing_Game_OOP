@@ -4,6 +4,7 @@
 #include "cObstacle.h"
 #include "cPeople.h"
 #include "cAsset.h"
+#include "cAnimal.h"
 
 
 
@@ -103,6 +104,19 @@ void cGameEngine::disableCtrlHandler()
 	DWORD prev_mode;
 	GetConsoleMode(hInput, &prev_mode);
 	SetConsoleMode(hInput, prev_mode & ~ENABLE_MOUSE_INPUT);
+}
+
+cObstacle* cGameEngine::createObject(char type, COORD pos, int spd)
+{
+	switch (type)
+	{
+	case 'l':
+		return new cLion(pos, spd);
+	case 'r':
+		return new cRhino(pos, spd);
+	}
+
+	return nullptr;
 }
 
 bool cGameEngine::startEngine()

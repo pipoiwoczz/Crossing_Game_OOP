@@ -116,8 +116,7 @@ cDWindow settingpanel(&cWidget::window, { 0,0 }, "settingpanel", "settingframe.t
 
 void pmap1()
 {
-	cGame a;
-	a.MainGame();
+	cGameEngine::pGame.MainGame();
 }
 
 void pmap2()
@@ -129,6 +128,13 @@ void pmap3()
 {				
 	Sleep(1000);
 }
+
+void test() {
+	cGameEngine::pGame.LoadGame();
+}
+
+
+
 void b1F(void)
 {
 	cDWindow mapMenu(&mainMenu, { 240, 55 }, "menumap", "mapPanel.txt");
@@ -300,9 +306,60 @@ void b3F(void)
 	}
 	exitpanel.unshow();	
 }
+
+
+void testLoadGame() {
+	cDWindow loadGameMenu(&mainMenu, { 240, 55 }, "menumap", "mapPanel.txt");
+	loadGameMenu.show();
+	cButton newgame(&loadGameMenu, { 10, 20 }, "map1", "newGameButton.txt", 1, b1F);
+	cButton loadGame(&loadGameMenu, { 10, 50 }, "map1", "loadGameButton.txt", 1, test);
+	cButton back(&loadGameMenu, { 10, 70 }, "map1", "jungleicon.txt", 1, pmap3);
+	cButton buttonlist[3] = { newgame, loadGame, back };
+	int x = 0;
+	for (int i = 0; i < 3; i++)
+	{
+		buttonlist[i].show();
+	}
+	buttonlist[x].onSelect();
+	while (true)
+	{
+		if (GetAsyncKeyState(0x51) && 0x8000)
+			break;
+		if (GetAsyncKeyState(0x0D) && 0x8000)
+		{
+			buttonlist[x].onDeSelect();
+			for (int i = 0; i < 3; i++)
+			{
+				buttonlist[i].unshow();
+			}
+			buttonlist[x].onEnter();
+			break;
+
+		}
+		if (GetAsyncKeyState(VK_LEFT) && x > 0)
+		{
+			buttonlist[x].onDeSelect();
+			x--;
+			buttonlist[x].onSelect();
+		}
+		if (GetAsyncKeyState(VK_RIGHT) && x < 2)
+		{
+			buttonlist[x].onDeSelect();
+			x++;
+			buttonlist[x].onSelect();
+		}
+		Sleep(100);
+	}
+	for (int i = 0; i < 3; i++)
+	{
+		buttonlist[i].unshow();
+	}
+	mainMenu.unshow();
+}
+
 int main() {
 	mainMenu.show();
-	cButton b1(&mainMenu, { 516, 55 }, "b1", "playbutton.txt", 1, b1F);
+	cButton b1(&mainMenu, { 516, 55 }, "b1", "playbutton.txt", 1, testLoadGame);
 	cButton b2(&mainMenu, { 516, 90 }, "b2", "settingbutton.txt", 1, b2F);
 	cButton b3(&mainMenu, { 516, 125 }, "b3", "exitbutton.txt", 1, b3F);
 
