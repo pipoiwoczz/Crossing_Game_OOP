@@ -308,11 +308,11 @@ void b3F(void)
 	int currentarrowpos = 1;
 	while (true)
 	{
-		if (GetAsyncKeyState(VK_DOWN) < 0 && currentarrowpos < 1)
+		if (GetAsyncKeyState(VK_DOWN) < 0 && currentarrowpos < 1 && 0x8000)
 		{
 			currentarrowpos++;
 			selectarrow.unshow();
-			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
+			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] } );
 			selectarrow.show();
 		}
 		if (GetAsyncKeyState(VK_UP) < 0 && currentarrowpos > 0)
@@ -367,13 +367,13 @@ void testLoadGame() {
 			break;
 
 		}
-		if (GetAsyncKeyState(VK_LEFT) && x > 0)
+		if (GetAsyncKeyState(VK_LEFT) && x > 0 && 0x8000)
 		{
 			buttonlist[x].onDeSelect();
 			x--;
 			buttonlist[x].onSelect();
 		}
-		if (GetAsyncKeyState(VK_RIGHT) && x < 2)
+		if (GetAsyncKeyState(VK_RIGHT) && x < 2 && 0x8000)
 		{
 			buttonlist[x].onDeSelect();
 			x++;
@@ -402,13 +402,13 @@ int main() {
 
 	while (cGame::mainloop)
 	{
-		if (GetAsyncKeyState(VK_UP) && x > 0)
+		if (GetAsyncKeyState(VK_UP) && x > 0 && 0x8000)
 		{
 			buttonlist[x].onDeSelect();
 			x--;
 			buttonlist[x].onSelect();
 		}
-		if (GetAsyncKeyState(VK_DOWN) && x < 2)
+		if (GetAsyncKeyState(VK_DOWN) && x < 2 && 0x8000)
 		{
 			buttonlist[x].onDeSelect();
 			x++;
@@ -417,7 +417,7 @@ int main() {
 		Sleep(75);
 		if (GetAsyncKeyState(0x51) && 0x8000)
 			break;
-		if (GetSpecificKeyPress(13))
+		if (GetAsyncKeyState(0x0D) && 0x8000)
 		{
 			buttonlist[x].onDeSelect();
 			for (int i = 0; i < 3; i++)

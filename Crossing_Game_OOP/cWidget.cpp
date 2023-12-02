@@ -26,6 +26,30 @@ cWidget::cWidget(cWidget* parent, COORD offsetFromParentTopleft, const string& t
 	}
 }
 
+cWidget::cWidget(cWidget* parent, COORD offsetFromParentTopleft, const string& imgSrc)
+{
+	if (!parent)
+		return;
+	offset = offsetFromParentTopleft;
+	IsVisible = false;
+	tag = "tagName";
+
+	this->parentWindow = parent;
+	topleft = { short(parentWindow->topleft.X + offset.X), short(parentWindow->topleft.Y + offset.Y) };
+	topleft = { max(topleft.X, parentWindow->topleft.X), max(topleft.Y, parentWindow->topleft.Y) };
+
+
+	if (imgSrc.length() != 0)
+	{
+		WidgetFace = cAsset::assetLoader(MapPrefix + imgSrc);
+
+		botright = { short(topleft.X + WidgetFace.getWidth() - 1), short(topleft.Y + WidgetFace.getHeight() - 1) };
+		botright = { min(botright.X, parentWindow->botright.X), min(botright.Y, parentWindow->botright.Y) };
+	}
+}
+
+
+
 bool cWidget::createMainWindow(const string& tagName)
 {
 	if (!hasWd) {
@@ -75,6 +99,10 @@ cDWindow::cDWindow(cDWindow* parent, COORD Topleft, const string& tagName, const
 {
 	if (showNow)
 		show();
+}
+
+cDWindow::cDWindow(cWidget* pareent, COORD Topleft, const string& imgSrc) : cWidget(pareent, Topleft, imgSrc)
+{
 }
 
 bool cDWindow::show(bool showNow)
