@@ -26,6 +26,7 @@ protected:
 	Texture WidgetFace;
 
 	cWidget(cWidget* parentWindow, COORD offsetFromParentTopleft, const string& tagName, const string& imgSrc);
+	cWidget(cWidget* pareent, COORD Topleft, const string& imgSrc);
 public:
 	static cWidget window;
 	static bool createMainWindow(const string& tagName);
@@ -49,9 +50,31 @@ private:
 public:
 	cDWindow(cWidget* parent, COORD Topleft, const string& tagName, const string& imgSrc, bool showNow = false);
 	cDWindow(cDWindow* parent, COORD Topleft, const string& tagName, const string& imgSrc, bool showNow = false);
+	cDWindow(cWidget* pareent, COORD Topleft, const string& imgSrc);
 
 	bool show(bool showNow = true);
 	bool unshow(bool showNow = true);
+
+	cDWindow& operator=(const cDWindow& newWindow) {
+		if (this != &newWindow) {
+			// Copy base class members
+			this->IsVisible = newWindow.IsVisible;
+			this->tag = newWindow.tag;
+			this->topleft = newWindow.topleft;
+			this->offset = newWindow.offset;
+			this->botright = newWindow.botright;
+			this->parentWindow = newWindow.parentWindow;
+			this->WidgetFace = newWindow.WidgetFace;  // Assuming Texture has a proper assignment operator or copy constructor
+
+			// Additional assignments specific to cDWindow
+			// Add more assignments if cDWindow has additional members
+
+			// You may also need to handle dynamic memory if any, e.g., deep copy
+
+		}
+		return *this;
+
+	}
 };
  
 class cButton: public cWidget {
