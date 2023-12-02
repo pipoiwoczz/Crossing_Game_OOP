@@ -506,8 +506,6 @@ void cGame::pauseGame() {
 
 	cDWindow pauseWindow(&cGameEngine::pWindow, { 100, 30 }, "pauseWindow", "pauseMenu.txt");
 	pauseWindow.show();
-	cLabel pauseLabel(&pauseWindow, { 50, 10 }, "pauseLabel", "PAUSE", 1, Color::red);
-	pauseLabel.show();
 	// change playNButton with correct one
 	cButton resumeButton(&pauseWindow, { 78, 15  }, "resumeButton", "continueButton.txt", 3, doNothing);
 	cButton saveButton(&pauseWindow, { 60, 40 }, "saveButton", "saveButton.txt", 3, saveGame);
@@ -528,8 +526,6 @@ void cGame::pauseGame() {
 			{
 				buttonList[i].unshow();
 			}
-			pauseLabel.unshow();
-			pauseWindow.unshow();
 			buttonList[x].onEnter();
 			break;
 		}
@@ -552,9 +548,10 @@ void cGame::pauseGame() {
 	{
 		buttonList[i].unshow();
 	}
-	pauseLabel.unshow();
 	pauseWindow.unshow();
 	resumeFunction();
+	
+
 }
 
 
