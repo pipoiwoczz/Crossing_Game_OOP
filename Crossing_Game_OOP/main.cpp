@@ -390,7 +390,8 @@ int main() {
 	cButton b1(&mainMenu, { 516, 55 }, "b1", "playbutton.txt", 1, testLoadGame);
 	cButton b2(&mainMenu, { 516, 90 }, "b2", "settingbutton.txt", 1, b2F);
 	cButton b3(&mainMenu, { 516, 125 }, "b3", "exitbutton.txt", 1, b3F);
-
+	cLabel ter(&mainMenu, { 60, 60 }, "ee", "%+-=:?<>", 2, Color::red);
+	ter.show();
 	cButton buttonlist[3] = { b1, b2, b3 };
 	int x = 0;
 	for (int i = 0; i < 3; i++)
