@@ -15,10 +15,6 @@ bool Hitbox::isOverlap(const Hitbox &h)
 
     if (topleft.X <= botright.X)
     {
-        /*if (h.topleft.X <= botright.X && h.botright.X >= topleft.X
-            && h.topleft.Y <= botright.Y && h.botright.Y >= topleft.Y)
-            return true;
-        return false;*/
         if (h.topleft.X <= botright.X && h.topleft.X >= topleft.X)
             return true;
         if (h.botright.X >= topleft.X && h.botright.X <= botright.X)
@@ -31,13 +27,6 @@ bool Hitbox::isOverlap(const Hitbox &h)
         if (h.botright.X >= topleft.X && h.botright.X <= PlayBoxRect.Right)
             return true;
         return false;
-        //if (h.topleft.X <= botright.X && h.botright.X >= 0
-        //    && h.topleft.Y <= botright.Y && h.botright.Y >= topleft.Y)
-        //    return true;
-        //else if (h.topleft.X <= PlayBoxRect.Right && h.botright.X >= 0
-        //    && h.topleft.Y <= botright.Y && h.botright.Y >= topleft.Y)
-        //    return true;
-        //return false;
     }
 
 }
@@ -55,6 +44,7 @@ void Hitbox::set(const COORD &newTopleft, const COORD &newBotright)
 }
 void Hitbox::move(const COORD& dPos)
 {
+    // move the hitbox by a vector defined by dPos. wraps around the screen if bound(s) are reached
     topleft.X = (topleft.X + dPos.X + PlayBoxRect.Right) % PlayBoxRect.Right;
     topleft.Y = (topleft.Y + dPos.Y + PlayBoxRect.Bottom) % PlayBoxRect.Bottom;
     botright.X = (botright.X + dPos.X + PlayBoxRect.Right) % PlayBoxRect.Right;

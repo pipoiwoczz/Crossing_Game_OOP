@@ -747,11 +747,11 @@ bool cGame::isImpact()
     for (int i = 0; i < livePeople.size(); i++)
     {
 		int cnt = -1;
-        if (livePeople[i] -> getState())
+        if (livePeople[i] -> getState()) // check only for alive players
 			for (cObstacle* obstacle : liveObstacles)
 			{
 				cnt++;
-				if (obstacle->Box.isOverlap(livePeople[i]->mBox))
+				if (obstacle->Box.isOverlap(livePeople[i]->mBox)) // check overlap with each obstacles on screen
 				{
 					livePeople[i]->mState = false;
 					Sleep(200);
@@ -770,10 +770,11 @@ bool cGame::isImpact()
 
 void cGame::randomStopThread()
 {
+    //setup clocks
     long long lastTime = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
     long long stopDuration = 0;
     long long stopCooldown = 0;
-    short stopped = -1;
+    short stopped = -1; //indicate which line is stopped, if any
     
     vector<short> linePos;
     for (cObstacle * element : liveObstacles)
@@ -806,6 +807,7 @@ void cGame::randomStopThread()
                         if (element -> getPos().Y == stopped)
                             element -> resume();
                     }
+                    //stopped = -1;
                 }
             }
             stopCooldown -= timePassed;
@@ -814,21 +816,21 @@ void cGame::randomStopThread()
         }
         else
         {
-            int roll = rand() % 30000 + 1;
+            int roll = rand() % 30000 + 1; // randomly determines if something will stop - chance is (1/30000) * [ms passed] --- can also be changed to always stop after a set interval
             if (roll > timePassed)
             {
                 // (sleep until next frame)
                 //Sleep(16);
                 continue;
             }
-            roll = rand() % size;
+            roll = rand() % size; // randomly determines which line will be stopped
             for (cObstacle * element : liveObstacles)
             {
                 if (element -> getPos().Y == linePos[roll])
                     element -> stop();
             }
             
-            roll = rand() % 10000;
+            roll = rand() % 10000; // randomly determines stop duration (from 5 - 15s)
             stopDuration = roll + 5000;
             stopCooldown = stopDuration + 10000;
             // (sleep until next frame)

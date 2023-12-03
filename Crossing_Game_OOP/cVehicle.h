@@ -7,7 +7,7 @@ class Texture;
 class cVehicle: public cObstacle {
 public:
     cVehicle(COORD In_pos, int speed);
-
+    virtual ~cVehicle() {}
 };
 
 class cTruck : public cVehicle {

@@ -39,7 +39,7 @@ public:
     friend class cGame;
 
     cObstacle (COORD In_pos, int speed); // constructor: set topleft and speed. timeUntilMove automatically set to be equal to speed
-    ~cObstacle();
+    virtual ~cObstacle();
    // static void cleanBootstrap(); // clean up static objects vector. call before program exits. [better solutions?]
     
     COORD getPos();
@@ -61,8 +61,8 @@ public:
     virtual unsigned char getType() = 0;
     virtual void hitEffect(cPeople* pVictim) = 0;// (optional) effect on collision with player
     virtual void hitSound() = 0;
-    void stop();
-    void resume();
+    void stop(); //stop object (object will not move)
+    void resume(); //un-stop object
 
     // shared methods
     

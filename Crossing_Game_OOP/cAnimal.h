@@ -8,6 +8,7 @@ private:
 
 public:
     cAnimal(COORD In_pos, int speed);
+    virtual ~cAnimal() {}
 };
 
 class cLion : public cAnimal {
