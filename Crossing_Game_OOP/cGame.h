@@ -2,6 +2,7 @@
 #define _CGAME_H
 #include "setup.h"
 class cObstacle;
+class cEnvironment;
 class cPeople;
 void cleanGame();
 
@@ -23,7 +24,7 @@ class cGame {
 
 	friend cGameEngine;
     vector<cObstacle*> liveObstacles;
-	vector<cObstacle*>  environmentObject;
+	vector<cEnvironment*>  environmentObject;
     vector<cPeople *> livePeople;
 	vector<cWidget*> listWidget;
 	vector<cLabel*> listLabel;
@@ -32,6 +33,11 @@ class cGame {
 	bool isPause, isExit, isLoad;
 	bool isLose;
 	bool tomainMenu;
+
+	//Special events
+	bool hasSuddenStop = false;
+	bool suddenStop;
+	int cooldown = 200;
 
 	long totalPoint;
 	double totalTime;

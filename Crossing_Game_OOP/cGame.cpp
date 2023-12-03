@@ -100,12 +100,14 @@ void cGame::spawnEnvironment() //summon environment objects of current map theme
 {
 	if (currentTheme == 0)
 	{
-		cObstacle* lily = new cLilyleaf({ 0, 73 });
+		cEnvironment* lily = new cLilyleaf({ 0, 73 });
 		environmentObject.push_back(lily);
+
 		environmentObject.push_back(new cRiver(73, lily));
 		lily = new cLilyleaf({ 30, 55 });
 		environmentObject.push_back(lily);
 		environmentObject.push_back(new cRiver(55, lily));
+
 	}
 	else if (currentTheme == 1)
 	{
@@ -113,7 +115,9 @@ void cGame::spawnEnvironment() //summon environment objects of current map theme
 	}
 	else if (currentTheme == 2)
 	{
-
+		environmentObject.push_back(new cTrafficLight({ 0, 73 }));
+		hasSuddenStop = true;
+		suddenStop = false;
 	}
 }
 
@@ -560,10 +564,22 @@ void cGame::MainGame() {
 
 
 	while (!isExit) {
-		//if (GetAsyncKeyState(0x50) < 0) {d
-		//	pauseGame();
-		//	break;
-		//}
+		if (hasSuddenStop)
+		{
+			if (cooldown > 0)
+				cooldown--;
+			else {
+				cooldown = 200;
+				suddenStop = !suddenStop;
+				for (cEnvironment* p : environmentObject)
+				{
+					if (p->hasEvent)
+					{
+						p->playEvent();
+					}
+				}
+			}
+		}
 		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
 		{
 			GamePausePanel();

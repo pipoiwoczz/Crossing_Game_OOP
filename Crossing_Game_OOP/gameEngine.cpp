@@ -5,7 +5,7 @@
 #include "cPeople.h"
 #include "cAsset.h"
 #include "cAnimal.h"
-
+#include "cEnvironment.h"
 
 
 COORD cGameEngine::GetMonitorDimension()
@@ -226,8 +226,16 @@ void cGameEngine::renderObstacle(cObstacle* pObstacle)
 
 	if (pObstacle->timeUntilRender == 0)
 	{
-		pObstacle->currentFrame = (pObstacle->currentFrame + 1) % pObstacle->numMotionFrame;
-		pObstacle->pMotionFrame = pObstacle->pLMotionFrames + pObstacle->currentFrame;
+		if (!pObstacle->isStop)
+		{
+			pObstacle->currentFrame = (pObstacle->currentFrame + 1) % pObstacle->numMotionFrame;
+			pObstacle->pMotionFrame = pObstacle->pLMotionFrames + pObstacle->currentFrame;
+		}
+		/*else {
+			pObstacle->currentFrame = 0;
+			pObstacle->pMotionFrame = pObstacle->pLMotionFrames;
+		}*/
+
 		
 		pObstacle->timeUntilRender = pObstacle->defaulttimeUntilRender;
 	}
@@ -236,11 +244,37 @@ void cGameEngine::renderObstacle(cObstacle* pObstacle)
 	}
 
 	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pObstacle->pMotionFrame->textureArray, { pObstacle->pMotionFrame->width, pObstacle->pMotionFrame->height }, pObstacle->topleft);
-
-	if (pObstacle->movable)
-	pObstacle->move();
 }
 
+void cGameEngine::renderEnvironment(cEnvironment* pEnvironmentObject)
+{
+	if (pEnvironmentObject->pMotionFrame == nullptr)
+		return;
+	if (pEnvironmentObject->hasFrameMove)
+	{
+		if (pEnvironmentObject->timeUntilRender == 0)
+		{
+			if (!pEnvironmentObject->isStop)
+			{
+				pEnvironmentObject->currentFrame = (pEnvironmentObject->currentFrame + 1) % pEnvironmentObject->numMotionFrame;
+				pEnvironmentObject->pMotionFrame = pEnvironmentObject->pLMotionFrames + pEnvironmentObject->currentFrame;
+			}
+			/*else {
+				pObstacle->currentFrame = 0;
+				pObstacle->pMotionFrame = pObstacle->pLMotionFrames;
+			}*/
+
+
+			pEnvironmentObject->timeUntilRender = pEnvironmentObject->defaulttimeUntilRender;
+		}
+		else {
+			pEnvironmentObject->timeUntilRender--;
+		}
+	}
+
+	
+	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pEnvironmentObject->pMotionFrame->textureArray, { pEnvironmentObject->pMotionFrame->width, pEnvironmentObject->pMotionFrame->height }, pEnvironmentObject->topleft);
+}
 void cGameEngine::updateInfo(cGame* pGame)
 {
 	for (int i = 0; i < pGame->listWidget.size(); i++)
@@ -261,12 +295,19 @@ void cGameEngine::pizzaDraw(cGame* pGame)
 	//put obstacles onto screen buffer
 	for (int i = 0; i < pGame->liveObstacles.size(); i++)
 	{
+		if (!pGame->suddenStop)
+		{
+			pGame->liveObstacles[i]->isStop = false;
+			pGame->liveObstacles[i]->move();
+		}
+		else {
+			pGame->liveObstacles[i]->isStop = true;
+		}
 		renderObstacle(pGame->liveObstacles[i]);
+
+
 	}
-	for (int i = 0; i < pGame->environmentObject.size(); i++)
-	{
-		renderObstacle(pGame->environmentObject[i]);
-	}
+
 	//put people onto buffer
 	for (int i = 0; i < pGame->livePeople.size(); i++)
 	{
@@ -274,6 +315,12 @@ void cGameEngine::pizzaDraw(cGame* pGame)
 		itera->move();
 		
 		renderPeople(itera);
+	}
+
+	for (int i = 0; i < pGame->environmentObject.size(); i++)
+	{
+		renderEnvironment(pGame->environmentObject[i]);
+		pGame->environmentObject[i]->move();
 	}
 }
 

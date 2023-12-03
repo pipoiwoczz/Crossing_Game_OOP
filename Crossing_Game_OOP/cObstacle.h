@@ -31,8 +31,6 @@ protected:
     short numFxFrame;
 
     bool movable = true;
-    bool friendly = false;
-    cObstacle* pSafe = nullptr;
 public:
     Hitbox Box;
 

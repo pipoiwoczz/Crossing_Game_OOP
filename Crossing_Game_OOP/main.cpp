@@ -39,6 +39,7 @@ bool enginecheck = cGameEngine::startEngine();
 
 //GameAsset
 Texture cAsset::blankchar;
+vector<Texture> cTrafficLight::motionFrames;
 vector<Texture> cLilyleaf::motionFrames;
 vector<Texture> cLion::motionFrames;
 vector<Texture> cRhino::motionFrames;
@@ -76,6 +77,7 @@ bool mainLoader()
 	cAsset::specialCharLoader();
 	cAsset::blankchar = cAsset::assetLoader("Char//Alphabet//blank.txt");
 	loadingBar.setProgress(false, 10);
+	cTrafficLight::motionFrames = cAsset::assetLoaders(trafficlightFile, TexturePrefix);
 	cLilyleaf::motionFrames = cAsset::assetLoaders(lilyFile, TexturePrefix);
 	cLion::motionFrames = cAsset::assetLoaders(lionFile, TexturePrefix);
 	cRhino::motionFrames = cAsset::assetLoaders(rhinoFile, TexturePrefix);

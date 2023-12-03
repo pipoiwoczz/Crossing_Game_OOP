@@ -2,7 +2,10 @@
 #include "hitbox.h"
 #include "cAsset.h"
 
-cRiver::cRiver(short line, cObstacle*& safeThingAboveThis) : cObstacle({ 0, line }, 0)
+
+cEnvironment::cEnvironment(COORD In_pos, int speed) : cObstacle(In_pos, speed) {}
+
+cRiver::cRiver(short line, cEnvironment*& safeThingAboveThis) : cEnvironment({ 0, line }, 0)
 {
     movable = false;
     pSafe = safeThingAboveThis;
@@ -23,7 +26,7 @@ void cRiver::hitSound()
 
 }
 
-cLilyleaf::cLilyleaf(COORD In_pos) : cObstacle(In_pos, 0)
+cLilyleaf::cLilyleaf(COORD In_pos) : cEnvironment(In_pos, 0)
 {
     friendly = true;
 
@@ -42,5 +45,29 @@ void cLilyleaf::hitEffect(cPeople* pVictim)
 
 }
 void cLilyleaf::hitSound() {
+
+}
+
+cTrafficLight::cTrafficLight(COORD In_pos) : cEnvironment(In_pos, 0)
+{
+    friendly = true;
+    hasEvent = true;
+    hasFrameMove = false;
+    movable = false;
+    pMotionFrame = &motionFrames[0];
+    pLMotionFrames = pMotionFrame;
+    currentFrame = 0;
+    numMotionFrame = motionFrames.size();
+    Box.set(topleft, { short(topleft.X + pMotionFrame->getWidth() - 1), short(topleft.Y + pMotionFrame->getHeight() - 1) });
+}
+unsigned char cTrafficLight::getType() {
+    return 'f';
+}
+
+void cTrafficLight::hitEffect(cPeople* pVictim)
+{
+
+}
+void cTrafficLight::hitSound() {
 
 }

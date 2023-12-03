@@ -15,7 +15,7 @@ class cBar;
 
 class cPeople;
 class cObstacle;
-
+class cEnvironment;
 class cGameEngine {
 private:
 	
@@ -32,7 +32,7 @@ private:
 	//Object rendering
 	static void renderPeople(cPeople* pPeople);
 	static void renderObstacle(cObstacle* pObstacle);
-	
+	static void renderEnvironment(cEnvironment* pEnvironmentObject);
 	//Initialization Phase
 	static COORD GetMonitorDimension();
 	static void FixConsoleBuffer(HANDLE H);
