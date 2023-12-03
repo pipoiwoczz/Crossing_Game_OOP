@@ -809,12 +809,18 @@ void cGame::randomStopThread()
                 }
             }
             stopCooldown -= timePassed;
+            // (sleep until cooldown is over)
+            //Sleep(stopCooldown);
         }
         else
         {
             int roll = rand() % 30000 + 1;
             if (roll > timePassed)
+            {
+                // (sleep until next frame)
+                //Sleep(16);
                 continue;
+            }
             roll = rand() % size;
             for (cObstacle * element : liveObstacles)
             {
@@ -825,6 +831,8 @@ void cGame::randomStopThread()
             roll = rand() % 10000;
             stopDuration = roll + 5000;
             stopCooldown = stopDuration + 10000;
+            // (sleep until next frame)
+            //Sleep(16);
         }
     }
 }
