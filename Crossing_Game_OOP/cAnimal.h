@@ -65,6 +65,38 @@ public:
     virtual void hitSound();
 };
 
+class cShark : public cAnimal {
+    static vector<Texture> motionFrames;
+    static vector<Texture> impactFx;
 
+public:
+    friend bool mainLoader();
+
+
+    cShark();
+    cShark(COORD In_pos, int speed);
+    ~cShark();
+
+    unsigned char getType();
+    virtual void hitEffect(cPeople* pVictim);
+    virtual void hitSound();
+};
+
+class cSurfer : public cAnimal {
+    static vector<Texture> motionFrames;
+    static vector<Texture> impactFx;
+
+public:
+    friend bool mainLoader();
+
+
+    cSurfer();
+    cSurfer(COORD In_pos, int speed);
+    ~cSurfer();
+
+    unsigned char getType();
+    virtual void hitEffect(cPeople* pVictim);
+    virtual void hitSound();
+};
 
 #endif

@@ -44,17 +44,21 @@ vector<Texture> cLilyleaf::motionFrames;
 vector<Texture> cLion::motionFrames;
 vector<Texture> cRhino::motionFrames;
 vector<Texture> cCrocodile::motionFrames;
+vector<Texture> cShark::motionFrames;
+vector<Texture> cSurfer::motionFrames;
 vector<Texture> cTruck::motionFrames;
-vector<Texture> cHelicopter::motionFrames;
+vector<Texture> cCar::motionFrames;
 vector<Texture> cMotorbike::motionFrames;
 
 Texture cAsset::FxFrame;
 vector<Texture> cMotorbike::impactFx;
-vector<Texture> cHelicopter::impactFx;
+vector<Texture> cCar::impactFx;
 vector<Texture> cTruck::impactFx;
 vector<Texture> cLion::impactFx;
 vector<Texture> cCrocodile::impactFx;
 vector<Texture> cRhino::impactFx;
+vector<Texture> cShark::impactFx;
+vector<Texture> cSurfer::impactFx;
 vector<vector<gameMap>> gameMap::listMap;
 
 int gameMap::currentTheme;
@@ -82,18 +86,22 @@ bool mainLoader()
 	cLion::motionFrames = cAsset::assetLoaders(lionFile, TexturePrefix);
 	cRhino::motionFrames = cAsset::assetLoaders(rhinoFile, TexturePrefix);
 	cCrocodile::motionFrames = cAsset::assetLoaders(crocoFile, TexturePrefix);
+	cShark::motionFrames = cAsset::assetLoaders(sharkFile, TexturePrefix);
+	cSurfer::motionFrames = cAsset::assetLoaders(surferFile, TexturePrefix);
+	cCar::motionFrames = cAsset::assetLoaders(carFile, TexturePrefix);
 	cTruck::motionFrames = cAsset::assetLoaders(truckFile, TexturePrefix);
-	cHelicopter::motionFrames = cAsset::assetLoaders(heliFile, TexturePrefix);
 	cMotorbike::motionFrames = cAsset::assetLoaders(motorbFile, TexturePrefix);
 	loadingBar.setProgress(false, 50);
 
 	cAsset::FxFrame = cAsset::assetLoader(FxPrefix + FxFrameFile);
 	cMotorbike::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-	cHelicopter::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
 	cTruck::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+	cCar::impactFx = cAsset::assetLoaders(carFile, TexturePrefix);
 	cLion::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
 	cCrocodile::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
 	cRhino::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+	cShark::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+	cSurfer::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
 	loadingBar.setProgress(false, 80);
 
 	gameMap::listMap;

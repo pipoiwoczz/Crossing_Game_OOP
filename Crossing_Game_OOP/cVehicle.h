@@ -29,24 +29,6 @@ public:
     virtual void hitSound();
 };
 
-class cHelicopter : public cVehicle {
-   // static cObstacle * bootstrapObjectcHelicopter;
-    static vector<Texture> motionFrames;
-	static vector<Texture> impactFx;
-public:
-    friend bool mainLoader();
-
-
-	cHelicopter();
-	//cHelicopter(COORD In_pos, int difficulty, int ttm);
-    cHelicopter (COORD In_pos, int speed);
-    ~cHelicopter();
-    
-    unsigned char getType();
-    virtual void hitEffect(cPeople* pVictim);
-    virtual void hitSound();
-};
-
 class cMotorbike : public cVehicle {
     //static cObstacle * bootstrapObjectcMotorbike;
 
@@ -66,6 +48,22 @@ public:
     virtual void hitSound();
 };
 
+class cCar : public cVehicle {
+    //static cObstacle * bootstrapObjectcMotorbike;
+
+    static vector<Texture> motionFrames;
+    static vector<Texture> impactFx;
+public:
+    friend bool mainLoader();
 
 
+    cCar();
+    //cCar(COORD In_pos, int difficulty, int ttm);
+    cCar(COORD In_pos, int speed);
+    ~cCar();
+
+    unsigned char getType();
+    virtual void hitEffect(cPeople* pVictim);
+    virtual void hitSound();
+};
 #endif
