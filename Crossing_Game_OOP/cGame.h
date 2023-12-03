@@ -112,7 +112,7 @@ class cGame {
 		void ScoreBoard();
 		void MainGame();
 		void LoadGame();
-		static void load(string fileName);
+		void load(string fileName);
 		void Setting();
 		void GameOver();
 		void GameWin();
