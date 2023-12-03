@@ -12,8 +12,8 @@ cObstacle::cObstacle(COORD In_pos, /* int difficulty, int ttm */ int speed) {
     topleft = In_pos;
     /*speed = difficulty;
     timeUntilMove = ttm;*/
-    if (speed <= 0)
-        speed = 1;
+    if (speed < 0)
+        speed = 0;
     this -> speed = speed;
     timeUntilMove = speed;
 }
@@ -27,6 +27,11 @@ COORD cObstacle::getPos() {
 int cObstacle::getSpeed()
 {
     return speed;
+}
+
+bool cObstacle::getDirection()
+{
+    return isMoveLeft;
 }
 
 void cObstacle::setPos(COORD new_Pos) {

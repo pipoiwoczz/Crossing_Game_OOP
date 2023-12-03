@@ -82,6 +82,11 @@ class cGame {
 
 		void environmentImpact();
 
+		short getNumberOfLane();
+
+		vector<COORD> getPositionLane(); 		// COORD X is pos Y and Y is direction
+
+
 		vector<cPeople *> getPeople();
         vector<cObstacle *> getObstacles();
 

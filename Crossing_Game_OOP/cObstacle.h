@@ -31,6 +31,7 @@ protected:
     short numFxFrame;
 
     bool movable = true;
+    bool isMoveLeft = false;
 public:
     Hitbox Box;
 
@@ -44,6 +45,7 @@ public:
     
     COORD getPos();
     int getSpeed();
+    bool getDirection();
     
     void setPos(COORD new_Pos);
     virtual void determineHitbox();
