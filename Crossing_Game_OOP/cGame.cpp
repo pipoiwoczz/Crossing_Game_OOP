@@ -115,7 +115,14 @@ void cGame::spawnEnvironment() //summon environment objects of current map theme
 	}
 	else if (currentTheme == 2)
 	{
-		environmentObject.push_back(new cTrafficLight({ 0, 73 }));
+		// COORD X is pos Y and Y is direction
+		vector<COORD> lanesPosition = getPositionLane();
+		for (int i = 0; i < lanesPosition.size(); i++)
+		{
+			short posX = lanesPosition[i].Y ? 0 : 486;
+			environmentObject.push_back(new cTrafficLight({ posX, lanesPosition[i].X }));
+		}
+		// get Traffic light
 		hasSuddenStop = true;
 		suddenStop = false;
 	}
@@ -124,8 +131,8 @@ void cGame::spawnEnvironment() //summon environment objects of current map theme
 void cGame::prepareGame()
 {
 	clearObjects();
-	spawnEnvironment();
 	spawnObstacle(CreatedLevel[currentTheme][currentPhase]);
+	spawnEnvironment();
 	spawnPeople();
 }
 
@@ -260,9 +267,20 @@ void cGame::GameNewGamePanel()
 		cButton(&panel, { 20, 97 }, "iconmapcity.txt", 1, true)
 	};
 
+	cLabel panelLabel[3] = {
+		cLabel(&panel, { 140, 40 }, "JUNGLE", 1, Color::black, true),
+		cLabel(&panel, { 140, 72 }, "BEACH", 1, Color::black, true),
+		cLabel(&panel, { 140, 104 }, "CITY", 1, Color::black, true)
+	};
+
 	int current = 0;
 	panelButton[current].onSelect();
-
+	
+	for (int i = 0; i < 3; i++) {
+		panelButton[i].show();
+		panelLabel[i].show();
+	}
+	
 	while (true)
 	{
 		if (GetAsyncKeyState(VK_UP)  && current > 0)
@@ -277,7 +295,6 @@ void cGame::GameNewGamePanel()
 			current++;
 			panelButton[current].onSelect();
 		}
-		Sleep(100);
 		if (GetAsyncKeyState(0x51) & 0x8000)
 			break;
 		if (GetAsyncKeyState(0x0D) & 0x8000)
@@ -293,7 +310,7 @@ void cGame::GameNewGamePanel()
 		{
 			break;
 		}
-		Sleep(75);
+		Sleep(100);
 	}
 }
 
@@ -740,6 +757,8 @@ void cGame::MainGame() {
 	isPause = false;
 	isExit = false;
 	isLoad = false;
+	hasSuddenStop = false;
+	suddenStop = false;
 	
 	//resetTime();
 
@@ -936,9 +955,7 @@ void cGame::randomStopThread()
     }
 }
 
-void exit() {
-	return;
-}
+
 
 void cGame::resumeFunction()
 {	
@@ -1242,4 +1259,44 @@ void cGame::resetGame() {
 		endlessMode();
 	}*/
 	MainGame();
+}
+
+short cGame::getNumberOfLane() {
+	int count = 0;
+	for (int i = 0; i < liveObstacles.size(); i++) {
+		if (count == 0) {
+			count++;
+		}
+		for (int j = 0; j < i; j++) {
+			if (j == i - 1) {
+				count++;
+			}
+			if (liveObstacles[i]->getPos().Y == liveObstacles[j]->getPos().Y) {
+				break;
+			}
+		}
+	}
+	return count;
+}
+
+
+vector<COORD> cGame::getPositionLane() {
+	short n = getNumberOfLane();
+	vector<COORD> position;
+	position.resize(n);
+	for (int i = 0; i < n; i++) {
+		position[i].X = 0;
+	}
+	for (int i = 0; i < liveObstacles.size(); i++) {
+		for (int j = 0; j < n; j++) {
+			if (liveObstacles[i]->getPos().Y == position[j].X) {
+				break;
+			}
+			if (j == n - 1 || position[j].X == 0) {
+				position[j].X = liveObstacles[i]->getPos().Y;
+				position[j].Y = liveObstacles[i]->getDirection();
+			}
+		}
+	}
+	return position;
 }
