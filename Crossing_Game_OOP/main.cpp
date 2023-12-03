@@ -9,25 +9,13 @@
 #include "Sound.h"
 #include "Map.h"
 
-bool GetSpecificKeyPress(int key)
-{
-	if (_kbhit())
-	{
-		int k = _getch();
-		if (k == key)
-			return true;
-	}
-
-
-	return false;
-}
-
 //Game Core
 const string UIPrefix = "UI//";
 const string TexturePrefix = "Obstacles//";
 const string FxPrefix = "FX//";
 const string PlayerPrefix = "Player//";
 const string MapPrefix = "Maps//";
+const string LevelPrefix = "Level//";
 
 const HANDLE mainHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -46,10 +34,8 @@ vector<Texture> cAsset::number;
 vector<Texture> cAsset::special;
 int cGameEngine::count = 0;
 HANDLE cGameEngine::curHandle = 0;
-cWidget cWidget::window;
 
 bool enginecheck = cGameEngine::startEngine();
-bool cWidget::hasWd = cWidget::createMainWindow("main");
 
 //GameAsset
 Texture cAsset::blankchar;
@@ -74,16 +60,17 @@ int gameMap::currentTheme;
 gameMap* gameMap::currentMap;
 int gameMap::currentMapIndex;
 int gameMap::numCurrentMapFrame;
-
 int gameMap::mapLoopCooldown = 15;
 
-cDWindow mainMenu(&cWidget::window, { 0, 0 }, "bg", "menuBg.txt", true);
-cGame cGameEngine::pGame;
-cDWindow cGameEngine::pWindow(&cWidget::window, { 0, 0 }, "bg", "menuBg.txt", true);
+cWidget cGame::window;
+cDWindow cGame::mainMenu;
+cGame cGame::game;
+
+bool gameinit = cGame::InitGame();
 
 bool mainLoader()
 {
-	cBar loadingBar(&mainMenu, { 20, 140 }, "loadingbar", 500, 8, Color::red, Color::white);
+	cBar loadingBar(&cGame::mainMenu, { 20, 140 },  500, 8, Color::red, Color::white);
 	cAsset::alphabetLoader();
 	cAsset::numberLoader();
 	cAsset::specialCharLoader();
@@ -122,334 +109,7 @@ bool mainLoader()
 
 bool cGame::mainloop = mainLoader();
 
-
-
-
-cDWindow settingpanel(&cWidget::window, { 0,0 }, "settingpanel", "settingframe.txt");
-
-void pmap1()
-{
-	cGameEngine::pGame.MainGame();
-}
-
-void pmap2()
-{
-
-}
-
-void pmap3()
-{				
-	Sleep(750);
-}
-
-void test() {
-	cGameEngine::pGame.LoadGame();
-}
-
-
-
-void b1F(void)
-{
-	cDWindow mapMenu(&mainMenu, { 240, 55 }, "menumap", "mapPanel.txt");
-	mapMenu.show();
-	cButton map1(&mapMenu, { 10, 20 }, "map1", "jungleicon.txt", 1, pmap1);
-	cButton map2(&mapMenu, { 84, 20 }, "map1", "jungleicon.txt", 1, pmap2);
-	cButton map3(&mapMenu, { 158, 20 }, "map1", "jungleicon.txt", 1, pmap3);
-
-	cButton buttonlist[3] = { map1, map2, map3 };
-
-
-	int x = 0;
-	for (int i = 0; i < 3; i++)
-	{
-
-		buttonlist[i].show();
-	}
-	buttonlist[x].onSelect();
-		
-	while (true)
-	{
-		if (GetAsyncKeyState(0x51) && 0x8000)
-			break;
-		if (GetAsyncKeyState(0x0D) && 0x8000)
-		{
-			buttonlist[x].onDeSelect();
-			for (int i = 0; i < 3; i++)
-			{
-				buttonlist[i].unshow();
-			}
-			buttonlist[x].onEnter();
-			break;
-
-		}
-		if (GetAsyncKeyState(VK_LEFT) && x > 0)
-		{
-			buttonlist[x].onDeSelect();
-			x--;
-			buttonlist[x].onSelect();
-		}
-		if (GetAsyncKeyState(VK_RIGHT) && x < 2)
-		{
-			buttonlist[x].onDeSelect();
-			x++;
-			buttonlist[x].onSelect();
-		}
-		Sleep(75);
-		if (GetAsyncKeyState(0x51) && 0x8000)
-			break;
-		if (GetSpecificKeyPress(13))
-		{
-			buttonlist[x].onDeSelect();
-			for (int i = 0; i < 3; i++)
-			{
-				buttonlist[i].unshow();
-			}
-			buttonlist[x].onEnter();
-			break;
-
-		}
-		Sleep(75);
-	}
-	for (int i = 0; i < 3; i++)
-	{
-		buttonlist[i].unshow();
-	}
-	mapMenu.unshow();
-
-}
-
-void b2F(void)
-{
-
-	//settingpanel.show();
-
-	//void (*pSoundSetting[2][2])() = {
-	//{ Sound::reduceSoundBackground, Sound::increaseSoundBackground},
-	//{Sound::reduceEffectSound, Sound::increaseEffectSound}
-	//};
-	//int (*pSoundVolume[2])() = { Sound::getCurrentMusicVolume, Sound::getCurrentEffectVolume };
-
-	//cLabel music(&settingpanel, { 200, 61 }, "music", "Music Volume", 1, Color::black);
-	//cLabel musicvolume(&settingpanel, { 335,61 }, "musicvolume", to_string(pSoundVolume[0]() / 10), 1, Color::black);
-
-	//cLabel FXsound(&settingpanel, { 200, 91 }, "fx", "Effect Volume", 1, Color::black);
-	//cLabel FXvolume(&settingpanel, { 335, 91 }, "fxvolume", to_string(pSoundVolume[1]() / 10), 1, Color::black);
-
-	//cDWindow selectarrow(&settingpanel, { 370, 61 }, "selectarrow", "arrowL.txt");
-
-
-
-	//short arrowPos[2] = { 61, 91 };
-
-	//cLabel ValueBar[2] = { musicvolume, FXvolume };
-
-	//int currentarrowpos = 0;
-
-	//settingpanel.show();
-
-	//music.show();
-	//musicvolume.show();
-	//FXsound.show();
-	//FXvolume.show();
-
-	//selectarrow.show();
-	//while (true)
-	//{
-
-	//	if (GetAsyncKeyState(VK_DOWN) < 0 && currentarrowpos < 1)
-	//	{
-	//		currentarrowpos++;
-	//		selectarrow.unshow();
-	//		selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
-	//		selectarrow.show();
-	//	}
-	//	if (GetAsyncKeyState(VK_UP) < 0 && currentarrowpos > 0)
-	//	{
-	//		currentarrowpos--;
-	//		selectarrow.unshow();
-	//		selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
-	//		selectarrow.show();
-	//	}
-	//	if (GetAsyncKeyState(VK_LEFT) < 0)
-	//	{
-	//		pSoundSetting[currentarrowpos][0]();
-	//		ValueBar[currentarrowpos].updateText(to_string(pSoundVolume[currentarrowpos]() / 10));
-	//		Sleep(250);
-	//	}
-	//	if (GetAsyncKeyState(VK_RIGHT) < 0)
-	//	{
-	//		pSoundSetting[currentarrowpos][1]();
-	//		ValueBar[currentarrowpos].updateText(to_string(pSoundVolume[currentarrowpos]() / 10));
-	//		Sleep(250);
-	//	}
-	//	Sleep(75);
-	//	if (GetSpecificKeyPress(13))
-	//	{
-	//		break;
-	//	}
-	//	Sleep(75);
-	//}
-	//selectarrow.show();
-
-	//FXvolume.unshow();
-	//FXsound.unshow();
-	//musicvolume.unshow();
-	//music.show();
-
-	//settingpanel.unshow();
-}
-
-void b3F(void)
-{
-	cDWindow exitpanel(&cWidget::window, { 233, 60 }, "exitpanel", "exitpanel.txt", true);
-	cDWindow selectarrow(&exitpanel, { 96, 37 }, "selectarrow", "enterarrow.txt", true);
-	
-	short arrowPos[2] = { 24, 37 };
-	int currentarrowpos = 1;
-	while (true)
-	{
-		if (GetAsyncKeyState(VK_DOWN) < 0 && currentarrowpos < 1 && 0x8000)
-		{
-			currentarrowpos++;
-			selectarrow.unshow();
-			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] } );
-			selectarrow.show();
-		}
-		if (GetAsyncKeyState(VK_UP) < 0 && currentarrowpos > 0)
-		{
-			currentarrowpos--;
-			selectarrow.unshow();
-			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
-			selectarrow.show();
-		}
-		Sleep(75);
-		if (GetSpecificKeyPress(13))
-		{
-			if (currentarrowpos == 0)
-			{
-				cGame::mainloop = false;
-			}
-			break;
-
-		}
-		Sleep(75);
-	}
-	exitpanel.unshow();	
-}
-
-
-void testLoadGame() {
-	cDWindow loadGameMenu(&mainMenu, { 240, 55 }, "menumap", "NewGamePanel.txt");
-	loadGameMenu.show();
-	cButton newgame(&loadGameMenu, { 25, 22 }, "map1", "newGameButton.txt", 1, b1F);
-	cButton loadGame(&loadGameMenu, { 25, 48 }, "map1", "loadGameButton.txt", 1, test);
-	cButton back(&loadGameMenu, { 62, 72 }, "map1", "LoadGameBackButton.txt", 1, pmap3);
-	cButton buttonlist[3] = { newgame, loadGame, back };
-	int x = 0;
-	for (int i = 0; i < 3; i++)
-	{
-		buttonlist[i].show();
-	}
-	buttonlist[x].onSelect();
-	while (true)
-	{
-		if (GetAsyncKeyState(0x51) && 0x8000)
-			break;
-		if (GetAsyncKeyState(0x0D) && 0x8000)
-		{
-			buttonlist[x].onDeSelect();
-			for (int i = 0; i < 3; i++)
-			{
-				buttonlist[i].unshow();
-			}
-			loadGameMenu.unshow();
-			buttonlist[x].onEnter();
-			break;
-
-		}
-		if (GetAsyncKeyState(VK_LEFT) && x > 0 && 0x8000)
-		{
-			buttonlist[x].onDeSelect();
-			x--;
-			buttonlist[x].onSelect();
-		}
-		if (GetAsyncKeyState(VK_RIGHT) && x < 2 && 0x8000)
-		{
-			buttonlist[x].onDeSelect();
-			x++;
-			buttonlist[x].onSelect();
-		}
-		Sleep(100);
-	}
-	loadGameMenu.unshow();
-	
-}
-
 int main() {
-	mainMenu.show();
-	cButton b1(&mainMenu, { 516, 55 }, "b1", "playbutton.txt", 1, testLoadGame);
-	cButton b2(&mainMenu, { 516, 90 }, "b2", "settingbutton.txt", 1, b2F);
-	cButton b3(&mainMenu, { 516, 125 }, "b3", "exitbutton.txt", 1, b3F);
-	cLabel ter(&mainMenu, { 60, 60 }, "ee", "%+-=:?<>", 2, Color::red);
-	ter.show();
-	cButton buttonlist[3] = { b1, b2, b3 };
-	int x = 0;
-	for (int i = 0; i < 3; i++)
-	{
-		buttonlist[i].show();
-	}
-	buttonlist[x].onSelect();
-
-	while (cGame::mainloop)
-	{
-		if (GetAsyncKeyState(VK_UP) && x > 0 && 0x8000)
-		{
-			buttonlist[x].onDeSelect();
-			x--;
-			buttonlist[x].onSelect();
-		}
-		if (GetAsyncKeyState(VK_DOWN) && x < 2 && 0x8000)
-		{
-			buttonlist[x].onDeSelect();
-			x++;
-			buttonlist[x].onSelect();
-		}
-		Sleep(75);
-		if (GetAsyncKeyState(0x51) && 0x8000)
-			break;
-		if (GetAsyncKeyState(0x0D) && 0x8000)
-		{
-			buttonlist[x].onDeSelect();
-			for (int i = 0; i < 3; i++)
-			{
-				buttonlist[i].unshow();
-			}
-			buttonlist[x].onDeSelect();
-			for (int i = 0; i < 3; i++)
-			{
-				buttonlist[i].unshow();
-			}
-			buttonlist[x].onEnter();
-			mainMenu.show();
-			for (int i = 0; i < 3; i++)
-			{
-				buttonlist[i].show();
-			}
-			buttonlist[x].onSelect();
-		}
-		Sleep(75);
-
-	}
-	buttonlist[x].onDeSelect();
-	for (int i = 0; i < 3; i++)
-	{
-		buttonlist[i].unshow();
-	}
-	//b.unshow();
-	////_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
-	////_CrtDumpMemoryLeaks();
-	mainMenu.unshow();
-
-	cleanGame();
+	cGame::onGameReady();
+	cGameEngine::cleanEngine();
 }
-

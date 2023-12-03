@@ -7,6 +7,7 @@ extern const string TexturePrefix;
 extern const string FxPrefix;
 extern const string PlayerPrefix;
 extern const string MapPrefix;
+extern const string LevelPrefix;
 
 const vector<string> lilyFile { "lily.txt" };		
 const vector<string> lionFile { "lionmove1.txt", "lionmove2.txt","lionmove3.txt","lionmove4.txt","lionmove5.txt","lionmove6.txt","lionmove7.txt" };
@@ -22,7 +23,8 @@ const vector<string> lionImpactEffect{"lioneffect1.txt", "lioneffect2.txt","lion
 
 const vector<vector<string>> mapFiles{
 	{"jungle1.txt", "jungle2.txt", "jungle3.txt"},
-	{"beach1.txt", "beach2.txt", "beach3.txt"}
+	{"beach1.txt", "beach2.txt", "beach3.txt"},
+	{"city1.txt"}
 };
 const vector<string> peopleFile { "up.txt", "right.txt", "down.txt", "left.txt"};
 

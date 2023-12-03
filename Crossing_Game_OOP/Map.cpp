@@ -72,6 +72,14 @@
         currentMapIndex = 0;
     }
 
+    void gameMap::changeMapTheme(int newTheme)
+    {
+        currentTheme = newTheme;
+        numCurrentMapFrame = listMap[currentTheme].size();
+        currentMap = &listMap[currentTheme][0];
+        currentMapIndex = 0;
+    }
+
     void gameMap::nextMapFrame() {
         currentMapIndex = (currentMapIndex + 1) % numCurrentMapFrame;
         currentMap = &listMap[currentTheme][currentMapIndex];

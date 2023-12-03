@@ -76,11 +76,6 @@ public:
 	friend cBar;
 
 	// game control
-	static cGame pGame;
-	static cDWindow pWindow;
-
-	static cObstacle* createObject(char type, COORD pos, int spd);
-
 
 	static HANDLE curHandle;
 
@@ -90,7 +85,7 @@ public:
 	static void cleanEngine();
 	
 	static void refreshBackGround(bool fillNow = false);
-
+	static void fillScreenWithLastFrame(bool fillNow = false);
 	static void maindraw(cGame* pGame);
 	static void updateInfo(cGame* pGame);
 	static void pizzaDraw(cGame* pGame);

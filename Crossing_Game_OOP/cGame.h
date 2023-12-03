@@ -9,18 +9,29 @@ class cDWindow;
 class cWidget;
 class cGameEngine;
 class cLabel;
+class cGame;
+
 class cGame {
+
+	const vector <vector<string>> CreatedLevel{
+		{"jungle1.txt"},
+		{"jungle1.txt"},
+		{"jungle1.txt"}
+	};
+
+	static cGame game;
+
 	friend cGameEngine;
     vector<cObstacle*> liveObstacles;
 	vector<cObstacle*>  environmentObject;
     vector<cPeople *> livePeople;
 	vector<cWidget*> listWidget;
 	vector<cLabel*> listLabel;
+
 	short gameOrder, gameLevel; // order: 1 or 2 player
 	bool isPause, isExit, isLoad;
-	int map = 0; // map = 1 -> city, map = 2 -> forest, map = 3 -> beach
-	bool isLose = false;
-
+	bool isLose;
+	bool tomainMenu;
 
 	long totalPoint;
 	double totalTime;
@@ -28,24 +39,49 @@ class cGame {
 	double timePauseStart, timePauseEnd;
 	double timePause;
 
-	cDWindow* pPausePanel;
-
+	int currentTheme;
+	int currentPhase;
+	cGame();
+	~cGame();
 	public:
+		static cWidget window;
+		static cDWindow mainMenu;
 		static bool mainloop;
-		cGame();
-    
-        cGame (string saveFile);
-    
-		~cGame();
 
-
-        void despawnThread(); // loops objects that have gone offscreen to the other side
-        void randomStopThread(); // stops a row of objects at random (or set) intervals
+		static bool InitGame();
 		
+		static void onGameReady();
+		
+		void clearObjects(bool clearPeople = false, bool clearEnvironment = false);
+
+		void spawnObstacle(const string& levelFile);
+
+		void spawnEnvironment(); //summon environment objects of current map theme
+		
+		void prepareGame();
+
+		void GamePlayPanel();
+
+		void GameNewGamePanel();
+
+		void GamePausePanel();
+
+		void GameSettingsPanel();
+
+		void GameSavePanel();
+
+		void GameLoadPanel();
+
+		void GameQuitPanel(bool fullexit = false);
+
+		void environmentImpact();
 
 		vector<cPeople *> getPeople();
         vector<cObstacle *> getObstacles();
 
+
+		void randomStopThread();
+		
 		void resetGame();
 		void exitGame(HANDLE t);
 		static void saveGame(cGame *pGame);
@@ -78,7 +114,7 @@ class cGame {
 		void drawBackGround();
 		void impactEffect(cObstacle* obsta);
 		void spawnPeople();
-		void spawnObstacle();
+		
 		bool isFinishLevel();
 		double calculateTime();
 		void resetTime();

@@ -72,7 +72,6 @@ enum class VehicleIndex {
 	Motorbike = 2
 };
 
-bool GetSpecificKeyPress(int key);
 class Time {
 	int year;
 	int month;

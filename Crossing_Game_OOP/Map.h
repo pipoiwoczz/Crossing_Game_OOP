@@ -29,6 +29,7 @@ public:
 	static vector<gameMap> loadMap(const vector<string>& mapFrames);
 	static gameMap* getCurrentMap();
 	static void changeMapTheme(MapTheme newTheme);
+	static void changeMapTheme(int newTheme);
 	static void nextMapFrame();
 
 	friend cAsset;

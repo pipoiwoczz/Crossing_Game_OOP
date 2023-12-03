@@ -106,19 +106,6 @@ void cGameEngine::disableCtrlHandler()
 	SetConsoleMode(hInput, prev_mode & ~ENABLE_MOUSE_INPUT);
 }
 
-cObstacle* cGameEngine::createObject(char type, COORD pos, int spd)
-{
-	switch (type)
-	{
-	case 'l':
-		return new cLion(pos, spd);
-	case 'r':
-		return new cRhino(pos, spd);
-	}
-
-	return nullptr;
-}
-
 bool cGameEngine::startEngine()
 {
 	My_Windows = { 0, 0, 617, 162 };
@@ -173,6 +160,14 @@ void cGameEngine::cleanEngine()
 void cGameEngine::refreshBackGround(bool fillNow)
 {
 	memcpy(mainBuffer, gameMap::currentMap->mapArray, gameMap::currentMap->height * gameMap::currentMap->width * sizeof(CHAR_INFO));
+	if (fillNow)
+	{
+		WriteConsoleOutput(curHandle, mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, { 0,0 }, &PlayBoxRect);
+	}
+}
+
+void cGameEngine::fillScreenWithLastFrame(bool fillNow)
+{
 	if (fillNow)
 	{
 		WriteConsoleOutput(curHandle, mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, { 0,0 }, &PlayBoxRect);
