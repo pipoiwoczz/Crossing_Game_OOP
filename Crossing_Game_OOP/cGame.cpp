@@ -682,6 +682,7 @@ void cGame::GameQuitPanel(bool fullexit)
 			selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
 			selectarrow.show();
 		}
+		Sleep(100);
 		if (GetAsyncKeyState(0x0D) & 0x8000)
 		{
 			if (currentarrowpos == 0)
@@ -694,7 +695,7 @@ void cGame::GameQuitPanel(bool fullexit)
 			}
 			break;
 		}
-		Sleep(100);
+		
 	}
 }
 
@@ -747,6 +748,7 @@ void cGame::GameDiePanel() {
 			game.isPause = false;
 			Sound::playBackGroundSound();
 			game.currentPhase = 0;
+			gameMap::currentMap = &gameMap::listMap[game.currentTheme][game.currentPhase];
 			game.clearObjects(true, true);
 			game.prepareGame();
 			game.MainGame();
@@ -755,7 +757,8 @@ void cGame::GameDiePanel() {
 			game.GameLoadPanel();
 		},
 		[]() {
-			game.GameQuitPanel(true); 
+			game.currentPhase = 0;
+			game.GameQuitPanel(); 
 		}
 	};
 
@@ -778,7 +781,6 @@ void cGame::GameDiePanel() {
 		Sleep(100);
 		if (GetAsyncKeyState(0x0D) & 0x8000)
 		{
-			panel.unshow();
 			panelButton[current].unshow();
 			panelFunct[current]();
 			break;
@@ -895,6 +897,21 @@ void cGame::MainGame() {
 		{
 			cGameEngine::fillScreenWithLastFrame(true);
 			Sound::pauseCurrentSound();
+			listWidget.clear();
+			listLabel.clear();
+			cDWindow dieeffect[5]{
+				cDWindow(&window, { 133, 11 }, "rip1.txt", false),
+				cDWindow(&window, { 133, 11 }, "rip2.txt", false),
+				cDWindow(&window, { 133, 11 }, "rip3.txt", false),
+				cDWindow(&window, {133, 11 }, "rip4.txt", false),
+				cDWindow(&window, {133, 11 }, "rip5.txt", false)
+			};
+			for (int i = 0; i < 5; i++)
+			{
+				dieeffect[i].show();
+				Sleep(300);
+			}
+			Sleep(2000);
 			GameDiePanel();
 			//Sleep(2000);
 			//cDWindow pa(&window, { 101, 31 },"panelfailed.txt");
