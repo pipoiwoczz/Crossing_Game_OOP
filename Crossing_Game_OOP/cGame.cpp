@@ -219,16 +219,15 @@ void cGame::GamePlayPanel()
 				LabelDate[current-1][0].show();
 				panelIcon[current - 1].show();
 			}
-			panelIcon[current - 1].unshow();
 
 			current--;
 
 			panelButton[current].show();
-
 			if (current != 0)
 			{
 				LabelLoad[current-1][1].show();
 				LabelDate[current-1][1].show();
+				
 			}
 		}
 		if ((GetAsyncKeyState(VK_DOWN) & 0x8000) && current < 3)
@@ -690,7 +689,7 @@ void cGame::GameQuitPanel(bool fullexit)
 				this->tomainMenu = true;
 				this->isPause = false;
 				this->isExit = true;
-				if (fullexit)
+				if (fullexit) 
 					cGame::mainloop = false;
 			}
 			break;
@@ -741,17 +740,14 @@ void cGame::GameDiePanel() {
 
 		std::function<void()> panelFunct[3] = {
 		[]() {
-			cGameEngine::fillScreenWithLastFrame(true);
-			game.totalPoint = 0;
-			game.resetTime();
-			game.isLose = false;
-			game.isPause = false;
-			Sound::playBackGroundSound();
-			game.currentPhase = 0;
-			gameMap::currentMap = &gameMap::listMap[game.currentTheme][game.currentPhase];
-			game.clearObjects(true, true);
-			game.prepareGame();
-			game.MainGame();
+			cGame::game.isPause = false;
+			cGame::game.isLose = false;
+			cGame::game.isExit = false;
+			for (int i = 0; i < cGame::game.livePeople.size(); i++)
+			{
+				cGame::game.livePeople[i]->setPos({ short(0 + 100 * i), 145 });
+				cGame::game.livePeople[i]->setState(true);
+			}
 		},
 		[]() {
 			game.GameLoadPanel();
@@ -901,10 +897,6 @@ void cGame::MainGame() {
 			isImpact();
 		if (isLose)
 		{	
-			cGameEngine::fillScreenWithLastFrame(true);
-			Sound::pauseCurrentSound();
-			listWidget.clear();
-			listLabel.clear();
 			
 			cDWindow dieeffect[5]{
 				cDWindow(&window, { 133, 11 }, "rip1.txt", false),
@@ -920,36 +912,6 @@ void cGame::MainGame() {
 			}
 			Sleep(2000);
 			GameDiePanel();
-			//Sleep(2000);
-			//cDWindow pa(&window, { 101, 31 },"panelfailed.txt");
-
-			/*pa.show();
-			while (true)
-			{
-				if (GetAsyncKeyState(0x51) & 0x8000)
-				{
-					tomainMenu = true;
-					break;
-				}
-
-				if (GetAsyncKeyState(0x11) & 0x8000)
-				{
-					for (int i = 0; i < livePeople.size(); i++)
-					{
-						delete livePeople[i];
-					}
-					livePeople.resize(0);
-					spawnPeople();
-					totalPoint = 0;
-					resetTime();
-					t2.updateText(to_string(totalPoint));
-					isLose = false;
-					isPause = false;
-					Sound::playBackGroundSound();
-					break;
-				}
-			}
-			pa.unshow();*/
 		}
 		
 		if (livePeople[0]->passLevel) {

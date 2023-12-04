@@ -25,10 +25,16 @@ COORD cPeople::getPos() {
 }
 void cPeople::setPos(COORD pos) {
 	topleft = pos;
+	mBox.set({ short(topleft.X + 4), short(2 + topleft.Y) }, { short(skin[0].getWidth() - 4 + topleft.X), short(skin[0].getHeight() - 2 + topleft.Y) });
 }
 bool cPeople::getState()
 {
 	return mState;
+}
+
+void cPeople::setState(bool state)
+{
+	mState = state;
 }
 
 bool cPeople::isDead() {

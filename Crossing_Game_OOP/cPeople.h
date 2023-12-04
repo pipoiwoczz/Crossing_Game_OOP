@@ -31,7 +31,7 @@ class cPeople {
 		COORD getPos();
 		void setPos(COORD pos);
 		bool getState();
-        
+        void setState(bool state);
 		bool move();
 
 		bool isDead();
