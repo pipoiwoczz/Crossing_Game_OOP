@@ -169,10 +169,16 @@ void cGame::GamePlayPanel()
 			ifs.close();
 		}
 	}
+	std::function<void()> panelFunct[1] = {
+		[]() {
+			game.GameNewGamePanel();
+		},
 
+	};
 
 	tomainMenu = false;
 	cDWindow panel(&mainMenu, { 30, 6 }, "panelplay.txt", true);
+	cDWindow panelBackground(&panel, { 0, 0 }, "panelbackground.txt", false);
 
 	cDWindow panelButton[4]{
 		cDWindow(&panel, { 2, 22 }, "buttonnewgame.txt", true),
@@ -200,6 +206,8 @@ void cGame::GamePlayPanel()
 
 
 	int current = 0;
+	panelButton[current].show();
+
 	while (!tomainMenu)
 	{
 		if ((GetAsyncKeyState(VK_UP) & 0x8000) && current > 0)
@@ -211,6 +219,8 @@ void cGame::GamePlayPanel()
 				LabelDate[current-1][0].show();
 				panelIcon[current - 1].show();
 			}
+			panelIcon[current - 1].unshow();
+
 			current--;
 
 			panelButton[current].show();
@@ -465,26 +475,30 @@ void cGame::GameSavePanel()
 
 	cDWindow panel(&window, { 133, 11 }, "panelsave.txt", true);
 	
+	cDWindow panelBackground(&panel, { 0, 0 }, "panelbackground.txt", false);
+
 	cButton mapIcons[3]{
-		cButton(&panel, {4, 42}, mapIconSaved[0], 1),
-		cButton(&panel, {4, 72}, mapIconSaved[1], 1),
-		cButton(&panel, {4, 102}, mapIconSaved[2], 1),
+		cButton(&panel, {2, 42}, mapIconSaved[0], 1),
+		cButton(&panel, {2, 72}, mapIconSaved[1], 1),
+		cButton(&panel, {2, 102}, mapIconSaved[2], 1),
 	};
 	cButton slots[3]{
-		cButton(&panel, {4, 42}, mapSaved[0], 1),
-		cButton(&panel, {4, 72}, mapSaved[1], 1),
-		cButton(&panel, {4, 102}, mapSaved[2], 1),
+		cButton(&panel, {2, 42}, mapSaved[0], 1),
+		cButton(&panel, {2, 72}, mapSaved[1], 1),
+		cButton(&panel, {2, 102}, mapSaved[2], 1),
 	};
 
-	cLabel LabelDate[3]{
-		cLabel(&panel, { 117, 52 }, labelText[0], 1, Color::black, true),
-		cLabel(&panel, { 117, 82 }, labelText[1], 1, Color::black, true),
-		cLabel(&panel, { 117, 112 }, labelText[2], 1, Color::black, true)
+	cLabel LabelDate[3][2]{
+		{cLabel(&panel, { 117, 54 }, labelText[0], 1, Color::black, true),cLabel(&panelBackground, {117, 54}, labelText[0], 1, Color::black)},
+		{cLabel(&panel, { 117, 83 }, labelText[0], 1, Color::black, true),cLabel(&panelBackground, {117, 83}, labelText[1], 1, Color::black)},
+		{cLabel(&panel, { 117, 112 }, labelText[0], 1, Color::black, true),cLabel(&panelBackground, {117, 112}, labelText[2], 1, Color::black)}
 	};
-	cLabel LabelSave[3]{
-		cLabel(&panel, { 117, 42 }, "SAVE 1", 1, Color::black, true),
-		cLabel(&panel, { 117, 72 }, "SAVE 2", 1, Color::black, true),
-		cLabel(&panel, { 117, 102 }, "SAVE 3", 1, Color::black, true)
+
+
+	cLabel LabelSave[3][2]{
+		{cLabel(&panel, { 117, 44 }, "LOAD 1", 1, Color::black, true),cLabel(&panelBackground,{117, 44}, "LOAD 1", 1, Color::black)},
+		{cLabel(&panel, { 117, 73 }, "LOAD 2", 1, Color::black, true),cLabel(&panelBackground, {117, 73}, "LOAD 2", 1, Color::black)},
+		{cLabel(&panel, { 117, 102 }, "LOAD 3", 1, Color::black, true),cLabel(&panelBackground, {117, 102}, "LOAD 3", 1, Color::black)}
 	};
 
 	panel.show();
@@ -513,8 +527,13 @@ void cGame::GameSavePanel()
 			slots[current].show();
 		}
 		for (int i = 0; i < 3; i++) {
-			LabelDate[i].show();
-			LabelSave[i].show();
+			if (current == i) {
+				LabelDate[i][1].show();
+				LabelSave[i][1].show();
+				continue;
+			}
+			LabelDate[i][0].show();
+			LabelSave[i][0].show();
 		}
 		Sleep(100);
 		if (GetAsyncKeyState(0x0D) & 0x8000)
@@ -566,26 +585,30 @@ void cGame::GameLoadPanel()
 
 	cDWindow panel(&window, { 133, 11 }, "panelload2.txt", true);
 
+	cDWindow panelBackground(&panel, { 0, 0 }, "panelbackground.txt", false);
+
 	cButton mapIcons[3]{
-		cButton(&panel, {4, 42}, mapIconSaved[0], 1),
-		cButton(&panel, {4, 72}, mapIconSaved[1], 1),
-		cButton(&panel, {4, 102}, mapIconSaved[2], 1),
+		cButton(&panel, {2, 42}, mapIconSaved[0], 1),
+		cButton(&panel, {2, 72}, mapIconSaved[1], 1),
+		cButton(&panel, {2, 102}, mapIconSaved[2], 1),
 	};
 	cButton slots[3]{
-		cButton(&panel, {4, 42}, mapSaved[0], 1),
-		cButton(&panel, {4, 72}, mapSaved[1], 1),
-		cButton(&panel, {4, 102}, mapSaved[2], 1),
+		cButton(&panel, {2, 42}, mapSaved[0], 1),
+		cButton(&panel, {2, 72}, mapSaved[1], 1),
+		cButton(&panel, {2, 102}, mapSaved[2], 1),
 	};
 
-	cLabel LabelDate[3]{
-		cLabel(&panel, { 117, 52 }, labelText[0], 1, Color::black, true),
-		cLabel(&panel, { 117, 82 }, labelText[1], 1, Color::black, true),
-		cLabel(&panel, { 117, 112 }, labelText[2], 1, Color::black, true)
+	cLabel LabelDate[3][2]{
+		{cLabel(&panel, { 117, 54 }, labelText[0], 1, Color::black, true),cLabel(&panelBackground, {117, 54}, labelText[0], 1, Color::black)},
+		{cLabel(&panel, { 117, 83 }, labelText[0], 1, Color::black, true),cLabel(&panelBackground, {117, 83}, labelText[1], 1, Color::black)},
+		{cLabel(&panel, { 117, 112 }, labelText[0], 1, Color::black, true),cLabel(&panelBackground, {117, 112}, labelText[2], 1, Color::black)}
 	};
-	cLabel LabelSave[3]{
-		cLabel(&panel, { 117, 42 }, "SAVED 1", 1, Color::black, true),
-		cLabel(&panel, { 117, 72 }, "SAVED 2", 1, Color::black, true),
-		cLabel(&panel, { 117, 102 }, "SAVED 3", 1, Color::black, true)
+
+
+	cLabel LabelLoad[3][2]{
+		{cLabel(&panel, { 117, 44 }, "LOAD 1", 1, Color::black, true),cLabel(&panelBackground,{117, 44}, "LOAD 1", 1, Color::black)},
+		{cLabel(&panel, { 117, 73 }, "LOAD 2", 1, Color::black, true),cLabel(&panelBackground, {117, 73}, "LOAD 2", 1, Color::black)},
+		{cLabel(&panel, { 117, 102 }, "LOAD 3", 1, Color::black, true),cLabel(&panelBackground, {117, 102}, "LOAD 3", 1, Color::black)}
 	};
 
 	panel.show();
@@ -614,8 +637,13 @@ void cGame::GameLoadPanel()
 			slots[current].show();
 		}
 		for (int i = 0; i < 3; i++) {
-			LabelDate[i].show();
-			LabelSave[i].show();
+			if (current == i) {
+				LabelDate[i][1].show();
+				LabelLoad[i][1].show();
+				continue;
+			}
+			LabelDate[i][0].show();
+			LabelLoad[i][0].show();			
 		}
 		Sleep(100);
 		if (GetAsyncKeyState(0x0D) & 0x8000)
@@ -1243,6 +1271,9 @@ void cGame::load(string fileName)
 	game.MainGame();
 }
 void cGame::ScoreBoard() {
+	cDWindow screen(&window, { 0, 0 }, "leaderboard.txt", true);
+	screen.show();
+	Sleep(3000);
 	// draw score board menu // has a box to show score and time of game
 	// has choices: back to previous menu
 }
