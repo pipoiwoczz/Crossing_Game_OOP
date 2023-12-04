@@ -21,6 +21,7 @@ class cGame {
 	};
 
 	static cGame game;
+	
 
 	friend cGameEngine;
     vector<cObstacle*> liveObstacles;

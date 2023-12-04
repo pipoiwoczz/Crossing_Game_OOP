@@ -357,7 +357,7 @@ void cGameEngine::maindraw(cGame* pGame)
 				gameMap::nextMapFrame();
 			}
 			Sleep(25);
-		}		
+		}
 	}
 }
 

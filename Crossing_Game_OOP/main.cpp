@@ -29,6 +29,7 @@ CHAR_INFO* cGameEngine::mainBuffer = nullptr;
 CHAR_INFO* cGameEngine::reservedBuffer = nullptr;
 HANDLE cGameEngine::Hbuffer1 = 0;
 HANDLE cGameEngine::Hbuffer2 = 0;
+bool cGameEngine::startDrawThread = true;
 vector<Texture> cAsset::alphabet;
 vector<Texture> cAsset::number;
 vector<Texture> cAsset::special;

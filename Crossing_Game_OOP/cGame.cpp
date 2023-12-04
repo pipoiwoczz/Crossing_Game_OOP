@@ -847,6 +847,7 @@ void cGame::MainGame() {
 	hasSuddenStop = false;
 	suddenStop = false;
 	
+
 	//resetTime();
 
 	Sound::playBackGroundSound();
@@ -864,7 +865,12 @@ void cGame::MainGame() {
 	listLabel.push_back(&t2);
 	t2.unshow();
 	int i = 0;
-	thread drawingThread(&cGameEngine::maindraw, this);
+	thread drawingThread;
+	if (cGameEngine::startDrawThread) {
+		drawingThread = thread(&cGameEngine::maindraw, this);
+		drawingThread.detach();
+		cGameEngine::startDrawThread = false;
+	}
 
 
 	while (!isExit) {
@@ -894,11 +900,12 @@ void cGame::MainGame() {
 		if (!isLose)
 			isImpact();
 		if (isLose)
-		{
+		{	
 			cGameEngine::fillScreenWithLastFrame(true);
 			Sound::pauseCurrentSound();
 			listWidget.clear();
 			listLabel.clear();
+			
 			cDWindow dieeffect[5]{
 				cDWindow(&window, { 133, 11 }, "rip1.txt", false),
 				cDWindow(&window, { 133, 11 }, "rip2.txt", false),
