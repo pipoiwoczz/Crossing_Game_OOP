@@ -307,7 +307,11 @@ void cGameEngine::pizzaDraw(cGame* pGame)
 
 
 	}
-
+	for (int i = 0; i < pGame->environmentObject.size(); i++)
+	{
+		renderEnvironment(pGame->environmentObject[i]);
+		pGame->environmentObject[i]->move();
+	}
 	//put people onto buffer
 	for (int i = 0; i < pGame->livePeople.size(); i++)
 	{
@@ -317,11 +321,7 @@ void cGameEngine::pizzaDraw(cGame* pGame)
 		renderPeople(itera);
 	}
 
-	for (int i = 0; i < pGame->environmentObject.size(); i++)
-	{
-		renderEnvironment(pGame->environmentObject[i]);
-		pGame->environmentObject[i]->move();
-	}
+
 }
 
 void cGameEngine::maindraw(cGame* pGame)

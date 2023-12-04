@@ -114,6 +114,7 @@ bool mainLoader()
 	loadingBar.setProgress(false, 100);
 	Sleep(100);
 	loadingBar.unshow();
+	Sound::playSoundList();
 	return true;
 }
 

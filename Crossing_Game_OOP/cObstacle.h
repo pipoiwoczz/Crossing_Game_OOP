@@ -41,7 +41,7 @@ public:
 
     cObstacle (COORD In_pos, int speed); // constructor: set topleft and speed. timeUntilMove automatically set to be equal to speed
     virtual ~cObstacle();
-   // static void cleanBootstrap(); // clean up static objects vector. call before program exits. [better solutions?]
+   // static void cleanBootstrap(); // clean up static objects vector. call before program exits. [better solutions?][No, unneccessary]
     
     COORD getPos();
     int getSpeed();

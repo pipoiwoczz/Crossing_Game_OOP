@@ -174,85 +174,86 @@ void cGame::GamePlayPanel()
 	tomainMenu = false;
 	cDWindow panel(&mainMenu, { 30, 6 }, "panelplay.txt", true);
 
-	cLabel LabelDate[3]{
-		cLabel(&panel, { 117, 60 }, labelText[0], 1, Color::black, true),
-		cLabel(&panel, { 117, 89}, labelText[1], 1, Color::black, true),
-		cLabel(&panel, { 117, 118 }, labelText[2], 1, Color::black, true)
-	};
-	cLabel LabelLoad[3]{
-		cLabel(&panel, { 117, 50 }, "LOAD 1", 1, Color::black, true),
-		cLabel(&panel, { 117, 79 }, "LOAD 2", 1, Color::black, true),
-		cLabel(&panel, { 117, 108 }, "LOAD 3", 1, Color::black, true)
+	cDWindow panelButton[4] = {
+		cDWindow(&panel, {2, 22}, "buttonnewgame.txt", true),
+		cDWindow(&panel, {2, 50}, mapSaved[0]),
+		cDWindow(&panel, {2, 79}, mapSaved[1]),
+		cDWindow(&panel, {2, 108}, mapSaved[2])
 	};
 
-	cButton panelButton[4] = {
-		cButton(&panel, {3, 22}, "buttonnewgame.txt", 1),
-		cButton(&panel, {2, 50}, mapSaved[0], 1),
-		cButton(&panel, {2, 79}, mapSaved[1], 1),
-		cButton(&panel, {2, 108}, mapSaved[2], 1)
+	cLabel LabelDate[3][2]{
+		{cLabel(&panel, { 117, 60 }, labelText[0], 1, Color::black), cLabel(&panelButton[0], {115, 28}, labelText[0], 1, Color::black)},
+		{cLabel(&panel, { 117, 89}, labelText[1], 1, Color::black, true), cLabel(&panelButton[0], {117, 89}, labelText[1], 1, Color::black)},
+		{cLabel(&panel, { 117, 118 }, labelText[2], 1, Color::black, true), cLabel(&panelButton[0], {117, 118}, labelText[2], 1, Color::black)}
 	};
-
+	cLabel LabelLoad[3][2]{
+		{cLabel(&panel, { 117, 50 }, "LOAD 1", 1, Color::black, true), cLabel(&panelButton[1], { 117, 50 }, "LOAD 1", 1, Color::black)},
+		{cLabel(&panel, { 117, 79 }, "LOAD 2", 1, Color::black, true), cLabel(&panelButton[2], { 117, 79 }, "LOAD 2", 1, Color::black)},
+		{cLabel(&panel, { 117, 108 }, "LOAD 3", 1, Color::black, true), cLabel(&panelButton[3], { 117, 108 }, "LOAD 3", 1, Color::black)}
+	};
 	cButton panelIcon[3] = {
-		cButton(&panel, { 2, 50 }, mapIconSaved[0], 1),
-		cButton(&panel, { 2, 79 }, mapIconSaved[1], 1),
-		cButton(&panel, { 2, 108 }, mapIconSaved[2], 1)
+		cButton(&panel, { 2, 50 }, mapIconSaved[0], 1, true),
+		cButton(&panel, { 2, 79 }, mapIconSaved[1], 1, true),
+		cButton(&panel, { 2, 108 }, mapIconSaved[2], 1, true)
 	};
-
-	function<void()> panelFunct[4] = {
-		[]() {game.GameNewGamePanel(); },
-		[]() {},
-		[]() {},
-		[]() {}
-	};
-
-	
 
 	int current = 0;
-	panelButton[current].show();
-	for (int i = 0; i < 3; i++) {
-		panelIcon[i].show();
-	}
-
 	while (!tomainMenu)
 	{
 		if ((GetAsyncKeyState(VK_UP) & 0x8000) && current > 0)
 		{
 			panelButton[current].unshow();
+			if (current != 0)
+			{
+				LabelLoad[current-1][0].show();
+				LabelDate[current-1][0].show();
+				panelIcon[current - 1].show();
+			}
 			current--;
+
 			panelButton[current].show();
-			if (current >= 0)
-				panelIcon[current].show();
+
+			if (current != 0)
+			{
+				LabelLoad[current-1][1].show();
+				LabelDate[current-1][1].show();
+			}
 		}
 		if ((GetAsyncKeyState(VK_DOWN) & 0x8000) && current < 3)
 		{
 			panelButton[current].unshow();
-			current++;			
+			if (current != 0)
+			{
+				LabelLoad[current - 1][0].show();
+				LabelDate[current - 1][0].show();
+				panelIcon[current - 1].show();
+			}
+			current++;
+
 			panelButton[current].show();
-			if (current >= 2)
-				panelIcon[current - 2].show();
+			if (current != 0)
+			{
+				LabelLoad[current - 1][1].show();
+				LabelDate[current - 1][1].show();
+			}
 			
 		}
 		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
 		{
 			break;
 		}
-		if (GetAsyncKeyState(0x0D) & 0x8000)
-		{
-			if (current == 0) {
-				panelFunct[current]();
-			}
-			else {
-				load(saved[current - 1]);
-			}
-			panelFunct[current]();
-			mainMenu.show();
-			panel.show();
-			panelButton[current].show();
-		}
-		for (int i = 0; i < 3; i++) {
-			LabelLoad[i].show();
-			LabelDate[i].show();
-		}
+		//if (GetAsyncKeyState(0x0D) & 0x8000)
+		//{
+		//	if (current == 0) {
+		//		game.GameNewGamePanel();
+		//	}
+		//	else {
+		//		load(saved[current - 1]);
+		//	}
+		//	mainMenu.show();
+		//	panel.show();
+		//	panelButton[current].show();
+		//}
 		Sleep(100);
 	}
 }
@@ -762,7 +763,6 @@ void cGame::MainGame() {
 	
 	//resetTime();
 
-	Sound::playSoundList();
 	Sound::playBackGroundSound();
 	//Sound::musicThread();	
 
@@ -1043,14 +1043,14 @@ void cGame::spawnObstacle(const string& levelFile) {
 			char objname;
 			levelIn >> objname;
 
-			short offsetF, offsetB, offsetY;
-			levelIn >> offsetF >> offsetB >> offsetY;
+			short offsetF, offsetB;
+			levelIn >> offsetF >> offsetB;
 			cObstacle* pObj = nullptr;
 			switch (objname)
 			{
-			case 'l': pObj = new cLion({ short(cX + offsetF), short(lineoffset[linecount] - offsetY) }, spd); break;
-			case 'r': pObj = new cRhino({ short(cX + offsetF), short(lineoffset[linecount] - offsetY) }, spd); break;
-			case 'c': pObj = new cCrocodile({ short(cX + offsetF), short(lineoffset[linecount] - offsetY) }, spd); break;
+			case 'l': pObj = new cLion({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
+			case 'r': pObj = new cRhino({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
+			case 'c': pObj = new cCrocodile({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
 			
 			default:
 				break;
