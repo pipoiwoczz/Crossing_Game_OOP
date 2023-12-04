@@ -80,6 +80,8 @@ class cGame {
 
 		void GameQuitPanel(bool fullexit = false);
 
+		void GameDiePanel();
+
 		void environmentImpact();
 
 		short getNumberOfLane();

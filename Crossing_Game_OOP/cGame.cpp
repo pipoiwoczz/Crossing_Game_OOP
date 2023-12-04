@@ -682,7 +682,6 @@ void cGame::GameQuitPanel(bool fullexit)
 			selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
 			selectarrow.show();
 		}
-		Sleep(100);
 		if (GetAsyncKeyState(0x0D) & 0x8000)
 		{
 			if (currentarrowpos == 0)
@@ -731,7 +730,61 @@ void cGame::environmentImpact()
 	}
 }
 
+void cGame::GameDiePanel() {
+	cDWindow panel(&window, { 133, 11 }, "paneldie.txt", true);
+	cButton panelButton[3]{
+		cButton(&panel, { 3, 28 }, "buttondieretry.txt", 1),
+		cButton(&panel, { 3, 59 }, "buttondieload.txt", 1),
+		cButton(&panel, { 3, 90 }, "buttondieback.txt", 1)
+	};
 
+		std::function<void()> panelFunct[3] = {
+		[]() {
+			cGameEngine::fillScreenWithLastFrame(true);
+			game.totalPoint = 0;
+			game.resetTime();
+			game.isLose = false;
+			game.isPause = false;
+			Sound::playBackGroundSound();
+			game.currentPhase = 0;
+			game.clearObjects(true, true);
+			game.prepareGame();
+			game.MainGame();
+		},
+		[]() {
+			game.GameLoadPanel();
+		},
+		[]() {
+			game.GameQuitPanel(true); 
+		}
+	};
+
+	int current = 0;
+	panelButton[current].show();
+	while (true)
+	{
+		if (GetAsyncKeyState(VK_DOWN) < 0 && current < 2)
+		{
+			panelButton[current].unshow();
+			current++;
+			panelButton[current].show();
+		}
+		if (GetAsyncKeyState(VK_UP) < 0 && current > 0)
+		{
+			panelButton[current].unshow();
+			current--;
+			panelButton[current].show();
+		}
+		Sleep(100);
+		if (GetAsyncKeyState(0x0D) & 0x8000)
+		{
+			panel.unshow();
+			panelButton[current].unshow();
+			panelFunct[current]();
+			break;
+		}
+	}
+}
 
 
 void cleanGame()
@@ -785,6 +838,7 @@ void cGame::updatePosObstacle()
 
 
 void cGame::MainGame() {
+	isLose = false;
 	isPause = false;
 	isExit = false;
 	isLoad = false;
@@ -841,9 +895,11 @@ void cGame::MainGame() {
 		{
 			cGameEngine::fillScreenWithLastFrame(true);
 			Sound::pauseCurrentSound();
-			Sleep(2000);
-			cDWindow pa(&window, { 101, 31 },"panelfailed.txt");
-			pa.show();
+			GameDiePanel();
+			//Sleep(2000);
+			//cDWindow pa(&window, { 101, 31 },"panelfailed.txt");
+
+			/*pa.show();
 			while (true)
 			{
 				if (GetAsyncKeyState(0x51) & 0x8000)
@@ -869,7 +925,7 @@ void cGame::MainGame() {
 					break;
 				}
 			}
-			pa.unshow();
+			pa.unshow();*/
 		}
 		
 		if (livePeople[0]->passLevel) {
