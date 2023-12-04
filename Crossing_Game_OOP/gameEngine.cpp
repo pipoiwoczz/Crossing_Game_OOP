@@ -434,8 +434,11 @@ bool cGameEngine::showLabel(cLabel* pLabel, bool instant)
 			break;
 		short W = pLabel->textLine[i].pChar->width;
 		short H = pLabel->textLine[i].pChar->height;
-		SMALL_RECT charBox = { pLabel->parentWindow->topleft.X + pLabel->textLine[i].pos.X, pLabel->parentWindow->topleft.Y + pLabel->textLine[i].pos.Y, pLabel->parentWindow->topleft.X + pLabel->textLine[i].pos.X + W - 1, pLabel->parentWindow->topleft.X + pLabel->textLine[i].pos.Y + H - 1 };
+		SMALL_RECT charBox = {pLabel->textLine[i].pos.X, pLabel->textLine[i].pos.Y, pLabel->textLine[i].pos.X + pLabel->textLine[i].pChar->width - 1, pLabel->textLine[i].pos.Y + pLabel->textLine[i].pChar->height - 1 };
 		memcpy(reservedBuffer, pLabel->textLine[i].pChar->textureArray, W * H * sizeof(CHAR_INFO));
+
+		COORD writepos = pLabel->parentWindow->getTL();
+		writepos = { short(pLabel->textLine[i].pos.X - writepos.X), short(pLabel->textLine[i].pos.Y - writepos.Y) };
 		for (int j = 0; j < W * H; j++)
 		{
 			if (pLabel->textLine[i].pChar->textureArray[j].Char.UnicodeChar != L' ')
@@ -443,7 +446,7 @@ bool cGameEngine::showLabel(cLabel* pLabel, bool instant)
 				reservedBuffer[j].Attributes = 16 * pLabel->color + pLabel->color;
 			}
 			else {
-				reservedBuffer[j].Attributes = pLabel->parentWindow->WidgetFace.textureArray[(pLabel->textLine[i].pos.Y + j / W) * pLabel->parentWindow->WidgetFace.width + pLabel->textLine[i].pos.X + j % W].Attributes;
+				reservedBuffer[j].Attributes = pLabel->parentWindow->WidgetFace.textureArray[(writepos.Y + j / W) * pLabel->parentWindow->WidgetFace.width + writepos.X + j % W].Attributes;
 			}
 		}
 
@@ -514,7 +517,7 @@ void cGameEngine::playEffect(cObstacle* obsta, cPeople* player) {
 
 	SMALL_RECT fxframe = { writepos.X, writepos.Y, writepos.X + w - 1, writepos.Y + h - 1 };
 
-	COORD p{ writepos.X + 150, writepos.Y + 30 };
+	COORD p{ writepos.X + 160, writepos.Y + 30 };
 
 	player->topleft = { 214, 58 };
 	player->pMotionFrame = &player->skin[3];

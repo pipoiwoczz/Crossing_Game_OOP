@@ -25,7 +25,7 @@ cWidget::cWidget(cWidget* parent, COORD offsetFromParentTopleft, const string& i
 	}
 }
 
-void cWidget::setPos(COORD In_topleft)
+void cWidget::setOffset(COORD In_topleft)
 {
 	offset = In_topleft;
 	topleft = { short(parentWindow->topleft.X + offset.X), short(parentWindow->topleft.Y + offset.Y) };
@@ -34,11 +34,15 @@ void cWidget::setPos(COORD In_topleft)
 	botright = { short(topleft.X + WidgetFace.getWidth() - 1), short(topleft.Y + WidgetFace.getHeight() - 1) };
 	botright = { min(botright.X, parentWindow->botright.X), min(botright.Y, parentWindow->botright.Y) };
 }
-COORD cWidget::getPos()
+COORD cWidget::getOffset()
 {
 	return offset;
 }
 
+COORD cWidget::getTL()
+{
+	return topleft;
+}
 bool cWidget::show(bool showNow)
 {
 	IsVisible = true;
@@ -129,32 +133,32 @@ void cLabel::createTextline()
 	if (text.length() == 0)
 		return;
 	textLine.clear();
-	int offset = 0;
+	int off = 0;
 	int length = 0;
-	COORD pos = { topleft.X - parentWindow->topleft.X, topleft.Y - parentWindow->topleft.Y};
+	COORD pos = topleft;
 	for (int i = 0; i < text.length(); i++)
 	{
 		Texture* pChar = cAsset::getChar(text[i]);
 		if (text[i] == ' ')
 		{
 			pChar = &cAsset::blankchar;
-			offset = 5 + align;
+			off = 5 + align;
 		}
 		else {
 			pChar = cAsset::getChar(text[i]);
 			if (pChar)
 			{
-				offset = pChar->getWidth() + align;
+				off = pChar->getWidth() + align;
 			}
 		}
 		if (pChar)
 		{
 			textLine.push_back({ pChar, pos });
-			pos.X += offset;
-			length += offset;
+			pos.X += off;
+			length += off;
 		}
 	}
-	if (offset == 0)
+	if (off == 0)
 		return;
 	botright = { short(topleft.X + length - 1), short(topleft.Y + textLine[0].pChar->getHeight() - 1)};
 	botright = { min(botright.X, parentWindow->botright.X), min(botright.Y, parentWindow->botright.Y) };
@@ -162,7 +166,7 @@ void cLabel::createTextline()
 
 cLabel::cLabel(cDWindow* parentWindow, COORD offsetFromParentTopleft, const string& text, const short& align, Color textColor, bool showNow)
 {
-	this->parentWindow = static_cast<cWidget*> (parentWindow);
+	this->parentWindow = parentWindow;
 	IsVisible = false;
 	this->text = text;
 	color = short(textColor);
@@ -176,21 +180,21 @@ cLabel::cLabel(cDWindow* parentWindow, COORD offsetFromParentTopleft, const stri
 		show();
 }
 
-cLabel::cLabel(cButton* parentWindow, COORD offsetFromParentTopleft, const string& text, const short& align, Color textColor, bool showNow)
-{
-	this->parentWindow = static_cast<cWidget*> (parentWindow);
-	IsVisible = false;
-	this->text = text;
-	color = short(textColor);
-	this->align = align;
-	offset = offsetFromParentTopleft;
-	topleft = { short(parentWindow->topleft.X + offsetFromParentTopleft.X), short(parentWindow->topleft.Y + offsetFromParentTopleft.Y) };
-	topleft = { max(topleft.X, parentWindow->topleft.X), max(topleft.Y, parentWindow->topleft.Y) };
-	createTextline();
-
-	if (showNow)
-		show();
-}
+//cLabel::cLabel(cButton* parentWindow, COORD offsetFromParentTopleft, const string& text, const short& align, Color textColor, bool showNow)
+//{
+//	this->parentWindow = static_cast<cWidget*> (parentWindow);
+//	IsVisible = false;
+//	this->text = text;
+//	color = short(textColor);
+//	this->align = align;
+//	offset = offsetFromParentTopleft;
+//	topleft = { short(parentWindow->topleft.X + offsetFromParentTopleft.X), short(parentWindow->topleft.Y + offsetFromParentTopleft.Y) };
+//	topleft = { max(topleft.X, parentWindow->topleft.X), max(topleft.Y, parentWindow->topleft.Y) };
+//	createTextline();
+//
+//	if (showNow)
+//		show();
+//}
 void cLabel::updateText(const string& newText)
 {
 	unshow();

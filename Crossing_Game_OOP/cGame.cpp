@@ -174,28 +174,30 @@ void cGame::GamePlayPanel()
 	tomainMenu = false;
 	cDWindow panel(&mainMenu, { 30, 6 }, "panelplay.txt", true);
 
-	cDWindow panelButton[4] = {
-		cDWindow(&panel, {2, 22}, "buttonnewgame.txt", true),
-		cDWindow(&panel, {2, 50}, mapSaved[0]),
-		cDWindow(&panel, {2, 79}, mapSaved[1]),
-		cDWindow(&panel, {2, 108}, mapSaved[2])
+	cDWindow panelButton[4]{
+		cDWindow(&panel, { 2, 22 }, "buttonnewgame.txt", true),
+		cDWindow(&panel, { 2, 50 }, mapSaved[0]),
+		cDWindow(&panel, { 2, 79 }, mapSaved[1]),
+		cDWindow(&panel, { 2, 108 }, mapSaved[2])
+	};
+
+	cButton panelIcon[3] = {
+	cButton(&panel, { 2, 50 }, mapIconSaved[0], 1, true),
+	cButton(&panel, { 2, 79 }, mapIconSaved[1], 1, true),
+	cButton(&panel, { 2, 108 }, mapIconSaved[2], 1, true)
 	};
 
 	cLabel LabelDate[3][2]{
-		{cLabel(&panel, { 117, 60 }, labelText[0], 1, Color::black), cLabel(&panelButton[0], {115, 28}, labelText[0], 1, Color::black)},
-		{cLabel(&panel, { 117, 89}, labelText[1], 1, Color::black, true), cLabel(&panelButton[0], {117, 89}, labelText[1], 1, Color::black)},
-		{cLabel(&panel, { 117, 118 }, labelText[2], 1, Color::black, true), cLabel(&panelButton[0], {117, 118}, labelText[2], 1, Color::black)}
+		{cLabel(&panel, { 117, 60 }, labelText[0], 1, Color::black, true), cLabel(&panelButton[1], {115, 10}, labelText[0], 1, Color::black)},
+		{cLabel(&panel, { 117, 89}, labelText[1], 1, Color::black, true), cLabel(&panelButton[2], {115, 10}, labelText[1], 1, Color::black)},
+		{cLabel(&panel, { 117, 118 }, labelText[2], 1, Color::black, true), cLabel(&panelButton[3], {115, 10}, labelText[2], 1, Color::black)}
 	};
 	cLabel LabelLoad[3][2]{
-		{cLabel(&panel, { 117, 50 }, "LOAD 1", 1, Color::black, true), cLabel(&panelButton[1], { 117, 50 }, "LOAD 1", 1, Color::black)},
-		{cLabel(&panel, { 117, 79 }, "LOAD 2", 1, Color::black, true), cLabel(&panelButton[2], { 117, 79 }, "LOAD 2", 1, Color::black)},
-		{cLabel(&panel, { 117, 108 }, "LOAD 3", 1, Color::black, true), cLabel(&panelButton[3], { 117, 108 }, "LOAD 3", 1, Color::black)}
+		{cLabel(&panel, { 117, 50 }, "LOAD 1", 1, Color::black, true), cLabel(&panelButton[1], { 115, 1 }, "LOAD 1", 1, Color::black)},
+		{cLabel(&panel, { 117, 79 }, "LOAD 2", 1, Color::black, true), cLabel(&panelButton[2], { 115, 1 }, "LOAD 2", 1, Color::black)},
+		{cLabel(&panel, { 117, 108 }, "LOAD 3", 1, Color::black, true), cLabel(&panelButton[3], { 115, 1 }, "LOAD 3", 1, Color::black)}
 	};
-	cButton panelIcon[3] = {
-		cButton(&panel, { 2, 50 }, mapIconSaved[0], 1, true),
-		cButton(&panel, { 2, 79 }, mapIconSaved[1], 1, true),
-		cButton(&panel, { 2, 108 }, mapIconSaved[2], 1, true)
-	};
+
 
 	int current = 0;
 	while (!tomainMenu)
@@ -242,18 +244,18 @@ void cGame::GamePlayPanel()
 		{
 			break;
 		}
-		//if (GetAsyncKeyState(0x0D) & 0x8000)
-		//{
-		//	if (current == 0) {
-		//		game.GameNewGamePanel();
-		//	}
-		//	else {
-		//		load(saved[current - 1]);
-		//	}
-		//	mainMenu.show();
-		//	panel.show();
-		//	panelButton[current].show();
-		//}
+		if (GetAsyncKeyState(0x0D) & 0x8000)
+		{
+			if (current == 0) {
+				game.GameNewGamePanel();
+			}
+			else {
+				load(saved[current - 1]);
+			}
+			mainMenu.show();
+			panel.show();
+			panelButton[current].show();
+		}
 		Sleep(100);
 	}
 }
@@ -397,14 +399,14 @@ void cGame::GameSettingsPanel()
 		{
 			currentarrowpos++;
 			selectarrow.unshow();
-			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
+			selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
 			selectarrow.show();
 		}
 		if (GetAsyncKeyState(VK_UP) < 0 && currentarrowpos > 0)
 		{
 			currentarrowpos--;
 			selectarrow.unshow();
-			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
+			selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
 			selectarrow.show();
 		}
 		if (GetAsyncKeyState(VK_LEFT) < 0)
@@ -642,14 +644,14 @@ void cGame::GameQuitPanel(bool fullexit)
 		{
 			currentarrowpos++;
 			selectarrow.unshow();
-			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
+			selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
 			selectarrow.show();
 		}
 		if (GetAsyncKeyState(VK_UP) < 0 && currentarrowpos > 0)
 		{
 			currentarrowpos--;
 			selectarrow.unshow();
-			selectarrow.setPos({ selectarrow.getPos().X, arrowPos[currentarrowpos] });
+			selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
 			selectarrow.show();
 		}
 		Sleep(100);

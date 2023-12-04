@@ -25,11 +25,11 @@ protected:
 
 	cWidget(cWidget* parentWindow, COORD offsetFromParentTopleft, const string& imgSrc);
 public:
-	static bool createMainWindow(const string& tagName);
 	virtual bool show(bool showNow = true);
 	virtual bool unshow(bool showNow = true);
-	void setPos(COORD In_topleft);
-	COORD getPos();
+	void setOffset(COORD In_topleft);
+	COORD getTL();
+	COORD getOffset();
 
 	friend cDWindow;
 	friend cButton;
@@ -97,7 +97,7 @@ public:
 
 class cLabel {
 protected:
-	cWidget* parentWindow = nullptr;
+	cDWindow* parentWindow = nullptr;
 	struct tchar {
 		Texture* pChar = nullptr;
 		COORD pos;
@@ -117,7 +117,7 @@ protected:
 public:
 	friend cGameEngine;
 	cLabel(cDWindow* parentWindow, COORD offsetFromParentTopleft, const string& text, const short& align, Color textColor, bool showNow = false);
-	cLabel(cButton* parentWindow, COORD offsetFromParentTopleft, const string& text, const short& align, Color textColor, bool showNow = false);
+	//cLabel(cButton* parentWindow, COORD offsetFromParentTopleft, const string& text, const short& align, Color textColor, bool showNow = false);
 	bool show(bool showNow = true);
 	bool unshow(bool showNow = true);
 	void updateText(const string& newText);
