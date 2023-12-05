@@ -5,7 +5,8 @@
 extern const string UIPrefix; 
 extern const string TexturePrefix;
 extern const string FxPrefix;
-extern const string PlayerPrefix;
+extern const string CubePrefix;
+extern const string RabbitPrefix;
 extern const string MapPrefix;
 extern const string LevelPrefix;
 

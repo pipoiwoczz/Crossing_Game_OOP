@@ -387,50 +387,118 @@ void cGame::GameSettingsPanel()
 {
 	cDWindow panel(&window, { 122, 11 }, "panelsettings.txt", true);
 	void (*panelFunct[2][2])() = {
-	{ Sound::reduceSoundBackground, Sound::increaseSoundBackground},
-	{Sound::reduceEffectSound, Sound::increaseEffectSound}
+		{Sound::reduceSoundBackground, Sound::increaseSoundBackground},
+		{Sound::reduceEffectSound, Sound::increaseEffectSound},
 	};
 	int (*getVolume[2])() = { Sound::getCurrentMusicVolume, Sound::getCurrentEffectVolume };
 
 	cLabel panelInfo[2][2] = {
 		{cLabel(&panel, { 30, 30 }, "Music Volume", 1, Color::black, true), cLabel(&panel, { 177, 30 }, to_string(getVolume[0]() / 10), 1, Color::black,true)},
-		{cLabel(&panel, { 30 , 60 }, "Effect Volume", 1, Color::black, true), cLabel(&panel, { 177, 60 }, to_string(getVolume[1]() / 10), 1, Color::black, true)}
+		{cLabel(&panel, { 30 , 40 }, "Effect Volume", 1, Color::black, true), cLabel(&panel, { 177, 40 }, to_string(getVolume[1]() / 10), 1, Color::black, true)}
+	};
+
+	cButton buttonPanel[2][2]{
+		{
+			cButton(&panel, { 20, 50 }, "rabbitchoose1.txt", 1, true),
+			cButton(&panel, { 20, 50 }, "rabbitchoose2.txt", 1, false)
+		},
+		{
+			cButton(&panel, { 140, 50 }, "cubechoose1.txt", 1, true),
+			cButton(&panel, { 140, 50 }, "cubechoose2.txt", 1, false) 
+		}	
 	};
 
 	cDWindow selectarrow(&panel, { 210, 30 }, "arrowL.txt", true);
-	short arrowPos[2] = { 30, 60 };
+	short arrowPos[2] = { 30, 40 };
 	int currentarrowpos = 0;
 
 	while (true)
 	{
 
-		if (GetAsyncKeyState(VK_DOWN) < 0 && currentarrowpos < 1)
+		if (GetAsyncKeyState(VK_DOWN) < 0 && currentarrowpos < 2)
 		{
-			currentarrowpos++;
-			selectarrow.unshow();
-			selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
-			selectarrow.show();
+			if (currentarrowpos < 1) 
+			{
+				currentarrowpos++;
+				selectarrow.unshow();
+				selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
+				selectarrow.show();
+			}
+			 else if (currentarrowpos == 1)
+			{
+				currentarrowpos++;
+				selectarrow.unshow();
+				buttonPanel[0][0].show();
+				buttonPanel[1][0].show();
+				buttonPanel[currentarrowpos - 2][1].show();
+				buttonPanel[currentarrowpos - 2][1].onSelect();
+			}
 		}
 		if (GetAsyncKeyState(VK_UP) < 0 && currentarrowpos > 0)
 		{
-			currentarrowpos--;
-			selectarrow.unshow();
-			selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
-			selectarrow.show();
+			if (currentarrowpos < 2) {
+				currentarrowpos--;
+				selectarrow.unshow();
+				selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
+				selectarrow.show();
+			}
+			else if (currentarrowpos >= 2) {
+				currentarrowpos = 1;
+				selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
+				selectarrow.show();		
+				//buttonPanel[currentarrowpos - 2][1].show();
+				buttonPanel[0][1].onDeSelect();
+				buttonPanel[1][1].onDeSelect();
+				buttonPanel[0][0].show();
+				buttonPanel[1][0].show();
+			}
 		}
 		if (GetAsyncKeyState(VK_LEFT) < 0)
 		{
-			panelFunct[currentarrowpos][0]();
-			panelInfo[currentarrowpos][1].updateText(to_string(getVolume[currentarrowpos]() / 10));
-			Sleep(250);
+			if (currentarrowpos < 2)
+			{
+				panelFunct[currentarrowpos][0]();
+				panelInfo[currentarrowpos][1].updateText(to_string(getVolume[currentarrowpos]() / 10));
+				Sleep(250);
+			}
+			else if (currentarrowpos == 3)  {
+				buttonPanel[currentarrowpos - 2][1].onDeSelect();
+				currentarrowpos--;
+				selectarrow.unshow();
+				buttonPanel[0][0].show();
+				buttonPanel[1][0].show();
+				buttonPanel[currentarrowpos - 2][1].show();
+				buttonPanel[currentarrowpos - 2][1].onSelect();
+			}
 		}
 		if (GetAsyncKeyState(VK_RIGHT) < 0)
 		{
-			panelFunct[currentarrowpos][1]();
-			panelInfo[currentarrowpos][1].updateText(to_string(getVolume[currentarrowpos]() / 10));
-			Sleep(250);
+			if (currentarrowpos < 2)
+			{
+				panelFunct[currentarrowpos][1]();
+				panelInfo[currentarrowpos][1].updateText(to_string(getVolume[currentarrowpos]() / 10));
+				Sleep(250);
+			}
+			else {
+				if (currentarrowpos == 2) {
+					buttonPanel[currentarrowpos - 2][1].onDeSelect();
+					currentarrowpos++;
+					selectarrow.unshow();
+					buttonPanel[0][0].show();
+					buttonPanel[1][0].show();
+					buttonPanel[currentarrowpos - 2][1].show();
+					buttonPanel[currentarrowpos - 2][1].onSelect();
+				}
+			}
 		}
 		Sleep(200);
+		if ((GetAsyncKeyState(0x0D) & 0x8000)) {
+			if (currentarrowpos >= 2) {
+				bool change = (currentarrowpos == 3) ? false : false;
+				cPeople::changeskin(change);
+				break;
+			}
+		}
 		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
 		{
 			break;
@@ -1315,12 +1383,38 @@ void cGame::load(string fileName)
 void cGame::ScoreBoard() {
 	cDWindow screen(&window, { 0, 0 }, "leaderboard.txt", true);
 	screen.show();
-	Sleep(3000);
-	// draw score board menu // has a box to show score and time of game
-	// has choices: back to previous menu
+
+	vector < cDWindow*> listWindow;
+
+	vector<COORD> winnerPosition = { {289, 94}, {206, 108}, {369, 112} };
+
+	ifstream ifs("Save//leaderboard.txt");
+	if (!ifs.is_open())
+		return;
+	int i = 0;
+	while (!ifs.eof()) {
+		int point;
+		bool isRabbit;
+		ifs >> point >> isRabbit;
+		if (isRabbit)
+			listWindow.push_back(new cDWindow(&screen, winnerPosition[i], "rabbit.txt", true));
+		else
+			listWindow.push_back(new cDWindow(&screen, winnerPosition[i], "cube.txt", true));
+		i++;
+	}
+
+	ifs.close();
+
+	while (true) {
+		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
+			break;
+		}
+	}
+
+	ifs.close();
 }
 void cGame::resetGame() {
-	resetTime();
+	//resetTime();
 	totalPoint = 0;
 	totalTime = 0;
 	gameLevel = 1;

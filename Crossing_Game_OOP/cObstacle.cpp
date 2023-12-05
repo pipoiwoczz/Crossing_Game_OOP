@@ -67,8 +67,14 @@ void cObstacle::advanceTime(int time)
 void cObstacle::move() {
     if (isStop) return;
     if (!movable) return;
-    topleft.X = (topleft.X + 1) % (PlayBoxRect.Right);
-    Box.move({ 1, 0 });
+    if (isMoveLeft) {
+        topleft.X = (topleft.X - 1) % (PlayBoxRect.Right);
+        Box.move({ short(-1), 0 });
+    }
+	else {      // isMoveRight
+        topleft.X = (topleft.X + 1) % (PlayBoxRect.Right);
+        Box.move({ short(1), 0 });
+    }
 }
 
 void cObstacle::moveHitBox()
