@@ -1,5 +1,6 @@
 ﻿#include "cAsset.h"
 #include "cGame.h"
+#include "cPeople.h"
 #include "gameEngine.h"
 #include "cObstacle.h"
 #include "cWidget.h"
@@ -13,7 +14,8 @@
 const string UIPrefix = "UI//";
 const string TexturePrefix = "Obstacles//";
 const string FxPrefix = "FX//";
-const string PlayerPrefix = "Player//";
+const string CubePrefix = "Player//Cube//";
+const string RabbitPrefix = "Player//Rabbit//";
 const string MapPrefix = "Maps//";
 const string LevelPrefix = "Level//";
 
@@ -29,6 +31,7 @@ CHAR_INFO* cGameEngine::mainBuffer = nullptr;
 CHAR_INFO* cGameEngine::reservedBuffer = nullptr;
 HANDLE cGameEngine::Hbuffer1 = 0;
 HANDLE cGameEngine::Hbuffer2 = 0;
+bool cGameEngine::startDrawThread = true;
 vector<Texture> cAsset::alphabet;
 vector<Texture> cAsset::number;
 vector<Texture> cAsset::special;
@@ -70,11 +73,14 @@ int gameMap::mapLoopCooldown = 15;
 cWidget cGame::window;
 cDWindow cGame::mainMenu;
 cGame cGame::game;
+bool cPeople::isRabbit = true;
+
 
 bool gameinit = cGame::InitGame();
 
 bool mainLoader()
 {
+
 	cBar loadingBar(&cGame::mainMenu, { 20, 140 },  500, 8, Color::red, Color::white);
 	cAsset::alphabetLoader();
 	cAsset::numberLoader();

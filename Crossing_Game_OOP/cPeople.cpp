@@ -7,7 +7,10 @@ cPeople::cPeople(COORD In_pos) {
 	topleft = In_pos;
 	mState = true;
 	moveCooldown = 0;
-	skin = cAsset::assetLoaders(peopleFile, PlayerPrefix);
+	if (isRabbit)
+		skin = cAsset::assetLoaders(peopleFile, RabbitPrefix);
+	else
+		skin = cAsset::assetLoaders(peopleFile, CubePrefix);
 
 
 	pMotionFrame = &skin[2];
@@ -25,10 +28,16 @@ COORD cPeople::getPos() {
 }
 void cPeople::setPos(COORD pos) {
 	topleft = pos;
+	mBox.set({ short(topleft.X + 4), short(2 + topleft.Y) }, { short(skin[0].getWidth() - 4 + topleft.X), short(skin[0].getHeight() - 2 + topleft.Y) });
 }
 bool cPeople::getState()
 {
 	return mState;
+}
+
+void cPeople::setState(bool state)
+{
+	mState = state;
 }
 
 bool cPeople::isDead() {
@@ -37,6 +46,11 @@ bool cPeople::isDead() {
 }
 bool cPeople::isFinish() {
 	return true;
+}
+
+void cPeople::changeskin(bool isChange)
+{
+	isRabbit = (isRabbit && isChange);
 }
 
 
@@ -91,7 +105,7 @@ bool cPeople::move() {
 		isMoving = true;
 		if (!horizon)
 		{
-			moveCooldown = 8;
+			moveCooldown = 4;
 			topleft.Y += dy * pMotionFrame->getHeight();
 			dx = 0;
 		}

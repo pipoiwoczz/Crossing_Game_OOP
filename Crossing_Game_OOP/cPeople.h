@@ -18,6 +18,7 @@ class cPeople {
 	int moveCooldown;
 	int step = 2;
 	bool passLevel = false;
+	static bool isRabbit;
 
 	public:
 		friend class cGame;
@@ -31,11 +32,13 @@ class cPeople {
 		COORD getPos();
 		void setPos(COORD pos);
 		bool getState();
-        
+        void setState(bool state);
 		bool move();
 
 		bool isDead();
 		bool isFinish();
+
+		static void changeskin(bool isChange);
 };
 
 #endif

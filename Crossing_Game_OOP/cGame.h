@@ -21,6 +21,7 @@ class cGame {
 	};
 
 	static cGame game;
+	
 
 	friend cGameEngine;
     vector<cObstacle*> liveObstacles;
@@ -79,6 +80,8 @@ class cGame {
 		void GameLoadPanel();
 
 		void GameQuitPanel(bool fullexit = false);
+
+		void GameDiePanel();
 
 		void environmentImpact();
 

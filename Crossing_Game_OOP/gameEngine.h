@@ -18,6 +18,7 @@ class cObstacle;
 class cEnvironment;
 class cGameEngine {
 private:
+	static bool startDrawThread;
 	
 	static COORD buffsize;
 	//Buffer
