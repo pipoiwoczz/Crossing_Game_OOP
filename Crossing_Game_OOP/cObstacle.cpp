@@ -68,12 +68,12 @@ void cObstacle::move() {
     if (isStop) return;
     if (!movable) return;
     if (isMoveLeft) {
-        topleft.X = (topleft.X - 1) % (PlayBoxRect.Right);
-        Box.move({ short(-1), 0 });
+        topleft.X = (topleft.X - speed + PlayBoxRect.Right) % (PlayBoxRect.Right);
+        Box.move({ short(-speed), 0 });
     }
 	else {      // isMoveRight
-        topleft.X = (topleft.X + 1) % (PlayBoxRect.Right);
-        Box.move({ short(1), 0 });
+        topleft.X = (topleft.X + speed) % (PlayBoxRect.Right);
+        Box.move({ short(speed), 0 });
     }
 }
 

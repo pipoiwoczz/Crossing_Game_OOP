@@ -14,7 +14,7 @@ class cPeople {
 
     COORD topleft;
 	bool isMoving = false;
-	bool mState; // true is alive, false is dead =))
+	bool mState; // true is alive, false is dead
 	int moveCooldown;
 	int step = 2;
 	bool passLevel = false;

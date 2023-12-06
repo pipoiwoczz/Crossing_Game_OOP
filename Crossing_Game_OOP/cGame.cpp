@@ -1191,7 +1191,12 @@ void cGame::spawnObstacle(const string& levelFile) {
 			case 'l': pObj = new cLion({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
 			case 'r': pObj = new cRhino({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
 			case 'c': pObj = new cCrocodile({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
-			
+			case 's': pObj = new cShark({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
+			case 'S': pObj = new cSurfer({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
+
+			case 'T': pObj = new cTruck({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
+			case 'M': pObj = new cMotorbike({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
+			case 'C': pObj = new cCar({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
 			default:
 				break;
 			}
