@@ -20,4 +20,4 @@ public:
     bool isOverlap (const Hitbox &h);
 };
 
-#endif /* hitbox_hpp */
+#endif

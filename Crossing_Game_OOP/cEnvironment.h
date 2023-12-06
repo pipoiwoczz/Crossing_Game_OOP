@@ -64,21 +64,7 @@ public:
     cTrafficLight(COORD In_pos);
     unsigned char getType();
 
-    void playEvent()
-    {
-        if (allowMove)
-        {
-            pMotionFrame = &motionFrames[1];
-            Sleep(500);
-            pMotionFrame = &motionFrames[2];
-        }
-        else {
-            pMotionFrame = &motionFrames[1];
-            Sleep(500);
-            pMotionFrame = &motionFrames[0];
-        }
-        allowMove = !allowMove;
-    }
+    void playEvent();
 
 
     void hitEffect(cPeople* pVictim);

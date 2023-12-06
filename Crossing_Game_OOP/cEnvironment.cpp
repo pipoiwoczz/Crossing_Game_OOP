@@ -71,3 +71,19 @@ void cTrafficLight::hitEffect(cPeople* pVictim)
 void cTrafficLight::hitSound() {
 
 }
+
+void cTrafficLight::playEvent()
+{
+    if (allowMove)
+    {
+        pMotionFrame = &motionFrames[1];
+        Sleep(500);
+        pMotionFrame = &motionFrames[2];
+    }
+    else {
+        pMotionFrame = &motionFrames[1];
+        Sleep(500);
+        pMotionFrame = &motionFrames[0];
+    }
+    allowMove = !allowMove;
+}

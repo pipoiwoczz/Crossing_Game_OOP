@@ -109,12 +109,11 @@ bool mainLoader()
 	{
 		gameMap::listMap.push_back(gameMap::loadMap(mapFiles[i]));
 	}
-	
-
-	loadingBar.setProgress(false, 100);
-	Sleep(100);
 	loadingBar.unshow();
 	Sound::playSoundList();
+	loadingBar.setProgress(false, 100);
+	Sleep(100);
+
 	return true;
 }
 
