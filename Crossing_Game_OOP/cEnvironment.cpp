@@ -29,7 +29,7 @@ void cRiver::hitSound()
 cLilyleaf::cLilyleaf(COORD In_pos) : cEnvironment(In_pos, 0)
 {
     friendly = true;
-
+    speed = 1;
     pMotionFrame = &motionFrames[0];
     pLMotionFrames = pMotionFrame;
     currentFrame = 0;

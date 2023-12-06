@@ -93,6 +93,8 @@ class cGame {
 		vector<cPeople *> getPeople();
         vector<cObstacle *> getObstacles();
 
+		void updateInfo();
+
 
 		void randomStopThread();
 		

@@ -72,6 +72,8 @@ public:
 	static void alphabetLoader();
 	static void numberLoader();
 	static void specialCharLoader();
+	static void settingsLoader();
+	static void settingSave();
 	static Texture* getChar(unsigned char In_char);
     
     Texture loader(string filename); // temporary (waiting for testing)

@@ -1,5 +1,5 @@
 #include "cAsset.h"
-
+#include "Sound.h"
 
 
 Texture::Texture() {
@@ -152,6 +152,28 @@ void cAsset::specialCharLoader()
     {
         special.push_back(assetLoader("Char//Special//sc" + to_string(i) + ".txt"));
     }
+}
+void cAsset::settingsLoader()
+{
+    ifstream settingIn;
+    settingIn.open("Settings.txt");
+    if (settingIn.is_open())
+    {
+        int value;
+        settingIn >> value;
+        Sound::setBGVolume(value);
+        settingIn >> value;
+        Sound::setEffectVolume(value);
+    }
+    settingIn.close();
+}
+void cAsset::settingSave()
+{
+    ofstream saveIn;
+    saveIn.open("Settings.txt");
+    saveIn << Sound::getCurrentMusicVolume() << endl;
+    saveIn << Sound::getCurrentEffectVolume() << endl;
+    saveIn.close();
 }
 
 Texture* cAsset::getChar(unsigned char In_char)

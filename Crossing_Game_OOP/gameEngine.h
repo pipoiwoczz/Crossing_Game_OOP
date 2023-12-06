@@ -88,7 +88,6 @@ public:
 	static void refreshBackGround(bool fillNow = false);
 	static void fillScreenWithLastFrame(bool fillNow = false);
 	static void maindraw(cGame* pGame);
-	static void updateInfo(cGame* pGame);
 	static void pizzaDraw(cGame* pGame);
 	static void playEffect(cObstacle* obsta, cPeople* people);
 	//For label rendering

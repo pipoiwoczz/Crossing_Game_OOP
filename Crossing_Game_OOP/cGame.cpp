@@ -927,14 +927,15 @@ void cGame::MainGame() {
 	listLabel.push_back(&t1);
 	t1.show();
 	listLabel.push_back(&t2);
-	t2.unshow();
+	t2.show();
+
 	int i = 0;
-	thread drawingThread;
-	if (cGameEngine::startDrawThread) {
-		drawingThread = thread(&cGameEngine::maindraw, this);
-		drawingThread.detach();
-		cGameEngine::startDrawThread = false;
-	}
+	thread drawingThread = thread(&cGameEngine::maindraw, this);
+	//if (cGameEngine::startDrawThread) {
+	//	drawingThread = thread(&cGameEngine::maindraw, this);
+	//	drawingThread.detach();
+	//	cGameEngine::startDrawThread = false;
+	//}
 
 
 	while (!isExit) {
@@ -989,7 +990,7 @@ void cGame::MainGame() {
 		}
 		Sleep(10);
 	}
-	//drawingThread.join();
+	drawingThread.join();
 	clearObjects(true, true);
 	Sound::pauseCurrentSound();
 }
@@ -1022,6 +1023,18 @@ bool cGame::isImpact()
     }
 	return false;
     //return livePeople.empty();
+}
+
+void cGame::updateInfo()
+{
+	for (int i = 0; i < listWidget.size(); i++)
+	{
+		listWidget[i]->show(false);
+	}
+	for (int i = 0; i < listLabel.size(); i++)
+	{
+		listLabel[i]->show(false);
+	}
 }
 
 void cGame::randomStopThread()

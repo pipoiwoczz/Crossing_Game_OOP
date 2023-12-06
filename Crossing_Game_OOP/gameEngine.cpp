@@ -275,17 +275,6 @@ void cGameEngine::renderEnvironment(cEnvironment* pEnvironmentObject)
 	
 	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pEnvironmentObject->pMotionFrame->textureArray, { pEnvironmentObject->pMotionFrame->width, pEnvironmentObject->pMotionFrame->height }, pEnvironmentObject->topleft);
 }
-void cGameEngine::updateInfo(cGame* pGame)
-{
-	for (int i = 0; i < pGame->listWidget.size(); i++)
-	{
-		pGame->listWidget[i]->show(false);
-	}
-	for (int i = 0; i < pGame->listLabel.size(); i++)
-	{
-		pGame->listLabel[i]->show(false);
-	}
-}
 
 void cGameEngine::pizzaDraw(cGame* pGame)
 {
@@ -339,8 +328,7 @@ void cGameEngine::maindraw(cGame* pGame)
 			}
 			memcpy(mainBuffer, gameMap::currentMap->mapArray, gameMap::currentMap->height * gameMap::currentMap->width * sizeof(CHAR_INFO));
 			pizzaDraw(pGame);
-			updateInfo(pGame);
-
+			pGame->updateInfo();
 			//thread g1(&cGameEngine::pizzaDraw, pGame);
 			//thread g2(&cGameEngine::updateInfo, pGame);
 

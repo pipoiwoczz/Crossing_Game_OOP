@@ -80,7 +80,7 @@ bool gameinit = cGame::InitGame();
 
 bool mainLoader()
 {
-
+	cAsset::settingsLoader();
 	cBar loadingBar(&cGame::mainMenu, { 20, 140 },  500, 8, Color::red, Color::white);
 	cAsset::alphabetLoader();
 	cAsset::numberLoader();
@@ -127,5 +127,6 @@ bool cGame::mainloop = mainLoader();
 
 int main() {
 	cGame::onGameReady();
+	cAsset::settingSave();
 	cGameEngine::cleanEngine();
 }

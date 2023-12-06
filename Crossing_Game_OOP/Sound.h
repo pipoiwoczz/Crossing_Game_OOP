@@ -26,6 +26,14 @@ private:
 public:
 	Sound() {};
 	~Sound() {};
+	static void setBGVolume(int value)
+	{
+		BGSoundVolume = value;
+	}
+	static void setEffectVolume(int value)
+	{
+		EffectSoundVolume = value;
+	}
 	static int getCurrentMusicVolume()
 	{
 		return BGSoundVolume;
