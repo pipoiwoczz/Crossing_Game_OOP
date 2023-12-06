@@ -989,7 +989,7 @@ void cGame::MainGame() {
 		}
 		Sleep(10);
 	}
-	drawingThread.join();
+	//drawingThread.join();
 	clearObjects(true, true);
 	Sound::pauseCurrentSound();
 }
