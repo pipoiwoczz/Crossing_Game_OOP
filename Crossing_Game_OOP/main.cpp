@@ -100,14 +100,14 @@ bool mainLoader()
 	loadingBar.setProgress(false, 50);
 
 	cAsset::FxFrame = cAsset::assetLoader(FxPrefix + FxFrameFile);
-	cMotorbike::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-	cTruck::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-	cCar::impactFx = cAsset::assetLoaders(carFile, TexturePrefix);
+	cMotorbike::impactFx = cAsset::assetLoaders(BikeImpactEffect, FxPrefix);
+	cTruck::impactFx = cAsset::assetLoaders(TruckImpactEffect, FxPrefix);
+	cCar::impactFx = cAsset::assetLoaders(CarImpactEffect, TexturePrefix);
 	cLion::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-	cCrocodile::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-	cRhino::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-	cShark::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
-	cSurfer::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
+	cCrocodile::impactFx = cAsset::assetLoaders(CrocoImpactEffect, FxPrefix);
+	cRhino::impactFx = cAsset::assetLoaders(RhinoImpactEffect, FxPrefix);
+	cShark::impactFx = cAsset::assetLoaders(SharkImpactEffect, FxPrefix);
+	cSurfer::impactFx = cAsset::assetLoaders(SurferImpactEffect, FxPrefix);
 	loadingBar.setProgress(false, 80);
 
 	gameMap::listMap;
