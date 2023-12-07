@@ -4,7 +4,6 @@
 class cAsset;
 class gameMap {
 private:
-public:
 	static vector<vector<gameMap>> listMap;
 
 	static int currentTheme;
@@ -17,9 +16,9 @@ public:
 	short width;
 	short height;
 
-	friend class cObstacle;
+public:
 	friend class cGame;
-	friend class cPeople;
+	//friend class cPeople;
 	friend class cGameEngine;
 	gameMap();
 	~gameMap();
