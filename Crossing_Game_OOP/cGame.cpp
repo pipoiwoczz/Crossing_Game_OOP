@@ -15,14 +15,16 @@ void cGame::pizzaDraw()
 {
 	for (int i = 0; i < liveObstacles.size(); i++)
 	{
-		if (!suddenStop)
-		{
-			liveObstacles[i]->isStop = false;
-			liveObstacles[i]->move();
-		}
-		else {
-			liveObstacles[i]->isStop = true;
-		}
+		liveObstacles[i]->move();
+
+		//if (!suddenStop)
+		//{
+		//	liveObstacles[i]->isStop = false;
+		//	liveObstacles[i]->move();
+		//}
+		//else {
+		//	liveObstacles[i]->isStop = true;
+		//}
 		cGameEngine::renderObstacle(liveObstacles[i]);
 
 
@@ -40,6 +42,38 @@ void cGame::pizzaDraw()
 	}
 
 
+}
+void cGame::collisionThread()
+{
+	while (!isExit)
+	{
+		if (!isLose && !isPause)
+		{
+			environmentImpact();
+
+			if (!isLose)
+				isImpact();
+
+			if (isLose)
+			{
+				cDWindow dieeffect[5]{
+					cDWindow(&window, { 133, 11 }, "rip1.txt", false),
+					cDWindow(&window, { 133, 11 }, "rip2.txt", false),
+					cDWindow(&window, { 133, 11 }, "rip3.txt", false),
+					cDWindow(&window, {133, 11 }, "rip4.txt", false),
+					cDWindow(&window, {133, 11 }, "rip5.txt", false)
+				};
+				for (int i = 0; i < 5; i++)
+				{
+					dieeffect[i].show();
+					Sleep(300);
+				}
+				Sleep(2000);
+				GameDiePanel();
+			}
+			Sleep(10);
+		}
+	}
 }
 void cGame::drawThread()
 {
@@ -171,7 +205,6 @@ void cGame::spawnEnvironment() //summon environment objects of current map theme
 		}
 		// get Traffic light
 		hasSuddenStop = true;
-		suddenStop = false;
 	}
 }
 
@@ -361,7 +394,7 @@ void cGame::GameNewGamePanel()
 			current++;
 			panelButton[current].onSelect();
 		}
-		Sleep(50);
+		Sleep(75);
 		if (GetKeyState(0x51) & 0x8000)
 			break;
 		if (GetKeyState(0x0D) & 0x8000)
@@ -595,7 +628,7 @@ void cGame::GameSavePanel()
 		}
 	}
 
-	cDWindow panel(&window, { 133, 11 }, "panelsave.txt", true);
+	cDWindow panel(&window, { 122, 11 }, "panelsave.txt", true);
 	
 	cDWindow panelBackground(&panel, { 0, 0 }, "panelbackground.txt", false);
 
@@ -706,7 +739,7 @@ void cGame::GameLoadPanel()
 		}
 	}
 
-	cDWindow panel(&window, { 133, 11 }, "panelload2.txt", true);
+	cDWindow panel(&window, { 122, 11 }, "panelload2.txt", true);
 
 	cDWindow panelBackground(&panel, { 0, 0 }, "panelbackground.txt", false);
 
@@ -898,7 +931,7 @@ void cGame::GameDiePanel() {
 
 	int current = 0;
 	panelButton[current].show();
-	while (true)
+	while (!tomainMenu)
 	{
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 2)
 		{
@@ -915,9 +948,11 @@ void cGame::GameDiePanel() {
 		Sleep(100);
 		if (GetKeyState(0x0D) & 0x8000)
 		{
-			panelButton[current].unshow();
 			panelFunct[current]();
-			break;
+			if (current < 2)
+				break;
+			panel.show();
+			panelButton[current].show();
 		}
 	}
 }
@@ -972,6 +1007,39 @@ void cGame::updatePosObstacle()
 	}
 }
 
+void cGame::createStopEvent()
+{
+	if (hasSuddenStop)
+	{
+		//if (cooldown > 0)
+		//{
+		//	cooldown--;
+		//	return;
+		//}
+		//cooldown = 200;
+		srand((unsigned int)time(NULL));
+		int target = rand() % obstacleLanes.size();
+		if (!flag[target])
+		{
+			for (cObstacle* pObs : liveObstacles)
+			{
+				if (pObs->getPos().Y == obstacleLanes[target].Y)
+				{
+					pObs->stop();
+				}
+			}
+			for (cEnvironment* element : environmentObject)
+			{
+				if (element->hasEvent && element->getPos().Y == obstacleLanes[target].Y)
+					element->playEvent();
+			}
+			flag[target] = true;
+			waiting[target] = 100;
+
+		}
+	}
+	Sleep(65);
+}
 
 void cGame::MainGame() {
 	isLose = false;
@@ -995,59 +1063,33 @@ void cGame::MainGame() {
 	t2.show();
 
 	int i = 0;
+	thread randomEventThread;
+	if (hasSuddenStop)
+	{
+		flag.resize(obstacleLanes.size(), false);
+		waiting.resize(obstacleLanes.size(), 0);
+		randomEventThread = thread(&cGame::randomStopThread, this);
+
+	}
 	thread drawingThread = thread(&cGame::drawThread, this);
+	thread collisionCheckingThread = thread(&cGame::collisionThread, this);
 	//if (cGameEngine::startDrawThread) {
 	//	drawingThread = thread(&cGameEngine::maindraw, this);
 	//	drawingThread.detach();
 	//	cGameEngine::startDrawThread = false;
 	//}
 
+	
+
+
 
 	while (!isExit) {
-		if (hasSuddenStop)
-		{
-			if (cooldown > 0)
-				cooldown--;
-			else {
-				cooldown = 200;
-				for (cEnvironment* p : environmentObject)
-				{
-					if (p->hasEvent)
-					{
-						p->playEvent();
-					}
-				}
-				suddenStop = !suddenStop;
-			}
-		}
-		if (GetKeyState(VK_ESCAPE) & 0x8000)
+		createStopEvent();
+		if ((GetKeyState(VK_ESCAPE) & 0x8000) && !isLose)
 		{
 			GamePausePanel();
 		}
 	
-		environmentImpact();
-		
-		if (!isLose)
-			isImpact();
-		if (isLose)
-		{	
-			
-			cDWindow dieeffect[5]{
-				cDWindow(&window, { 133, 11 }, "rip1.txt", false),
-				cDWindow(&window, { 133, 11 }, "rip2.txt", false),
-				cDWindow(&window, { 133, 11 }, "rip3.txt", false),
-				cDWindow(&window, {133, 11 }, "rip4.txt", false),
-				cDWindow(&window, {133, 11 }, "rip5.txt", false)
-			};
-			for (int i = 0; i < 5; i++)
-			{
-				dieeffect[i].show();
-				Sleep(300);
-			}
-			Sleep(2000);
-			GameDiePanel();
-		}
-		
 		if (livePeople[0]->passLevel) {
 			nextLevel();
 			t2.updateText(to_string(totalPoint));
@@ -1055,9 +1097,14 @@ void cGame::MainGame() {
 		}
 		Sleep(10);
 	}
-	drawingThread.join();
-	clearObjects(true, true);
 	Sound::pauseCurrentSound();
+	drawingThread.join();
+	collisionCheckingThread.join();
+	if (hasSuddenStop)
+	{
+		randomEventThread.join();
+	}
+	clearObjects(true, true);
 }
 
 
@@ -1104,77 +1151,105 @@ void cGame::updateInfo()
 
 void cGame::randomStopThread()
 {
-    //setup clocks
-    long long lastTime = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
-    long long stopDuration = 0;
-    long long stopCooldown = 0;
-    short stopped = -1; //indicate which line is stopped, if any
-    
-    vector<short> linePos;
-    for (cObstacle * element : liveObstacles)
-    {
-        if (find(linePos.begin(), linePos.end(), element -> getPos().Y) == linePos.end())
-        {
-            linePos.push_back(element -> getPos().Y);
-        }
-    }
-    int size = (int) linePos.size();
-    
-    srand((unsigned int) time(NULL));
-    while (!isLose && !isExit)
-    {
-        if (isPause)
-            continue;
-        long long timePassed = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count() - lastTime;
-        if (timePassed <= 0)
-            continue;
-        
-        if (stopCooldown > 0)
-        {
-            if (stopDuration > 0)
-            {
-                stopDuration -= timePassed;
-                if (stopDuration <= 0)
-                {
-                    for (cObstacle * element : liveObstacles)
-                    {
-                        if (element -> getPos().Y == stopped)
-                            element -> resume();
-                    }
+	//setup clocks
+	long long lastTime = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+	long long stopDuration = 0;
+	long long stopCooldown = 0;
+	short stopped = -1; //indicate which line is stopped, if any
 
-                    //stopped = -1;
-                }
-            }
-            stopCooldown -= timePassed;
-            // (sleep until cooldown is over)
-            //Sleep(stopCooldown);
-        }
-        else
-        {
-            int roll = rand() % 30000 + 1; // randomly determines if something will stop - chance is (1/30000) * [ms passed] --- can also be changed to always stop after a set interval
-            if (roll > timePassed)
-            {
-                // (sleep until next frame)
-                //Sleep(16);
-                continue;
-            }
-            roll = rand() % size; // randomly determines which line will be stopped
-            for (cObstacle * element : liveObstacles)
-            {
-                if (element -> getPos().Y == linePos[roll])
-                    element -> stop();
-            }
-            
-            roll = rand() % 10000; // randomly determines stop duration (from 5 - 15s)
-            stopDuration = roll + 5000;
-            stopCooldown = stopDuration + 10000;
-            // (sleep until next frame)
-            //Sleep(16);
-        }
-    }
+
+	int n = obstacleLanes.size();
+
+	while (!isExit)
+	{
+		if (isLose || isPause)
+			continue;
+
+		for (int i = 0; i < n; i++)
+		{
+
+			if (flag[i])
+			{
+				if (waiting[i] > 0)
+					waiting[i]--;
+				else {
+					for (cObstacle* pObs : liveObstacles)
+					{
+						if (pObs->getPos().Y == obstacleLanes[i].Y)
+						{
+							pObs->resume();
+						}
+					}
+					for (cEnvironment* element : environmentObject)
+					{
+						if (element->hasEvent && element->getPos().Y == obstacleLanes[i].Y)
+							element->playEvent();
+					}
+					flag[i] = !flag[i];
+				}
+
+			}
+		}
+		Sleep(50);
+		
+	}
+
+	//while (!isExit)
+	//{
+	//	if (isLose || isPause)
+	//		continue;
+	//	long long timePassed = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count() - lastTime;
+	//	if (timePassed <= 0)
+	//		continue;
+
+	//	if (stopCooldown > 0)
+	//	{
+	//		if (stopDuration > 0)
+	//		{
+	//			stopDuration -= timePassed;
+	//		}
+	//		else {
+	//			for (cObstacle* element : liveObstacles)
+	//			{
+	//				if (element->getPos().Y == stopped)
+	//					element->resume();
+	//			}
+	//			for (cEnvironment* element : environmentObject)
+	//			{
+	//				if (element->hasEvent && element->getPos().Y == stopped)
+	//					element->playEvent();
+	//			}
+	//		}
+	//		// (sleep until cooldown is over)
+	//		//Sleep(stopCooldown);
+	//	}
+	//	else {
+	//		int roll = rand() % 30000 + 1; // randomly determines if something will stop - chance is (1/30000) * [ms passed] --- can also be changed to always stop after a set interval
+	//		if (roll > timePassed)
+	//		{
+	//			// (sleep until next frame)
+	//			//Sleep(16);
+	//			continue;
+	//		}
+	//		roll = rand() % obstacleLanes.size(); // randomly determines which line will be stopped
+	//		for (cObstacle* element : liveObstacles)
+	//		{
+	//			if (element->getPos().Y == obstacleLanes[roll].Y)
+	//				element->stop();
+	//		}
+	//		for (cEnvironment* element : environmentObject)
+	//		{
+	//			if (element->hasEvent && element->getPos().Y == obstacleLanes[roll].Y)
+	//				element->playEvent();
+	//		}
+	//		roll = rand() % 10000; // randomly determines stop duration (from 5 - 15s)
+	//		stopDuration = roll + 5000;
+	//		stopCooldown = stopDuration + 10000;
+	//		// (sleep until next frame)
+	//		Sleep(16);
+	//	}
+	//}
 }
-
-
 
 void cGame::resumeFunction()
 {	
@@ -1277,15 +1352,15 @@ void cGame::spawnObstacle(const string& levelFile) {
 			cObstacle* pObj = nullptr;
 			switch (objname)
 			{
-			case 'l': pObj = new cLion({ short(cX + offsetF), obstacleLanes[linecount].Y }, obstacleLanes[linecount].X, spd); break;
-			case 'r': pObj = new cRhino({ short(cX + offsetF), obstacleLanes[linecount].Y }, obstacleLanes[linecount].X, spd); break;
-			case 'c': pObj = new cCrocodile({ short(cX + offsetF), obstacleLanes[linecount].Y }, obstacleLanes[linecount].X, spd); break;
-			case 's': pObj = new cShark({ short(cX + offsetF), obstacleLanes[linecount].Y }, obstacleLanes[linecount].X, spd); break;
-			case 'S': pObj = new cSurfer({ short(cX + offsetF), obstacleLanes[linecount].Y }, obstacleLanes[linecount].X, spd); break;
+			case 'l': pObj = new cLion({ short(cX + offsetF), obstacleLanes[linecount].Y }, spd, obstacleLanes[linecount].X); break;
+			case 'r': pObj = new cRhino({ short(cX + offsetF), obstacleLanes[linecount].Y }, spd, obstacleLanes[linecount].X); break;
+			case 'c': pObj = new cCrocodile({ short(cX + offsetF), obstacleLanes[linecount].Y }, spd, obstacleLanes[linecount].X); break;
+			case 's': pObj = new cShark({ short(cX + offsetF), obstacleLanes[linecount].Y }, spd, obstacleLanes[linecount].X); break;
+			case 'S': pObj = new cSurfer({ short(cX + offsetF), obstacleLanes[linecount].Y }, spd, obstacleLanes[linecount].X); break;
 
-			case 'T': pObj = new cTruck({ short(cX + offsetF), obstacleLanes[linecount].Y }, obstacleLanes[linecount].X, spd); break;
-			case 'M': pObj = new cMotorbike({ short(cX + offsetF), obstacleLanes[linecount].Y }, obstacleLanes[linecount].X, spd); break;
-			case 'C': pObj = new cCar({ short(cX + offsetF), obstacleLanes[linecount].Y }, obstacleLanes[linecount].X, spd); break;
+			case 'T': pObj = new cTruck({ short(cX + offsetF), obstacleLanes[linecount].Y }, spd, obstacleLanes[linecount].X); break;
+			case 'M': pObj = new cMotorbike({ short(cX + offsetF), obstacleLanes[linecount].Y }, spd, obstacleLanes[linecount].X); break;
+			case 'C': pObj = new cCar({ short(cX + offsetF), obstacleLanes[linecount].Y }, spd, obstacleLanes[linecount].X); break;
 			default:
 				break;
 			}

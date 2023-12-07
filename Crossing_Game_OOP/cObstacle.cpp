@@ -48,7 +48,8 @@ void cObstacle::determineHitbox() // default function to determine an obstacle's
 
 
 void cObstacle::move() {
-    if (isStop) return;
+    if (isStop)
+        return;
     if (!movable) return;
     if (fromRight) {
         topleft.X = (topleft.X - speed + PlayBoxRect.Right) % (PlayBoxRect.Right);

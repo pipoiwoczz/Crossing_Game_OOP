@@ -38,8 +38,10 @@ class cGame {
 
 	//Special events
 	bool hasSuddenStop = false;
-	bool suddenStop;
-	int cooldown = 200;
+	vector<short> waiting;
+	vector<bool> flag;
+	void createStopEvent();
+	int cooldown = 0;
 
 	long totalPoint;
 	double totalTime;
@@ -90,7 +92,7 @@ class cGame {
 		//short getNumberOfLane();
 
 		//vector<COORD> getPositionLane(); 		// COORD X is pos Y and Y is direction
-
+		void collisionThread();
 		void drawThread();
 		void pizzaDraw();
 
