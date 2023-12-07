@@ -257,6 +257,12 @@ void cGame::GamePlayPanel()
 		{
 			if (current == 0) {
 				game.GameNewGamePanel();
+				for (int i = 0; i < 3; i++)
+				{
+					LabelLoad[i][0].show();
+					LabelDate[i][0].show();
+					panelIcon[i].show();
+				}
 			}
 			else {
 				load(saved[current - 1]);
@@ -907,11 +913,7 @@ void cGame::MainGame() {
 	isLose = false;
 	isPause = false;
 	isExit = false;
-	isLoad = false;
-	hasSuddenStop = false;
 	suddenStop = false;
-	
-
 	//resetTime();
 
 	Sound::playBackGroundSound();
@@ -1076,6 +1078,7 @@ void cGame::randomStopThread()
                         if (element -> getPos().Y == stopped)
                             element -> resume();
                     }
+
                     //stopped = -1;
                 }
             }
@@ -1183,7 +1186,7 @@ void cGame::spawnObstacle(const string& levelFile) {
 	ifstream levelIn;
 	levelIn.open(LevelPrefix + levelFile);
 	int linecount = 0;
-	short lineoffset[] = { 19, 55, 91, 127};
+	vector<short> lineoffset = gameMap::getcurrentMapLayout();
 	while (!levelIn.eof())
 	{
 		int objcount;
@@ -1386,6 +1389,23 @@ void cGame::load(string fileName)
 			break;
 		case 'c':
 			game.liveObstacles[i] = new cCrocodile(pos, speed);
+			break;
+
+		case 's':
+			game.liveObstacles[i] = new cShark(pos, speed); 
+			break;
+		case 'S':
+			game.liveObstacles[i] = new cSurfer(pos, speed); 
+			break;
+
+		case 'T': 
+			game.liveObstacles[i] = new cTruck(pos, speed);
+			break;
+		case 'M': 
+			game.liveObstacles[i] = new cMotorbike(pos, speed); 
+			break;
+		case 'C': 
+			game.liveObstacles[i] = new cCar(pos, speed);
 			break;
 		default:
 			break;

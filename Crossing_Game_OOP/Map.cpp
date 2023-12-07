@@ -72,6 +72,22 @@
         currentMapIndex = 0;
     }
 
+    vector<short> gameMap::getcurrentMapLayout()
+    {
+        if (currentTheme == 0)
+        {
+            return vector<short> {19, 107, 125};
+        }
+        else if (currentTheme == 1)
+        {
+            return vector<short> {19, 107, 125};
+        }
+        else if (currentTheme == 2)
+        {
+            return vector<short> {19, 107, 125};
+        }
+    }
+
     void gameMap::changeMapTheme(int newTheme)
     {
         currentTheme = newTheme;
