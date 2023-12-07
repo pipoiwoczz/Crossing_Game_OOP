@@ -23,7 +23,14 @@ const vector<string> motorbFile { "BikeR.txt" };
 
 const string FxFrameFile { "fxframe.txt" };
 const vector<string> hedgeImpactEffect {"base.txt", "purple.txt", "blast.txt", "explosion1.txt","explosion2.txt", "explosion3.txt","fade1.txt", "fade2.txt", "fade3.txt", "dissappear.txt" };
-const vector<string> lionImpactEffect{"Lionimpact1.txt","Lionimpact2.txt","Lionimpact3.txt","Lionimpact4.txt"};
+const vector<string> lionImpactEffect{"Lionimpact1.txt","Lionimpact2.txt","Lionimpact3.txt","Lionimpact4.txt","Lionimpact.txt"5 };
+const vector<string> RhinoImpactEffect{ "Rhinoimpact1.txt","Rhinoimpact2.txt","Rhinoimpact3.txt","Rhinoimpact4.txt","Rhinoimpact5.txt" };
+const vector<string> CrocoImpactEffect{ "Crocodileimpact1.txt","Crocodileimpact2.txt","Crocodileimpact3.txt","Crocodileimpact4.txt" };
+const vector<string> BikeImpactEffect{ "Bikeimpact1.txt","Bikeimpact2.txt","Bikeimpact3.txt","Bikeimpact4.txt" };
+const vector<string> CarImpactEffect{ "Carimpact1.txt","Carimpact2.txt","Carimpact3.txt" };
+const vector<string> TruckImpactEffect{ "Truckimpact1.txt","Truckimpact2.txt","Truckimpact3.txt"};
+const vector<string> SharkImpactEffect{ "Sharkimpact1.txt","Sharkimpact2.txt","Sharkimpact3.txt","Sharkimpact4.txt" };
+const vector<string> SurferImpactEffect{ "Surferimpact1.txt","Surferimpact2.txt","Surferimpact3.txt" };
 
 const vector<vector<string>> mapFiles{
 	{"jungle1.txt", "jungle2.txt", "jungle3.txt"},

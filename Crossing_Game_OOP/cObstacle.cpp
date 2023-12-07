@@ -45,24 +45,6 @@ void cObstacle::determineHitbox() // default function to determine an obstacle's
 
 }
 
-bool cObstacle::collide(Hitbox h)
-{
-    return true;
-}
-
-void cObstacle::advanceTime(int time)
-{
-    if (isStop)
-        return;
-    
-    timeUntilMove -= time;
-    if (timeUntilMove <= 0)
-    {
-        move();
-        timeUntilMove = speed;
-    }
-    
-}
 
 void cObstacle::move() {
     if (isStop) return;

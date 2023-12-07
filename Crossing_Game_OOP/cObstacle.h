@@ -68,8 +68,6 @@ public:
 
     // shared methods
     
-    bool collide (Hitbox h); // (unused) check collision with other obstacles
-    void advanceTime (int time); // (unused) counts down timeUntilMove and executes move if it reaches 0. does nothing while obstacle is stopped
 };
 
 #endif
