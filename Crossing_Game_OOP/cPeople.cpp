@@ -23,6 +23,14 @@ cPeople::~cPeople() {
 
 }
 
+void cPeople::normalizingTopleft()
+{
+	if (topleft.X > PlayBoxRect.Right - pMotionFrame->getWidth() + 1)
+	{
+		topleft.X = PlayBoxRect.Right - pMotionFrame->getWidth() + 1;
+	}
+};
+
 COORD cPeople::getPos() {
 	return topleft;
 }
@@ -100,7 +108,10 @@ bool cPeople::move() {
 		ismove = true;
 		pMotionFrame = &skin[2];
 	}
-	if (ismove )
+	topleft.X += carryOffset.X;
+	topleft.Y += carryOffset.Y;
+
+	if (ismove)
 	{
 		isMoving = true;
 		if (!horizon)
@@ -114,7 +125,9 @@ bool cPeople::move() {
 			topleft.X += dx * 6;
 			dy = 0;
 		}
-		mBox.move({ short(dx * 6), short(dy * pMotionFrame->getHeight())});
-		return ismove;
 	}
+	carryOffset = { 0,0 };
+	normalizingTopleft();
+	mBox.set({ short(topleft.X + 4), short(2 + topleft.Y) }, { short(skin[0].getWidth() - 4 + topleft.X), short(skin[0].getHeight() - 2 + topleft.Y) });
+	return ismove;
 }

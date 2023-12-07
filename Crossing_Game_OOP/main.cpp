@@ -44,14 +44,22 @@ bool enginecheck = cGameEngine::startEngine();
 Texture cAsset::blankchar;
 vector<Texture> cTrafficLight::motionFrames;
 vector<Texture> cLilyleaf::motionFrames;
-vector<Texture> cLion::motionFrames;
-vector<Texture> cRhino::motionFrames;
-vector<Texture> cCrocodile::motionFrames;
-vector<Texture> cShark::motionFrames;
-vector<Texture> cSurfer::motionFrames;
-vector<Texture> cTruck::motionFrames;
-vector<Texture> cCar::motionFrames;
-vector<Texture> cMotorbike::motionFrames;
+vector<Texture> cLion::motionFramesR;
+vector<Texture> cLion::motionFramesL;
+vector<Texture> cRhino::motionFramesR;
+vector<Texture> cRhino::motionFramesL;
+vector<Texture> cCrocodile::motionFramesR;
+vector<Texture> cCrocodile::motionFramesL;
+vector<Texture> cShark::motionFramesR;
+vector<Texture> cShark::motionFramesL;
+vector<Texture> cSurfer::motionFramesR;
+vector<Texture> cSurfer::motionFramesL;
+vector<Texture> cTruck::motionFramesR;
+vector<Texture> cTruck::motionFramesL;
+vector<Texture> cCar::motionFramesR;
+vector<Texture> cCar::motionFramesL;
+vector<Texture> cMotorbike::motionFramesR;
+vector<Texture> cMotorbike::motionFramesL;
 
 Texture cAsset::FxFrame;
 vector<Texture> cMotorbike::impactFx;
@@ -87,16 +95,34 @@ bool mainLoader()
 	cAsset::specialCharLoader();
 	cAsset::blankchar = cAsset::assetLoader("Char//Alphabet//blank.txt");
 	loadingBar.setProgress(false, 10);
+
 	cTrafficLight::motionFrames = cAsset::assetLoaders(trafficlightFile, TexturePrefix);
 	cLilyleaf::motionFrames = cAsset::assetLoaders(lilyFile, TexturePrefix);
-	cLion::motionFrames = cAsset::assetLoaders(lionFile, TexturePrefix);
-	cRhino::motionFrames = cAsset::assetLoaders(rhinoFile, TexturePrefix);
-	cCrocodile::motionFrames = cAsset::assetLoaders(crocoFile, TexturePrefix);
-	cShark::motionFrames = cAsset::assetLoaders(sharkFile, TexturePrefix);
-	cSurfer::motionFrames = cAsset::assetLoaders(surferFile, TexturePrefix);
-	cCar::motionFrames = cAsset::assetLoaders(carFile, TexturePrefix);
-	cTruck::motionFrames = cAsset::assetLoaders(truckFile, TexturePrefix);
-	cMotorbike::motionFrames = cAsset::assetLoaders(motorbFile, TexturePrefix);
+
+	cLion::motionFramesR = cAsset::assetLoaders(lionFileR, TexturePrefix);
+	cLion::motionFramesL = cAsset::assetLoaders(lionFileL, TexturePrefix);
+
+	cRhino::motionFramesR = cAsset::assetLoaders(rhinoFileR, TexturePrefix);
+	cRhino::motionFramesL = cAsset::assetLoaders(rhinoFileL, TexturePrefix);
+
+	cCrocodile::motionFramesR = cAsset::assetLoaders(crocoFileR, TexturePrefix);
+	cCrocodile::motionFramesL = cAsset::assetLoaders(crocoFileL, TexturePrefix);
+
+	cShark::motionFramesR = cAsset::assetLoaders(sharkFileR, TexturePrefix);
+	cShark::motionFramesL = cAsset::assetLoaders(sharkFileL, TexturePrefix);
+
+	cSurfer::motionFramesR = cAsset::assetLoaders(surferFileR, TexturePrefix);
+	cSurfer::motionFramesL = cAsset::assetLoaders(surferFileL, TexturePrefix);
+
+	cCar::motionFramesR = cAsset::assetLoaders(carFileR, TexturePrefix);
+	cCar::motionFramesL = cAsset::assetLoaders(carFileL, TexturePrefix);
+
+	cTruck::motionFramesR = cAsset::assetLoaders(truckFileR, TexturePrefix);
+	cTruck::motionFramesL = cAsset::assetLoaders(truckFileL, TexturePrefix);
+
+	cMotorbike::motionFramesR = cAsset::assetLoaders(motorbFileR, TexturePrefix);
+	cMotorbike::motionFramesL = cAsset::assetLoaders(motorbFileL, TexturePrefix);
+
 	loadingBar.setProgress(false, 50);
 
 	cAsset::FxFrame = cAsset::assetLoader(FxPrefix + FxFrameFile);

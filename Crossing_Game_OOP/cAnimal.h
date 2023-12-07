@@ -7,19 +7,20 @@ class cAnimal: public cObstacle {
 private:
 
 public:
-    cAnimal(COORD In_pos, int speed);
+    cAnimal(COORD In_pos, int speed, bool fromRight);
     virtual ~cAnimal() {}
 };
 
 class cLion : public cAnimal {
    // static cObstacle * bootstrapObjectcLion;
-	static vector<Texture> motionFrames;
+    static vector<Texture> motionFramesL;
+    static vector<Texture> motionFramesR;
     static vector<Texture> impactFx;
 
 public:
     friend bool mainLoader();
 	cLion();
-    cLion (COORD In_pos, int speed);
+    cLion (COORD In_pos, int speed, bool fromRight);
     ~cLion();
     
 
@@ -31,14 +32,15 @@ public:
 class cRhino : public cAnimal {
     //static cObstacle * bootstrapObjectcRhino;
 
-	static vector<Texture> motionFrames;
+    static vector<Texture> motionFramesL;
+    static vector<Texture> motionFramesR;
     static vector<Texture> impactFx;
 public:
     friend bool mainLoader();
 
 
 	cRhino();
-	cRhino(COORD In_pos, int speed);
+	cRhino(COORD In_pos, int speed, bool fromRight);
     ~cRhino();
 
     unsigned char getType();
@@ -49,7 +51,8 @@ public:
 class cCrocodile : public cAnimal {
    // static cObstacle * bootstrapObjectcCrocodile;
 
-	static vector<Texture> motionFrames;
+    static vector<Texture> motionFramesL;
+    static vector<Texture> motionFramesR;
     static vector<Texture> impactFx;
 
 public:
@@ -57,7 +60,7 @@ public:
 
 
 	cCrocodile();
-	cCrocodile(COORD In_pos, int speed);
+	cCrocodile(COORD In_pos, int speed, bool fromRight);
     ~cCrocodile();
     
     unsigned char getType();
@@ -66,7 +69,8 @@ public:
 };
 
 class cShark : public cAnimal {
-    static vector<Texture> motionFrames;
+    static vector<Texture> motionFramesL;
+    static vector<Texture> motionFramesR;
     static vector<Texture> impactFx;
 
 public:
@@ -74,7 +78,7 @@ public:
 
 
     cShark();
-    cShark(COORD In_pos, int speed);
+    cShark(COORD In_pos, int speed, bool fromRight);
     ~cShark();
 
     unsigned char getType();
@@ -83,7 +87,8 @@ public:
 };
 
 class cSurfer : public cAnimal {
-    static vector<Texture> motionFrames;
+    static vector<Texture> motionFramesL;
+    static vector<Texture> motionFramesR;
     static vector<Texture> impactFx;
 
 public:
@@ -91,7 +96,7 @@ public:
 
 
     cSurfer();
-    cSurfer(COORD In_pos, int speed);
+    cSurfer(COORD In_pos, int speed, bool fromRight);
     ~cSurfer();
 
     unsigned char getType();

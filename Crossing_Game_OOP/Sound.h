@@ -45,7 +45,10 @@ public:
 	static void playSoundList() {
 
 		mciSendString(TEXT("open \"sound/test.mp3\" type mpegvideo alias test"), 0, 0, 0);
-		mciSendString(TEXT("open \"sound/bombhitsound.mp3\" type mpegvideo alias hitsound"), 0, 0, 0);
+		wstring volume = L"setaudio test volume to " + to_wstring(Sound::BGSoundVolume);
+		const wchar_t* test = volume.c_str();
+		//mciSendString(volume.c_str(), 0, 0, 0);
+		mciSendString(test, 0, 0, 0);
 
 	}
 	static void pauseCurrentSound()
@@ -70,7 +73,7 @@ public:
 	}
 	static void playHitSound()
 	{
-		mciSendString(TEXT("pause test"), 0, 0, 0);
+		pauseCurrentSound();
 		mciSendString(TEXT("play hitsound"), 0, 0, 0);
 	}
 	static void reduceSoundBackground() {

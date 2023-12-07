@@ -28,7 +28,6 @@ public:
 	static vector<gameMap> loadMap(const vector<string>& mapFrames);
 	static gameMap* getCurrentMap();
 	static void changeMapTheme(MapTheme newTheme);
-	static vector<short> getcurrentMapLayout();
 	static void changeMapTheme(int newTheme);
 	static void nextMapFrame();
 	static void mapChangeTick();

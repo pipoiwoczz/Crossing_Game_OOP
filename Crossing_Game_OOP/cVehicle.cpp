@@ -2,19 +2,28 @@
 #include "cAsset.h"
 #include "hitbox.h"
 
-cVehicle::cVehicle(COORD In_pos, int speed) : cObstacle(In_pos, speed)
+cVehicle::cVehicle(COORD In_pos, int speed, bool fromRight) : cObstacle(In_pos, speed, fromRight)
 {
 }
 
-cTruck::cTruck() : cTruck({ 0, 40 }, 2) {};
-cTruck::cTruck(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cVehicle(In_pos, /*difficulty, ttm*/ speed) {
+cTruck::cTruck() : cTruck({ 0, 40 }, 2, true) {};
+cTruck::cTruck(COORD In_pos, /*int difficulty, int ttm*/ int speed, bool fromRight) : cVehicle(In_pos, /*difficulty, ttm*/ speed, fromRight) {
 	defaulttimeUntilRender = 5;
 
-	pMotionFrame = &motionFrames[0];
-	pLMotionFrames = pMotionFrame;
-	currentFrame = 0;
-	numMotionFrame = motionFrames.size();
-
+	if (fromRight)
+	{
+		pMotionFrame = &motionFramesL[0];
+		pLMotionFrames = pMotionFrame;
+		currentFrame = 0;
+		numMotionFrame = motionFramesL.size();
+	}
+	else {
+		pMotionFrame = &motionFramesR[0];
+		pLMotionFrames = pMotionFrame;
+		currentFrame = 0;
+		numMotionFrame = motionFramesR.size();
+	}
+	
 	pFxFrame = &impactFx[0];
 	pLFxFrames = pFxFrame;
 	currentFxFrame = 0;
@@ -36,14 +45,23 @@ void cTruck::hitEffect(cPeople* pVictim) {}
 void cTruck::hitSound() {}
 
 
-cMotorbike::cMotorbike() : cMotorbike({ 0, 40 }, 2) {};
-cMotorbike::cMotorbike(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cVehicle(In_pos, /*difficulty, ttm*/ speed) {
+cMotorbike::cMotorbike() : cMotorbike({ 0, 40 }, 2, true) {};
+cMotorbike::cMotorbike(COORD In_pos, /*int difficulty, int ttm*/ int speed, bool fromRight) : cVehicle(In_pos, /*difficulty, ttm*/ speed, fromRight) {
 	defaulttimeUntilRender = 5;
 
-	pMotionFrame = &motionFrames[0];
-	pLMotionFrames = pMotionFrame;
-	currentFrame = 0;
-	numMotionFrame = motionFrames.size();
+	if (fromRight)
+	{
+		pMotionFrame = &motionFramesL[0];
+		pLMotionFrames = pMotionFrame;
+		currentFrame = 0;
+		numMotionFrame = motionFramesL.size();
+	}
+	else {
+		pMotionFrame = &motionFramesR[0];
+		pLMotionFrames = pMotionFrame;
+		currentFrame = 0;
+		numMotionFrame = motionFramesR.size();
+	}
 
 	pFxFrame = &impactFx[0];
 	pLFxFrames = pFxFrame;
@@ -69,14 +87,23 @@ void cMotorbike::hitSound()
 {}
 
 
-cCar::cCar() : cCar({ 0, 40 }, 2) {};
-cCar::cCar(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cVehicle(In_pos, /*difficulty, ttm*/ speed) {
+cCar::cCar() : cCar({ 0, 40 }, 2, true) {};
+cCar::cCar(COORD In_pos, /*int difficulty, int ttm*/ int speed, bool fromRight) : cVehicle(In_pos, /*difficulty, ttm*/ speed, fromRight) {
 	defaulttimeUntilRender = 5;
 
-	pMotionFrame = &motionFrames[0];
-	pLMotionFrames = pMotionFrame;
-	currentFrame = 0;
-	numMotionFrame = motionFrames.size();
+	if (fromRight)
+	{
+		pMotionFrame = &motionFramesL[0];
+		pLMotionFrames = pMotionFrame;
+		currentFrame = 0;
+		numMotionFrame = motionFramesL.size();
+	}
+	else {
+		pMotionFrame = &motionFramesR[0];
+		pLMotionFrames = pMotionFrame;
+		currentFrame = 0;
+		numMotionFrame = motionFramesR.size();
+	}
 
 	pFxFrame = &impactFx[0];
 	pLFxFrames = pFxFrame;

@@ -16,8 +16,8 @@ class cGame {
 
 	const vector <vector<string>> CreatedLevel{
 		{"jungle1.txt"},
-		{"jungle1.txt"},
-		{"jungle1.txt"}
+		{"beach1.txt"},
+		{"city1.txt"}
 	};
 
 	static cGame game;
@@ -49,6 +49,7 @@ class cGame {
 
 	int currentTheme;
 	int currentPhase;
+
 	cGame();
 	~cGame();
 	public:

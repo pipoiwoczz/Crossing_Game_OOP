@@ -41,7 +41,6 @@ void cGame::pizzaDraw()
 
 
 }
-
 void cGame::drawThread()
 {
 	while (!isExit)
@@ -53,6 +52,7 @@ void cGame::drawThread()
 			pizzaDraw();
 			updateInfo();
 			gameMap::mapChangeTick();
+			cGameEngine::fillScreen();
 			Sleep(25);
 		}
 	}
@@ -99,21 +99,21 @@ void cGame::onGameReady()
 
 	while (mainloop)
 	{
-		if (GetAsyncKeyState(VK_UP) && current > 0)
+		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
 			panelButton[current].unshow();
 			current--;
 			panelButton[current].show();
 		}
 
-		if (GetAsyncKeyState(VK_DOWN) && current < 3)
+		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 3)
 		{
 			panelButton[current].unshow();
 			current++;
 			panelButton[current].show();
 		}
 
-		if (GetAsyncKeyState(0x0D) & 0x8000)
+		if (GetKeyState(0x0D) & 0x8000)
 		{
 			panelFunction[current]();
 			mainMenu.show();
@@ -147,11 +147,11 @@ void cGame::spawnEnvironment() //summon environment objects of current map theme
 {
 	if (currentTheme == 0)
 	{
-		cEnvironment* lily = new cLilyleaf({ 0, 73 });
+		cEnvironment* lily = new cLilyleaf({ 0, 75 }, 1, false);
 		environmentObject.push_back(lily);
 
 		environmentObject.push_back(new cRiver(73, lily));
-		lily = new cLilyleaf({ 30, 55 });
+		lily = new cLilyleaf({ 30, 57 }, 1, false);
 		environmentObject.push_back(lily);
 		environmentObject.push_back(new cRiver(55, lily));
 
@@ -163,11 +163,11 @@ void cGame::spawnEnvironment() //summon environment objects of current map theme
 	else if (currentTheme == 2)
 	{
 		// COORD X is pos Y and Y is direction
-		vector<COORD> lanesPosition = getPositionLane();
-		for (int i = 0; i < lanesPosition.size(); i++)
+
+		for (int i = 0; i < obstacleLanes.size(); i++)
 		{
-			short posX = lanesPosition[i].Y ? 0 : 486;
-			environmentObject.push_back(new cTrafficLight({ posX, lanesPosition[i].X }));
+			short posX = obstacleLanes[i].X ? 0 : 486;
+			environmentObject.push_back(new cTrafficLight({ posX, obstacleLanes[i].Y }));
 		}
 		// get Traffic light
 		hasSuddenStop = true;
@@ -257,7 +257,7 @@ void cGame::GamePlayPanel()
 
 	while (!tomainMenu)
 	{
-		if ((GetAsyncKeyState(VK_UP) & 0x8000) && current > 0)
+		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
 			panelButton[current].unshow();
 			if (current != 0)
@@ -277,7 +277,7 @@ void cGame::GamePlayPanel()
 				
 			}
 		}
-		if ((GetAsyncKeyState(VK_DOWN) & 0x8000) && current < 3)
+		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 3)
 		{
 			panelButton[current].unshow();
 			if (current != 0)
@@ -296,11 +296,12 @@ void cGame::GamePlayPanel()
 			}
 			
 		}
-		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
+		if (GetKeyState(VK_ESCAPE) & 0x8000)
 		{
 			break;
 		}
-		if (GetAsyncKeyState(0x0D) & 0x8000)
+		Sleep(50);
+		if (GetKeyState(0x0D) & 0x8000)
 		{
 			if (current == 0) {
 				game.GameNewGamePanel();
@@ -318,7 +319,7 @@ void cGame::GamePlayPanel()
 			panel.show();
 			panelButton[current].show();
 		}
-		Sleep(100);
+		Sleep(50);
 	}
 }
 
@@ -348,21 +349,22 @@ void cGame::GameNewGamePanel()
 	
 	while (true)
 	{
-		if (GetAsyncKeyState(VK_UP)  && current > 0)
+		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
 			panelButton[current].onDeSelect();
 			current--;
 			panelButton[current].onSelect();
 		}
-		if (GetAsyncKeyState(VK_DOWN) && current < 2)
+		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 2)
 		{
 			panelButton[current].onDeSelect();
 			current++;
 			panelButton[current].onSelect();
 		}
-		if (GetAsyncKeyState(0x51) & 0x8000)
+		Sleep(50);
+		if (GetKeyState(0x51) & 0x8000)
 			break;
-		if (GetAsyncKeyState(0x0D) & 0x8000)
+		if (GetKeyState(0x0D) & 0x8000)
 		{
 			gameMap::changeMapTheme(current);
 			currentTheme = current;
@@ -371,11 +373,11 @@ void cGame::GameNewGamePanel()
 			MainGame();
 			break;
 		}
-		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
+		if (GetKeyState(VK_ESCAPE) & 0x8000)
 		{
 			break;
 		}
-		Sleep(100);
+		Sleep(50);
 	}
 }
 
@@ -410,20 +412,20 @@ void cGame::GamePausePanel()
 	panelButton[current].show();
 	while (isPause)
 	{
-		if (GetAsyncKeyState(VK_DOWN) < 0 && current < 5)
+		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 5)
 		{
 			panelButton[current].unshow();
 			current++;
 			panelButton[current].show();
 		}
-		if (GetAsyncKeyState(VK_UP) < 0 && current > 0)
+		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
 			panelButton[current].unshow();
 			current--;
 			panelButton[current].show();
 		}
-		Sleep(100);
-		if (GetAsyncKeyState(0x0D) & 0x8000)
+		Sleep(50);
+		if (GetKeyState(0x0D) & 0x8000)
 		{
 			//panel.unshow();
 			//panelButton[current].unshow();
@@ -431,6 +433,7 @@ void cGame::GamePausePanel()
 			panel.show();
 			panelButton[current].show();
 		}
+		Sleep(50);
 	}
 }
 
@@ -466,7 +469,7 @@ void cGame::GameSettingsPanel()
 	while (true)
 	{
 
-		if (GetAsyncKeyState(VK_DOWN) < 0 && currentarrowpos < 2)
+		if ((GetKeyState(VK_DOWN) & 0x8000) && currentarrowpos < 2)
 		{
 			if (currentarrowpos < 1) 
 			{
@@ -485,7 +488,7 @@ void cGame::GameSettingsPanel()
 				buttonPanel[currentarrowpos - 2][1].onSelect();
 			}
 		}
-		if (GetAsyncKeyState(VK_UP) < 0 && currentarrowpos > 0)
+		if ((GetKeyState(VK_UP) & 0x8000) && currentarrowpos > 0)
 		{
 			if (currentarrowpos < 2) {
 				currentarrowpos--;
@@ -504,7 +507,7 @@ void cGame::GameSettingsPanel()
 				buttonPanel[1][0].show();
 			}
 		}
-		if (GetAsyncKeyState(VK_LEFT) < 0)
+		if (GetKeyState(VK_LEFT) & 0x8000)
 		{
 			if (currentarrowpos < 2)
 			{
@@ -522,7 +525,7 @@ void cGame::GameSettingsPanel()
 				buttonPanel[currentarrowpos - 2][1].onSelect();
 			}
 		}
-		if (GetAsyncKeyState(VK_RIGHT) < 0)
+		if (GetKeyState(VK_RIGHT) & 0x8000)
 		{
 			if (currentarrowpos < 2)
 			{
@@ -542,18 +545,19 @@ void cGame::GameSettingsPanel()
 				}
 			}
 		}
-		Sleep(200);
-		if ((GetAsyncKeyState(0x0D) & 0x8000)) {
+		Sleep(50);
+		if ((GetKeyState(0x0D) & 0x8000)) {
 			if (currentarrowpos >= 2) {
 				bool change = (currentarrowpos == 3) ? false : false;
 				cPeople::changeskin(change);
 				break;
 			}
 		}
-		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
+		if (GetKeyState(VK_ESCAPE) & 0x8000)
 		{
 			break;
 		}
+		Sleep(50);
 	}
 }
 
@@ -630,14 +634,14 @@ void cGame::GameSavePanel()
 	slots[current].show();
 	while (true)
 	{
-		if (GetAsyncKeyState(VK_DOWN) < 0 && current < 2)
+		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 2)
 		{
 			slots[current].unshow();
 			mapIcons[current].show();
 			current++;
 			slots[current].show();
 		}
-		if (GetAsyncKeyState(VK_UP) < 0 && current > 0)
+		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
 			slots[current].unshow();
 			mapIcons[current].show();
@@ -653,17 +657,18 @@ void cGame::GameSavePanel()
 			LabelDate[i][0].show();
 			LabelSave[i][0].show();
 		}
-		Sleep(100);
-		if (GetAsyncKeyState(0x0D) & 0x8000)
+		Sleep(50);
+		if (GetKeyState(0x0D) & 0x8000)
 		{
 			slots[current].unshow();
 			panel.unshow();
 			save("Save//" + saved[current]);
 			break;
 		}
-		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
+		if (GetKeyState(VK_ESCAPE) & 0x8000) {
 			break;
 		}
+		Sleep(50);
 	}
 }
 
@@ -740,14 +745,14 @@ void cGame::GameLoadPanel()
 	slots[current].show();
 	while (true)
 	{
-		if (GetAsyncKeyState(VK_DOWN) < 0 && current < 2)
+		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 2)
 		{
 			slots[current].unshow();
 			mapIcons[current].show();
 			current++;
 			slots[current].show();
 		}
-		if (GetAsyncKeyState(VK_UP) < 0 && current > 0)
+		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
 			slots[current].unshow();
 			mapIcons[current].show();
@@ -763,17 +768,18 @@ void cGame::GameLoadPanel()
 			LabelDate[i][0].show();
 			LabelLoad[i][0].show();			
 		}
-		Sleep(100);
-		if (GetAsyncKeyState(0x0D) & 0x8000)
+		Sleep(50);
+		if (GetKeyState(0x0D) & 0x8000)
 		{
 			slots[current].unshow();
 			panel.unshow();
 			load("Save//" + saved[current]);
 			break;
 		}
-		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
+		if (GetKeyState(VK_ESCAPE) & 0x8000) {
 			break;
 		}
+		Sleep(50);
 	}
 }
 
@@ -786,14 +792,14 @@ void cGame::GameQuitPanel(bool fullexit)
 	int currentarrowpos = 1;
 	while (true)
 	{
-		if (GetAsyncKeyState(VK_DOWN) < 0 && currentarrowpos < 1)
+		if ((GetKeyState(VK_DOWN) & 0x8000) && currentarrowpos < 1)
 		{
 			currentarrowpos++;
 			selectarrow.unshow();
 			selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
 			selectarrow.show();
 		}
-		if (GetAsyncKeyState(VK_UP) < 0 && currentarrowpos > 0)
+		if ((GetKeyState(VK_UP) & 0x8000) && currentarrowpos > 0)
 		{
 			currentarrowpos--;
 			selectarrow.unshow();
@@ -801,7 +807,7 @@ void cGame::GameQuitPanel(bool fullexit)
 			selectarrow.show();
 		}
 		Sleep(100);
-		if (GetAsyncKeyState(0x0D) & 0x8000)
+		if (GetKeyState(0x0D) & 0x8000)
 		{
 			if (currentarrowpos == 0)
 			{
@@ -838,6 +844,19 @@ void cGame::environmentImpact()
 					}
 					if (isCook)
 						break;
+				}
+			}
+		}
+		else {
+			if (environmentObject[j]->getType() == 'L')
+			{
+				for (int u = 0; u < livePeople.size(); u++)
+				{
+					if (environmentObject[j]->Box.isOverlap(livePeople[u]->mBox))
+					{
+						livePeople[u]->carryOffset = { short(environmentObject[j]->speed), 0};
+					}
+						
 				}
 			}
 		}
@@ -881,20 +900,20 @@ void cGame::GameDiePanel() {
 	panelButton[current].show();
 	while (true)
 	{
-		if (GetAsyncKeyState(VK_DOWN) < 0 && current < 2)
+		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 2)
 		{
 			panelButton[current].unshow();
 			current++;
 			panelButton[current].show();
 		}
-		if (GetAsyncKeyState(VK_UP) < 0 && current > 0)
+		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
 			panelButton[current].unshow();
 			current--;
 			panelButton[current].show();
 		}
 		Sleep(100);
-		if (GetAsyncKeyState(0x0D) & 0x8000)
+		if (GetKeyState(0x0D) & 0x8000)
 		{
 			panelButton[current].unshow();
 			panelFunct[current]();
@@ -1001,7 +1020,7 @@ void cGame::MainGame() {
 				suddenStop = !suddenStop;
 			}
 		}
-		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
+		if (GetKeyState(VK_ESCAPE) & 0x8000)
 		{
 			GamePausePanel();
 		}
@@ -1205,7 +1224,7 @@ void cGame::save(string fileName) {
 
 	for (int i = 0; i < obstacleCount; i++)
 	{
-		ofs << liveObstacles[i]->getType() << " " << liveObstacles[i]->getPos().X << " " << liveObstacles[i]->getPos().Y << " " << liveObstacles[i]->getSpeed() << endl;
+		ofs << liveObstacles[i]->getType() << " " << liveObstacles[i]->getPos().X << " " << liveObstacles[i]->getPos().Y << " " << liveObstacles[i]->getSpeed() << liveObstacles[i]->getDirection() << endl;
 	}
 
 	ofs.close();
@@ -1229,12 +1248,23 @@ void cGame::spawnObstacle(const string& levelFile) {
 	
 	ifstream levelIn;
 	levelIn.open(LevelPrefix + levelFile);
-	int linecount = 0;
+
+	int linecount;
+	levelIn >> linecount;
+	obstacleLanes.clear();
+	obstacleLanes.resize(linecount);
+	for (int i = 0; i < linecount; i++)
+	{
+		levelIn >> obstacleLanes[i].Y >> obstacleLanes[i].X;
+	}
+
+	int objcount;
+	int spd;
+
 	while (!levelIn.eof())
 	{
-		int objcount;
+		levelIn >> linecount;
 		levelIn >> objcount;
-		int spd;
 		levelIn >> spd;
 		short cX = 0;
 		for (int i = 0; i < objcount; i++)
@@ -1247,15 +1277,15 @@ void cGame::spawnObstacle(const string& levelFile) {
 			cObstacle* pObj = nullptr;
 			switch (objname)
 			{
-			case 'l': pObj = new cLion({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
-			case 'r': pObj = new cRhino({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
-			case 'c': pObj = new cCrocodile({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
-			case 's': pObj = new cShark({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
-			case 'S': pObj = new cSurfer({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
+			case 'l': pObj = new cLion({ short(cX + offsetF), obstacleLanes[linecount].Y }, obstacleLanes[linecount].X, spd); break;
+			case 'r': pObj = new cRhino({ short(cX + offsetF), obstacleLanes[linecount].Y }, obstacleLanes[linecount].X, spd); break;
+			case 'c': pObj = new cCrocodile({ short(cX + offsetF), obstacleLanes[linecount].Y }, obstacleLanes[linecount].X, spd); break;
+			case 's': pObj = new cShark({ short(cX + offsetF), obstacleLanes[linecount].Y }, obstacleLanes[linecount].X, spd); break;
+			case 'S': pObj = new cSurfer({ short(cX + offsetF), obstacleLanes[linecount].Y }, obstacleLanes[linecount].X, spd); break;
 
-			case 'T': pObj = new cTruck({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
-			case 'M': pObj = new cMotorbike({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
-			case 'C': pObj = new cCar({ short(cX + offsetF), short(lineoffset[linecount]) }, spd); break;
+			case 'T': pObj = new cTruck({ short(cX + offsetF), obstacleLanes[linecount].Y }, obstacleLanes[linecount].X, spd); break;
+			case 'M': pObj = new cMotorbike({ short(cX + offsetF), obstacleLanes[linecount].Y }, obstacleLanes[linecount].X, spd); break;
+			case 'C': pObj = new cCar({ short(cX + offsetF), obstacleLanes[linecount].Y }, obstacleLanes[linecount].X, spd); break;
 			default:
 				break;
 			}
@@ -1323,13 +1353,13 @@ void cGame::endlessMode() {
 	//Sound::playIntroSound();
 	////Sound::musicThread();
 	//while (true) {
-	//	if (GetAsyncKeyState(0x50) < 0 && 0x8000) {
+	//	if (GetKeyState(0x50) < 0 && 0x8000) {
 	//		pauseGame();
 	//	}
-	//	if (GetAsyncKeyState(0x53) < 0 && 0x8000) {
+	//	if (GetKeyState(0x53) < 0 && 0x8000) {
 	//		resumeGame(&cGameEngine::pGame);
 	//	}
-	//	if (GetAsyncKeyState(0x51) < 0 && 0x8000) {
+	//	if (GetKeyState(0x51) < 0 && 0x8000) {
 	//		// isExit = true;
 	//		// save game Menu here
 	//		// draw save game menu
@@ -1337,7 +1367,7 @@ void cGame::endlessMode() {
 	//		// if can save => save game
 	//		// if not => continue game
 	//	}
-	//	if (GetAsyncKeyState(0x1B) < 0 && 0x8000) {
+	//	if (GetKeyState(0x1B) < 0 && 0x8000) {
 	//		isExit = true;
 	//		// save game Menu here
 	//		// draw save game menu
@@ -1420,35 +1450,36 @@ void cGame::load(string fileName)
 	{
 		char type;
 		short x, y, speed;
-		ifs >> type >> x >> y >> speed;
+		bool direction;
+		ifs >> type >> x >> y >> speed >> direction;
 		COORD pos = { x, y };
 		switch (type)
 		{
 		case 'l':
-			game.liveObstacles[i] = new cLion(pos, speed);
+			game.liveObstacles[i] = new cLion(pos, speed, direction);
 			break;
 		case 'r':
-			game.liveObstacles[i] = new cRhino(pos, speed);
+			game.liveObstacles[i] = new cRhino(pos, speed, direction);
 			break;
 		case 'c':
-			game.liveObstacles[i] = new cCrocodile(pos, speed);
+			game.liveObstacles[i] = new cCrocodile(pos, speed, direction);
 			break;
 
 		case 's':
-			game.liveObstacles[i] = new cShark(pos, speed); 
+			game.liveObstacles[i] = new cShark(pos, speed, direction);
 			break;
 		case 'S':
-			game.liveObstacles[i] = new cSurfer(pos, speed); 
+			game.liveObstacles[i] = new cSurfer(pos, speed, direction);
 			break;
 
 		case 'T': 
-			game.liveObstacles[i] = new cTruck(pos, speed);
+			game.liveObstacles[i] = new cTruck(pos, speed, direction);
 			break;
 		case 'M': 
-			game.liveObstacles[i] = new cMotorbike(pos, speed); 
+			game.liveObstacles[i] = new cMotorbike(pos, speed, direction);
 			break;
 		case 'C': 
-			game.liveObstacles[i] = new cCar(pos, speed);
+			game.liveObstacles[i] = new cCar(pos, speed, direction);
 			break;
 		default:
 			break;
@@ -1487,7 +1518,7 @@ void cGame::ScoreBoard() {
 	ifs.close();
 
 	while (true) {
-		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
+		if (GetKeyState(VK_ESCAPE) & 0x8000) {
 			break;
 		}
 	}

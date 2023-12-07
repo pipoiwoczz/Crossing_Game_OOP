@@ -31,7 +31,7 @@ protected:
     short numFxFrame;
 
     bool movable = true;
-    bool isMoveLeft = false;
+    bool fromRight;
 public:
     Hitbox Box;
 
@@ -39,7 +39,7 @@ public:
     friend class cGameEngine;
     friend class cGame;
 
-    cObstacle (COORD In_pos, int speed); // constructor: set topleft and speed. timeUntilMove automatically set to be equal to speed
+    cObstacle (COORD In_pos, int speed, bool fromRight); // constructor: set topleft and speed. timeUntilMove automatically set to be equal to speed
     virtual ~cObstacle();
    // static void cleanBootstrap(); // clean up static objects vector. call before program exits. [better solutions?][No, unneccessary]
     

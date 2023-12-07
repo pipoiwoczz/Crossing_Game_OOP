@@ -5,16 +5,25 @@
 
 
 
-cAnimal::cAnimal(COORD In_pos, int speed) : cObstacle(In_pos, speed) {};
+cAnimal::cAnimal(COORD In_pos, int speed, bool fromRight) : cObstacle(In_pos, speed, fromRight) {};
 
-cLion::cLion() : cLion({ 0,20 }, 3) {}
-cLion::cLion(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In_pos, /*difficulty, ttm*/ speed) {
+cLion::cLion() : cLion({ 0,20 }, 3, true) {}
+cLion::cLion(COORD In_pos, /*int difficulty, int ttm*/ int speed, bool fromRight) : cAnimal(In_pos, speed, fromRight) {
     defaulttimeUntilRender = 4;
 
-    pMotionFrame = &motionFrames[0];
-    pLMotionFrames = pMotionFrame;
-    currentFrame = 0;
-    numMotionFrame = motionFrames.size();
+    if (fromRight)
+    {
+        pMotionFrame = &motionFramesL[0];
+        pLMotionFrames = pMotionFrame;
+        currentFrame = 0;
+        numMotionFrame = motionFramesL.size();
+    }
+    else {
+        pMotionFrame = &motionFramesR[0];
+        pLMotionFrames = pMotionFrame;
+        currentFrame = 0;
+        numMotionFrame = motionFramesR.size();
+    }
 
     pFxFrame = &impactFx[0];
     pLFxFrames = pFxFrame;
@@ -43,14 +52,23 @@ void cLion::hitSound()
 
 }
 
-cRhino::cRhino() : cRhino({ 0,20 }, 3) {}
-cRhino::cRhino(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In_pos, /*difficulty, ttm*/ speed) {
+cRhino::cRhino() : cRhino({ 0,20 }, 3, true) {}
+cRhino::cRhino(COORD In_pos, /*int difficulty, int ttm*/ int speed, bool fromRight) : cAnimal(In_pos, /*difficulty, ttm*/ speed, fromRight) {
     defaulttimeUntilRender = 5;
 
-    pMotionFrame = &motionFrames[0];
-    pLMotionFrames = pMotionFrame;
-    currentFrame = 0;
-    numMotionFrame = motionFrames.size();
+    if (fromRight)
+    {
+        pMotionFrame = &motionFramesL[0];
+        pLMotionFrames = pMotionFrame;
+        currentFrame = 0;
+        numMotionFrame = motionFramesL.size();
+    }
+    else {
+        pMotionFrame = &motionFramesR[0];
+        pLMotionFrames = pMotionFrame;
+        currentFrame = 0;
+        numMotionFrame = motionFramesR.size();
+    }
 
     pFxFrame = &impactFx[0];
     pLFxFrames = pFxFrame;
@@ -78,14 +96,23 @@ void cRhino::hitSound()
 {
 
 }
-cCrocodile::cCrocodile() : cCrocodile({ 0,20 }, 3) {}
-cCrocodile::cCrocodile(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In_pos, /*difficulty, ttm*/ speed) {
+cCrocodile::cCrocodile() : cCrocodile({ 0,20 }, 3, true) {}
+cCrocodile::cCrocodile(COORD In_pos, /*int difficulty, int ttm*/ int speed, bool fromRight) : cAnimal(In_pos, /*difficulty, ttm*/ speed, fromRight) {
     defaulttimeUntilRender = 6;
 
-    pMotionFrame = &motionFrames[0];
-    pLMotionFrames = pMotionFrame;
-    currentFrame = 0;
-    numMotionFrame = motionFrames.size();
+    if (fromRight)
+    {
+        pMotionFrame = &motionFramesL[0];
+        pLMotionFrames = pMotionFrame;
+        currentFrame = 0;
+        numMotionFrame = motionFramesL.size();
+    }
+    else {
+        pMotionFrame = &motionFramesR[0];
+        pLMotionFrames = pMotionFrame;
+        currentFrame = 0;
+        numMotionFrame = motionFramesR.size();
+    }
 
     pFxFrame = &impactFx[0];
     pLFxFrames = pFxFrame;
@@ -115,14 +142,23 @@ void cCrocodile::hitSound()
 }
 
 
-cShark::cShark() : cShark({ 0,20 }, 3) {}
-cShark::cShark(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In_pos, /*difficulty, ttm*/ speed) {
+cShark::cShark() : cShark({ 0,20 }, 3, true) {}
+cShark::cShark(COORD In_pos, /*int difficulty, int ttm*/ int speed, bool fromRight) : cAnimal(In_pos, /*difficulty, ttm*/ speed, fromRight) {
     defaulttimeUntilRender = 6;
 
-    pMotionFrame = &motionFrames[0];
-    pLMotionFrames = pMotionFrame;
-    currentFrame = 0;
-    numMotionFrame = motionFrames.size();
+    if (fromRight)
+    {
+        pMotionFrame = &motionFramesL[0];
+        pLMotionFrames = pMotionFrame;
+        currentFrame = 0;
+        numMotionFrame = motionFramesL.size();
+    }
+    else {
+        pMotionFrame = &motionFramesR[0];
+        pLMotionFrames = pMotionFrame;
+        currentFrame = 0;
+        numMotionFrame = motionFramesR.size();
+    }
 
     pFxFrame = &impactFx[0];
     pLFxFrames = pFxFrame;
@@ -152,14 +188,23 @@ void cShark::hitSound()
 }
 
 
-cSurfer::cSurfer() : cSurfer({ 0,20 }, 3) {}
-cSurfer::cSurfer(COORD In_pos, /*int difficulty, int ttm*/ int speed) : cAnimal(In_pos, /*difficulty, ttm*/ speed) {
+cSurfer::cSurfer() : cSurfer({ 0,20 }, 3, true) {}
+cSurfer::cSurfer(COORD In_pos, /*int difficulty, int ttm*/ int speed, bool fromRight) : cAnimal(In_pos, /*difficulty, ttm*/ speed, fromRight) {
     defaulttimeUntilRender = 5;
 
-    pMotionFrame = &motionFrames[0];
-    pLMotionFrames = pMotionFrame;
-    currentFrame = 0;
-    numMotionFrame = motionFrames.size();
+    if (fromRight)
+    {
+        pMotionFrame = &motionFramesL[0];
+        pLMotionFrames = pMotionFrame;
+        currentFrame = 0;
+        numMotionFrame = motionFramesL.size();
+    }
+    else {
+        pMotionFrame = &motionFramesR[0];
+        pLMotionFrames = pMotionFrame;
+        currentFrame = 0;
+        numMotionFrame = motionFramesR.size();
+    }
 
     pFxFrame = &impactFx[0];
     pLFxFrames = pFxFrame;

@@ -183,8 +183,6 @@ void cGameEngine::fillScreen()
 	SetConsoleActiveScreenBuffer(curHandle);
 }
 
-
-
 void cGameEngine::fillScreenWithLastFrame(bool fillNow)
 {
 	if (fillNow)

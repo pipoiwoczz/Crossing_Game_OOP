@@ -8,7 +8,7 @@ cObstacle::~cObstacle()
 {
 }
 
-cObstacle::cObstacle(COORD In_pos, /* int difficulty, int ttm */ int speed) {
+cObstacle::cObstacle(COORD In_pos, int speed, bool fromRight) {
     topleft = In_pos;
     /*speed = difficulty;
     timeUntilMove = ttm;*/
@@ -16,6 +16,7 @@ cObstacle::cObstacle(COORD In_pos, /* int difficulty, int ttm */ int speed) {
         speed = 0;
     this -> speed = speed;
     timeUntilMove = speed;
+    this->fromRight = fromRight;
 }
 
 
@@ -31,7 +32,7 @@ int cObstacle::getSpeed()
 
 bool cObstacle::getDirection()
 {
-    return isMoveLeft;
+    return fromRight;
 }
 
 void cObstacle::setPos(COORD new_Pos) {
@@ -49,11 +50,11 @@ void cObstacle::determineHitbox() // default function to determine an obstacle's
 void cObstacle::move() {
     if (isStop) return;
     if (!movable) return;
-    if (isMoveLeft) {
+    if (fromRight) {
         topleft.X = (topleft.X - speed + PlayBoxRect.Right) % (PlayBoxRect.Right);
         Box.move({ short(-speed), 0 });
     }
-	else {      // isMoveRight
+	else {
         topleft.X = (topleft.X + speed) % (PlayBoxRect.Right);
         Box.move({ short(speed), 0 });
     }

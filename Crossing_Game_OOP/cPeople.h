@@ -11,6 +11,8 @@ class cPeople {
 	Texture* pMotionFrame;
 	int currentFrame;
 
+	//Handle people movement when being carried by an object, Ex: standing on lilypad
+	COORD carryOffset = { 0, 0 };
 
     COORD topleft;
 	bool isMoving = false;
@@ -27,7 +29,7 @@ class cPeople {
 		cPeople();
 		cPeople(COORD In_pos);
 		~cPeople();
-
+		void normalizingTopleft();
 		COORD getPos();
 		void setPos(COORD pos);
 		bool getState();

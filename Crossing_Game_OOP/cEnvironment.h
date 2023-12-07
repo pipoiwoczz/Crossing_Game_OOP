@@ -17,7 +17,7 @@ protected:
     friend class cGame;
     friend cGameEngine;
 
-    cEnvironment(COORD In_pos, int speed);
+    cEnvironment(COORD In_pos, int speed, bool fromRight);
 };
 class cRiver : public cEnvironment {
 private:
@@ -43,7 +43,7 @@ public:
     friend bool mainLoader();
 
 
-    cLilyleaf(COORD In_pos);
+    cLilyleaf(COORD In_pos, int speed, bool fromRight);
     unsigned char getType();
 
     void hitEffect(cPeople* pVictim);
