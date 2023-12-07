@@ -76,14 +76,10 @@ void cTrafficLight::playEvent()
 {
     if (allowMove)
     {
-        pMotionFrame = &motionFrames[1];
-        Sleep(500);
-        pMotionFrame = &motionFrames[2];
+        pMotionFrame = &motionFrames[0];
     }
     else {
         pMotionFrame = &motionFrames[1];
-        Sleep(500);
-        pMotionFrame = &motionFrames[0];
     }
     allowMove = !allowMove;
 }

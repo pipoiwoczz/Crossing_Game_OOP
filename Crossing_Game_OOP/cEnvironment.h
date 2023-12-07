@@ -59,7 +59,7 @@ class cTrafficLight : public cEnvironment {
 private: static vector<Texture> motionFrames;
 public:
     friend bool mainLoader();
-    bool allowMove = true;
+    bool allowMove = false;
 
     cTrafficLight(COORD In_pos);
     unsigned char getType();

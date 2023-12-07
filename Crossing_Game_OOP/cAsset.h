@@ -10,7 +10,7 @@ extern const string RabbitPrefix;
 extern const string MapPrefix;
 extern const string LevelPrefix;
 
-const vector<string> trafficlightFile {"trafficlightgreen.txt", "trafficlightyellow.txt", "trafficlightred.txt"};
+const vector<string> trafficlightFile {"trafficlightgreen.txt", "trafficlightred.txt"};
 const vector<string> lilyFile { "lily.txt" };		
 const vector<string> lionFile { "LionR1.txt","LionR2.txt","LionR3.txt", "LionR2.txt" };
 const vector<string> rhinoFile { "RhinoR1.txt","RhinoR2.txt","RhinoR3.txt", "RhinoR2.txt"};

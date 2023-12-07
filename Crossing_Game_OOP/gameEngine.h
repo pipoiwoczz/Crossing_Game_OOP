@@ -31,9 +31,7 @@ private:
 	static int count;
 
 	//Object rendering
-	static void renderPeople(cPeople* pPeople);
-	static void renderObstacle(cObstacle* pObstacle);
-	static void renderEnvironment(cEnvironment* pEnvironmentObject);
+
 	//Initialization Phase
 	static COORD GetMonitorDimension();
 	static void FixConsoleBuffer(HANDLE H);
@@ -82,13 +80,17 @@ public:
 
 	//For game rendering
 	static bool startEngine();
-
 	static void cleanEngine();
 	
+	static void swapHandle();
 	static void refreshBackGround(bool fillNow = false);
 	static void fillScreenWithLastFrame(bool fillNow = false);
-	static void maindraw(cGame* pGame);
-	static void pizzaDraw(cGame* pGame);
+	static void fillScreen();
+
+	static void renderPeople(cPeople* pPeople);
+	static void renderObstacle(cObstacle* pObstacle);
+	static void renderEnvironment(cEnvironment* pEnvironmentObject);
+
 	static void playEffect(cObstacle* obsta, cPeople* people);
 	//For label rendering
 };

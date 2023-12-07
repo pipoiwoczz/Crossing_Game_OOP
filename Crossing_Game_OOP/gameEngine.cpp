@@ -157,6 +157,17 @@ void cGameEngine::cleanEngine()
 	CloseHandle(Hbuffer2);
 }
 
+void cGameEngine::swapHandle()
+{
+	count = 1 - count;
+	if (count % 2 == 0) {
+		curHandle = Hbuffer1;
+	}
+	else {
+		curHandle = Hbuffer2;
+	}
+}
+
 void cGameEngine::refreshBackGround(bool fillNow)
 {
 	memcpy(mainBuffer, gameMap::currentMap->mapArray, gameMap::currentMap->height * gameMap::currentMap->width * sizeof(CHAR_INFO));
@@ -165,6 +176,14 @@ void cGameEngine::refreshBackGround(bool fillNow)
 		WriteConsoleOutput(curHandle, mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, { 0,0 }, &PlayBoxRect);
 	}
 }
+
+void cGameEngine::fillScreen()
+{
+	WriteConsoleOutput(curHandle, mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, { 0,0 }, &PlayBoxRect);
+	SetConsoleActiveScreenBuffer(curHandle);
+}
+
+
 
 void cGameEngine::fillScreenWithLastFrame(bool fillNow)
 {
@@ -276,78 +295,7 @@ void cGameEngine::renderEnvironment(cEnvironment* pEnvironmentObject)
 	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pEnvironmentObject->pMotionFrame->textureArray, { pEnvironmentObject->pMotionFrame->width, pEnvironmentObject->pMotionFrame->height }, pEnvironmentObject->topleft);
 }
 
-void cGameEngine::pizzaDraw(cGame* pGame)
-{
-	//clear all entities
 
-
-	//put obstacles onto screen buffer
-	for (int i = 0; i < pGame->liveObstacles.size(); i++)
-	{
-		if (!pGame->suddenStop)
-		{
-			pGame->liveObstacles[i]->isStop = false;
-			pGame->liveObstacles[i]->move();
-		}
-		else {
-			pGame->liveObstacles[i]->isStop = true;
-		}
-		renderObstacle(pGame->liveObstacles[i]);
-
-
-	}
-	for (int i = 0; i < pGame->environmentObject.size(); i++)
-	{
-		renderEnvironment(pGame->environmentObject[i]);
-		pGame->environmentObject[i]->move();
-	}
-	//put people onto buffer
-	for (int i = 0; i < pGame->livePeople.size(); i++)
-	{
-		cPeople* itera = pGame->livePeople[i];
-		itera->move();
-		
-		renderPeople(itera);
-	}
-
-
-}
-
-void cGameEngine::maindraw(cGame* pGame)
-{
-	while (!pGame->isExit)
-	{
-		if (!pGame->isLose && !pGame->isPause)
-		{
-			count = 1 - count;
-			if (count % 2 == 0) {
-				curHandle = Hbuffer1;
-			}
-			else {
-				curHandle = Hbuffer2;
-			}
-			memcpy(mainBuffer, gameMap::currentMap->mapArray, gameMap::currentMap->height * gameMap::currentMap->width * sizeof(CHAR_INFO));
-			pizzaDraw(pGame);
-			pGame->updateInfo();
-			//thread g1(&cGameEngine::pizzaDraw, pGame);
-			//thread g2(&cGameEngine::updateInfo, pGame);
-
-			//g1.join();
-			//g2.join();
-
-			WriteConsoleOutput(curHandle, mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, { 0,0 }, &PlayBoxRect);
-			SetConsoleActiveScreenBuffer(curHandle);
-			gameMap::mapLoopCooldown--;
-
-			if (gameMap::mapLoopCooldown == 0)
-			{
-				gameMap::mapLoopCooldown = 15;
-				gameMap::nextMapFrame();
-			}
-			Sleep(25);
-		}
-	}
-}
 
 bool cGameEngine::showWidget(cWidget* pWidget, bool instant)
 {

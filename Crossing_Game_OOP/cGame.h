@@ -24,6 +24,7 @@ class cGame {
 	
 
 	friend cGameEngine;
+	vector<COORD> obstacleLanes;
     vector<cObstacle*> liveObstacles;
 	vector<cEnvironment*>  environmentObject;
     vector<cPeople *> livePeople;
@@ -85,10 +86,12 @@ class cGame {
 
 		void environmentImpact();
 
-		short getNumberOfLane();
+		//short getNumberOfLane();
 
-		vector<COORD> getPositionLane(); 		// COORD X is pos Y and Y is direction
+		//vector<COORD> getPositionLane(); 		// COORD X is pos Y and Y is direction
 
+		void drawThread();
+		void pizzaDraw();
 
 		vector<cPeople *> getPeople();
         vector<cObstacle *> getObstacles();
@@ -100,19 +103,11 @@ class cGame {
 		
 		void resetGame();
 		void exitGame(HANDLE t);
-		static void saveGame(cGame *pGame);
 		void pauseGame();	
-		static void resumeGame(cGame *pGame);
+		static void resumeGame();
 		void resumeFunction();
 		void save(string fileName);
 
-
-		//void updatePosPeople(char MOVING) {
-		//	if (!isPause) {
-
-		//	}
-		//		//people->move(MOVING);
-		//}
         bool isImpact();
 		
 		void updatePosObstacle();
@@ -128,7 +123,7 @@ class cGame {
 		void GameWin();
 
 		void drawBackGround();
-		void impactEffect(cObstacle* obsta);
+		//void impactEffect(cObstacle* obsta);
 		void spawnPeople();
 		
 		bool isFinishLevel();

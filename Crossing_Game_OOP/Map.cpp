@@ -84,7 +84,7 @@
         }
         else if (currentTheme == 2)
         {
-            return vector<short> {19, 107, 125};
+            return vector<short> {18, 37, 72, 90, 107, 125};
         }
     }
 
@@ -99,4 +99,15 @@
     void gameMap::nextMapFrame() {
         currentMapIndex = (currentMapIndex + 1) % numCurrentMapFrame;
         currentMap = &listMap[currentTheme][currentMapIndex];
+    }
+
+    void gameMap::mapChangeTick()
+    {
+        mapLoopCooldown--;
+
+        if (mapLoopCooldown == 0)
+        {
+            mapLoopCooldown = 15;
+            nextMapFrame();
+        }
     }

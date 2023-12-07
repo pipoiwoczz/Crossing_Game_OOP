@@ -11,6 +11,53 @@
 #include "gameEngine.h"
 #include "cTime"
 
+void cGame::pizzaDraw()
+{
+	for (int i = 0; i < liveObstacles.size(); i++)
+	{
+		if (!suddenStop)
+		{
+			liveObstacles[i]->isStop = false;
+			liveObstacles[i]->move();
+		}
+		else {
+			liveObstacles[i]->isStop = true;
+		}
+		cGameEngine::renderObstacle(liveObstacles[i]);
+
+
+	}
+	for (int i = 0; i < environmentObject.size(); i++)
+	{
+		cGameEngine::renderEnvironment(environmentObject[i]);
+		environmentObject[i]->move();
+	}
+	//put people onto buffer
+	for (int i = 0; i < livePeople.size(); i++)
+	{
+		livePeople[i]->move();
+		cGameEngine::renderPeople(livePeople[i]);
+	}
+
+
+}
+
+void cGame::drawThread()
+{
+	while (!isExit)
+	{
+		if (!isLose && !isPause)
+		{
+			cGameEngine::swapHandle();
+			cGameEngine::refreshBackGround(false);
+			pizzaDraw();
+			updateInfo();
+			gameMap::mapChangeTick();
+			Sleep(25);
+		}
+	}
+}
+
 bool cGame::InitGame()
 {
 	window.IsVisible = true;
@@ -381,8 +428,6 @@ void cGame::GamePausePanel()
 			//panel.unshow();
 			//panelButton[current].unshow();
 			panelFunct[current]();
-			if (current >= 3)
-				break;
 			panel.show();
 			panelButton[current].show();
 		}
@@ -913,7 +958,6 @@ void cGame::MainGame() {
 	isLose = false;
 	isPause = false;
 	isExit = false;
-	suddenStop = false;
 	//resetTime();
 
 	Sound::playBackGroundSound();
@@ -932,7 +976,7 @@ void cGame::MainGame() {
 	t2.show();
 
 	int i = 0;
-	thread drawingThread = thread(&cGameEngine::maindraw, this);
+	thread drawingThread = thread(&cGame::drawThread, this);
 	//if (cGameEngine::startDrawThread) {
 	//	drawingThread = thread(&cGameEngine::maindraw, this);
 	//	drawingThread.detach();
@@ -947,7 +991,6 @@ void cGame::MainGame() {
 				cooldown--;
 			else {
 				cooldown = 200;
-				suddenStop = !suddenStop;
 				for (cEnvironment* p : environmentObject)
 				{
 					if (p->hasEvent)
@@ -955,6 +998,7 @@ void cGame::MainGame() {
 						p->playEvent();
 					}
 				}
+				suddenStop = !suddenStop;
 			}
 		}
 		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
@@ -1186,7 +1230,6 @@ void cGame::spawnObstacle(const string& levelFile) {
 	ifstream levelIn;
 	levelIn.open(LevelPrefix + levelFile);
 	int linecount = 0;
-	vector<short> lineoffset = gameMap::getcurrentMapLayout();
 	while (!levelIn.eof())
 	{
 		int objcount;
@@ -1468,42 +1511,42 @@ void cGame::resetGame() {
 	MainGame();
 }
 
-short cGame::getNumberOfLane() {
-	int count = 0;
-	for (int i = 0; i < liveObstacles.size(); i++) {
-		if (count == 0) {
-			count++;
-		}
-		for (int j = 0; j < i; j++) {
-			if (j == i - 1) {
-				count++;
-			}
-			if (liveObstacles[i]->getPos().Y == liveObstacles[j]->getPos().Y) {
-				break;
-			}
-		}
-	}
-	return count;
-}
+//short cGame::getNumberOfLane() {
+//	int count = 0;
+//	for (int i = 0; i < liveObstacles.size(); i++) {
+//		if (count == 0) {
+//			count++;
+//		}
+//		for (int j = 0; j < i; j++) {
+//			if (j == i - 1) {
+//				count++;
+//			}
+//			if (liveObstacles[i]->getPos().Y == liveObstacles[j]->getPos().Y) {
+//				break;
+//			}
+//		}
+//	}
+//	return count;
+//}
 
 
-vector<COORD> cGame::getPositionLane() {
-	short n = getNumberOfLane();
-	vector<COORD> position;
-	position.resize(n);
-	for (int i = 0; i < n; i++) {
-		position[i].X = 0;
-	}
-	for (int i = 0; i < liveObstacles.size(); i++) {
-		for (int j = 0; j < n; j++) {
-			if (liveObstacles[i]->getPos().Y == position[j].X) {
-				break;
-			}
-			if (j == n - 1 || position[j].X == 0) {
-				position[j].X = liveObstacles[i]->getPos().Y;
-				position[j].Y = liveObstacles[i]->getDirection();
-			}
-		}
-	}
-	return position;
-}
+//vector<COORD> cGame::getPositionLane() {
+//	short n = getNumberOfLane();
+//	vector<COORD> position;
+//	position.resize(n);
+//	for (int i = 0; i < n; i++) {
+//		position[i].X = 0;
+//	}
+//	for (int i = 0; i < liveObstacles.size(); i++) {
+//		for (int j = 0; j < n; j++) {
+//			if (liveObstacles[i]->getPos().Y == position[j].X) {
+//				break;
+//			}
+//			if (j == n - 1 || position[j].X == 0) {
+//				position[j].X = liveObstacles[i]->getPos().Y;
+//				position[j].Y = liveObstacles[i]->getDirection();
+//			}
+//		}
+//	}
+//	return position;
+//}

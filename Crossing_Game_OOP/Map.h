@@ -32,6 +32,7 @@ public:
 	static vector<short> getcurrentMapLayout();
 	static void changeMapTheme(int newTheme);
 	static void nextMapFrame();
+	static void mapChangeTick();
 
 	friend cAsset;
 	friend bool mainLoader();
