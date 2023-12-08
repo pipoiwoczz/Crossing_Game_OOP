@@ -1,7 +1,7 @@
 #include "cAnimal.h"
 #include "hitbox.h"
 #include "cAsset.h"
-
+#include "Sound.h"
 
 
 
@@ -49,7 +49,14 @@ void cLion::hitEffect(cPeople* pVictim)
 
 void cLion::hitSound()
 {
-
+    if (!FxPlaying)
+    {
+        Sound::playSoundEffect(SoundEffect::lionFx);
+    }
+    else {
+        Sound::pauseSoundEffect(SoundEffect::lionFx);
+    }
+    FxPlaying = !FxPlaying;
 }
 
 cRhino::cRhino() : cRhino({ 0,20 }, 3, true) {}
@@ -94,7 +101,14 @@ void cRhino::hitEffect(cPeople* pVictim)
 
 void cRhino::hitSound()
 {
-
+    if (!FxPlaying)
+    {
+        Sound::playSoundEffect(SoundEffect::rhinoFx);
+    }
+    else {
+        Sound::pauseSoundEffect(SoundEffect::rhinoFx);
+    }
+    FxPlaying = !FxPlaying;
 }
 cCrocodile::cCrocodile() : cCrocodile({ 0,20 }, 3, true) {}
 cCrocodile::cCrocodile(COORD In_pos, /*int difficulty, int ttm*/ int speed, bool fromRight) : cAnimal(In_pos, /*difficulty, ttm*/ speed, fromRight) {
@@ -138,7 +152,14 @@ void cCrocodile::hitEffect(cPeople* pVictim)
 
 void cCrocodile::hitSound()
 {
-
+    if (!FxPlaying)
+    {
+        Sound::playSoundEffect(SoundEffect::crocoFx);
+    }
+    else {
+        Sound::pauseSoundEffect(SoundEffect::crocoFx);
+    }
+    FxPlaying = !FxPlaying;
 }
 
 

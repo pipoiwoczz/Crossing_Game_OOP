@@ -55,24 +55,6 @@ void cGame::collisionThread()
 			if (!isLose)
 				isImpact();
 
-			if (isLose)
-			{	
-				coinBonus = 0;
-				cDWindow dieeffect[5]{
-					cDWindow(&window, { 133, 11 }, "rip1.txt", false),
-					cDWindow(&window, { 133, 11 }, "rip2.txt", false),
-					cDWindow(&window, { 133, 11 }, "rip3.txt", false),
-					cDWindow(&window, {133, 11 }, "rip4.txt", false),
-					cDWindow(&window, {133, 11 }, "rip5.txt", false)
-				};
-				for (int i = 0; i < 5; i++)
-				{
-					dieeffect[i].show();
-					Sleep(300);
-				}
-				Sleep(2000);
-				GameDiePanel();
-			}
 			Sleep(10);
 		}
 	}
@@ -688,6 +670,7 @@ void cGame::GameSavePanel()
 	{
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 2)
 		{
+
 			Sound::playSoundEffect(SoundEffect::menuMove);
 			slots[current].unshow();
 			mapIcons[current].show();
@@ -960,6 +943,9 @@ void cGame::GameDiePanel() {
 				cGame::game.livePeople[i]->setPos({ short(0 + 100 * i), 145 });
 				cGame::game.livePeople[i]->setState(true);
 			};
+			game.nemesis = nullptr;
+			game.victim = nullptr;
+			Sound::resumeCurrentTrack();
 			cGame::game.timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 			cGame::game.timePause += (cGame::game.timePauseEnd - cGame::game.timePauseStart) / 1000;
 		},
@@ -1124,7 +1110,10 @@ void cGame::MainGame() {
 		cGameEngine::startDrawThread = false;
 	}
 	
-	Sound::playTrack(SoundTrack::background);
+	Sound::playTrack(SoundTrack::background, true);
+
+	nemesis = nullptr;
+	victim = nullptr;
 
 	while (!isExit) {
 		if (calculateTime() - time >= 1) {
@@ -1134,15 +1123,16 @@ void cGame::MainGame() {
 		}
 		if (coinBonus != coinNow) {
 			t7.updateText("30 x " + to_string(coinBonus / 30));
+			Sound::playSoundEffect(SoundEffect::coinEarn);
 			coinNow = coinBonus;
 		}
 		
 		if ((GetKeyState(VK_ESCAPE) & 0x8000) && !isLose)
 		{
-			Sound::pauseCurrentTrack();
+			//Sound::pauseCurrentTrack();
 			timePauseStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 			GamePausePanel();
-			Sound::resumeCurrentTrack();
+			//Sound::resumeCurrentTrack();
 		}
 	
 		if (!livePeople.empty() && livePeople[0]->passLevel) {
@@ -1153,6 +1143,32 @@ void cGame::MainGame() {
 			coinNow = 0;
 			t7.updateText("30 x " + to_string(coinBonus / 30));
 			t4.updateText(to_string(time));
+		}
+
+		if (isLose)
+		{
+			timePauseStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+
+			Sound::pauseCurrentTrack();
+			nemesis->hitSound();
+			cGameEngine::playEffect(nemesis, victim);
+			nemesis->hitSound();
+			Sleep(1000);
+			coinBonus = 0;
+			cDWindow dieeffect[5]{
+				cDWindow(&window, { 133, 11 }, "rip1.txt", false),
+				cDWindow(&window, { 133, 11 }, "rip2.txt", false),
+				cDWindow(&window, { 133, 11 }, "rip3.txt", false),
+				cDWindow(&window, {133, 11 }, "rip4.txt", false),
+				cDWindow(&window, {133, 11 }, "rip5.txt", false)
+			};
+			for (int i = 0; i < 5; i++)
+			{
+				dieeffect[i].show();
+				Sleep(300);
+			}
+			Sleep(2000);
+			GameDiePanel();
 		}
 		Sleep(10);
 	}
@@ -1189,13 +1205,10 @@ bool cGame::isImpact()
 				if (obstacle->Box.isOverlap(livePeople[i]->mBox)) // check overlap with each obstacles on screen
 				{
 					livePeople[i]->mState = false;
-					Sleep(200);
 					isPause = true;
 					isLose = true;
-					Sound::pauseCurrentTrack();
-					//Sound::playHitSound();
-					cGameEngine::playEffect(obstacle, livePeople[i]);
-					timePauseStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+					nemesis = obstacle;
+					victim = livePeople[i];
 					return true;
 				}
 			}

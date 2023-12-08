@@ -32,6 +32,7 @@ protected:
 
     bool movable = true;
     bool fromRight;
+    bool FxPlaying = false;
 public:
     Hitbox Box;
 

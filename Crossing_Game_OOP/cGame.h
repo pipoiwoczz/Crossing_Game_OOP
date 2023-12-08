@@ -57,6 +57,9 @@ class cGame {
 	thread drawThreadHandle;
 	thread randomStopThreadHandle;
 
+	cObstacle* nemesis;
+	cPeople* victim;
+
 	cGame();
 	~cGame();
 	public:

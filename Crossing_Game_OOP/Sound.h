@@ -8,7 +8,10 @@
 
 enum class SoundEffect {
 	menuMove = 0,
-	menuSelect = 1,
+	coinEarn = 1,
+	lionFx = 2,
+	rhinoFx = 3,
+	crocoFx = 4
  };
 enum class SoundTrack {
 	background = 0
@@ -46,7 +49,9 @@ public:
 	static void pauseCurrentTrack();
 
 	static void playTrack(SoundTrack track, bool repeat = false);
+
 	static void playSoundEffect(SoundEffect soundEffect);
+	static void pauseSoundEffect(SoundEffect soundEffect);
 
 	static void reduceSoundBackground();
 	static void increaseSoundBackground();

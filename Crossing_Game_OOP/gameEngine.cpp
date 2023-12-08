@@ -7,7 +7,6 @@
 #include "cAnimal.h"
 #include "cEnvironment.h"
 
-
 COORD cGameEngine::GetMonitorDimension()
 {
 	HDC hdc = GetDC(0);
@@ -441,8 +440,10 @@ bool cGameEngine::unshowBar(cBar* pBar, bool instant)
 
 }
 
-void cGameEngine::playEffect(cObstacle* obsta, cPeople* player) {
-
+void cGameEngine::playEffect(cObstacle* obsta, cPeople* player)
+{
+	if (!obsta || !player)
+		return;
 	short w = cAsset::FxFrame.width;
 	short h = cAsset::FxFrame.height;
 	COORD writepos = { 100, 31 };
@@ -459,7 +460,6 @@ void cGameEngine::playEffect(cObstacle* obsta, cPeople* player) {
 	SMALL_RECT re = { p.X, p.Y, p.X + player->pMotionFrame->width - 1, p.Y + player->pMotionFrame->height - 1 };
 
 	COORD startpos = { 50, 25 };
-
 	for (int j = 0; j < obsta->numFxFrame; j++)
 	{
 		WriteConsoleOutput(cGameEngine::curHandle, cAsset::FxFrame.textureArray, { w, h }, { 0,0 }, &fxframe);

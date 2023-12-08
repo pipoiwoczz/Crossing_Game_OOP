@@ -91,6 +91,11 @@ void Sound::playSoundEffect(SoundEffect soundEffect)
 	mciSendString(wstring(L"play " + SoundEffectList[int(soundEffect)] + L" from 0").c_str(), 0, 0, 0);
 }
 
+void Sound::pauseSoundEffect(SoundEffect soundEffect)
+{
+	mciSendString(wstring(L"pause " + SoundEffectList[int(soundEffect)]).c_str(), 0, 0, 0);
+}
+
 void Sound::reduceSoundBackground() {
 	BGSoundVolume -= 250;
 	BGSoundVolume = max(BGSoundVolume, 0);
