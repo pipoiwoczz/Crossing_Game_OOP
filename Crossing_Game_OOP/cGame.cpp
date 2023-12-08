@@ -34,6 +34,7 @@ void cGame::pizzaDraw()
 		cGameEngine::renderEnvironment(environmentObject[i]);
 		environmentObject[i]->move();
 	}
+
 	//put people onto buffer
 	for (int i = 0; i < livePeople.size(); i++)
 	{
@@ -56,6 +57,7 @@ void cGame::collisionThread()
 
 			if (isLose)
 			{
+				coinBonus = 0;
 				cDWindow dieeffect[5]{
 					cDWindow(&window, { 133, 11 }, "rip1.txt", false),
 					cDWindow(&window, { 133, 11 }, "rip2.txt", false),
@@ -135,6 +137,7 @@ void cGame::onGameReady()
 	{
 		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].unshow();
 			current--;
 			panelButton[current].show();
@@ -142,6 +145,7 @@ void cGame::onGameReady()
 
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 3)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].unshow();
 			current++;
 			panelButton[current].show();
@@ -292,6 +296,7 @@ void cGame::GamePlayPanel()
 	{
 		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].unshow();
 			if (current != 0)
 			{
@@ -312,6 +317,7 @@ void cGame::GamePlayPanel()
 		}
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 3)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].unshow();
 			if (current != 0)
 			{
@@ -384,12 +390,14 @@ void cGame::GameNewGamePanel()
 	{
 		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].onDeSelect();
 			current--;
 			panelButton[current].onSelect();
 		}
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 2)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].onDeSelect();
 			current++;
 			panelButton[current].onSelect();
@@ -447,12 +455,14 @@ void cGame::GamePausePanel()
 	{
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 5)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].unshow();
 			current++;
 			panelButton[current].show();
 		}
 		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].unshow();
 			current--;
 			panelButton[current].show();
@@ -506,6 +516,7 @@ void cGame::GameSettingsPanel()
 		{
 			if (currentarrowpos < 1) 
 			{
+				Sound::playSoundEffect(SoundEffect::menuMove);
 				currentarrowpos++;
 				selectarrow.unshow();
 				selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
@@ -513,6 +524,7 @@ void cGame::GameSettingsPanel()
 			}
 			 else if (currentarrowpos == 1)
 			{
+				Sound::playSoundEffect(SoundEffect::menuMove);
 				currentarrowpos++;
 				selectarrow.unshow();
 				buttonPanel[0][0].show();
@@ -523,6 +535,7 @@ void cGame::GameSettingsPanel()
 		}
 		if ((GetKeyState(VK_UP) & 0x8000) && currentarrowpos > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			if (currentarrowpos < 2) {
 				currentarrowpos--;
 				selectarrow.unshow();
@@ -530,6 +543,7 @@ void cGame::GameSettingsPanel()
 				selectarrow.show();
 			}
 			else if (currentarrowpos >= 2) {
+				Sound::playSoundEffect(SoundEffect::menuMove);
 				currentarrowpos = 1;
 				selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
 				selectarrow.show();		
@@ -549,6 +563,7 @@ void cGame::GameSettingsPanel()
 				Sleep(250);
 			}
 			else if (currentarrowpos == 3)  {
+				Sound::playSoundEffect(SoundEffect::menuMove);
 				buttonPanel[currentarrowpos - 2][1].onDeSelect();
 				currentarrowpos--;
 				selectarrow.unshow();
@@ -568,6 +583,7 @@ void cGame::GameSettingsPanel()
 			}
 			else {
 				if (currentarrowpos == 2) {
+					Sound::playSoundEffect(SoundEffect::menuMove);
 					buttonPanel[currentarrowpos - 2][1].onDeSelect();
 					currentarrowpos++;
 					selectarrow.unshow();
@@ -669,6 +685,7 @@ void cGame::GameSavePanel()
 	{
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 2)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			slots[current].unshow();
 			mapIcons[current].show();
 			current++;
@@ -676,6 +693,7 @@ void cGame::GameSavePanel()
 		}
 		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			slots[current].unshow();
 			mapIcons[current].show();
 			current--;
@@ -780,6 +798,7 @@ void cGame::GameLoadPanel()
 	{
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 2)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			slots[current].unshow();
 			mapIcons[current].show();
 			current++;
@@ -787,6 +806,7 @@ void cGame::GameLoadPanel()
 		}
 		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			slots[current].unshow();
 			mapIcons[current].show();
 			current--;
@@ -827,6 +847,7 @@ void cGame::GameQuitPanel(bool fullexit)
 	{
 		if ((GetKeyState(VK_DOWN) & 0x8000) && currentarrowpos < 1)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			currentarrowpos++;
 			selectarrow.unshow();
 			selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
@@ -834,6 +855,7 @@ void cGame::GameQuitPanel(bool fullexit)
 		}
 		if ((GetKeyState(VK_UP) & 0x8000) && currentarrowpos > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			currentarrowpos--;
 			selectarrow.unshow();
 			selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
@@ -891,6 +913,20 @@ void cGame::environmentImpact()
 					}
 						
 				}
+			} 
+			else {
+				if (environmentObject[j]->getType() == '1') {
+					for (int u = 0; u < livePeople.size(); u++)
+					{
+						if (environmentObject[j]->Box.isOverlap(livePeople[u]->mBox))
+						{
+							environmentObject[j]->hitSound();
+							coinBonus += 30;
+							delete environmentObject[j];
+							environmentObject.erase(environmentObject.begin() + j);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -935,12 +971,14 @@ void cGame::GameDiePanel() {
 	{
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 2)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].unshow();
 			current++;
 			panelButton[current].show();
 		}
 		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].unshow();
 			current--;
 			panelButton[current].show();
@@ -973,6 +1011,7 @@ cGame::cGame()
 	totalPoint = 0;
 	timePause = 0;
 	totalTime = 0;
+	coinBonus = 0;
 }
 cGame::~cGame()
 {
@@ -1011,22 +1050,47 @@ void cGame::MainGame() {
 	isLose = false;
 	isPause = false;
 	isExit = false;
+	
+	timeStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+	
 	//resetTime();
 
-	Sound::playBackGroundSound();
+	Sound::playSound(L"test.mp3", 1);
 	//Sound::musicThread();	
 
 	cDWindow rr(&window, { 504, 0 }, "panelinfo.txt", true);
+	cDWindow howtoplay(&rr, { 0,110 }, "coin.txt", true);
 	cLabel t1(&rr, { 10, 5 }, "SCORES", 1, Color::red, true);
 	string point = to_string(totalPoint);
 	cLabel t2(&rr, { 10, 15 }, point, 2, Color::red, true);
+	cLabel t3(&rr, { 10, 25 }, "TIME", 1, Color::red, true);
+	int time = int(calculateTime());
+	string timeString = to_string(time);
+	cLabel t4(&rr, { 10, 35 }, timeString, 2, Color::red, true);
+	cLabel t5(&rr, { 10, 150 }, "ESC: PAUSE", 1, Color::red, true);
+
+	cLabel t6(&rr, { 10, 45 }, "COINS", 1, Color::red, true);
+	cLabel t7(&rr, { 10, 55 }, "30 x 0", 2, Color::red, true);
+	int coinNow = 0;
 
 	listWidget.push_back(&rr);
 	rr.show();
+	listWidget.push_back(&howtoplay);
+	howtoplay.show();
 	listLabel.push_back(&t1);
 	t1.show();
 	listLabel.push_back(&t2);
 	t2.show();
+	listLabel.push_back(&t3);
+	t3.show();
+	listLabel.push_back(&t4);
+	t4.show();
+	listLabel.push_back(&t5);
+	t5.show();
+	listLabel.push_back(&t6);
+	t6.show();
+	listLabel.push_back(&t7);
+	t7.show();
 
 	int i = 0;
 	thread randomEventThread;
@@ -1034,10 +1098,25 @@ void cGame::MainGame() {
 	{
 		randomEventThread = thread(&cGame::randomStopThread, this);
 	}
-	thread drawingThread = thread(&cGame::drawThread, this);
+	thread drawingThread;// = thread(&cGame::drawThread, this);
 	thread collisionCheckingThread = thread(&cGame::collisionThread, this);
+	if (cGameEngine::startDrawThread) {
+		drawingThread = thread(&cGame::drawThread, this);
+		cGameEngine::startDrawThread = false;
+	}
+
 
 	while (!isExit) {
+		if (calculateTime() - time >= 1) {
+			time = int(calculateTime());
+			timeString = to_string(time);
+			t4.updateText(timeString);
+		}
+		if (coinBonus != coinNow) {
+			t7.updateText("30 x " + to_string(coinBonus / 30));
+			coinNow = coinBonus;
+		}
+		
 		if ((GetKeyState(VK_ESCAPE) & 0x8000) && !isLose)
 		{
 			GamePausePanel();
@@ -1047,12 +1126,17 @@ void cGame::MainGame() {
 			nextLevel();
 			t2.updateText(to_string(totalPoint));
 			livePeople[0]->passLevel = false;
+			time = 0;
+			coinNow = 0;
+			t7.updateText("30 x " + to_string(coinBonus / 30));
+			t4.updateText(to_string(time));
 		}
 		Sleep(10);
 	}
 	Sound::pauseCurrentSound();
 	drawingThread.join();
 	collisionCheckingThread.join();
+	cGameEngine::startDrawThread = true;
 	if (hasSuddenStop)
 	{
 		randomEventThread.join();
@@ -1109,56 +1193,56 @@ void cGame::randomStopThread()
 	long long stopDuration = 0;
 	long long stopCooldown = 0;
 	short stopped = -1; //indicate which line is stopped, if any
-	while (!isExit)
-	{
-		if (isPause || isLose)
-			continue;
-		long long timePassed = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count() - lastTime;
-		if (timePassed <= 0)
-			continue;
+	//while (!isExit)
+	//{
+	//	if (isPause || isLose)
+	//		continue;
+	//	long long timePassed = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count() - lastTime;
+	//	if (timePassed <= 0)
+	//		continue;
 
-		if (stopCooldown > 0)
-		{
-			if (stopDuration > 0)
-			{
-				stopDuration -= timePassed;
-				if (stopDuration <= 0)
-				{
-					for (cObstacle* element : liveObstacles)
-					{
-						if (element->getPos().Y == stopped)
-							element->resume();
-					}
-					//stopped = -1;
-				}
-			}
-			stopCooldown -= timePassed;
-			// (sleep until cooldown is over)
-			//Sleep(stopCooldown);
-		}
-		else
-		{
-			int roll = rand() % 30000 + 1; // randomly determines if something will stop - chance is (1/30000) * [ms passed] --- can also be changed to always stop after a set interval
-			if (roll > timePassed)
-			{
-				// (sleep until next frame)
-				//Sleep(16);
-				continue;
-			}
-			roll = rand() % obstacleLanes.size(); // randomly determines which line will be stopped
-			for (cObstacle* element : liveObstacles)
-			{
-				if (element->getPos().Y == obstacleLanes[roll].Y)
-					element->stop();
-			}
+	//	if (stopCooldown > 0)
+	//	{
+	//		if (stopDuration > 0)
+	//		{
+	//			stopDuration -= timePassed;
+	//			if (stopDuration <= 0)
+	//			{
+	//				for (cObstacle* element : liveObstacles)
+	//				{
+	//					if (element->getPos().Y == stopped)
+	//						element->resume();
+	//				}
+	//				//stopped = -1;
+	//			}
+	//		}
+	//		stopCooldown -= timePassed;
+	//		// (sleep until cooldown is over)
+	//		//Sleep(stopCooldown);
+	//	}
+	//	else
+	//	{
+	//		int roll = rand() % 30000 + 1; // randomly determines if something will stop - chance is (1/30000) * [ms passed] --- can also be changed to always stop after a set interval
+	//		if (roll > timePassed)
+	//		{
+	//			// (sleep until next frame)
+	//			//Sleep(16);
+	//			continue;
+	//		}
+	//		roll = rand() % obstacleLanes.size(); // randomly determines which line will be stopped
+	//		for (cObstacle* element : liveObstacles)
+	//		{
+	//			if (element->getPos().Y == obstacleLanes[roll].Y)
+	//				element->stop();
+	//		}
 
-			roll = rand() % 10000; // randomly determines stop duration (from 5 - 15s)
-			stopDuration = roll + 5000;
-			stopCooldown = stopDuration + 10000;
-			// (sleep until next frame)
-			//Sleep(16);
-		}
-	}
+	//		roll = rand() % 10000; // randomly determines stop duration (from 5 - 15s)
+	//		stopDuration = roll + 5000;
+	//		stopCooldown = stopDuration + 10000;
+	//		// (sleep until next frame)
+	//		//Sleep(16);
+	//	}
+	//}
 }
 
 void cGame::resumeFunction()
@@ -1209,7 +1293,7 @@ void cGame::save(string fileName) {
 
 	for (int i = 0; i < obstacleCount; i++)
 	{
-		ofs << liveObstacles[i]->getType() << " " << liveObstacles[i]->getPos().X << " " << liveObstacles[i]->getPos().Y << " " << liveObstacles[i]->getSpeed() << liveObstacles[i]->getDirection() << endl;
+		ofs << liveObstacles[i]->getType() << " " << liveObstacles[i]->getPos().X << " " << liveObstacles[i]->getPos().Y << " " << liveObstacles[i]->getSpeed() << " " << liveObstacles[i]->getDirection() << endl;
 	}
 
 	ofs.close();
@@ -1285,6 +1369,8 @@ void cGame::spawnObstacle(const string& levelFile) {
 		linecount++;
 	}
 	levelIn.close();
+
+	spawnCoin();
 }
 
 bool cGame::isFinishLevel() {
@@ -1293,6 +1379,7 @@ bool cGame::isFinishLevel() {
 }
 
 double cGame::calculateTime() {
+	timeEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 	double time = timeEnd - timeStart + timePauseStart - timePauseEnd;
 	return time / 1000.0;
 	return 0;
@@ -1314,6 +1401,7 @@ void cGame::calculatePoint() {
 	cout << "Total point: " << totalPoint << endl;
 	totalTime += calculateTime();
 	totalPoint += 100 + bonus[count];
+	totalPoint += coinBonus;
 	resetTime();
 }
 
@@ -1324,7 +1412,7 @@ void cGame::nextLevel() {
 	this->gameLevel++;
 	//gameMap::nextMap();
 	calculatePoint();
-
+	coinBonus = 0;
 	clearObjects();
 	spawnObstacle(CreatedLevel[currentTheme][(currentPhase + 1) % CreatedLevel[currentTheme].size()]);
 }
@@ -1566,3 +1654,20 @@ void cGame::resetGame() {
 //	}
 //	return position;
 //}
+
+void cGame::spawnCoin() {
+	int random = rand() % 6 + 1; // number of coins from 1 to 6
+	for (int i = 0; i < random; i++) {
+		short y = 4 + (rand() % 9) * 18;
+		short x = rand() % 475 + 1;
+		for (int j = 0; j < environmentObject.size(); j++) {
+			if (environmentObject[j]->getType() == '1') {
+				while (environmentObject[j]->getPos().Y == y && abs(environmentObject[j]->getPos().X - x) <= 24) {
+					y = 4 + (rand() % 9) * 18;
+					x = rand() % 475 + 1;
+				}
+			}
+		}
+		environmentObject.push_back(new cCoin({ x, y }));
+	}
+}

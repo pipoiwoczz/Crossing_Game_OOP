@@ -18,7 +18,6 @@ const string CubePrefix = "Player//Cube//";
 const string RabbitPrefix = "Player//Rabbit//";
 const string MapPrefix = "Maps//";
 const string LevelPrefix = "Level//";
-
 const HANDLE mainHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
 int Sound::BGSoundVolume = 1000;
@@ -42,6 +41,7 @@ bool enginecheck = cGameEngine::startEngine();
 
 //GameAsset
 Texture cAsset::blankchar;
+Texture cCoin::motionFrame;
 vector<Texture> cTrafficLight::motionFrames;
 vector<Texture> cLilyleaf::motionFrames;
 vector<Texture> cLion::motionFramesR;
@@ -96,6 +96,8 @@ bool mainLoader()
 	cAsset::blankchar = cAsset::assetLoader("Char//Alphabet//blank.txt");
 	loadingBar.setProgress(false, 10);
 
+	cCoin::motionFrame = cAsset::assetLoader("Obstacles//coin.txt");
+
 	cTrafficLight::motionFrames = cAsset::assetLoaders(trafficlightFile, TexturePrefix);
 	cLilyleaf::motionFrames = cAsset::assetLoaders(lilyFile, TexturePrefix);
 
@@ -142,7 +144,7 @@ bool mainLoader()
 		gameMap::listMap.push_back(gameMap::loadMap(mapFiles[i]));
 	}
 	loadingBar.unshow();
-	Sound::playSoundList();
+	Sound::openSoundList();
 	loadingBar.setProgress(false, 100);
 	Sleep(100);
 

@@ -13,7 +13,7 @@ extern const string LevelPrefix;
 //Environment objects
 const vector<string> trafficlightFile {"trafficlightgreen.txt", "trafficlightred.txt"};
 const vector<string> lilyFile { "lily.txt" };		
-
+const vector<string> coinFile { "coin.txt" };
 //Obstacles objects
 const vector<string> lionFileR { "LionR1.txt","LionR2.txt","LionR3.txt", "LionR2.txt" };
 const vector<string> lionFileL { "LionL1.txt", "LionL2.txt", "LionL3.txt", "LionL2.txt"};

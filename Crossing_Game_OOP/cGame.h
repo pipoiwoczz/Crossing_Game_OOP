@@ -11,6 +11,7 @@ class cWidget;
 class cGameEngine;
 class cLabel;
 class cGame;
+class cCoin;
 
 class cGame {
 
@@ -39,6 +40,8 @@ class cGame {
 	//Special events
 	bool hasSuddenStop = false;
 
+	//Game info
+	long coinBonus;
 	long totalPoint;
 	double totalTime;
 	double timeStart, timeEnd;
@@ -133,6 +136,7 @@ class cGame {
 		void nextLevel();
 		void endlessMode();
 
+		void spawnCoin();
 };
 
 #endif
