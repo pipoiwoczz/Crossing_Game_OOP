@@ -73,12 +73,15 @@ public:
 
 class cCoin : public cEnvironment {
 private:
+    bool up = false;
     static Texture motionFrame;
 public:
     friend bool mainLoader();
 
 	cCoin(COORD In_pos);
 	unsigned char getType();
+
+    void move();
 
 	void hitEffect(cPeople* pVictim);
 	void hitSound();

@@ -72,6 +72,10 @@ vector<Texture> cShark::impactFx;
 vector<Texture> cSurfer::impactFx;
 vector<vector<gameMap>> gameMap::listMap;
 
+wstring Sound::currentSound;
+vector<wstring> Sound::SoundEffectList = { L"menuMove", L"menuSelect" };
+vector<wstring> Sound::TrackList = { L"background" };
+
 int gameMap::currentTheme;
 gameMap* gameMap::currentMap;
 int gameMap::currentMapIndex;
@@ -89,6 +93,7 @@ bool gameinit = cGame::InitGame();
 bool mainLoader()
 {
 	cAsset::settingsLoader();
+	Sound::startAudioEngine();
 	cBar loadingBar(&cGame::mainMenu, { 20, 140 },  500, 8, Color::red, Color::white);
 	cAsset::alphabetLoader();
 	cAsset::numberLoader();
@@ -144,7 +149,6 @@ bool mainLoader()
 		gameMap::listMap.push_back(gameMap::loadMap(mapFiles[i]));
 	}
 	loadingBar.unshow();
-	Sound::openSoundList();
 	loadingBar.setProgress(false, 100);
 	Sleep(100);
 
@@ -156,5 +160,7 @@ bool cGame::mainloop = mainLoader();
 int main() {
 	cGame::onGameReady();
 	cAsset::settingSave();
+
+	Sound::cleanAudioEngine();
 	cGameEngine::cleanEngine();
 }

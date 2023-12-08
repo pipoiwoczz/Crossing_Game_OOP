@@ -28,6 +28,8 @@ void cRiver::hitSound()
 
 cLilyleaf::cLilyleaf(COORD In_pos, int speed, bool fromRight) : cEnvironment(In_pos, speed, fromRight)
 {
+    defaulttimeUntilRender = 4;
+
     friendly = true;
     pMotionFrame = &motionFrames[0];
     pLMotionFrames = pMotionFrame;
@@ -49,6 +51,9 @@ void cLilyleaf::hitSound() {
 
 cTrafficLight::cTrafficLight(COORD In_pos) : cEnvironment(In_pos, 0, true)
 {
+
+    defaulttimeUntilRender = 4;
+
     friendly = true;
     hasEvent = true;
     hasFrameMove = false;
@@ -84,15 +89,39 @@ void cTrafficLight::playEvent()
 }
 
 cCoin::cCoin(COORD In_pos): cEnvironment(In_pos, 0, true) {
+    defaulttimeUntilMove = 10;
+
     friendly = true;
     hasEvent = false;
     hasFrameMove = false;
-    movable = false;
+    movable = true;
     pMotionFrame = &motionFrame;
     pLMotionFrames = pMotionFrame;
     currentFrame = 0;
     numMotionFrame = 1;
     Box.set(topleft, { short(topleft.X + pMotionFrame->getWidth() - 1), short(topleft.Y + pMotionFrame->getHeight() - 1) });
+}
+
+void cCoin::move()
+{
+    if (timeUntilMove > 0)
+    {
+        timeUntilMove--;
+    }
+    else {
+        if (up)
+        {
+            topleft.Y -= 2;
+            Box.move({ 0,-2 });
+        }
+        else {
+            topleft.Y += 2;
+            Box.move({ 0, 2 });
+        }
+        up = !up;
+        timeUntilMove = defaulttimeUntilMove;
+    }
+
 }
 
 unsigned char cCoin::getType()

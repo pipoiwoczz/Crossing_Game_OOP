@@ -217,6 +217,7 @@ void cGame::prepareGame()
 	clearObjects();
 	spawnObstacle(CreatedLevel[currentTheme][currentPhase]);
 	spawnEnvironment();
+	spawnCoin();
 	spawnPeople();
 }
 
@@ -1055,7 +1056,6 @@ void cGame::MainGame() {
 	
 	//resetTime();
 
-	Sound::playSound(L"test.mp3", 1);
 	//Sound::musicThread();	
 
 	cDWindow rr(&window, { 504, 0 }, "panelinfo.txt", true);
@@ -1104,7 +1104,8 @@ void cGame::MainGame() {
 		drawingThread = thread(&cGame::drawThread, this);
 		cGameEngine::startDrawThread = false;
 	}
-
+	
+	Sound::playTrack(SoundTrack::background);
 
 	while (!isExit) {
 		if (calculateTime() - time >= 1) {
@@ -1119,7 +1120,9 @@ void cGame::MainGame() {
 		
 		if ((GetKeyState(VK_ESCAPE) & 0x8000) && !isLose)
 		{
+			Sound::pauseCurrentTrack();
 			GamePausePanel();
+			Sound::resumeCurrentTrack();
 		}
 	
 		if (livePeople[0]->passLevel) {
@@ -1133,7 +1136,7 @@ void cGame::MainGame() {
 		}
 		Sleep(10);
 	}
-	Sound::pauseCurrentSound();
+	Sound::pauseCurrentTrack();
 	drawingThread.join();
 	collisionCheckingThread.join();
 	cGameEngine::startDrawThread = true;
@@ -1163,7 +1166,7 @@ bool cGame::isImpact()
 					Sleep(200);
 					isPause = true;
 					isLose = true;
-					Sound::pauseCurrentSound();
+					Sound::pauseCurrentTrack();
 					//Sound::playHitSound();
 					cGameEngine::playEffect(obstacle, livePeople[i]);
 					return true;
@@ -1369,8 +1372,6 @@ void cGame::spawnObstacle(const string& levelFile) {
 		linecount++;
 	}
 	levelIn.close();
-
-	spawnCoin();
 }
 
 bool cGame::isFinishLevel() {
@@ -1396,17 +1397,11 @@ void cGame::calculatePoint() {
 	this->timeEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 	int bonus[6] = { 120, 70, 35, 15, 5, 0 };
 	int count = min(int(calculateTime() / 5), 5);
-	cout << "Time: " << calculateTime() << endl;
-	cout << "Bonus: " << bonus[count] << endl;
-	cout << "Total point: " << totalPoint << endl;
 	totalTime += calculateTime();
 	totalPoint += 100 + bonus[count];
 	totalPoint += coinBonus;
 	resetTime();
 }
-
-void foo()
-{}
 
 void cGame::nextLevel() {
 	this->gameLevel++;

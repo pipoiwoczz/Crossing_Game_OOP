@@ -11,8 +11,8 @@ private:
 protected:
     COORD topleft; // coordinates of center of sprite
     int speed; // determines time interval between moves. smaller = faster
-    int timeUntilMove; // time left before move is executed. if 0 or less, move, then reset this to be equal to speed
-
+    int timeUntilMove = 0; // time left before move is executed. if 0 or less, move, then reset this to be equal to speed
+    int defaulttimeUntilMove;
 
     int timeUntilRender = 0;
     int defaulttimeUntilRender;
