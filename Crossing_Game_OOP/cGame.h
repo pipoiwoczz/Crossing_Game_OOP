@@ -38,10 +38,6 @@ class cGame {
 
 	//Special events
 	bool hasSuddenStop = false;
-	vector<short> waiting;
-	vector<bool> flag;
-	void createStopEvent();
-	int cooldown = 0;
 
 	long totalPoint;
 	double totalTime;

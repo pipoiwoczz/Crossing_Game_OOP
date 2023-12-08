@@ -1007,40 +1007,6 @@ void cGame::updatePosObstacle()
 	}
 }
 
-void cGame::createStopEvent()
-{
-	if (hasSuddenStop)
-	{
-		//if (cooldown > 0)
-		//{
-		//	cooldown--;
-		//	return;
-		//}
-		//cooldown = 200;
-		srand((unsigned int)time(NULL));
-		int target = rand() % obstacleLanes.size();
-		if (!flag[target])
-		{
-			for (cObstacle* pObs : liveObstacles)
-			{
-				if (pObs->getPos().Y == obstacleLanes[target].Y)
-				{
-					pObs->stop();
-				}
-			}
-			for (cEnvironment* element : environmentObject)
-			{
-				if (element->hasEvent && element->getPos().Y == obstacleLanes[target].Y)
-					element->playEvent();
-			}
-			flag[target] = true;
-			waiting[target] = 100;
-
-		}
-	}
-	Sleep(65);
-}
-
 void cGame::MainGame() {
 	isLose = false;
 	isPause = false;
@@ -1066,25 +1032,12 @@ void cGame::MainGame() {
 	thread randomEventThread;
 	if (hasSuddenStop)
 	{
-		flag.resize(obstacleLanes.size(), false);
-		waiting.resize(obstacleLanes.size(), 0);
 		randomEventThread = thread(&cGame::randomStopThread, this);
-
 	}
 	thread drawingThread = thread(&cGame::drawThread, this);
 	thread collisionCheckingThread = thread(&cGame::collisionThread, this);
-	//if (cGameEngine::startDrawThread) {
-	//	drawingThread = thread(&cGameEngine::maindraw, this);
-	//	drawingThread.detach();
-	//	cGameEngine::startDrawThread = false;
-	//}
-
-	
-
-
 
 	while (!isExit) {
-		createStopEvent();
 		if ((GetKeyState(VK_ESCAPE) & 0x8000) && !isLose)
 		{
 			GamePausePanel();
@@ -1156,99 +1109,56 @@ void cGame::randomStopThread()
 	long long stopDuration = 0;
 	long long stopCooldown = 0;
 	short stopped = -1; //indicate which line is stopped, if any
-
-
-	int n = obstacleLanes.size();
-
 	while (!isExit)
 	{
-		if (isLose || isPause)
+		if (isPause || isLose)
+			continue;
+		long long timePassed = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count() - lastTime;
+		if (timePassed <= 0)
 			continue;
 
-		for (int i = 0; i < n; i++)
+		if (stopCooldown > 0)
 		{
-
-			if (flag[i])
+			if (stopDuration > 0)
 			{
-				if (waiting[i] > 0)
-					waiting[i]--;
-				else {
-					for (cObstacle* pObs : liveObstacles)
+				stopDuration -= timePassed;
+				if (stopDuration <= 0)
+				{
+					for (cObstacle* element : liveObstacles)
 					{
-						if (pObs->getPos().Y == obstacleLanes[i].Y)
-						{
-							pObs->resume();
-						}
+						if (element->getPos().Y == stopped)
+							element->resume();
 					}
-					for (cEnvironment* element : environmentObject)
-					{
-						if (element->hasEvent && element->getPos().Y == obstacleLanes[i].Y)
-							element->playEvent();
-					}
-					flag[i] = !flag[i];
+					//stopped = -1;
 				}
-
 			}
+			stopCooldown -= timePassed;
+			// (sleep until cooldown is over)
+			//Sleep(stopCooldown);
 		}
-		Sleep(50);
-		
+		else
+		{
+			int roll = rand() % 30000 + 1; // randomly determines if something will stop - chance is (1/30000) * [ms passed] --- can also be changed to always stop after a set interval
+			if (roll > timePassed)
+			{
+				// (sleep until next frame)
+				//Sleep(16);
+				continue;
+			}
+			roll = rand() % obstacleLanes.size(); // randomly determines which line will be stopped
+			for (cObstacle* element : liveObstacles)
+			{
+				if (element->getPos().Y == obstacleLanes[roll].Y)
+					element->stop();
+			}
+
+			roll = rand() % 10000; // randomly determines stop duration (from 5 - 15s)
+			stopDuration = roll + 5000;
+			stopCooldown = stopDuration + 10000;
+			// (sleep until next frame)
+			//Sleep(16);
+		}
 	}
-
-	//while (!isExit)
-	//{
-	//	if (isLose || isPause)
-	//		continue;
-	//	long long timePassed = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count() - lastTime;
-	//	if (timePassed <= 0)
-	//		continue;
-
-	//	if (stopCooldown > 0)
-	//	{
-	//		if (stopDuration > 0)
-	//		{
-	//			stopDuration -= timePassed;
-	//		}
-	//		else {
-	//			for (cObstacle* element : liveObstacles)
-	//			{
-	//				if (element->getPos().Y == stopped)
-	//					element->resume();
-	//			}
-	//			for (cEnvironment* element : environmentObject)
-	//			{
-	//				if (element->hasEvent && element->getPos().Y == stopped)
-	//					element->playEvent();
-	//			}
-	//		}
-	//		// (sleep until cooldown is over)
-	//		//Sleep(stopCooldown);
-	//	}
-	//	else {
-	//		int roll = rand() % 30000 + 1; // randomly determines if something will stop - chance is (1/30000) * [ms passed] --- can also be changed to always stop after a set interval
-	//		if (roll > timePassed)
-	//		{
-	//			// (sleep until next frame)
-	//			//Sleep(16);
-	//			continue;
-	//		}
-	//		roll = rand() % obstacleLanes.size(); // randomly determines which line will be stopped
-	//		for (cObstacle* element : liveObstacles)
-	//		{
-	//			if (element->getPos().Y == obstacleLanes[roll].Y)
-	//				element->stop();
-	//		}
-	//		for (cEnvironment* element : environmentObject)
-	//		{
-	//			if (element->hasEvent && element->getPos().Y == obstacleLanes[roll].Y)
-	//				element->playEvent();
-	//		}
-	//		roll = rand() % 10000; // randomly determines stop duration (from 5 - 15s)
-	//		stopDuration = roll + 5000;
-	//		stopCooldown = stopDuration + 10000;
-	//		// (sleep until next frame)
-	//		Sleep(16);
-	//	}
-	//}
 }
 
 void cGame::resumeFunction()
