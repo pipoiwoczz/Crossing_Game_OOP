@@ -1170,6 +1170,7 @@ void cGame::MainGame() {
 	clearObjects(true, true);
 	listWidget.clear();
 	listLabel.clear();
+	isStart = false;
 }
 
 
@@ -1226,7 +1227,7 @@ void cGame::randomStopThread()
 		stopDuration.push_back(-x);
 		laneStopped.push_back(obstacleLanes[i].Y);
 	}
-	while (!isExit) {
+	while (hasSuddenStop && !isExit) {
 		long long currentTime = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 		long long timePassed = currentTime - now;
 		if (timePassed <= 0)
@@ -1243,6 +1244,7 @@ void cGame::randomStopThread()
 						ele->resume();
 					}
 				}
+				
 			}
 			else {
 				for (cObstacle* ele : liveObstacles) {
@@ -1503,6 +1505,11 @@ void cGame::GameWin() {
 }
 void cGame::load(string fileName)
 {
+	if (hasSuddenStop)
+	{
+		hasSuddenStop = false;
+		randomStopThreadHandle.join();
+	}
 	game.clearObjects(true, true);
 
 	ifstream ifs(fileName);
@@ -1571,7 +1578,14 @@ void cGame::load(string fileName)
 	gameMap::changeMapTheme(game.currentTheme);
 	gameMap::currentMap = &gameMap::listMap[game.currentTheme][game.currentPhase];
 	game.spawnEnvironment();	
-	MainGame();
+	if (isStart)
+	{
+		isPause = false;
+	}
+	else {
+		MainGame();
+
+	}
 	
 }
 void cGame::ScoreBoard() {
