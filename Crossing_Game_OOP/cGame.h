@@ -52,10 +52,10 @@ class cGame {
 	int currentTheme;
 	int currentPhase;
 
-	//Threads
-	thread drawingThread;
-	thread randomEventThread;
-	thread collisionCheckingThread;
+	//thread handler
+	thread collisionThreadHandle;
+	thread drawThreadHandle;
+	thread randomStopThreadHandle;
 
 	cGame();
 	~cGame();

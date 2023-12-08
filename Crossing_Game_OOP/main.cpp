@@ -158,6 +158,7 @@ bool mainLoader()
 bool cGame::mainloop = mainLoader();
 
 int main() {
+	srand(NULL);
 	cGame::onGameReady();
 	cAsset::settingSave();
 

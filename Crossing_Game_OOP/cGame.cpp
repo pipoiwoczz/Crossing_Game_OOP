@@ -56,7 +56,7 @@ void cGame::collisionThread()
 				isImpact();
 
 			if (isLose)
-			{
+			{	
 				coinBonus = 0;
 				cDWindow dieeffect[5]{
 					cDWindow(&window, { 133, 11 }, "rip1.txt", false),
@@ -427,7 +427,6 @@ void cGame::GameNewGamePanel()
 void cGame::GamePausePanel()
 {
 	isPause = true;
-	timePauseStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 	cDWindow panel(&window, { 122, 11 }, "panelpause.txt", true);
 	cButton panelButton[6]{
 		cButton(&panel, { 42, 21 }, "buttonresume.txt", 1),
@@ -443,6 +442,8 @@ void cGame::GamePausePanel()
 			cGameEngine::fillScreenWithLastFrame(true);
 			game.resumeFunction();
 			game.isPause = false;
+			game.timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+			game.timePause += (game.timePauseEnd - game.timePauseStart) / 1000  ;
 		},
 		[]() {game.GameSettingsPanel(); },
 		[]() {game.GameSavePanel(); },
@@ -897,6 +898,7 @@ void cGame::environmentImpact()
 					isCook = true;
 					if (environmentObject[j]->pSafe->Box.isOverlap(livePeople[u]->mBox))
 					{
+						timePauseStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 						livePeople[u]->mState = true;
 						isCook = false;
 					}
@@ -957,7 +959,9 @@ void cGame::GameDiePanel() {
 			{
 				cGame::game.livePeople[i]->setPos({ short(0 + 100 * i), 145 });
 				cGame::game.livePeople[i]->setState(true);
-			}
+			};
+			cGame::game.timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+			cGame::game.timePause += (cGame::game.timePauseEnd - cGame::game.timePauseStart) / 1000;
 		},
 		[]() {
 			game.GameLoadPanel();
@@ -989,6 +993,7 @@ void cGame::GameDiePanel() {
 		Sleep(100);
 		if (GetKeyState(0x0D) & 0x8000)
 		{
+
 			panelFunct[current]();
 			if (current < 2)
 				break;
@@ -1076,33 +1081,48 @@ void cGame::MainGame() {
 	cLabel t7(&rr, { 10, 55 }, "30 x 0", 2, Color::red, true);
 	int coinNow = 0;
 
-	listWidget.push_back(&rr);
-	rr.show();
-	listWidget.push_back(&howtoplay);
-	howtoplay.show();
-	listLabel.push_back(&t1);
-	t1.show();
-	listLabel.push_back(&t2);
-	t2.show();
-	listLabel.push_back(&t3);
-	t3.show();
-	listLabel.push_back(&t4);
-	t4.show();
-	listLabel.push_back(&t5);
-	t5.show();
-	listLabel.push_back(&t6);
-	t6.show();
-	listLabel.push_back(&t7);
-	t7.show();
-
-	int i = 0;
-	if (hasSuddenStop)
+	if (listWidget.size() < 2)
 	{
-		randomEventThread = thread(&cGame::randomStopThread, this);
+		listWidget.push_back(&rr);
+		rr.show();
+		listWidget.push_back(&howtoplay);
+		howtoplay.show();
+	}
+	if (listLabel.size() < 7) {
+		listLabel.push_back(&t1);
+		t1.show();
+		listLabel.push_back(&t2);
+		t2.show();
+		listLabel.push_back(&t3);
+		t3.show();
+		listLabel.push_back(&t4);
+		t4.show();
+		listLabel.push_back(&t5);
+		t5.show();
+		listLabel.push_back(&t6);
+		t6.show();
+		listLabel.push_back(&t7);
+		t7.show();
 	}
 
-	collisionCheckingThread = thread(&cGame::collisionThread, this);
-	drawingThread = thread(&cGame::drawThread, this);
+
+	int i = 0;
+	if (currentTheme == 2) {
+		hasSuddenStop = true;
+	}
+	else {
+		hasSuddenStop = false;
+	}
+	
+	if (cGameEngine::startDrawThread) {
+		drawThreadHandle = thread(&cGame::drawThread, this);
+		collisionThreadHandle = thread(&cGame::collisionThread, this);
+		if (hasSuddenStop)
+		{
+			randomStopThreadHandle = thread(&cGame::randomStopThread, this);
+		}
+		cGameEngine::startDrawThread = false;
+	}
 	
 	Sound::playTrack(SoundTrack::background);
 
@@ -1120,11 +1140,12 @@ void cGame::MainGame() {
 		if ((GetKeyState(VK_ESCAPE) & 0x8000) && !isLose)
 		{
 			Sound::pauseCurrentTrack();
+			timePauseStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 			GamePausePanel();
 			Sound::resumeCurrentTrack();
 		}
 	
-		if (livePeople[0]->passLevel) {
+		if (!livePeople.empty() && livePeople[0]->passLevel) {
 			nextLevel();
 			t2.updateText(to_string(totalPoint));
 			livePeople[0]->passLevel = false;
@@ -1136,17 +1157,19 @@ void cGame::MainGame() {
 		Sleep(10);
 	}
 	Sound::pauseCurrentTrack();
-	drawingThread.join();
-	collisionCheckingThread.join();
+
+	if (drawThreadHandle.joinable())
+		drawThreadHandle.join();
+	if (collisionThreadHandle.joinable())
+		collisionThreadHandle.join();
 	cGameEngine::startDrawThread = true;
-	if (hasSuddenStop)
-	{
-		randomEventThread.join();
+	if (randomStopThreadHandle.joinable()) {
+		randomStopThreadHandle.join();
 	}
+
 	clearObjects(true, true);
 	listWidget.clear();
 	listLabel.clear();
-	isStart = false;
 }
 
 
@@ -1171,6 +1194,7 @@ bool cGame::isImpact()
 					Sound::pauseCurrentTrack();
 					//Sound::playHitSound();
 					cGameEngine::playEffect(obstacle, livePeople[i]);
+					timePauseStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 					return true;
 				}
 			}
@@ -1193,61 +1217,46 @@ void cGame::updateInfo()
 
 void cGame::randomStopThread()
 {
-	////setup clocks
-	//long long lastTime = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
-	//long long stopDuration = 0;
-	//long long stopCooldown = 0;
-	//short stopped = -1; //indicate which line is stopped, if any
-	//while (!isExit)
-	//{
-	//	if (isPause || isLose)
-	//		continue;
-	//	long long timePassed = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count() - lastTime;
-	//	if (timePassed <= 0)
-	//		continue;
+	long long now = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+	int lane = obstacleLanes.size();
+	vector<long long> stopDuration;
+	vector<short> laneStopped;
+	for (int i = 0; i < lane; i++) {
+		int x = rand() % 1000 + 500;
+		stopDuration.push_back(-x);
+		laneStopped.push_back(obstacleLanes[i].Y);
+	}
+	while (!isExit) {
+		long long currentTime = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+		long long timePassed = currentTime - now;
+		if (timePassed <= 0)
+			continue;
+		for (int i = 0; i < lane; i++) {
+			stopDuration[i] -= timePassed;
+			if (stopDuration[i] <= 0) {
+				long long timeRandom = (rand() % 1000 + 1000) * (-1); // control from > 0 -> stop , < 0  &  > timeRandom -> resume
+				if (stopDuration[i] < timeRandom) {
+					stopDuration[i] = rand() % 1000 + 500;
+				}
+				for (cObstacle* ele : liveObstacles) {
+					if (ele->getPos().Y == laneStopped[i]) {
+						ele->resume();
+					}
+				}
+			}
+			else {
+				for (cObstacle* ele : liveObstacles) {
+					if (ele->getPos().Y == obstacleLanes[i].Y) {
+						ele->stop();
+					}
+				}
+			}
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(25));
+		now = currentTime;
+	}
 
-	//	if (stopCooldown > 0)
-	//	{
-	//		if (stopDuration > 0)
-	//		{
-	//			stopDuration -= timePassed;
-	//			if (stopDuration <= 0)
-	//			{
-	//				for (cObstacle* element : liveObstacles)
-	//				{
-	//					if (element->getPos().Y == stopped)
-	//						element->resume();
-	//				}
-	//				//stopped = -1;
-	//			}
-	//		}
-	//		stopCooldown -= timePassed;
-	//		// (sleep until cooldown is over)
-	//		//Sleep(stopCooldown);
-	//	}
-	//	else
-	//	{
-	//		int roll = rand() % 30000 + 1; // randomly determines if something will stop - chance is (1/30000) * [ms passed] --- can also be changed to always stop after a set interval
-	//		if (roll > timePassed)
-	//		{
-	//			// (sleep until next frame)
-	//			//Sleep(16);
-	//			continue;
-	//		}
-	//		roll = rand() % obstacleLanes.size(); // randomly determines which line will be stopped
-	//		for (cObstacle* element : liveObstacles)
-	//		{
-	//			if (element->getPos().Y == obstacleLanes[roll].Y)
-	//				element->stop();
-	//		}
-
-	//		roll = rand() % 10000; // randomly determines stop duration (from 5 - 15s)
-	//		stopDuration = roll + 5000;
-	//		stopCooldown = stopDuration + 10000;
-	//		// (sleep until next frame)
-	//		//Sleep(16);
-	//	}
-	//}
+	
 }
 
 void cGame::resumeFunction()
@@ -1256,8 +1265,7 @@ void cGame::resumeFunction()
 	cDWindow countdown[3] = {
 		cDWindow(&panel, {28, 6}, "Count3.txt"),
 		cDWindow(&panel, {28, 6}, "Count2.txt"),
-		cDWindow(&panel, {20, 6}, "Count1.txt")
-
+		cDWindow(&panel, {20, 6}, "Count1.txt"),
 	};
 	for (int i = 0; i < 3; i++)
 	{
@@ -1265,10 +1273,6 @@ void cGame::resumeFunction()
 		Sleep(750);
 		countdown[i].unshow();
 	}
-	timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
-	timePause += (timePauseEnd - timePauseStart) / 1000;
-
-	
 }
 
 
@@ -1382,9 +1386,10 @@ bool cGame::isFinishLevel() {
 }
 
 double cGame::calculateTime() {
-	timeEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
-	double time = timeEnd - timeStart + timePauseStart - timePauseEnd;
-	return time / 1000.0;
+	if (!isLose && !isPause)
+		timeEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+	double time = (timeEnd - timeStart) / 1000 - timePause;
+	return time;
 	return 0;
 }
 
@@ -1393,6 +1398,7 @@ void cGame::resetTime() {
 	this->timeEnd = timeStart;
 	this->timePauseStart = 0;
 	this->timePauseEnd = 0;
+	timePause = 0;
 }
 
 void cGame::calculatePoint() {
@@ -1409,9 +1415,15 @@ void cGame::nextLevel() {
 	this->gameLevel++;
 	//gameMap::nextMap();
 	calculatePoint();
-	coinBonus = 0;
+
 	clearObjects();
 	spawnObstacle(CreatedLevel[currentTheme][(currentPhase + 1) % CreatedLevel[currentTheme].size()]);
+	coinBonus = 0;
+	timePause = 0;
+	timeStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+	timeEnd = timeStart;
+	timePauseStart = 0;
+	timePauseEnd = 0;
 }
 
 void cGame::endlessMode() {
@@ -1491,11 +1503,6 @@ void cGame::GameWin() {
 }
 void cGame::load(string fileName)
 {
-	if (hasSuddenStop)
-	{
-		randomEventThread.join();
-	}
-
 	game.clearObjects(true, true);
 
 	ifstream ifs(fileName);
@@ -1564,13 +1571,8 @@ void cGame::load(string fileName)
 	gameMap::changeMapTheme(game.currentTheme);
 	gameMap::currentMap = &gameMap::listMap[game.currentTheme][game.currentPhase];
 	game.spawnEnvironment();	
-	if (isStart)
-	{
-		isPause = false;
-	}
-	else {
-		MainGame();
-	}
+	MainGame();
+	
 }
 void cGame::ScoreBoard() {
 	cDWindow screen(&window, { 0, 0 }, "leaderboard.txt", true);
