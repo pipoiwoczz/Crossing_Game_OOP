@@ -82,3 +82,28 @@ void cTrafficLight::playEvent()
     }
     allowMove = !allowMove;
 }
+
+cCoin::cCoin(COORD In_pos): cEnvironment(In_pos, 0, true) {
+    friendly = true;
+    hasEvent = false;
+    hasFrameMove = false;
+    movable = false;
+    pMotionFrame = &motionFrame;
+    pLMotionFrames = pMotionFrame;
+    currentFrame = 0;
+    numMotionFrame = 1;
+    Box.set(topleft, { short(topleft.X + pMotionFrame->getWidth() - 1), short(topleft.Y + pMotionFrame->getHeight() - 1) });
+}
+
+unsigned char cCoin::getType()
+{
+    return '1';
+}
+
+void cCoin::hitEffect(cPeople* pVictim)
+{
+}
+
+void cCoin::hitSound()
+{
+}

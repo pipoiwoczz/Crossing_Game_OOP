@@ -42,6 +42,7 @@ bool enginecheck = cGameEngine::startEngine();
 
 //GameAsset
 Texture cAsset::blankchar;
+Texture cCoin::motionFrame;
 vector<Texture> cTrafficLight::motionFrames;
 vector<Texture> cLilyleaf::motionFrames;
 vector<Texture> cLion::motionFramesR;
@@ -95,6 +96,8 @@ bool mainLoader()
 	cAsset::specialCharLoader();
 	cAsset::blankchar = cAsset::assetLoader("Char//Alphabet//blank.txt");
 	loadingBar.setProgress(false, 10);
+
+	cCoin::motionFrame = cAsset::assetLoader("Obstacles//coin.txt");
 
 	cTrafficLight::motionFrames = cAsset::assetLoaders(trafficlightFile, TexturePrefix);
 	cLilyleaf::motionFrames = cAsset::assetLoaders(lilyFile, TexturePrefix);
