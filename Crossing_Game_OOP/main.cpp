@@ -18,7 +18,6 @@ const string CubePrefix = "Player//Cube//";
 const string RabbitPrefix = "Player//Rabbit//";
 const string MapPrefix = "Maps//";
 const string LevelPrefix = "Level//";
-
 const HANDLE mainHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
 int Sound::BGSoundVolume = 1000;
@@ -145,7 +144,7 @@ bool mainLoader()
 		gameMap::listMap.push_back(gameMap::loadMap(mapFiles[i]));
 	}
 	loadingBar.unshow();
-	Sound::playSoundList();
+	Sound::openSoundList();
 	loadingBar.setProgress(false, 100);
 	Sleep(100);
 

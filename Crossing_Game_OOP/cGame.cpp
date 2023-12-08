@@ -137,6 +137,7 @@ void cGame::onGameReady()
 	{
 		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].unshow();
 			current--;
 			panelButton[current].show();
@@ -144,6 +145,7 @@ void cGame::onGameReady()
 
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 3)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].unshow();
 			current++;
 			panelButton[current].show();
@@ -294,6 +296,7 @@ void cGame::GamePlayPanel()
 	{
 		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].unshow();
 			if (current != 0)
 			{
@@ -314,6 +317,7 @@ void cGame::GamePlayPanel()
 		}
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 3)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].unshow();
 			if (current != 0)
 			{
@@ -386,12 +390,14 @@ void cGame::GameNewGamePanel()
 	{
 		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].onDeSelect();
 			current--;
 			panelButton[current].onSelect();
 		}
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 2)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].onDeSelect();
 			current++;
 			panelButton[current].onSelect();
@@ -449,12 +455,14 @@ void cGame::GamePausePanel()
 	{
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 5)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].unshow();
 			current++;
 			panelButton[current].show();
 		}
 		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].unshow();
 			current--;
 			panelButton[current].show();
@@ -508,6 +516,7 @@ void cGame::GameSettingsPanel()
 		{
 			if (currentarrowpos < 1) 
 			{
+				Sound::playSoundEffect(SoundEffect::menuMove);
 				currentarrowpos++;
 				selectarrow.unshow();
 				selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
@@ -515,6 +524,7 @@ void cGame::GameSettingsPanel()
 			}
 			 else if (currentarrowpos == 1)
 			{
+				Sound::playSoundEffect(SoundEffect::menuMove);
 				currentarrowpos++;
 				selectarrow.unshow();
 				buttonPanel[0][0].show();
@@ -525,6 +535,7 @@ void cGame::GameSettingsPanel()
 		}
 		if ((GetKeyState(VK_UP) & 0x8000) && currentarrowpos > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			if (currentarrowpos < 2) {
 				currentarrowpos--;
 				selectarrow.unshow();
@@ -532,6 +543,7 @@ void cGame::GameSettingsPanel()
 				selectarrow.show();
 			}
 			else if (currentarrowpos >= 2) {
+				Sound::playSoundEffect(SoundEffect::menuMove);
 				currentarrowpos = 1;
 				selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
 				selectarrow.show();		
@@ -551,6 +563,7 @@ void cGame::GameSettingsPanel()
 				Sleep(250);
 			}
 			else if (currentarrowpos == 3)  {
+				Sound::playSoundEffect(SoundEffect::menuMove);
 				buttonPanel[currentarrowpos - 2][1].onDeSelect();
 				currentarrowpos--;
 				selectarrow.unshow();
@@ -570,6 +583,7 @@ void cGame::GameSettingsPanel()
 			}
 			else {
 				if (currentarrowpos == 2) {
+					Sound::playSoundEffect(SoundEffect::menuMove);
 					buttonPanel[currentarrowpos - 2][1].onDeSelect();
 					currentarrowpos++;
 					selectarrow.unshow();
@@ -671,6 +685,7 @@ void cGame::GameSavePanel()
 	{
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 2)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			slots[current].unshow();
 			mapIcons[current].show();
 			current++;
@@ -678,6 +693,7 @@ void cGame::GameSavePanel()
 		}
 		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			slots[current].unshow();
 			mapIcons[current].show();
 			current--;
@@ -782,6 +798,7 @@ void cGame::GameLoadPanel()
 	{
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 2)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			slots[current].unshow();
 			mapIcons[current].show();
 			current++;
@@ -789,6 +806,7 @@ void cGame::GameLoadPanel()
 		}
 		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			slots[current].unshow();
 			mapIcons[current].show();
 			current--;
@@ -829,6 +847,7 @@ void cGame::GameQuitPanel(bool fullexit)
 	{
 		if ((GetKeyState(VK_DOWN) & 0x8000) && currentarrowpos < 1)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			currentarrowpos++;
 			selectarrow.unshow();
 			selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
@@ -836,6 +855,7 @@ void cGame::GameQuitPanel(bool fullexit)
 		}
 		if ((GetKeyState(VK_UP) & 0x8000) && currentarrowpos > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			currentarrowpos--;
 			selectarrow.unshow();
 			selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
@@ -951,12 +971,14 @@ void cGame::GameDiePanel() {
 	{
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 2)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].unshow();
 			current++;
 			panelButton[current].show();
 		}
 		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelButton[current].unshow();
 			current--;
 			panelButton[current].show();
@@ -1067,7 +1089,7 @@ void cGame::MainGame() {
 	
 	//resetTime();
 
-	Sound::playBackGroundSound();
+	Sound::playSound(L"test.mp3", 1);
 	//Sound::musicThread();	
 
 	cDWindow rr(&window, { 504, 0 }, "panelinfo.txt", true);
