@@ -33,7 +33,8 @@ class cGame {
 	vector<cLabel*> listLabel;
 
 	short gameOrder, gameLevel; // order: 1 or 2 player
-	bool isPause, isExit, isLoad;
+	bool isPause, isExit;
+	bool isStart = false;
 	bool isLose;
 	bool tomainMenu;
 
@@ -50,6 +51,11 @@ class cGame {
 
 	int currentTheme;
 	int currentPhase;
+
+	//Threads
+	thread drawingThread;
+	thread randomEventThread;
+	thread collisionCheckingThread;
 
 	cGame();
 	~cGame();

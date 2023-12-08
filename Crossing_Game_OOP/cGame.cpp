@@ -192,11 +192,12 @@ void cGame::spawnEnvironment() //summon environment objects of current map theme
 		lily = new cLilyleaf({ 30, 57 }, 1, false);
 		environmentObject.push_back(lily);
 		environmentObject.push_back(new cRiver(55, lily));
+		hasSuddenStop = false;
 
 	}
 	else if (currentTheme == 1)
 	{
-
+		hasSuddenStop = false;
 	}
 	else if (currentTheme == 2)
 	{
@@ -827,6 +828,7 @@ void cGame::GameLoadPanel()
 		{
 			slots[current].unshow();
 			panel.unshow();
+
 			load("Save//" + saved[current]);
 			break;
 		}
@@ -1048,6 +1050,7 @@ void cGame::updatePosObstacle()
 }
 
 void cGame::MainGame() {
+	isStart = true;
 	isLose = false;
 	isPause = false;
 	isExit = false;
@@ -1093,17 +1096,13 @@ void cGame::MainGame() {
 	t7.show();
 
 	int i = 0;
-	thread randomEventThread;
 	if (hasSuddenStop)
 	{
 		randomEventThread = thread(&cGame::randomStopThread, this);
 	}
-	thread drawingThread;// = thread(&cGame::drawThread, this);
-	thread collisionCheckingThread = thread(&cGame::collisionThread, this);
-	if (cGameEngine::startDrawThread) {
-		drawingThread = thread(&cGame::drawThread, this);
-		cGameEngine::startDrawThread = false;
-	}
+
+	collisionCheckingThread = thread(&cGame::collisionThread, this);
+	drawingThread = thread(&cGame::drawThread, this);
 	
 	Sound::playTrack(SoundTrack::background);
 
@@ -1145,6 +1144,9 @@ void cGame::MainGame() {
 		randomEventThread.join();
 	}
 	clearObjects(true, true);
+	listWidget.clear();
+	listLabel.clear();
+	isStart = false;
 }
 
 
@@ -1191,11 +1193,11 @@ void cGame::updateInfo()
 
 void cGame::randomStopThread()
 {
-	//setup clocks
-	long long lastTime = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
-	long long stopDuration = 0;
-	long long stopCooldown = 0;
-	short stopped = -1; //indicate which line is stopped, if any
+	////setup clocks
+	//long long lastTime = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+	//long long stopDuration = 0;
+	//long long stopCooldown = 0;
+	//short stopped = -1; //indicate which line is stopped, if any
 	//while (!isExit)
 	//{
 	//	if (isPause || isLose)
@@ -1489,9 +1491,13 @@ void cGame::GameWin() {
 }
 void cGame::load(string fileName)
 {
+	if (hasSuddenStop)
+	{
+		randomEventThread.join();
+	}
+
 	game.clearObjects(true, true);
 
-	isLoad = true;
 	ifstream ifs(fileName);
 	if (!ifs.is_open())
 		return;
@@ -1558,7 +1564,13 @@ void cGame::load(string fileName)
 	gameMap::changeMapTheme(game.currentTheme);
 	gameMap::currentMap = &gameMap::listMap[game.currentTheme][game.currentPhase];
 	game.spawnEnvironment();	
-	game.MainGame();
+	if (isStart)
+	{
+		isPause = false;
+	}
+	else {
+		MainGame();
+	}
 }
 void cGame::ScoreBoard() {
 	cDWindow screen(&window, { 0, 0 }, "leaderboard.txt", true);
@@ -1593,22 +1605,22 @@ void cGame::ScoreBoard() {
 
 	ifs.close();
 }
-void cGame::resetGame() {
-	//resetTime();
-	totalPoint = 0;
-	totalTime = 0;
-	gameLevel = 1;
-	gameOrder = 1;
-	clearObjects(true);
-	// game type ?
-	/*if (gameType == 0) {
-		MainGame();
-	}
-	else {
-		endlessMode();
-	}*/
-	MainGame();
-}
+//void cGame::resetGame() {
+//	//resetTime();
+//	totalPoint = 0;
+//	totalTime = 0;
+//	gameLevel = 1;
+//	gameOrder = 1;
+//	clearObjects(true);
+//	// game type ?
+//	/*if (gameType == 0) {
+//		MainGame();
+//	}
+//	else {
+//		endlessMode();
+//	}*/
+//	MainGame();
+//}
 
 //short cGame::getNumberOfLane() {
 //	int count = 0;
