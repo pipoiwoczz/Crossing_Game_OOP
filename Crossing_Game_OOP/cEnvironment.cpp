@@ -88,6 +88,24 @@ void cTrafficLight::playEvent()
     allowMove = !allowMove;
 }
 
+bool cTrafficLight::getFrameMove()
+{
+    return allowMove;
+}
+
+void cTrafficLight::changeLight(bool isGreen)
+{
+    if (allowMove == isGreen) return;
+    allowMove = isGreen;
+    if (allowMove)
+    {
+		pMotionFrame = &motionFrames[0];
+	}
+    else {
+		pMotionFrame = &motionFrames[1];
+	}
+}
+
 cCoin::cCoin(COORD In_pos): cEnvironment(In_pos, 0, true) {
     defaulttimeUntilMove = 10;
 

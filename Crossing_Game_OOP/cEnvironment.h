@@ -14,6 +14,7 @@ protected:
     cEnvironment* pSafe = nullptr;
 
     virtual void playEvent() = 0;
+    virtual bool getFrameMove() = 0;
     friend class cGame;
     friend cGameEngine;
 
@@ -29,7 +30,9 @@ public:
     unsigned char getType();
     void hitEffect(cPeople* pVictim);
     void hitSound();
-
+    bool getFrameMove() override {
+        return false;
+    }
     void playEvent()
     {
 
@@ -48,7 +51,9 @@ public:
 
     void hitEffect(cPeople* pVictim);
     void hitSound();
-
+    bool getFrameMove() override {
+        return false;
+    }
     void playEvent()
     {
 
@@ -65,7 +70,8 @@ public:
     unsigned char getType();
 
     void playEvent();
-
+    bool getFrameMove() override;
+    void changeLight(bool isGreen);
 
     void hitEffect(cPeople* pVictim);
     void hitSound();
@@ -85,7 +91,9 @@ public:
 
 	void hitEffect(cPeople* pVictim);
 	void hitSound();
-
+    bool getFrameMove() override {
+        return false;
+    }
 	void playEvent()
 	{
 
