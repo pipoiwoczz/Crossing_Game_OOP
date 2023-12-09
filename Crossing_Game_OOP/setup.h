@@ -156,5 +156,4 @@ public:
 		return temp;
 	}
 };
-
 #endif

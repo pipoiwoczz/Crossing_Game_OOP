@@ -73,7 +73,7 @@ vector<Texture> cSurfer::impactFx;
 vector<vector<gameMap>> gameMap::listMap;
 
 wstring Sound::currentSound;
-vector<wstring> Sound::SoundEffectList = { L"menuMove", L"coinEarn", L"LionFx", L"RhinoFx", L"CrocoFx"};
+vector<wstring> Sound::SoundEffectList = { L"menuMove", L"coinEarn", L"LionFx", L"RhinoFx", L"CrocoFx", L"SharkFx", L"SurferFx", L"VehicleFx"};
 vector<wstring> Sound::TrackList = { L"background" };
 
 int gameMap::currentTheme;
@@ -135,7 +135,7 @@ bool mainLoader()
 	cAsset::FxFrame = cAsset::assetLoader(FxPrefix + FxFrameFile);
 	cMotorbike::impactFx = cAsset::assetLoaders(BikeImpactEffect, FxPrefix);
 	cTruck::impactFx = cAsset::assetLoaders(TruckImpactEffect, FxPrefix);
-	cCar::impactFx = cAsset::assetLoaders(CarImpactEffect, TexturePrefix);
+	cCar::impactFx = cAsset::assetLoaders(CarImpactEffect, FxPrefix);
 	cLion::impactFx = cAsset::assetLoaders(lionImpactEffect, FxPrefix);
 	cCrocodile::impactFx = cAsset::assetLoaders(CrocoImpactEffect, FxPrefix);
 	cRhino::impactFx = cAsset::assetLoaders(RhinoImpactEffect, FxPrefix);

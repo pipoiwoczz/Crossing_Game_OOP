@@ -205,7 +205,14 @@ void cShark::hitEffect(cPeople* pVictim)
 
 void cShark::hitSound()
 {
-
+    if (!FxPlaying)
+    {
+        Sound::playSoundEffect(SoundEffect::sharkFx);
+    }
+    else {
+        Sound::pauseSoundEffect(SoundEffect::sharkFx);
+    }
+    FxPlaying = !FxPlaying;
 }
 
 
@@ -251,5 +258,12 @@ void cSurfer::hitEffect(cPeople* pVictim)
 
 void cSurfer::hitSound()
 {
-
+    if (!FxPlaying)
+    {
+        Sound::playSoundEffect(SoundEffect::surferFx);
+    }
+    else {
+        Sound::pauseSoundEffect(SoundEffect::surferFx);
+    }
+    FxPlaying = !FxPlaying;
 }

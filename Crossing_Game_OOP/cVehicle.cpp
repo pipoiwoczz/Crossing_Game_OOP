@@ -1,7 +1,7 @@
 #include "cVehicle.h"
 #include "cAsset.h"
 #include "hitbox.h"
-
+#include "Sound.h"
 cVehicle::cVehicle(COORD In_pos, int speed, bool fromRight) : cObstacle(In_pos, speed, fromRight)
 {
 }
@@ -42,7 +42,17 @@ cTruck::~cTruck()
 }
 
 void cTruck::hitEffect(cPeople* pVictim) {}
-void cTruck::hitSound() {}
+void cTruck::hitSound()
+{
+	if (!FxPlaying)
+	{
+		Sound::playSoundEffect(SoundEffect::vehicleFx);
+	}
+	else {
+		Sound::pauseSoundEffect(SoundEffect::vehicleFx);
+	}
+	FxPlaying = !FxPlaying;
+}
 
 
 cMotorbike::cMotorbike() : cMotorbike({ 0, 40 }, 2, true) {};
@@ -84,7 +94,16 @@ void cMotorbike::hitEffect(cPeople* pVictim)
 {
 }
 void cMotorbike::hitSound()
-{}
+{
+	if (!FxPlaying)
+	{
+		Sound::playSoundEffect(SoundEffect::vehicleFx);
+	}
+	else {
+		Sound::pauseSoundEffect(SoundEffect::vehicleFx);
+	}
+	FxPlaying = !FxPlaying;
+}
 
 
 cCar::cCar() : cCar({ 0, 40 }, 2, true) {};
@@ -126,4 +145,13 @@ void cCar::hitEffect(cPeople* pVictim)
 {
 }
 void cCar::hitSound()
-{}
+{
+	if (!FxPlaying)
+	{
+		Sound::playSoundEffect(SoundEffect::vehicleFx);
+	}
+	else {
+		Sound::pauseSoundEffect(SoundEffect::vehicleFx);
+	}
+	FxPlaying = !FxPlaying;
+}

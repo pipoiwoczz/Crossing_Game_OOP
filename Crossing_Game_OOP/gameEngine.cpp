@@ -452,26 +452,22 @@ void cGameEngine::playEffect(cObstacle* obsta, cPeople* player)
 
 	SMALL_RECT fxframe = { writepos.X, writepos.Y, writepos.X + w - 1, writepos.Y + h - 1 };
 
-	COORD p{ writepos.X + 160, writepos.Y + 30 };
 
-	player->topleft = { 214, 58 };
 	player->pMotionFrame = &player->skin[3];
-	replaceBlankPixel(player->pMotionFrame->textureArray, { player->pMotionFrame->width, player->pMotionFrame->height }, cAsset::FxFrame.textureArray, { w, h }, { 120, 25 });
-	SMALL_RECT re = { p.X, p.Y, p.X + player->pMotionFrame->width - 1, p.Y + player->pMotionFrame->height - 1 };
+	//replaceBlankPixel(player->pMotionFrame->textureArray, { player->pMotionFrame->width, player->pMotionFrame->height }, cAsset::FxFrame.textureArray, { w, h }, { 120, 25 });
 
 	COORD startpos = { 50, 25 };
 	for (int j = 0; j < obsta->numFxFrame; j++)
 	{
-		WriteConsoleOutput(cGameEngine::curHandle, cAsset::FxFrame.textureArray, { w, h }, { 0,0 }, &fxframe);
-		memcpy(reservedBuffer, (obsta->pLFxFrames + j)->textureArray, (obsta->pLFxFrames + j)->width * (obsta->pLFxFrames + j)->height * sizeof(CHAR_INFO));
+		memcpy(reservedBuffer, cAsset::FxFrame.textureArray, w * h * sizeof(CHAR_INFO));
 
-		replaceBlankPixel(reservedBuffer, { (obsta->pLFxFrames + j)->width, (obsta->pLFxFrames + j)->height }, cAsset::FxFrame.textureArray, { w, h }, { 50, 25 });
+		if (j != obsta->numFxFrame-1)
+			fillEffectivePixel(reservedBuffer, { w, h }, player->pMotionFrame->textureArray, { player->pMotionFrame->width, player->pMotionFrame->height }, { 150, 20 });
+
+		fillEffectivePixel(reservedBuffer, { w, h }, (obsta->pLFxFrames + j)->textureArray, { (obsta->pLFxFrames + j)->width, (obsta->pLFxFrames + j)->height }, {10, 20});
 
 		SMALL_RECT reg = { writepos.X + startpos.X , writepos.Y + startpos.Y,   writepos.X + startpos.X + (obsta->pLFxFrames + j)->width - 1,  writepos.X + startpos.X + (obsta->pLFxFrames + j)->height - 1 };
-
-		WriteConsoleOutput(cGameEngine::curHandle, reservedBuffer, { (obsta->pLFxFrames + j)->width , (obsta->pLFxFrames + j)->height }, { 0,0 }, &reg);
-		if (j < 7)
-			WriteConsoleOutput(curHandle, player->pMotionFrame->textureArray, { player->pMotionFrame->width, player->pMotionFrame->height }, { 0,0 }, &re);
+		WriteConsoleOutput(curHandle, reservedBuffer, { w, h }, { 0, 0 }, &fxframe);
 		if (j == 1)
 			Sleep(500);
 

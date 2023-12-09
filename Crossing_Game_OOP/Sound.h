@@ -11,7 +11,10 @@ enum class SoundEffect {
 	coinEarn = 1,
 	lionFx = 2,
 	rhinoFx = 3,
-	crocoFx = 4
+	crocoFx = 4,
+	sharkFx = 5,
+	surferFx = 6,
+	vehicleFx = 7
  };
 enum class SoundTrack {
 	background = 0
