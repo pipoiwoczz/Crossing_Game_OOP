@@ -1,7 +1,7 @@
 #include "cObstacle.h"
 #include "cAsset.h"
 #include "hitbox.h"
-
+#include "gameEngine.h"
 
 
 cObstacle::~cObstacle()
@@ -59,6 +59,11 @@ void cObstacle::move() {
         topleft.X = (topleft.X + speed) % (PlayBoxRect.Right);
         Box.move({ short(speed), 0 });
     }
+}
+
+void cObstacle::hitEffect(cPeople* victim)
+{
+    cGameEngine::playEffect(this, victim);
 }
 
 void cObstacle::moveHitBox()

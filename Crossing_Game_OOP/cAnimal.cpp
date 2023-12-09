@@ -42,11 +42,6 @@ cLion::~cLion()
 {
 }
 
-void cLion::hitEffect(cPeople* pVictim)
-{
-
-}
-
 void cLion::hitSound()
 {
     if (!FxPlaying)
@@ -94,11 +89,6 @@ cRhino::~cRhino()
 {
 }
 
-void cRhino::hitEffect(cPeople* pVictim)
-{
-
-}
-
 void cRhino::hitSound()
 {
     if (!FxPlaying)
@@ -142,10 +132,6 @@ unsigned char cCrocodile::getType()
 }
 
 cCrocodile::~cCrocodile()
-{
-}
-
-void cCrocodile::hitEffect(cPeople* pVictim)
 {
 
 }
@@ -196,10 +182,6 @@ unsigned char cShark::getType()
 
 cShark::~cShark()
 {
-}
-
-void cShark::hitEffect(cPeople* pVictim)
-{
 
 }
 
@@ -248,10 +230,6 @@ unsigned char cSurfer::getType()
 }
 
 cSurfer::~cSurfer()
-{
-}
-
-void cSurfer::hitEffect(cPeople* pVictim)
 {
 
 }

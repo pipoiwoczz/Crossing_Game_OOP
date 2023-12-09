@@ -62,7 +62,7 @@ public:
     void moveHitBox();
 
     virtual unsigned char getType() = 0;
-    virtual void hitEffect(cPeople* pVictim) = 0;// (optional) effect on collision with player
+    virtual void hitEffect(cPeople* pVictim);// (optional) effect on collision with player
     virtual void hitSound() = 0;
     void stop(); //stop object (object will not move)
     void resume(); //un-stop object

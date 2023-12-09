@@ -25,7 +25,6 @@ public:
     
 
     unsigned char getType();
-    virtual void hitEffect(cPeople* pVictim);
     virtual void hitSound();
 };
 
@@ -44,7 +43,6 @@ public:
     ~cRhino();
 
     unsigned char getType();
-    virtual void hitEffect(cPeople* pVictim);
     virtual void hitSound();
 };
 
@@ -64,7 +62,6 @@ public:
     ~cCrocodile();
     
     unsigned char getType();
-    virtual void hitEffect(cPeople* pVictim);
     virtual void hitSound();
 };
 
@@ -82,7 +79,6 @@ public:
     ~cShark();
 
     unsigned char getType();
-    virtual void hitEffect(cPeople* pVictim);
     virtual void hitSound();
 };
 
@@ -100,7 +96,6 @@ public:
     ~cSurfer();
 
     unsigned char getType();
-    virtual void hitEffect(cPeople* pVictim);
     virtual void hitSound();
 };
 

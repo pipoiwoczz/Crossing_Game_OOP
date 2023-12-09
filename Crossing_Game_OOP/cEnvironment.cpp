@@ -1,7 +1,7 @@
 #include "cEnvironment.h"
 #include "hitbox.h"
 #include "cAsset.h"
-
+#include "Sound.h"
 
 cEnvironment::cEnvironment(COORD In_pos, int speed, bool fromRight) : cObstacle(In_pos, speed, fromRight) {}
 
@@ -19,11 +19,18 @@ unsigned char cRiver::getType()
 }
 void cRiver::hitEffect(cPeople* pVictim)
 {
-
+    Sleep(2000);
 }
 void cRiver::hitSound()
 {
-
+    if (!FxPlaying)
+    {
+        Sound::playSoundEffect(SoundEffect::riverFx);
+    }
+    else {
+        Sound::pauseSoundEffect(SoundEffect::riverFx);
+    }
+    FxPlaying = !FxPlaying;
 }
 
 cLilyleaf::cLilyleaf(COORD In_pos, int speed, bool fromRight) : cEnvironment(In_pos, speed, fromRight)
@@ -41,10 +48,6 @@ unsigned char cLilyleaf::getType() {
     return 'L';
 }
 
-void cLilyleaf::hitEffect(cPeople* pVictim)
-{
-
-}
 void cLilyleaf::hitSound() {
 
 }
@@ -68,10 +71,6 @@ unsigned char cTrafficLight::getType() {
     return 'f';
 }
 
-void cTrafficLight::hitEffect(cPeople* pVictim)
-{
-
-}
 void cTrafficLight::hitSound() {
 
 }
@@ -86,6 +85,24 @@ void cTrafficLight::playEvent()
         pMotionFrame = &motionFrames[1];
     }
     allowMove = !allowMove;
+}
+
+bool cTrafficLight::getFrameMove()
+{
+    return allowMove;
+}
+
+void cTrafficLight::changeLight(bool isGreen)
+{
+    if (allowMove == isGreen) return;
+    allowMove = isGreen;
+    if (allowMove)
+    {
+		pMotionFrame = &motionFrames[0];
+	}
+    else {
+		pMotionFrame = &motionFrames[1];
+	}
 }
 
 cCoin::cCoin(COORD In_pos): cEnvironment(In_pos, 0, true) {
@@ -127,10 +144,6 @@ void cCoin::move()
 unsigned char cCoin::getType()
 {
     return '1';
-}
-
-void cCoin::hitEffect(cPeople* pVictim)
-{
 }
 
 void cCoin::hitSound()

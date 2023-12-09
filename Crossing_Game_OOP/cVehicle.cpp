@@ -41,7 +41,6 @@ cTruck::~cTruck()
 {
 }
 
-void cTruck::hitEffect(cPeople* pVictim) {}
 void cTruck::hitSound()
 {
 	if (!FxPlaying)
@@ -90,9 +89,6 @@ cMotorbike::~cMotorbike()
 {
 }
 
-void cMotorbike::hitEffect(cPeople* pVictim)
-{
-}
 void cMotorbike::hitSound()
 {
 	if (!FxPlaying)
@@ -141,9 +137,6 @@ cCar::~cCar()
 {
 }
 
-void cCar::hitEffect(cPeople* pVictim)
-{
-}
 void cCar::hitSound()
 {
 	if (!FxPlaying)

@@ -135,6 +135,7 @@ void cGame::onGameReady()
 
 		if (GetKeyState(0x0D) & 0x8000)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelFunction[current]();
 			mainMenu.show();
 			panel.show();
@@ -326,6 +327,7 @@ void cGame::GamePlayPanel()
 		Sleep(50);
 		if (GetKeyState(0x0D) & 0x8000)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			if (current == 0) {
 				game.GameNewGamePanel();
 				for (int i = 0; i < 3; i++)
@@ -391,6 +393,7 @@ void cGame::GameNewGamePanel()
 			break;
 		if (GetKeyState(0x0D) & 0x8000)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			gameMap::changeMapTheme(current);
 			currentTheme = current;
 			currentPhase = 0;
@@ -455,6 +458,7 @@ void cGame::GamePausePanel()
 		Sleep(50);
 		if (GetKeyState(0x0D) & 0x8000)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			//panel.unshow();
 			//panelButton[current].unshow();
 			panelFunct[current]();
@@ -496,6 +500,7 @@ void cGame::GameSettingsPanel()
 
 	while (true)
 	{
+		
 
 		if ((GetKeyState(VK_DOWN) & 0x8000) && currentarrowpos < 2)
 		{
@@ -543,6 +548,7 @@ void cGame::GameSettingsPanel()
 		{
 			if (currentarrowpos < 2)
 			{
+				Sound::playSoundEffect(SoundEffect::menuMove);
 				panelFunct[currentarrowpos][0]();
 				panelInfo[currentarrowpos][1].updateText(to_string(getVolume[currentarrowpos]() / 10));
 				Sleep(250);
@@ -562,6 +568,7 @@ void cGame::GameSettingsPanel()
 		{
 			if (currentarrowpos < 2)
 			{
+				Sound::playSoundEffect(SoundEffect::menuMove);
 				panelFunct[currentarrowpos][1]();
 				panelInfo[currentarrowpos][1].updateText(to_string(getVolume[currentarrowpos]() / 10));
 				Sleep(250);
@@ -581,6 +588,7 @@ void cGame::GameSettingsPanel()
 		}
 		Sleep(50);
 		if ((GetKeyState(0x0D) & 0x8000)) {
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			if (currentarrowpos >= 2) {
 				bool change = (currentarrowpos == 3) ? false : false;
 				cPeople::changeskin(change);
@@ -697,6 +705,7 @@ void cGame::GameSavePanel()
 		Sleep(50);
 		if (GetKeyState(0x0D) & 0x8000)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			slots[current].unshow();
 			panel.unshow();
 			save("Save//" + saved[current]);
@@ -810,6 +819,7 @@ void cGame::GameLoadPanel()
 		Sleep(50);
 		if (GetKeyState(0x0D) & 0x8000)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			slots[current].unshow();
 			panel.unshow();
 
@@ -851,6 +861,7 @@ void cGame::GameQuitPanel(bool fullexit)
 		Sleep(100);
 		if (GetKeyState(0x0D) & 0x8000)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			if (currentarrowpos == 0)
 			{
 				this->tomainMenu = true;
@@ -886,7 +897,11 @@ void cGame::environmentImpact()
 						isCook = false;
 					}
 					if (isCook)
+					{
+						nemesis = environmentObject[j];
+						victim = livePeople[u];
 						break;
+					}
 				}
 			}
 		}
@@ -979,7 +994,7 @@ void cGame::GameDiePanel() {
 		Sleep(100);
 		if (GetKeyState(0x0D) & 0x8000)
 		{
-
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelFunct[current]();
 			if (current < 2)
 				break;
@@ -1150,9 +1165,13 @@ void cGame::MainGame() {
 			timePauseStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 
 			Sound::pauseCurrentTrack();
-			nemesis->hitSound();
-			cGameEngine::playEffect(nemesis, victim);
-			nemesis->hitSound();
+			if (nemesis && victim)
+			{
+				nemesis->hitSound();
+				nemesis->hitEffect(victim);
+				nemesis->hitSound();
+			}
+
 			Sleep(1000);
 			coinBonus = 0;
 			cDWindow dieeffect[5]{
@@ -1235,10 +1254,13 @@ void cGame::randomStopThread()
 	int lane = obstacleLanes.size();
 	vector<long long> stopDuration;
 	vector<short> laneStopped;
+	vector<bool> flag;
+	vector<cTrafficLight*> traffic;
 	for (int i = 0; i < lane; i++) {
 		int x = rand() % 1000 + 500;
 		stopDuration.push_back(-x);
 		laneStopped.push_back(obstacleLanes[i].Y);
+		traffic.push_back(static_cast<cTrafficLight*>(environmentObject[i]));
 	}
 	while (hasSuddenStop && !isExit) {
 		long long currentTime = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
@@ -1246,26 +1268,34 @@ void cGame::randomStopThread()
 		if (timePassed <= 0)
 			continue;
 		for (int i = 0; i < lane; i++) {
+			
 			stopDuration[i] -= timePassed;
 			if (stopDuration[i] <= 0) {
 				long long timeRandom = (rand() % 1000 + 1000) * (-1); // control from > 0 -> stop , < 0  &  > timeRandom -> resume
 				if (stopDuration[i] < timeRandom) {
+					traffic[i]->changeLight(false);
 					stopDuration[i] = rand() % 1000 + 500;
+				}
+				else {
+					traffic[i]->changeLight(true);
 				}
 				for (cObstacle* ele : liveObstacles) {
 					if (ele->getPos().Y == laneStopped[i]) {
 						ele->resume();
 					}
 				}
+
 				
 			}
 			else {
+				
 				for (cObstacle* ele : liveObstacles) {
 					if (ele->getPos().Y == obstacleLanes[i].Y) {
 						ele->stop();
 					}
 				}
 			}
+
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(25));
 		now = currentTime;

@@ -26,7 +26,6 @@ public:
     ~cTruck();
     
     unsigned char getType();
-    virtual void hitEffect(cPeople* pVictim);
     virtual void hitSound();
 };
 
@@ -46,7 +45,6 @@ public:
     ~cMotorbike();
  
     unsigned char getType();
-    virtual void hitEffect(cPeople* pVictim);
     virtual void hitSound();
 };
 
@@ -66,7 +64,6 @@ public:
     ~cCar();
 
     unsigned char getType();
-    virtual void hitEffect(cPeople* pVictim);
     virtual void hitSound();
 };
 #endif

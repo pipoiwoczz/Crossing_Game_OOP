@@ -73,7 +73,7 @@ vector<Texture> cSurfer::impactFx;
 vector<vector<gameMap>> gameMap::listMap;
 
 wstring Sound::currentSound;
-vector<wstring> Sound::SoundEffectList = { L"menuMove", L"coinEarn", L"LionFx", L"RhinoFx", L"CrocoFx", L"SharkFx", L"SurferFx", L"VehicleFx"};
+vector<wstring> Sound::SoundEffectList = { L"menuMove", L"coinEarn", L"LionFx", L"RhinoFx", L"CrocoFx", L"SharkFx", L"SurferFx", L"VehicleFx", L"RiverFx"};
 vector<wstring> Sound::TrackList = { L"background" };
 
 int gameMap::currentTheme;
