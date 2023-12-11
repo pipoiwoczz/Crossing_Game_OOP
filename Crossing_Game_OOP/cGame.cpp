@@ -11,15 +11,34 @@
 #include "gameEngine.h"
 #include "cTime"
 
+bool cGame::handlingSkillExec(cPeople* pPeople)
+{
+	if (pPeople->isFlashing > 0)
+	{
+		pPeople->isFlashing--;
+		cGameEngine::playFlashEffect(oldPos);
+	}
+
+	if (pPeople->useSkill() == 0)
+	{
+		pPeople->isFlashing = 5;
+		oldPos = pPeople->topleft;
+		cGameEngine::playFlashEffect(oldPos);
+		pPeople->teleport();
+		cGameEngine::renderPeople(pPeople);
+		return true;
+	}
+	return false;
+}
+
 void cGame::pizzaDraw()
 {
-	
-		for (int i = 0; i < liveObstacles.size(); i++)
-		{
-			liveObstacles[i]->isStop = suddenStop;
-			liveObstacles[i]->move();
-			cGameEngine::renderObstacle(liveObstacles[i]);
-		}
+	for (int i = 0; i < liveObstacles.size(); i++)
+	{
+		liveObstacles[i]->isStop = suddenStop;
+		liveObstacles[i]->move();
+		cGameEngine::renderObstacle(liveObstacles[i]);
+	}
 
 	for (int i = 0; i < environmentObject.size(); i++)
 	{
@@ -30,13 +49,9 @@ void cGame::pizzaDraw()
 	//put people onto buffer
 	for (int i = 0; i < livePeople.size(); i++)
 	{
-
-		if (livePeople[i]->useSkill() == 0)
-		{
-			livePeople[i]->teleport();
-			cGameEngine::renderPeople(livePeople[i]);
+	
+		if (handlingSkillExec(livePeople[i]))
 			continue;
-		}
 		livePeople[i]->moveHitBox();
 		livePeople[i]->move();
 		cGameEngine::renderPeople(livePeople[i]);
@@ -1132,6 +1147,7 @@ void cGame::MainGame() {
 		{
 			if (livePeople[i]->skill[0])
 			{
+				Sound::playSoundEffect(SoundEffect::flashFx);
 				livePeople[i]->skill[0] = false;
 			}
 			if (livePeople[i]->skill[1])

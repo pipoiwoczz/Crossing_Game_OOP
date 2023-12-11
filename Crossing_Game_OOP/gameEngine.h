@@ -92,6 +92,7 @@ public:
 	static void renderEnvironment(cEnvironment* pEnvironmentObject);
 
 	static void playEffect(cObstacle* obsta, cPeople* people);
+	static void playFlashEffect(const COORD& topleft);
 	//For label rendering
 };
 

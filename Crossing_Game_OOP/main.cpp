@@ -42,6 +42,7 @@ bool enginecheck = cGameEngine::startEngine();
 //GameAsset
 Texture cAsset::blankchar;
 Texture cCoin::motionFrame;
+Texture cAsset::flashEffect;
 vector<Texture> cTrafficLight::motionFrames;
 vector<Texture> cLilyleaf::motionFrames;
 vector<Texture> cLion::motionFramesR;
@@ -73,7 +74,7 @@ vector<Texture> cSurfer::impactFx;
 vector<vector<gameMap>> gameMap::listMap;
 
 wstring Sound::currentSound;
-vector<wstring> Sound::SoundEffectList = { L"menuMove", L"coinEarn", L"LionFx", L"RhinoFx", L"CrocoFx", L"SharkFx", L"SurferFx", L"VehicleFx", L"RiverFx"};
+vector<wstring> Sound::SoundEffectList = { L"menuMove", L"coinEarn", L"LionFx", L"RhinoFx", L"CrocoFx", L"SharkFx", L"SurferFx", L"VehicleFx", L"RiverFx", L"flashFx"};
 vector<wstring> Sound::TrackList = { L"background" };
 
 int gameMap::currentTheme;
@@ -98,10 +99,11 @@ bool mainLoader()
 	cAsset::alphabetLoader();
 	cAsset::numberLoader();
 	cAsset::specialCharLoader();
-	cAsset::blankchar = cAsset::assetLoader("Char//Alphabet//blank.txt");
+	cAsset::blankchar = cAsset::assetLoader("blank.txt", "Char//Alphabet//");
 	loadingBar.setProgress(false, 10);
 
-	cCoin::motionFrame = cAsset::assetLoader("Obstacles//coin.txt");
+	cCoin::motionFrame = cAsset::assetLoader("coin.txt", TexturePrefix);
+	cAsset::flashEffect = cAsset::assetLoader("skillFlash.txt", FxPrefix);
 
 	cTrafficLight::motionFrames = cAsset::assetLoaders(trafficlightFile, TexturePrefix);
 	cLilyleaf::motionFrames = cAsset::assetLoaders(lilyFile, TexturePrefix);

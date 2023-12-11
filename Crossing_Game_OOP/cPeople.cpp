@@ -169,7 +169,6 @@ bool cPeople::move() {
 	if (ismove)
 	{
 		pMotionFrame = &skin[currentFrame];
-		isMoving = true;
 		if (!horizon)
 		{
 			moveCooldown = 4;
