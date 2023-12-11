@@ -53,10 +53,10 @@ short Texture::getWidth() {
     return width;
 }   
 
-Texture cAsset::assetLoader(string filename)
+Texture cAsset::assetLoader(string filename, const string& prefix)
 {
     ifstream inGate;
-    inGate.open("Sprites//" + filename);
+    inGate.open("Sprites//" + prefix + filename);
     Texture loaded;
     if (inGate.is_open()) {
         inGate >> loaded.height >> loaded.width;
@@ -69,7 +69,7 @@ Texture cAsset::assetLoader(string filename)
                 inGate >> x;
                 if (x != 16)
                 {
-                    CHAR_INFO t = { L'█', WORD(x * 16 + x)};
+                    CHAR_INFO t = { L'█', WORD(16*x + x) };
                     loaded.textureArray[i * loaded.width + j] = t;
 
                 }
@@ -120,7 +120,7 @@ vector<Texture> cAsset::assetLoaders(const vector<string> &textureList, const st
     vector<Texture> multiFrame;
     for (string filename: textureList)
     {
-        Texture a = cAsset::assetLoader(prefix + filename);
+        Texture a = cAsset::assetLoader(filename, prefix);
         multiFrame.push_back(a);
     }
 

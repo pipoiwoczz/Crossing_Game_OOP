@@ -72,6 +72,7 @@ enum class VehicleIndex {
 	Motorbike = 2
 };
 
+
 class Time {
 	int year;
 	int month;

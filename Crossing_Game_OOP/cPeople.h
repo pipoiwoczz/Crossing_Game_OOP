@@ -15,7 +15,7 @@ class cPeople {
 	COORD carryOffset = { 0, 0 };
 
     COORD topleft;
-	bool isMoving = false;
+	int isFlashing = 0;
 	bool mState; // true is alive, false is dead
 	int moveCooldown;
 	bool passLevel = false;

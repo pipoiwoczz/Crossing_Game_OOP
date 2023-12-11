@@ -225,6 +225,10 @@ void cGameEngine::paintBucket(CHAR_INFO* des, const COORD& desSize, short color)
 	}
 }
 
+void cGameEngine::playFlashEffect(const COORD& topleft)
+{
+	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, cAsset::flashEffect.textureArray, { cAsset::flashEffect.width, cAsset::flashEffect.height }, topleft);
+}
 
 void cGameEngine::renderPeople(cPeople* pPeople)
 {

@@ -85,6 +85,7 @@ class cAsset {
 private:
 	cAsset();	
 public:
+	static Texture flashEffect;
 	static vector<Texture> alphabet;
 	static vector<Texture> number;
 	static vector<Texture> special;
@@ -92,7 +93,7 @@ public:
 	static Texture FxFrame;
 	friend cLabel;
 	friend cGameEngine;
-	static Texture assetLoader(string filename);
+	static Texture assetLoader(string filename, const string& prefix = "");
 	static vector<Texture> assetLoaders(const vector<string> &textureList, const string& prefix);
 	static void alphabetLoader();
 	static void numberLoader();

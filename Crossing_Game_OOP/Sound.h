@@ -15,7 +15,8 @@ enum class SoundEffect {
 	sharkFx = 5,
 	surferFx = 6,
 	vehicleFx = 7,
-	riverFx = 8
+	riverFx = 8,
+	flashFx = 9
  };
 enum class SoundTrack {
 	background = 0

@@ -14,7 +14,7 @@ class cGame;
 class cCoin;
 
 class cGame {
-
+	COORD oldPos;
 	const vector <vector<string>> CreatedLevel{
 		{"jungle1.txt"},
 		{"beach1.txt"},
@@ -22,7 +22,6 @@ class cGame {
 	};
 
 	static cGame game;
-	
 
 	friend cGameEngine;
 	vector<COORD> obstacleLanes;
@@ -104,6 +103,8 @@ class cGame {
 		void collisionThread();
 		void drawThread();
 		void pizzaDraw();
+
+		int handlingSkillExec(cPeople* pPeople);
 
 		vector<cPeople *> getPeople();
         vector<cObstacle *> getObstacles();

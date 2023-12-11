@@ -40,8 +40,10 @@ HANDLE cGameEngine::curHandle = 0;
 bool enginecheck = cGameEngine::startEngine();
 
 //GameAsset
+//Textures
 Texture cAsset::blankchar;
 Texture cCoin::motionFrame;
+Texture cAsset::flashEffect;
 vector<Texture> cTrafficLight::motionFrames;
 vector<Texture> cLilyleaf::motionFrames;
 vector<Texture> cLion::motionFramesR;
@@ -61,6 +63,7 @@ vector<Texture> cCar::motionFramesL;
 vector<Texture> cMotorbike::motionFramesR;
 vector<Texture> cMotorbike::motionFramesL;
 
+//FX Textures
 Texture cAsset::FxFrame;
 vector<Texture> cMotorbike::impactFx;
 vector<Texture> cCar::impactFx;
@@ -72,16 +75,19 @@ vector<Texture> cShark::impactFx;
 vector<Texture> cSurfer::impactFx;
 vector<vector<gameMap>> gameMap::listMap;
 
+//Sound Assets
 wstring Sound::currentSound;
-vector<wstring> Sound::SoundEffectList = { L"menuMove", L"coinEarn", L"LionFx", L"RhinoFx", L"CrocoFx", L"SharkFx", L"SurferFx", L"VehicleFx", L"RiverFx"};
+vector<wstring> Sound::SoundEffectList = { L"menuMove", L"coinEarn", L"LionFx", L"RhinoFx", L"CrocoFx", L"SharkFx", L"SurferFx", L"VehicleFx", L"RiverFx", L"flashFx"};
 vector<wstring> Sound::TrackList = { L"background" };
 
+//Map-related stuffs
 int gameMap::currentTheme;
 gameMap* gameMap::currentMap;
 int gameMap::currentMapIndex;
 int gameMap::numCurrentMapFrame;
 int gameMap::mapLoopCooldown = 15;
 
+//UI-Window stuffs
 cWidget cGame::window;
 cDWindow cGame::mainMenu;
 cGame cGame::game;
@@ -98,10 +104,11 @@ bool mainLoader()
 	cAsset::alphabetLoader();
 	cAsset::numberLoader();
 	cAsset::specialCharLoader();
-	cAsset::blankchar = cAsset::assetLoader("Char//Alphabet//blank.txt");
+	cAsset::blankchar = cAsset::assetLoader("blank.txt", "Char//Alphabet//");
 	loadingBar.setProgress(false, 10);
 
-	cCoin::motionFrame = cAsset::assetLoader("Obstacles//coin.txt");
+	cCoin::motionFrame = cAsset::assetLoader("coin.txt", TexturePrefix);
+	cAsset::flashEffect = cAsset::assetLoader("skillFlash.txt", FxPrefix);
 
 	cTrafficLight::motionFrames = cAsset::assetLoaders(trafficlightFile, TexturePrefix);
 	cLilyleaf::motionFrames = cAsset::assetLoaders(lilyFile, TexturePrefix);
