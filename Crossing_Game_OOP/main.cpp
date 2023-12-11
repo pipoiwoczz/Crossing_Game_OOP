@@ -93,6 +93,7 @@ bool gameinit = cGame::InitGame();
 
 bool mainLoader()
 {
+	_mkdir("Save");
 	cAsset::settingsLoader();
 	Sound::startAudioEngine();
 	cBar loadingBar(&cGame::mainMenu, { 20, 140 },  500, 8, Color::red, Color::white);

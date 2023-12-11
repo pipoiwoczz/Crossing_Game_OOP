@@ -75,6 +75,24 @@ void cPeople::moveHitBox()
 	mBox.set({ short(topleft.X + 4), short(2 + topleft.Y) }, { short(skin[0].getWidth() - 4 + topleft.X), short(skin[0].getHeight() - 2 + topleft.Y) });
 }
 
+void cPeople::resetCooldown()
+{
+	skillCooldown[0] = 0;
+	skillCooldown[1] = 0;
+}
+
+int cPeople::getCooldown(int skill)
+{
+	return skillCooldown[skill];
+}
+
+void cPeople::setCooldown(int skill, int value)
+{
+	if (skill < 0 || skill > 1)
+		return;
+	skillCooldown[skill] = value;
+}
+
 void cPeople::changeskin(bool isChange)
 {
 	isRabbit = (isChange);
@@ -84,12 +102,14 @@ int cPeople::useSkill()
 {
 	if (!used[0] && (GetKeyState(0x31) & 0x8000))
 	{
+		setCooldown(0, 6000);
 		used[0] = true;
 		skill[0] = true;
 		return 0;
 	}
 	if (!used[1] && (GetKeyState(0x32) & 0x8000))
 	{
+		setCooldown(1, 6000);
 		used[1] = true;
 		skill[1] = true;
 		return 1;

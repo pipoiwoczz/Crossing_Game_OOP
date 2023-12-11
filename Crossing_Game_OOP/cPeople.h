@@ -23,6 +23,8 @@ class cPeople {
 	bool forceStop = false;
 	bool skill[2] = { false, false };
 	bool used[2] = { false, false };
+	int skillCooldown[2] = { 30, 30 };
+
 	public:
 		friend class cGame;
 		friend class cGameEngine;
@@ -43,6 +45,9 @@ class cPeople {
 		bool isDead();
 		bool isFinish();
 		void moveHitBox();
+		void resetCooldown();
+		int getCooldown(int skill);
+		void setCooldown(int skill, int value);
 		static void changeskin(bool isChange);
 };
 

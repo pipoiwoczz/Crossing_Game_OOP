@@ -20,6 +20,7 @@ enum class SoundEffect {
  };
 enum class SoundTrack {
 	background = 0
+
 };
 class Sound {
 private:
