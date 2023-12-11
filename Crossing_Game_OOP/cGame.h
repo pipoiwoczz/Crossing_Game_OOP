@@ -30,6 +30,7 @@ class cGame {
 	vector<cEnvironment*>  environmentObject;
     vector<cPeople *> livePeople;
 	vector<cWidget*> listWidget;
+	vector<cWidget*> listSkill;
 	vector<cLabel*> listLabel;
 
 	short gameOrder, gameLevel; // order: 1 or 2 player
@@ -37,7 +38,7 @@ class cGame {
 	bool isStart = false;
 	bool isLose;
 	bool tomainMenu;
-
+	bool suddenStop = false;
 	//Special events
 	bool hasSuddenStop = false;
 

@@ -13,22 +13,14 @@
 
 void cGame::pizzaDraw()
 {
-	for (int i = 0; i < liveObstacles.size(); i++)
-	{
-		liveObstacles[i]->move();
+	
+		for (int i = 0; i < liveObstacles.size(); i++)
+		{
+			liveObstacles[i]->isStop = suddenStop;
+			liveObstacles[i]->move();
+			cGameEngine::renderObstacle(liveObstacles[i]);
+		}
 
-		//if (!suddenStop)
-		//{
-		//	liveObstacles[i]->isStop = false;
-		//	liveObstacles[i]->move();
-		//}
-		//else {
-		//	liveObstacles[i]->isStop = true;
-		//}
-		cGameEngine::renderObstacle(liveObstacles[i]);
-
-
-	}
 	for (int i = 0; i < environmentObject.size(); i++)
 	{
 		cGameEngine::renderEnvironment(environmentObject[i]);
@@ -38,6 +30,14 @@ void cGame::pizzaDraw()
 	//put people onto buffer
 	for (int i = 0; i < livePeople.size(); i++)
 	{
+
+		if (livePeople[i]->useSkill() == 0)
+		{
+			livePeople[i]->teleport();
+			cGameEngine::renderPeople(livePeople[i]);
+			continue;
+		}
+		livePeople[i]->moveHitBox();
 		livePeople[i]->move();
 		cGameEngine::renderPeople(livePeople[i]);
 	}
@@ -1082,14 +1082,12 @@ void cGame::MainGame() {
 	cLabel t7(&rr, { 10, 55 }, "30 x 0", 2, Color::red, true);
 	int coinNow = 0;
 
-	if (listWidget.size() < 2)
-	{
+
 		listWidget.push_back(&rr);
 		rr.show();
 		listWidget.push_back(&howtoplay);
 		howtoplay.show();
-	}
-	if (listLabel.size() < 7) {
+
 		listLabel.push_back(&t1);
 		t1.show();
 		listLabel.push_back(&t2);
@@ -1104,7 +1102,6 @@ void cGame::MainGame() {
 		t6.show();
 		listLabel.push_back(&t7);
 		t7.show();
-	}
 
 
 	int i = 0;
@@ -1131,6 +1128,20 @@ void cGame::MainGame() {
 	victim = nullptr;
 
 	while (!isExit) {
+		for (int i = 0; i < livePeople.size(); i++)
+		{
+			if (livePeople[i]->skill[0])
+			{
+				livePeople[i]->skill[0] = false;
+			}
+			if (livePeople[i]->skill[1])
+			{
+				suddenStop = true;
+				Sleep(2000);
+				suddenStop = false;
+				livePeople[i]->skill[1] = false;
+			}
+		}
 		if (calculateTime() - time >= 1) {
 			time = int(calculateTime());
 			timeString = to_string(time);
@@ -1151,17 +1162,19 @@ void cGame::MainGame() {
 		}
 	
 		if (!livePeople.empty() && livePeople[0]->passLevel) {
-			livePeople[0]->setState(false);
 			int bonus[6] = { 120, 70, 35, 15, 5, 0 };
 			int count = min(int(calculateTime() / 5), 5);
 			int roundScore = bonus[count] + coinBonus + 100;
 			t2.updateText(to_string(totalPoint) + " + " + to_string(roundScore));
 			t3.updateText("TIME BONUS");
 			t4.updateText(to_string(bonus[count]));
-			Sleep(2500);
-			t3.updateText("TIME");
-			livePeople[0]->setState(true);
 			nextLevel();
+			livePeople[0]->setForceStop();
+			suddenStop = true;
+			Sleep(2000);
+			suddenStop = false;
+			livePeople[0]->setForceStop();
+			t3.updateText("TIME");
 			t2.updateText(to_string(totalPoint));
 			livePeople[0]->passLevel = false;
 			time = 0;

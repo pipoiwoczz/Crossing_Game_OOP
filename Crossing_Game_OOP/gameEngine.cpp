@@ -446,11 +446,11 @@ void cGameEngine::playEffect(cObstacle* obsta, cPeople* player)
 		return;
 	short w = cAsset::FxFrame.width;
 	short h = cAsset::FxFrame.height;
-	COORD writepos = { 100, 31 };
+	COORD OuterFrameTopLeft = { 100, 31 };
 
 	replaceBlankPixel(cAsset::FxFrame.textureArray, { w,h }, mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, { 100,31 });
 
-	SMALL_RECT fxframe = { writepos.X, writepos.Y, writepos.X + w - 1, writepos.Y + h - 1 };
+	SMALL_RECT fxframe = { OuterFrameTopLeft.X, OuterFrameTopLeft.Y, OuterFrameTopLeft.X + w - 1, OuterFrameTopLeft.Y + h - 1 };
 
 
 	player->pMotionFrame = &player->skin[3];
@@ -462,11 +462,11 @@ void cGameEngine::playEffect(cObstacle* obsta, cPeople* player)
 		memcpy(reservedBuffer, cAsset::FxFrame.textureArray, w * h * sizeof(CHAR_INFO));
 
 		if (j != obsta->numFxFrame-1)
-			fillEffectivePixel(reservedBuffer, { w, h }, player->pMotionFrame->textureArray, { player->pMotionFrame->width, player->pMotionFrame->height }, { 190, 40 });
+			fillEffectivePixel(reservedBuffer, { w, h }, player->pMotionFrame->textureArray, { player->pMotionFrame->width, player->pMotionFrame->height }, { short(50 + obsta->pLFxFrames->width - player->pMotionFrame->width), short (30 + obsta->pLFxFrames->height - player->pMotionFrame->height)});
 
-		fillEffectivePixel(reservedBuffer, { w, h }, (obsta->pLFxFrames + j)->textureArray, { (obsta->pLFxFrames + j)->width, (obsta->pLFxFrames + j)->height }, {50, 40});
+		fillEffectivePixel(reservedBuffer, { w, h }, (obsta->pLFxFrames + j)->textureArray, { (obsta->pLFxFrames + j)->width, (obsta->pLFxFrames + j)->height }, {50, 30});
 
-		SMALL_RECT reg = { writepos.X + startpos.X , writepos.Y + startpos.Y,   writepos.X + startpos.X + (obsta->pLFxFrames + j)->width - 1,  writepos.X + startpos.X + (obsta->pLFxFrames + j)->height - 1 };
+		SMALL_RECT reg = { OuterFrameTopLeft.X + startpos.X , OuterFrameTopLeft.Y + startpos.Y,   OuterFrameTopLeft.X + startpos.X + (obsta->pLFxFrames + j)->width - 1,  OuterFrameTopLeft.X + startpos.X + (obsta->pLFxFrames + j)->height - 1 };
 		WriteConsoleOutput(curHandle, reservedBuffer, { w, h }, { 0, 0 }, &fxframe);
 		if (j == 1)
 			Sleep(500);
