@@ -58,7 +58,7 @@ bool cPeople::isFinish() {
 
 void cPeople::changeskin(bool isChange)
 {
-	isRabbit = (isRabbit && isChange);
+	isRabbit = (isChange);
 }
 
 

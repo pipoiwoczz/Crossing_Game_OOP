@@ -462,9 +462,9 @@ void cGameEngine::playEffect(cObstacle* obsta, cPeople* player)
 		memcpy(reservedBuffer, cAsset::FxFrame.textureArray, w * h * sizeof(CHAR_INFO));
 
 		if (j != obsta->numFxFrame-1)
-			fillEffectivePixel(reservedBuffer, { w, h }, player->pMotionFrame->textureArray, { player->pMotionFrame->width, player->pMotionFrame->height }, { 150, 20 });
+			fillEffectivePixel(reservedBuffer, { w, h }, player->pMotionFrame->textureArray, { player->pMotionFrame->width, player->pMotionFrame->height }, { 190, 40 });
 
-		fillEffectivePixel(reservedBuffer, { w, h }, (obsta->pLFxFrames + j)->textureArray, { (obsta->pLFxFrames + j)->width, (obsta->pLFxFrames + j)->height }, {10, 20});
+		fillEffectivePixel(reservedBuffer, { w, h }, (obsta->pLFxFrames + j)->textureArray, { (obsta->pLFxFrames + j)->width, (obsta->pLFxFrames + j)->height }, {50, 40});
 
 		SMALL_RECT reg = { writepos.X + startpos.X , writepos.Y + startpos.Y,   writepos.X + startpos.X + (obsta->pLFxFrames + j)->width - 1,  writepos.X + startpos.X + (obsta->pLFxFrames + j)->height - 1 };
 		WriteConsoleOutput(curHandle, reservedBuffer, { w, h }, { 0, 0 }, &fxframe);
