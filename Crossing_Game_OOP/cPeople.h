@@ -23,7 +23,7 @@ class cPeople {
 	bool forceStop = false;
 	bool skill[2] = { false, false };
 	bool used[2] = { false, false };
-	int skillCooldown[2] = { 30, 30 };
+	int skillCooldown[2] = { 0, 0 };
 
 	public:
 		friend class cGame;

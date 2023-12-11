@@ -17,6 +17,12 @@ cPeople::cPeople(COORD In_pos) {
 	currentFrame = 0;
 
 	mBox.set({ short(topleft.X + 4), short(2 + topleft.Y) }, { short(skin[0].getWidth() - 4 + topleft.X), short(skin[0].getHeight() - 2 + topleft.Y) });
+	skillCooldown[0] = 0;
+	skillCooldown[1] = 0;
+	skill[0] = false;
+	skill[1] = false;
+	used[0] = false;
+	used[1] = false;
 }
 cPeople::~cPeople() {
 
@@ -83,6 +89,8 @@ void cPeople::resetCooldown()
 
 int cPeople::getCooldown(int skill)
 {
+	if (skill < 0 || skill > 1)
+		return -1;
 	return skillCooldown[skill];
 }
 

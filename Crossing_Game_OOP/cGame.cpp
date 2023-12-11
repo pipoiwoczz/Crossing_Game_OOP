@@ -81,10 +81,10 @@ void cGame::drawThread()
 	{
 		long long current = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 		long long timePassed = current - time;
-		if (livePeople[0]->getCooldown(0) > 0)
+		if (!livePeople.empty() && livePeople[0] && livePeople[0]->skillCooldown[0] > 0)
 		{
-			livePeople[0]->setCooldown(0, max(livePeople[0]->getCooldown(0) - timePassed, 0));
-			if (livePeople[0]->getCooldown(0) == 0)
+			livePeople[0]->setCooldown(0, max(livePeople[0]->skillCooldown[0] - timePassed, 0));
+			if (livePeople[0]->skillCooldown[0] == 0)
 				livePeople[0]->used[0] = false;
 		}
 
@@ -98,7 +98,7 @@ void cGame::drawThread()
 			cGameEngine::fillScreen();
 			Sleep(25);
 		}
-		time = current;
+		//time = current;
 	}
 }
 
@@ -488,8 +488,7 @@ void cGame::GamePausePanel()
 			//panel.unshow();
 			//panelButton[current].unshow();
 			panelFunct[current]();
-			panel.show();
-			panelButton[current].show();
+			
 		}
 		Sleep(50);
 	}
@@ -1096,8 +1095,8 @@ void cGame::MainGame() {
 
 	cDWindow rr(&window, { 504, 0 }, "panelinfo.txt", true);
 	cDWindow howtoplay(&rr, { 0,110 }, "howtoplay.txt", true);
-	cDWindow skill1NotReady(&rr, { 5, 80 }, "notreadyskill.txt", true);
-	cDWindow skill1Ready(&rr, { 5, 80 }, "readySkill.txt", true);
+	cButton skill1NotReady(&rr, { 5, 80 }, "notreadyskill.txt", true);
+	cButton skill1Ready(&rr, { 5, 80 }, "readySkill.txt", true);
 	cLabel t1(&rr, { 10, 5 }, "SCORES", 1, Color::red, true);
 	string point = to_string(totalPoint);
 	cLabel t2(&rr, { 10, 15 }, point, 2, Color::red, true);
@@ -1120,9 +1119,9 @@ void cGame::MainGame() {
 	rr.show();
 	listWidget.push_back(&howtoplay);
 	howtoplay.show();
-	listWidget.push_back(&skill1NotReady);
+//	listWidget.push_back(&skill1NotReady);
 	skill1NotReady.show();
-	listWidget.push_back(&skill1Ready);
+//	listWidget.push_back(&skill1Ready);
 	skill1Ready.show();
 	
 
@@ -1169,7 +1168,7 @@ void cGame::MainGame() {
 
 	nemesis = nullptr;
 	victim = nullptr;
-
+	bool isAvailableSkill[2] = { true, true };
 	while (!isExit) {
 		for (int i = 0; i < livePeople.size(); i++)
 		{
@@ -1196,19 +1195,29 @@ void cGame::MainGame() {
 			Sound::playSoundEffect(SoundEffect::coinEarn);
 			coinNow = coinBonus;
 		}
-		if (skillCooldown[0] != livePeople[0]->skillCooldown[0]) {
+
+		if (!livePeople.empty() && skillCooldown[0] != livePeople[0]->skillCooldown[0]) {
 			t9.updateText(to_string(livePeople[0]->skillCooldown[0]));
 			skillCooldown[0] = livePeople[0]->skillCooldown[0];
+			if (skillCooldown[0] > 0) {
+				if (!isAvailableSkill[0])
+				{
+					isAvailableSkill[0] = true;
+					//skill1NotReady.unshow();
+					skill1Ready.show(true);
+				}
+			}
+			else {
+				if (isAvailableSkill[0])
+				{
+					isAvailableSkill[0] = false;
+					//skill1Ready.unshow();
+					skill1NotReady.show(true);
+				}
+			}
 			
 		}
-		if (skillCooldown[0] <= 0) {
-			skill1NotReady.unshow();
-			skill1Ready.show();
-		}
-		else {
-			skill1Ready.unshow();
-			skill1NotReady.show();
-		}
+		
 
 		
 		if ((GetKeyState(VK_ESCAPE) & 0x8000) && !isLose)
@@ -1267,7 +1276,7 @@ void cGame::MainGame() {
 				}
 			}
 			ofstream ofs("Save//leaderboard.txt");
-			for (int id = 0; id < 3; i++) {
+			for (int id = 0; id < 3; id++) {
 				ofs << n[id] << endl;
 			}
 			ofs.close();
