@@ -590,7 +590,7 @@ void cGame::GameSettingsPanel()
 		if ((GetKeyState(0x0D) & 0x8000)) {
 			Sound::playSoundEffect(SoundEffect::menuMove);
 			if (currentarrowpos >= 2) {
-				bool change = (currentarrowpos == 3) ? false : false;
+				bool change = (currentarrowpos == 3) ? false : true;
 				cPeople::changeskin(change);
 				break;
 			}
@@ -1068,7 +1068,7 @@ void cGame::MainGame() {
 	//Sound::musicThread();	
 
 	cDWindow rr(&window, { 504, 0 }, "panelinfo.txt", true);
-	cDWindow howtoplay(&rr, { 0,110 }, "coin.txt", true);
+	cDWindow howtoplay(&rr, { 0,110 }, "howtoplay.txt", true);
 	cLabel t1(&rr, { 10, 5 }, "SCORES", 1, Color::red, true);
 	string point = to_string(totalPoint);
 	cLabel t2(&rr, { 10, 15 }, point, 2, Color::red, true);
@@ -1151,6 +1151,16 @@ void cGame::MainGame() {
 		}
 	
 		if (!livePeople.empty() && livePeople[0]->passLevel) {
+			livePeople[0]->setState(false);
+			int bonus[6] = { 120, 70, 35, 15, 5, 0 };
+			int count = min(int(calculateTime() / 5), 5);
+			int roundScore = bonus[count] + coinBonus + 100;
+			t2.updateText(to_string(totalPoint) + " + " + to_string(roundScore));
+			t3.updateText("TIME BONUS");
+			t4.updateText(to_string(bonus[count]));
+			Sleep(2500);
+			t3.updateText("TIME");
+			livePeople[0]->setState(true);
 			nextLevel();
 			t2.updateText(to_string(totalPoint));
 			livePeople[0]->passLevel = false;
@@ -1537,17 +1547,13 @@ void cGame::endlessMode() {
 	//drawingThread.join();
 
 }
-void cGame::GameOver() {
-	// draw game over animation // has  a box to know game point and time
-	// draw game over menu has choices: exit game, start new game with same map, back to main menu
-
-}
 void cGame::GameWin() {
 	// draw game win animation //
 	// draw game win menu has choices: exit game, start new game with next map, back to main menu, save game score and time
 }
 void cGame::load(string fileName)
 {
+	resetTime();
 	if (hasSuddenStop)
 	{
 		hasSuddenStop = false;
@@ -1618,6 +1624,10 @@ void cGame::load(string fileName)
 	}
 
 	ifs.close();
+	timePauseStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+	timePauseEnd = timePauseStart;
+	timeStart -= totalTime * 1000;
+
 	gameMap::changeMapTheme(game.currentTheme);
 	gameMap::currentMap = &gameMap::listMap[game.currentTheme][game.currentPhase];
 	game.spawnEnvironment();	
