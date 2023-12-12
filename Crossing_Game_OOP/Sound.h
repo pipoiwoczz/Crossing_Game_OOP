@@ -16,10 +16,12 @@ enum class SoundEffect {
 	surferFx = 6,
 	vehicleFx = 7,
 	riverFx = 8,
-	flashFx = 9
+	flashFx = 9,
+	freezeFx = 10
  };
 enum class SoundTrack {
 	background = 0
+
 };
 class Sound {
 private:

@@ -82,39 +82,17 @@ void cPeople::changeskin(bool isChange)
 
 int cPeople::useSkill()
 {
-	if (!used[0] && (GetKeyState(0x31) & 0x8000))
+	if (GetKeyState(0x31) & 0x8000)
 	{
-		used[0] = true;
-		skill[0] = true;
 		return 0;
 	}
-	if (!used[1] && (GetKeyState(0x32) & 0x8000))
+	if (GetKeyState(0x32) & 0x8000)
 	{
-		used[1] = true;
-		skill[1] = true;
 		return 1;
 	}
 	return -1;
 }
 
-void cPeople::teleport()
-{
-	if (currentFrame == 0)
-	{
-		topleft.Y -= 36;
-	}
-	else if (currentFrame == 1)
-	{
-		topleft.X += 48;
-	}
-	else if (currentFrame == 2)
-	{
-		topleft.Y += 36;
-	}
-	else {
-		topleft.X -= 48;
-	}
-}
 bool cPeople::move() {
 	if (forceStop)
 		return false;

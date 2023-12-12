@@ -77,7 +77,7 @@ vector<vector<gameMap>> gameMap::listMap;
 
 //Sound Assets
 wstring Sound::currentSound;
-vector<wstring> Sound::SoundEffectList = { L"menuMove", L"coinEarn", L"LionFx", L"RhinoFx", L"CrocoFx", L"SharkFx", L"SurferFx", L"VehicleFx", L"RiverFx", L"flashFx"};
+vector<wstring> Sound::SoundEffectList = { L"menuMove", L"coinEarn", L"LionFx", L"RhinoFx", L"CrocoFx", L"SharkFx", L"SurferFx", L"VehicleFx", L"RiverFx", L"flashFx", L"freezeFx"};
 vector<wstring> Sound::TrackList = { L"background" };
 
 //Map-related stuffs
@@ -98,6 +98,7 @@ bool gameinit = cGame::InitGame();
 
 bool mainLoader()
 {
+	_mkdir("Save");
 	cAsset::settingsLoader();
 	Sound::startAudioEngine();
 	cBar loadingBar(&cGame::mainMenu, { 20, 140 },  500, 8, Color::red, Color::white);

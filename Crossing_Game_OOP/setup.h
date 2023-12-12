@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <mmsystem.h>
 #include <future>
+#include <direct.h>
 
 #pragma comment(lib, "winmm.lib")
 

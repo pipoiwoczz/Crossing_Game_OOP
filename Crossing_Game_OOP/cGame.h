@@ -29,7 +29,6 @@ class cGame {
 	vector<cEnvironment*>  environmentObject;
     vector<cPeople *> livePeople;
 	vector<cWidget*> listWidget;
-	vector<cWidget*> listSkill;
 	vector<cLabel*> listLabel;
 
 	short gameOrder, gameLevel; // order: 1 or 2 player
@@ -59,6 +58,17 @@ class cGame {
 
 	cObstacle* nemesis;
 	cPeople* victim;
+
+	//Skills
+	int skillCooldown[2] = { 0, 0 };
+	int defaultSkillCooldown[2] = { 400, 400 };
+	int freezetime = 100;
+	vector<cWidget*> listSkill;
+	vector<cLabel*> cooldownLabel;
+	int handlingSkillExec(cPeople* pPeople);
+	void updateSkillState();
+	void teleport(cPeople* pPeople);
+
 
 	cGame();
 	~cGame();
@@ -104,7 +114,6 @@ class cGame {
 		void drawThread();
 		void pizzaDraw();
 
-		int handlingSkillExec(cPeople* pPeople);
 
 		vector<cPeople *> getPeople();
         vector<cObstacle *> getObstacles();

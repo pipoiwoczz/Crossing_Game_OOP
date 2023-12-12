@@ -21,7 +21,6 @@ class cPeople {
 	bool passLevel = false;
 	static bool isRabbit;
 	bool forceStop = false;
-	bool skill[2] = { false, false };
 	bool used[2] = { false, false };
 	public:
 		friend class cGame;
@@ -38,11 +37,13 @@ class cPeople {
         void setState(bool state);
 		bool move();
 		int useSkill();
-		void teleport();
 		void setForceStop();
 		bool isDead();
 		bool isFinish();
 		void moveHitBox();
+		void resetCooldown();
+		int getCooldown(int skill);
+		void setCooldown(int skill, int value);
 		static void changeskin(bool isChange);
 };
 
