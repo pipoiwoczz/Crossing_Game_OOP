@@ -2,7 +2,7 @@
 #include "cAsset.h"
 #include "gameEngine.h"
 
-cPeople::cPeople() : cPeople({0, 145}) {}
+cPeople::cPeople() : cPeople({234, 145}) {}
 cPeople::cPeople(COORD In_pos) {
 	topleft = In_pos;
 	mState = true;
@@ -13,7 +13,7 @@ cPeople::cPeople(COORD In_pos) {
 		skin = cAsset::assetLoaders(peopleFile, CubePrefix);
 
 
-	pMotionFrame = &skin[2];
+	pMotionFrame = &skin[0];
 	currentFrame = 0;
 
 	mBox.set({ short(topleft.X + 4), short(2 + topleft.Y) }, { short(skin[0].getWidth() - 4 + topleft.X), short(skin[0].getHeight() - 2 + topleft.Y) });

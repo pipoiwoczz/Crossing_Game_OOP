@@ -30,7 +30,7 @@ cLion::cLion(COORD In_pos, /*int difficulty, int ttm*/ int speed, bool fromRight
     currentFxFrame = 0;
     numFxFrame = impactFx.size();
 
-    Box.set({ short(topleft.X + 2), short(topleft.Y) }, { short(topleft.X + pMotionFrame->getWidth() - 2), short(topleft.Y + pMotionFrame->getHeight()) });
+    Box.set({ short(topleft.X + 5), short(topleft.Y+1) }, { short(topleft.X + pMotionFrame->getWidth() - 5), short(topleft.Y + pMotionFrame->getHeight() - 1) });
 }
 
 unsigned char cLion::getType()
@@ -77,7 +77,7 @@ cRhino::cRhino(COORD In_pos, /*int difficulty, int ttm*/ int speed, bool fromRig
     currentFxFrame = 0;
     numFxFrame = impactFx.size();
 
-    Box.set({ short(topleft.X + 2), short(topleft.Y) }, { short(topleft.X + pMotionFrame->getWidth() - 2), short(topleft.Y + pMotionFrame->getHeight()) });
+    Box.set({ short(topleft.X + 5), short(topleft.Y + 1) }, { short(topleft.X + pMotionFrame->getWidth() - 5), short(topleft.Y + pMotionFrame->getHeight() - 1) });
 }
 
 unsigned char cRhino::getType()
@@ -123,7 +123,7 @@ cCrocodile::cCrocodile(COORD In_pos, /*int difficulty, int ttm*/ int speed, bool
     currentFxFrame = 0;
     numFxFrame = impactFx.size();
 
-    Box.set({ short(topleft.X + 2), short(topleft.Y) }, { short(topleft.X + pMotionFrame->getWidth() - 2), short(topleft.Y + pMotionFrame->getHeight()) });
+    Box.set({ short(topleft.X + 5), short(topleft.Y + 1) }, { short(topleft.X + pMotionFrame->getWidth() - 5), short(topleft.Y + pMotionFrame->getHeight() - 1) });
 }
 
 unsigned char cCrocodile::getType()
@@ -172,7 +172,7 @@ cShark::cShark(COORD In_pos, /*int difficulty, int ttm*/ int speed, bool fromRig
     currentFxFrame = 0;
     numFxFrame = impactFx.size();
 
-    Box.set({ short(topleft.X + 2), short(topleft.Y) }, { short(topleft.X + pMotionFrame->getWidth() - 2), short(topleft.Y + pMotionFrame->getHeight()) });
+    Box.set({ short(topleft.X + 5), short(topleft.Y + 1) }, { short(topleft.X + pMotionFrame->getWidth() - 5), short(topleft.Y + pMotionFrame->getHeight() - 1) });
 }
 
 unsigned char cShark::getType()
@@ -221,7 +221,7 @@ cSurfer::cSurfer(COORD In_pos, /*int difficulty, int ttm*/ int speed, bool fromR
     currentFxFrame = 0;
     numFxFrame = impactFx.size();
 
-    Box.set({ short(topleft.X + 2), short(topleft.Y) }, { short(topleft.X + pMotionFrame->getWidth() - 2), short(topleft.Y + pMotionFrame->getHeight()) });
+    Box.set({ short(topleft.X + 5), short(topleft.Y + 1) }, { short(topleft.X + pMotionFrame->getWidth() - 5), short(topleft.Y + pMotionFrame->getHeight() - 1) });
 }
 
 unsigned char cSurfer::getType()

@@ -29,7 +29,7 @@ cTruck::cTruck(COORD In_pos, /*int difficulty, int ttm*/ int speed, bool fromRig
 	currentFxFrame = 0;
 	numFxFrame = impactFx.size();
 
-	Box.set({ short(topleft.X + 2), short(topleft.Y) }, { short(topleft.X + pMotionFrame->getWidth() - 2), short(topleft.Y + pMotionFrame->getHeight()) });
+	Box.set({ short(topleft.X + 5), short(topleft.Y + 1) }, { short(topleft.X + pMotionFrame->getWidth() - 5), short(topleft.Y + pMotionFrame->getHeight() - 1) });
 }
 
 unsigned char cTruck::getType()
@@ -77,7 +77,7 @@ cMotorbike::cMotorbike(COORD In_pos, /*int difficulty, int ttm*/ int speed, bool
 	currentFxFrame = 0;
 	numFxFrame = impactFx.size();
 
-	Box.set({ short(topleft.X + 2), short(topleft.Y) }, { short(topleft.X + pMotionFrame->getWidth() - 2), short(topleft.Y + pMotionFrame->getHeight()) });
+	Box.set({ short(topleft.X + 5), short(topleft.Y + 1) }, { short(topleft.X + pMotionFrame->getWidth() - 5), short(topleft.Y + pMotionFrame->getHeight() - 1) });
 }
 
 unsigned char cMotorbike::getType()
@@ -125,7 +125,7 @@ cCar::cCar(COORD In_pos, /*int difficulty, int ttm*/ int speed, bool fromRight) 
 	currentFxFrame = 0;
 	numFxFrame = impactFx.size();
 
-	Box.set({ short(topleft.X + 2), short(topleft.Y) }, { short(topleft.X + pMotionFrame->getWidth() - 2), short(topleft.Y + pMotionFrame->getHeight()) });
+	Box.set({ short(topleft.X + 5), short(topleft.Y + 1) }, { short(topleft.X + pMotionFrame->getWidth() - 5), short(topleft.Y + pMotionFrame->getHeight() - 1) });
 }
 
 unsigned char cCar::getType()
