@@ -68,7 +68,7 @@ class cGame {
 	int handlingSkillExec(cPeople* pPeople);
 	void updateSkillState();
 	void teleport(cPeople* pPeople);
-
+	int skillValue = -1;
 
 	cGame();
 	~cGame();

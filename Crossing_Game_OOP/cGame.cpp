@@ -32,8 +32,7 @@ void cGame::teleport(cPeople* pPeople)
 
 int cGame::handlingSkillExec(cPeople* pPeople)
 {
-	int returnValue = pPeople->useSkill();
-	if (skillCooldown[0] == 0 && returnValue == 0)
+	if (skillCooldown[0] == 0 && skillValue == 0)
 	{
 		oldPos = pPeople->topleft;
 		cGameEngine::playFlashEffect(oldPos);
@@ -41,6 +40,7 @@ int cGame::handlingSkillExec(cPeople* pPeople)
 		cGameEngine::renderPeople(pPeople);
 		skillCooldown[0] = defaultSkillCooldown[0];
 		pPeople->used[0] = true;
+		skillValue = -1;
 		return 1;
 	}
 
@@ -52,11 +52,12 @@ int cGame::handlingSkillExec(cPeople* pPeople)
 		skillCooldown[0]--;
 	}
 
-	if (skillCooldown[1] == 0 && returnValue == 1)
+	if (skillCooldown[1] == 0 && skillValue == 1)
 	{
 		suddenStop = true;
 		pPeople->used[1] = true;
 		skillCooldown[1] = defaultSkillCooldown[1];
+		skillValue = -1;
 		return 0;
 	}
 
@@ -1221,6 +1222,7 @@ void cGame::MainGame() {
 	while (!isExit) {
 		for (int i = 0; i < livePeople.size(); i++)
 		{
+			skillValue = livePeople[i]->useSkill();
 			if (livePeople[i]->used[0])
 			{
 				Sound::playSoundEffect(SoundEffect::flashFx);
