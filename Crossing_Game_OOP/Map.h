@@ -8,10 +8,10 @@ private:
 
 	static int currentTheme;
 	static gameMap* currentMap;
-	static int currentMapIndex;
-	static int numCurrentMapFrame;
+	static int currentMapIndex; // current bg # (for the theme)
+	static int numCurrentMapFrame; // total bg # for the theme
 
-	static int mapLoopCooldown;
+	static int mapLoopCooldown; // timer until cycle
 	CHAR_INFO* mapArray = nullptr;
 	short width;
 	short height;
@@ -25,12 +25,12 @@ public:
 	gameMap(const gameMap& a);
 	gameMap& operator=(const gameMap& a);
 
-	static vector<gameMap> loadMap(const vector<string>& mapFrames);
+	static vector<gameMap> loadMap(const vector<string>& mapFrames); // load listMap
 	static gameMap* getCurrentMap();
-	static void changeMapTheme(MapTheme newTheme);
+	static void changeMapTheme(MapTheme newTheme); // change theme
 	static void changeMapTheme(int newTheme);
-	static void nextMapFrame();
-	static void mapChangeTick();
+	static void nextMapFrame(); // cycle through backgrounds
+	static void mapChangeTick(); // loop and call nextMapFrame periodically
 
 	friend cAsset;
 	friend bool mainLoader();
