@@ -77,7 +77,7 @@ vector<vector<gameMap>> gameMap::listMap;
 
 //Sound Assets
 wstring Sound::currentSound;
-vector<wstring> Sound::SoundEffectList = { L"menuMove", L"coinEarn", L"LionFx", L"RhinoFx", L"CrocoFx", L"SharkFx", L"SurferFx", L"VehicleFx", L"RiverFx", L"flashFx", L"freezeFx"};
+vector<wstring> Sound::SoundEffectList = { L"menuMove", L"coinEarn", L"LionFx", L"RhinoFx", L"CrocoFx", L"SharkFx", L"SurferFx", L"VehicleFx", L"RiverFx", L"flashFx", L"freezeFx", L"levelUp"};
 vector<wstring> Sound::TrackList = { L"background" };
 
 //Map-related stuffs
