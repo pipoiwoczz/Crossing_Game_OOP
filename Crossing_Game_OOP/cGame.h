@@ -4,7 +4,6 @@
 class cObstacle;
 class cEnvironment;
 class cPeople;
-void cleanGame();
 
 class cDWindow;
 class cWidget;
@@ -14,7 +13,6 @@ class cGame;
 class cCoin;
 
 class cGame {
-	COORD oldPos;
 	const vector <vector<string>> CreatedLevel{
 		{"jungle1.txt","jungle2.txt","jungle3.txt","jungle4.txt","jungle5.txt"},
 		{"beach1.txt","beach2.txt","beach3.txt","beach4.txt","beach5.txt"},
@@ -41,12 +39,12 @@ class cGame {
 	bool hasSuddenStop = false;
 
 	//Game info
-	long coinBonus;
-	long totalPoint;
+
 	double totalTime;
 	double timeStart, timeEnd;
 	double timePauseStart, timePauseEnd;
 	double timePause;
+	int time;
 
 	int currentTheme;
 	int currentPhase;
@@ -56,23 +54,21 @@ class cGame {
 	thread drawThreadHandle;
 	thread randomStopThreadHandle;
 
-	cObstacle* nemesis;
-	cPeople* victim;
+	cObstacle* nemesis = nullptr;
+	cPeople* victim = nullptr;
 
 	//Skills
-	int skillCooldown[2] = { 0, 0 };
 	int defaultSkillCooldown[2] = { 60000, 60000 };
 	int freezetime = 100;
-	vector<cWidget*> listSkill;
-	vector<cLabel*> cooldownLabel;
+	void handlingSkillFx();
 	int handlingSkillExec(cPeople* pPeople, long long &startTime);
 	void updateSkillState();
 	void teleport(cPeople* pPeople);
-	int skillValue = -1;
 
 	cGame();
 	~cGame();
 	public:
+
 		static cWidget window;
 		static cDWindow mainMenu;
 		static bool mainloop;
@@ -88,6 +84,8 @@ class cGame {
 		void spawnEnvironment(); //summon environment objects of current map theme
 		
 		void prepareGame();
+		void prepareUI();
+		void clearUI();
 
 		void GamePlayPanel();
 
@@ -115,36 +113,29 @@ class cGame {
 		void pizzaDraw(long long &startTime);
 
 
-		vector<cPeople *> getPeople();
-        vector<cObstacle *> getObstacles();
+		cPeople* mainPeople = nullptr;
 
 		void updateInfo();
 
 
 		void randomStopThread();
 		
-		void resetGame();
-		void exitGame(HANDLE t);
-		void pauseGame();	
-		static void resumeGame();
+		bool isComplete();
+
 		void resumeFunction();
 		void save(string fileName);
 
         bool isImpact();
 		
-		void updatePosObstacle();
 
 		short getGameOrder();
 
 		void ScoreBoard();
 		void MainGame();
-		void LoadGame();
 		void load(string fileName);
-		void Setting();
-		void GameOver();
-		void GameWin();
+		void GameWinPanel();
+		void processLose();
 
-		void drawBackGround();
 		//void impactEffect(cObstacle* obsta);
 		void spawnPeople();
 		

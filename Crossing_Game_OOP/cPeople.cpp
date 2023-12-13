@@ -75,6 +75,12 @@ void cPeople::moveHitBox()
 	mBox.set({ short(topleft.X + 4), short(2 + topleft.Y) }, { short(skin[0].getWidth() - 4 + topleft.X), short(skin[0].getHeight() - 2 + topleft.Y) });
 }
 
+void cPeople::resetCooldown()
+{
+	skillCooldown[0] = 0;
+	skillCooldown[1] = 0;
+}
+
 void cPeople::changeskin(bool isChange)
 {
 	isRabbit = (isChange);

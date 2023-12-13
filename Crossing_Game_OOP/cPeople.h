@@ -15,6 +15,15 @@ class cPeople {
 	COORD carryOffset = { 0, 0 };
 
     COORD topleft;
+
+	//For skill
+	COORD oldPos = { 0,0 };
+
+
+	long coinNow = 0;
+	long coinBonus = 0;
+	long totalPoint = 0;
+
 	int isFlashing = 0;
 	bool mState; // true is alive, false is dead
 	int moveCooldown;
@@ -22,6 +31,7 @@ class cPeople {
 	static bool isRabbit;
 	bool forceStop = false;
 	bool used[2] = { false, false };
+	int skillCooldown[2] = { 0,0 };
 	public:
 		friend class cGame;
 		friend class cGameEngine;
@@ -42,8 +52,6 @@ class cPeople {
 		bool isFinish();
 		void moveHitBox();
 		void resetCooldown();
-		int getCooldown(int skill);
-		void setCooldown(int skill, int value);
 		static void changeskin(bool isChange);
 };
 
