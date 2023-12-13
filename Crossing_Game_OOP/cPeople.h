@@ -20,9 +20,7 @@ class cPeople {
 	COORD oldPos = { 0,0 };
 
 
-	long coinNow = 0;
-	long coinBonus = 0;
-	long totalPoint = 0;
+
 
 	int isFlashing = 0;
 	bool mState; // true is alive, false is dead

@@ -39,7 +39,9 @@ class cGame {
 	bool hasSuddenStop = false;
 
 	//Game info
-
+	long coinNow = 0;
+	long coinBonus = 0;
+	long totalPoint = 0;
 	double totalTime;
 	double timeStart, timeEnd;
 	double timePauseStart, timePauseEnd;

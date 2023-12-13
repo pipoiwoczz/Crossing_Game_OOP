@@ -1011,7 +1011,7 @@ void cGame::environmentImpact()
 						if (environmentObject[j]->Box.isOverlap(livePeople[u]->mBox))
 						{
 							environmentObject[j]->hitSound();
-							livePeople[u]->coinBonus += 30;
+							coinBonus += 30;
 							delete environmentObject[j];
 							environmentObject.erase(environmentObject.begin() + j);
 						}
@@ -1137,7 +1137,7 @@ void cGame::prepareUI()
 	cDWindow* rr = new cDWindow(&window, { 504, 0 }, "panelinfo.txt", true);
 	//cDWindow howtoplay(&rr, { 0,110 }, "howtoplay.txt", true);
 	cLabel* t1 = new cLabel(rr, { 10, 5 }, "SCORES", 1, Color::red, true);
-	string point = to_string(mainPeople->totalPoint);
+	string point = to_string(totalPoint);
 	cLabel* t2 = new cLabel(rr, { 10, 15 }, point, 2, Color::red, true);
 	cLabel* t3 = new cLabel(rr, { 10, 25 }, "TIME", 1, Color::red, true);
 	time = int(calculateTime());
@@ -1232,8 +1232,9 @@ void cGame::processLose()
 		nemesis->hitSound();
 		nemesis->hitEffect(victim);
 		nemesis->hitSound();
-		victim->coinBonus = 0;
 	}
+
+	coinBonus = 0;
 
 	Sleep(1000);
 	cGameEngine::fillScreenWithLastFrame(true);
@@ -1366,10 +1367,10 @@ void cGame::updateInfo()
 		time = int(calculateTime());
 		listLabel[3]->updateText(to_string(time));
 	}
-	if (mainPeople->coinBonus != mainPeople->coinNow) {
-		listLabel[6]->updateText("30 x " + to_string(mainPeople->coinBonus / 30));
+	if (coinBonus != coinNow) {
+		listLabel[6]->updateText("30 x " + to_string(coinBonus / 30));
 		Sound::playSoundEffect(SoundEffect::coinEarn);
-		mainPeople->coinNow = mainPeople->coinBonus;
+		coinNow = coinBonus;
 	}
 }
 
@@ -1458,12 +1459,12 @@ void cGame::save(string fileName) {
 	time.getTime();
 	ofs << time << endl;
 
-	ofs << gameOrder << " " << gameLevel << " " << currentTheme << " " << currentPhase << " " << totalTime << " " << timePause << endl;
+	ofs << gameOrder << " " << gameLevel << " " << currentTheme << " " << currentPhase << " " << totalPoint << " " << coinBonus << " " << totalTime << " " << timePause << endl;
 	// people and their position
 	ofs << livePeople.size() << endl;
 	for (cPeople* element : livePeople)
 	{
-		ofs << element->getPos().X << " " << element->getPos().Y << " " << element->totalPoint << " " << element->coinBonus << endl;
+		ofs << element->getPos().X << " " << element->getPos().Y << " " << endl;
 	}
 
 	// obstacles and their position
@@ -1592,16 +1593,16 @@ void cGame::calculatePoint() {
 	int bonus[6] = { 120, 70, 35, 15, 5, 0 };
 	int count = min(int(calculateTime() / 5), 5);
 	totalTime += calculateTime();
-	mainPeople->totalPoint += 100 + bonus[count];
-	mainPeople->totalPoint += mainPeople->coinBonus;
+	totalPoint += 100 + bonus[count];
+	totalPoint += coinBonus;
 	resetTime();
 }
 
 void cGame::nextLevel() {
 	int bonus[6] = { 120, 70, 35, 15, 5, 0 };
 	int count = min(int(calculateTime() / 5), 5);
-	int roundScore = bonus[count] + mainPeople->coinBonus + 100;
-	listLabel[1]->updateText(to_string(mainPeople->totalPoint) + " + " + to_string(roundScore));
+	int roundScore = bonus[count] + coinBonus + 100;
+	listLabel[1]->updateText(to_string(totalPoint) + " + " + to_string(roundScore));
 	listLabel[2]->updateText("TIME BONUS");
 	listLabel[3]->updateText(to_string(bonus[count]));
 
@@ -1611,7 +1612,7 @@ void cGame::nextLevel() {
 	if (currentPhase == 4) currentPhase--;
 	clearObjects();
 	spawnObstacle(CreatedLevel[currentTheme][(++currentPhase) % CreatedLevel[currentTheme].size()]);
-	mainPeople->coinBonus = 0;
+	coinBonus = 0;
 	timePause = 0;
 	timeStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 	timeEnd = timeStart;
@@ -1625,11 +1626,11 @@ void cGame::nextLevel() {
 	mainPeople->setForceStop();
 
 	listLabel[2]->updateText("TIME");
-	listLabel[1]->updateText(to_string(mainPeople->totalPoint));
+	listLabel[1]->updateText(to_string(totalPoint));
 	livePeople[0]->passLevel = false;
 	time = 0;
-	mainPeople->coinNow = 0;
-	listLabel[6]->updateText("30 x " + to_string(mainPeople->coinBonus / 30));
+	coinNow = 0;
+	listLabel[6]->updateText("30 x " + to_string(coinBonus / 30));
 	listLabel[3]->updateText(to_string(time));
 }
 
@@ -1716,7 +1717,7 @@ void cGame::load(string fileName)
 	Time time;
 	ifs >> time;
 
-	ifs >> game.gameOrder >> game.gameLevel >> game.currentTheme >> game.currentPhase >> game.totalTime >> game.timePause;
+	ifs >> game.gameOrder >> game.gameLevel >> game.currentTheme >> game.currentPhase >> game.totalPoint >> game.coinBonus >> game.totalTime >> game.timePause;
 
 	game.livePeople.resize(game.gameOrder);
 	int dump;
@@ -1726,7 +1727,6 @@ void cGame::load(string fileName)
 		short x, y;
 		ifs >> x >> y;
 		game.livePeople[i] = new cPeople({ x, y });
-		ifs >> game.livePeople[i]->totalPoint >> game.livePeople[i]->coinBonus;
 	}
 
 	int obstacleCount;
