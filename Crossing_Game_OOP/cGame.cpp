@@ -1161,7 +1161,7 @@ void cGame::prepareUI()
 	cLabel* t10 = new cLabel(rr, { 60, 100 }, to_string(mainPeople->skillCooldown[1]), 1, Color::red);
 	cLabel* t11 = new cLabel(rr, {10, 140}, "LEVEL: " + to_string(gameLevel), 1, Color::red, true);
 
-	cLabel* t11 = new cLabel(rr, { 10, 120 }, "TAB: KEYBOARD CONTROL", 1, Color::red, true);
+	cLabel* t12 = new cLabel(rr, { 10, 120 }, "HELP: TAB", 1, Color::red, true);
 
 	listWidget.push_back(skill1R);
 	listWidget.push_back(skill1U);
@@ -1180,6 +1180,7 @@ void cGame::prepareUI()
 	listLabel.push_back(t9);
 	listLabel.push_back(t10);
 	listLabel.push_back(t11);
+	listLabel.push_back(t12);
 }
 
 void cGame::handlingSkillFx()
@@ -1726,7 +1727,7 @@ void cGame::nextLevel() {
 	suddenStop = true;
 	string src[3] = { "jungle1.txt", "beach1.txt", "city1.txt" };
 	string themeString = src[currentTheme];
-	cDWindow theme(&window, themeString, true);
+	cDWindow theme(&window, { 0, 0 }, themeString, true);
 	cDWindow suddenstop(&theme, { 0, 0 }, "levelUp.txt", true);
 	Sound::playSoundEffect(SoundEffect::levelup);
 	Sleep(2000);
