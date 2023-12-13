@@ -55,7 +55,7 @@ const vector<vector<string>> mapFiles{
 	{"beach1", "beach2", "beach3"},
 	{"city1"}
 };
-const vector<string> peopleFile { "up", "right", "down", "left"};
+const vector<string> PeopleFile { "up", "right", "down", "left"};
 
 
 

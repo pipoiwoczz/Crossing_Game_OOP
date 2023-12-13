@@ -473,7 +473,7 @@ void cGameEngine::playEffect(cObstacle* obsta, cPeople* player)
 	SMALL_RECT fxframe = { OuterFrameTopLeft.X, OuterFrameTopLeft.Y, OuterFrameTopLeft.X + w - 1, OuterFrameTopLeft.Y + h - 1 };
 
 
-	player->pMotionFrame = &player->skin[3];
+	player->pMotionFrame = player->pLMotionFrame + 3;
 	//replaceBlankPixel(player->pMotionFrame->textureArray, { player->pMotionFrame->width, player->pMotionFrame->height }, cAsset::FxFrame.textureArray, { w, h }, { 120, 25 });
 
 	COORD startpos = { 50, 25 };

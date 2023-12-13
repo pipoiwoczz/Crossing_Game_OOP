@@ -2,21 +2,42 @@
 #include "cAsset.h"
 #include "gameEngine.h"
 
-cPeople::cPeople() : cPeople({234, 145}) {}
-cPeople::cPeople(COORD In_pos) {
+cPeople::cPeople(int skin) : cPeople({234, 145}, skin) {}
+cPeople::cPeople(COORD In_pos, int skin) {
 	topleft = In_pos;
 	mState = true;
 	moveCooldown = 0;
-	if (isRabbit)
-		skin = cAsset::assetLoaders(peopleFile, RabbitPrefix);
-	else
-		skin = cAsset::assetLoaders(peopleFile, CubePrefix);
 
+	if (skin == 0)
+	{
+		controlKey[0] = VK_UP;
+		controlKey[1] = VK_RIGHT;
+		controlKey[2] = VK_DOWN;
+		controlKey[3] = VK_LEFT;
 
-	pMotionFrame = &skin[0];
+		skillKey[0] = 0x4F;
+		skillKey[1] = 0x50;
+
+		pLMotionFrame = &skinRabbit[0];
+		numFrame = skinRabbit.size();
+	}
+	else {
+		controlKey[0] = 0x57;
+		controlKey[1] = 0x44;
+		controlKey[2] = 0x53;
+		controlKey[3] = 0x41;
+
+		skillKey[0] = 0x52;
+		skillKey[1] = 0x46;
+
+		pLMotionFrame = &skinCube[0];
+		numFrame = skinCube.size();
+	}
+	
+	pMotionFrame = pLMotionFrame;
 	currentFrame = 0;
 
-	mBox.set({ short(topleft.X + 4), short(2 + topleft.Y) }, { short(skin[0].getWidth() - 4 + topleft.X), short(skin[0].getHeight() - 2 + topleft.Y) });
+	mBox.set({ short(topleft.X + 4), short(2 + topleft.Y) }, { short(pMotionFrame->getWidth() - 4 + topleft.X), short(pMotionFrame->getHeight() - 2 + topleft.Y) });
 	used[0] = false;
 	used[1] = false;
 	skillCooldown[0] = 0;
@@ -49,7 +70,7 @@ COORD cPeople::getPos() {
 }
 void cPeople::setPos(COORD pos) {
 	topleft = pos;
-	mBox.set({ short(topleft.X + 4), short(2 + topleft.Y) }, { short(skin[0].getWidth() - 4 + topleft.X), short(skin[0].getHeight() - 2 + topleft.Y) });
+	mBox.set({ short(topleft.X + 4), short(2 + topleft.Y) }, { short(pMotionFrame->getWidth() - 4 + topleft.X), short(pMotionFrame->getHeight() - 2 + topleft.Y) });
 }
 bool cPeople::getState()
 {
@@ -76,7 +97,7 @@ bool cPeople::isFinish() {
 
 void cPeople::moveHitBox()
 {
-	mBox.set({ short(topleft.X + 4), short(2 + topleft.Y) }, { short(skin[0].getWidth() - 4 + topleft.X), short(skin[0].getHeight() - 2 + topleft.Y) });
+	mBox.set({ short(topleft.X + 4), short(2 + topleft.Y) }, { short(pMotionFrame->getWidth() - 4 + topleft.X), short(pMotionFrame->getHeight() - 2 + topleft.Y) });
 }
 
 void cPeople::resetCooldown()
@@ -85,18 +106,26 @@ void cPeople::resetCooldown()
 	skillCooldown[1] = 0;
 }
 
-void cPeople::changeskin(bool isChange)
+void cPeople::changeskin(SkinIndex skin)
 {
-	isRabbit = (isChange);
+	if (skin == SkinIndex::rabbit)
+	{
+		pLMotionFrame = &skinRabbit[0];
+		numFrame = skinRabbit.size();
+	}
+	else {
+		pLMotionFrame = &skinCube[0];
+		numFrame = skinCube.size();
+	}
 }
 
 int cPeople::useSkill()
 {
-	if (GetKeyState(0x31) & 0x8000)
+	if (GetKeyState(skillKey[0]) & 0x8000)
 	{
 		return 0;
 	}
-	if (GetKeyState(0x32) & 0x8000)
+	if (GetKeyState(skillKey[1]) & 0x8000)
 	{
 		return 1;
 	}
@@ -114,14 +143,14 @@ bool cPeople::move() {
 	bool ismove = false;
 	bool horizon;
 	float dx = 0, dy = 0;
-	if (GetAsyncKeyState(VK_LEFT) < 0/* && topleft.X > 0*/) {
+	if (GetAsyncKeyState(controlKey[3]) < 0/* && topleft.X > 0*/) {
 		dx--;
 		horizon = true;
 		ismove = true;
 		currentFrame = 3;
 	}
 
-	if (GetAsyncKeyState(VK_RIGHT) < 0 /*&& topleft.X < PlayBoxRect.Right - pMotionFrame->getWidth()*/) {
+	if (GetAsyncKeyState(controlKey[1]) < 0 /*&& topleft.X < PlayBoxRect.Right - pMotionFrame->getWidth()*/) {
 		dx++;	
 		horizon = true;
 		ismove = true;
@@ -129,7 +158,7 @@ bool cPeople::move() {
 
 	}
 
-	if (GetAsyncKeyState(VK_UP) < 0) {
+	if (GetAsyncKeyState(controlKey[0]) < 0) {
 		if (topleft.Y == 1)
 		{
 			topleft.Y = 163;
@@ -145,7 +174,7 @@ bool cPeople::move() {
 		}
 	} 
 
-	if (GetAsyncKeyState(VK_DOWN) < 0 /*&& topleft.Y < PlayBoxRect.Bottom - pMotionFrame->getHeight() + 1*/) {
+	if (GetAsyncKeyState(controlKey[2]) < 0 /*&& topleft.Y < PlayBoxRect.Bottom - pMotionFrame->getHeight() + 1*/) {
 		dy++;
 		horizon = false;
 		ismove = true;
@@ -156,7 +185,7 @@ bool cPeople::move() {
 
 	if (ismove)
 	{
-		pMotionFrame = &skin[currentFrame];
+		pMotionFrame = pLMotionFrame + currentFrame;
 		if (!horizon)
 		{
 			moveCooldown = 4;

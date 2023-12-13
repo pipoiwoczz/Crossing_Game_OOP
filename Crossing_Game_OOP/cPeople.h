@@ -4,11 +4,20 @@
 #include "setup.h"
 #include "hitbox.h"
 class Texture;
+class cButton;
+
+enum class SkinIndex {
+	rabbit = 0,
+	cube = 1
+};
+
 class cPeople {
-	vector<Texture> skin;
+	static vector<Texture> skinRabbit;
+	static vector<Texture> skinCube;
 
-
+	Texture* pLMotionFrame;
 	Texture* pMotionFrame;
+	int numFrame;
 	int currentFrame;
 
 	//Handle people movement when being carried by an object, Ex: standing on lilypad
@@ -19,24 +28,23 @@ class cPeople {
 	//For skill
 	COORD oldPos = { 0,0 };
 
-
-
+	int controlKey[4];
+	int skillKey[2];
 
 	int isFlashing = 0;
 	bool mState; // true is alive, false is dead
 	int moveCooldown;
 	bool passLevel = false;
-	static bool isRabbit;
 	bool forceStop = false;
 	bool used[2] = { false, false };
 	int skillCooldown[2] = { 0,0 };
 	public:
 		friend class cGame;
 		friend class cGameEngine;
-		/*vector<Hitbox> mBoxes;*/
+		friend bool mainLoader();
 		Hitbox mBox;
-		cPeople();
-		cPeople(COORD In_pos);
+		cPeople(int skin);
+		cPeople(COORD In_pos, int skin);
 		~cPeople();
 		void normalizingTopleft();
 		COORD getPos();
@@ -50,7 +58,7 @@ class cPeople {
 		bool isFinish();
 		void moveHitBox();
 		void resetCooldown();
-		static void changeskin(bool isChange);
+		void changeskin(SkinIndex skin);
 };
 
 #endif

@@ -60,6 +60,8 @@ class cGame {
 	cPeople* victim = nullptr;
 
 	//Skills
+	vector<vector<cWidget*>> SkillIcon;
+	vector<vector<cLabel*>> Skillcooldown;
 	int defaultSkillCooldown[2] = { 60000, 60000 };
 	int freezetime = 100;
 	void handlingSkillFx();
@@ -86,11 +88,15 @@ class cGame {
 
 		void spawnEnvironment(); //summon environment objects of current map theme
 		
+		bool checkPassLevel();
+
 		void prepareGame();
 		void prepareUI();
 		void clearUI();
 
 		void GamePlayPanel();
+
+		bool GameCharacterPanel();
 
 		void GameNewGamePanel();
 

@@ -41,6 +41,8 @@ bool enginecheck = cGameEngine::startEngine();
 
 //GameAsset
 //Textures
+vector<Texture> cPeople::skinRabbit;
+vector<Texture> cPeople::skinCube;
 Texture cAsset::blankchar;
 Texture cCoin::motionFrame;
 Texture cAsset::flashEffect;
@@ -91,7 +93,6 @@ int gameMap::mapLoopCooldown = 15;
 cWidget cGame::window;
 cDWindow cGame::mainMenu;
 cGame cGame::game;
-bool cPeople::isRabbit = true;
 
 
 bool gameinit = cGame::InitGame();
@@ -107,6 +108,9 @@ bool mainLoader()
 	cAsset::specialCharLoader();
 	cAsset::blankchar = cAsset::assetLoader("blank", "Char//Alphabet//");
 	loadingBar.setProgress(false, 10);
+
+	cPeople::skinCube = cAsset::assetLoaders(PeopleFile, CubePrefix);
+	cPeople::skinRabbit = cAsset::assetLoaders(PeopleFile, RabbitPrefix);
 
 	cCoin::motionFrame = cAsset::assetLoader("coin", TexturePrefix);
 	cAsset::flashEffect = cAsset::assetLoader("skillFlash", FxPrefix);
