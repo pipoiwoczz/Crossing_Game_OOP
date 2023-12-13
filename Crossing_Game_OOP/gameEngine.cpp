@@ -296,6 +296,13 @@ void cGameEngine::renderEnvironment(cEnvironment* pEnvironmentObject)
 	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pEnvironmentObject->pMotionFrame->textureArray, { pEnvironmentObject->pMotionFrame->width, pEnvironmentObject->pMotionFrame->height }, pEnvironmentObject->topleft);
 }
 
+void cGameEngine::renderWidget(cWidget* pWidget)
+{
+if (!pWidget->WidgetFace.textureArray)
+		return;
+	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pWidget->WidgetFace.textureArray, { pWidget->WidgetFace.width, pWidget->WidgetFace.height }, pWidget->topleft);
+}
+
 
 
 bool cGameEngine::showWidget(cWidget* pWidget, bool instant)

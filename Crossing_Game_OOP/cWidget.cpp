@@ -25,6 +25,40 @@ cWidget::cWidget(cWidget* parent, COORD offsetFromParentTopleft, const string& i
 	}
 }
 
+cWidget::cWidget(cWidget* parent, COORD offsetFromParentTopleft, const string& imgSrc, bool isBGTheme)
+{
+	if (!parent)
+		return;
+	offset = offsetFromParentTopleft;
+	IsVisible = false;
+
+	this->parentWindow = parent;
+	topleft = { short(parentWindow->topleft.X + offset.X), short(parentWindow->topleft.Y + offset.Y) };
+	topleft = { max(topleft.X, parentWindow->topleft.X), max(topleft.Y, parentWindow->topleft.Y) };
+
+	if (!isBGTheme)
+	{
+		if (imgSrc.length() != 0)
+		{
+			WidgetFace = cAsset::assetLoader(UIPrefix + imgSrc);
+
+			botright = { short(topleft.X + WidgetFace.getWidth() - 1), short(topleft.Y + WidgetFace.getHeight() - 1) };
+			botright = { min(botright.X, parentWindow->botright.X), min(botright.Y, parentWindow->botright.Y) };
+		}
+	}
+	else {
+		if (imgSrc.length() != 0)
+		{
+			WidgetFace = cAsset::assetLoader("Maps//" + imgSrc);
+
+			botright = { short(topleft.X + WidgetFace.getWidth() - 1), short(topleft.Y + WidgetFace.getHeight() - 1) };
+			botright = { min(botright.X, parentWindow->botright.X), min(botright.Y, parentWindow->botright.Y) };
+		}
+	}
+}
+
+
+
 void cWidget::setOffset(COORD In_topleft)
 {
 	offset = In_topleft;
@@ -66,6 +100,14 @@ cDWindow::cDWindow(cDWindow* parent, COORD Topleft, const string& imgSrc, bool s
 	if (showNow)
 		show();
 }
+
+cDWindow::cDWindow(cWidget* parent, const string& imgSrc, bool showNow) : cWidget(parent, { 0,0 }, imgSrc, true)
+{
+	if (showNow)
+		show();
+}
+
+
 
 bool cDWindow::show(bool showNow)
 {

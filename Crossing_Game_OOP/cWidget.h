@@ -24,6 +24,7 @@ protected:
 	Texture WidgetFace;
 
 	cWidget(cWidget* parentWindow, COORD offsetFromParentTopleft, const string& imgSrc);
+	cWidget(cWidget* parentWindow, COORD offsetFromParentTopleft, const string& imgSrc, bool isBGTheme);
 public:
 	virtual bool show(bool showNow = true);
 	virtual bool unshow(bool showNow = true);
@@ -48,7 +49,7 @@ public:
 	cDWindow(): cWidget() {};
 	cDWindow(cWidget* parent, COORD offsetFromParentTopleft, const string& imgSrc, bool showNow = false);
 	cDWindow(cDWindow* parent, COORD offsetFromParentTopleft, const string& imgSrc, bool showNow = false);
-
+	cDWindow(cWidget* parent, const string& imgSrc, bool showNow = false);
 	bool show(bool showNow = true);
 	bool unshow(bool showNow = true);
 };

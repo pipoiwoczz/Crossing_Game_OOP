@@ -100,8 +100,9 @@ void cGame::updateSkillState()
 void cGame::pizzaDraw(long long &startTime) {
 	for (int i = 0; i < liveObstacles.size(); i++)
 	{
-		/*liveObstacles[i]->isStop = suddenStop;*/
-		if (suddenStop) 			
+		if (!hasSuddenStop)
+			liveObstacles[i]->isStop = suddenStop;
+		else if (suddenStop) 			
 			liveObstacles[i]->isStop = true;
 		liveObstacles[i]->move();
 		cGameEngine::renderObstacle(liveObstacles[i]);
@@ -501,6 +502,7 @@ void cGame::GamePausePanel()
 {
 	timePauseStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 	isPause = true;
+	GameWinPanel();
 	cDWindow panel(&window, { 122, 11 }, "panelpause.txt", true);
 	cButton panelButton[6]{
 		cButton(&panel, { 42, 21 }, "buttonresume.txt", 1),
@@ -1195,7 +1197,50 @@ void cGame::handlingSkillFx()
 
 void cGame::GameWinPanel()
 {
+	string list[3] = { "jungle1.txt", "beach1.txt", "city1.txt" };
+	string themeString = list[2];
+	cDWindow theme(&window, themeString, true);
+	cDWindow firework[5]{
+		cDWindow(&theme, { 0, 0 }, "Layer 1.txt", true),
+		cDWindow(&theme, { 0, 0 }, "Layer 2.txt", false),
+		cDWindow(&theme, { 0, 0 }, "Layer 3.txt", false),
+		cDWindow(&theme, { 0, 0 }, "Layer 4.txt", false),
+		cDWindow(&theme, { 0, 0 }, "Layer 5.txt", false)
+	};
+	cDWindow winlayer[2]{
+		cDWindow(&theme, { 0, 0 }, "winlayer1.txt", true),
+		cDWindow(&theme, { 0, 0 }, "winlayer2.txt", false)
+	};
 
+
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 5; j++) {
+			firework[j].show();
+			Sleep(200);
+		}
+	}
+	int frameCooldown = 10;
+	while (true) {
+		if (frameCooldown == 0) {
+			winlayer[1].show();
+			frameCooldown = 10;
+		}
+		else if (frameCooldown == 10){
+			winlayer[0].show();
+			frameCooldown--;
+		}
+		else {
+			frameCooldown--;
+		}
+
+		if (GetKeyState(0x0D) & 0x8000)
+		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
+			break;
+		}
+		Sleep(50);
+	}
 }
 
 void cGame::processLose()
@@ -1436,9 +1481,9 @@ void cGame::resumeFunction()
 {	
 	cDWindow panel(&window, { 204, 50 }, "panelcountdown.txt", true);
 	cDWindow countdown[3] = {
-		cDWindow(&panel, {28, 6}, "Count3.txt"),
-		cDWindow(&panel, {28, 6}, "Count2.txt"),
-		cDWindow(&panel, {20, 6}, "Count1.txt"),
+		cDWindow(&panel, {28, 6}, "Count3.txt", false),
+		cDWindow(&panel, {28, 6}, "Count2.txt", false),
+		cDWindow(&panel, {20, 6}, "Count1.txt", false),
 	};
 	for (int i = 0; i < 3; i++)
 	{
