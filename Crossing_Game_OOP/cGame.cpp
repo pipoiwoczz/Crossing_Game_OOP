@@ -1202,6 +1202,40 @@ void cGame::handlingSkillFx()
 
 void cGame::GameWinPanel()
 {
+	int bonus[6] = { 120, 70, 35, 15, 5, 0 };
+	int count = min(int(calculateTime() / 5), 5);
+	int roundScore = bonus[count] + coinBonus + 100;
+	listLabel[1]->updateText(to_string(totalPoint) + " + " + to_string(roundScore));
+	listLabel[2]->updateText("TIME BONUS");
+	listLabel[3]->updateText(to_string(bonus[count]));
+	totalPoint+= roundScore;
+
+	int n[3] = { 0, 0, 0 };
+	int k = 0;
+	int temp = 0;
+	ifstream ifs("Save//leaderboard");
+	if (ifs.is_open()) {
+		while (ifs >> temp) {
+			if (ifs.eof())
+				break;
+			n[k] = temp;
+			k++;
+		}
+	}
+	ifs.close();
+
+	for (int ind = 0; ind < 3; ind++) {
+		if (totalPoint > n[ind]) {
+			n[ind] = totalPoint;
+			break;
+		}
+	}
+	ofstream ofs("Save//leaderboard");
+	for (int id = 0; id < 3; id++) {
+		ofs << n[id] << endl;
+	}
+	ofs.close();
+
 	isPause = true;
 	mainPeople->passLevel = false;
 	Sound::pauseCurrentTrack();
@@ -1271,6 +1305,7 @@ void cGame::GameWinPanel()
 			if (current == 0)
 			{
 				currentPhase = 0;
+				resetTime();
 				clearObjects(true, true);
 				spawnObstacle(CreatedLevel[currentTheme][currentPhase]);
 				spawnEnvironment();
@@ -1725,10 +1760,11 @@ void cGame::nextLevel() {
 	isPause = true;
 	mainPeople->setForceStop();
 	suddenStop = true;
-	string src[3] = { "jungle1.txt", "beach1.txt", "city1.txt" };
+	string src[3] = { "jungle1", "beach1", "city1" };
 	string themeString = src[currentTheme];
-	cDWindow theme(&window, { 0, 0 }, themeString, true);
-	cDWindow suddenstop(&theme, { 0, 0 }, "levelUp.txt", true);
+	cDWindow theme(&window, { 0,0 }, themeString);
+	cDWindow levelUp(&theme, { 0, 0 }, "levelUp", 1);
+	levelUp.show();
 	Sound::playSoundEffect(SoundEffect::levelup);
 	Sleep(2000);
 	suddenStop = false;
