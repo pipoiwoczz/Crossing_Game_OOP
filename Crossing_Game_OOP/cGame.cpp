@@ -30,8 +30,10 @@ void cGame::teleport(cPeople* pPeople)
 	}
 }
 
-int cGame::handlingSkillExec(cPeople* pPeople)
+int cGame::handlingSkillExec(cPeople* pPeople, long long &startTime)
 {
+	long long cur = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+	long long pass = cur - startTime;
 	if (skillCooldown[0] == 0 && skillValue == 0)
 	{
 		oldPos = pPeople->topleft;
@@ -46,10 +48,10 @@ int cGame::handlingSkillExec(cPeople* pPeople)
 
 	if (skillCooldown[0] > 0)
 	{
-		if (defaultSkillCooldown[0] - skillCooldown[0] < 6)
+		if (defaultSkillCooldown[0] - skillCooldown[0] < 500)
 			cGameEngine::playFlashEffect(oldPos);
 
-		skillCooldown[0]--;
+		skillCooldown[0] -= pass;
 	}
 
 	if (skillCooldown[1] == 0 && skillValue == 1)
@@ -63,41 +65,46 @@ int cGame::handlingSkillExec(cPeople* pPeople)
 
 	if (skillCooldown[1] > 0)
 	{
-		if (defaultSkillCooldown[1] - skillCooldown[1] == 90)
+		if (defaultSkillCooldown[1] - skillCooldown[1] >= 3000)
 			suddenStop = false;
-		skillCooldown[1]--;
+		skillCooldown[1] -= pass;
 	}
+	startTime = cur;
 	return -1;
 }
 
 void cGame::updateSkillState()
 {
+
 	if (skillCooldown[0] > 0)
 	{
 		listSkill[1]->show();
-		cooldownLabel[0]->updateText(to_string(skillCooldown[0] / 21));
+		cooldownLabel[0]->updateText(to_string(skillCooldown[0] / 1000));
 	}
 	else {
 		listSkill[0]->show();
 		cooldownLabel[0]->unshow();
+		skillCooldown[0] = 0;
+		//skillValue = 0;
 	}
 
 	if (skillCooldown[1] > 0)
 	{
 		listSkill[3]->show();
-		cooldownLabel[1]->updateText(to_string(skillCooldown[1] / 21));
+		cooldownLabel[1]->updateText(to_string(skillCooldown[1] / 1000));
 	}
 	else {
 		listSkill[2]->show();
 		cooldownLabel[1]->unshow();
-
+		skillCooldown[1] = 0;
+		//skillValue = 0;
 	}
+	
 
 
 }
 
-void cGame::pizzaDraw()
-{
+void cGame::pizzaDraw(long long &startTime) {
 	for (int i = 0; i < liveObstacles.size(); i++)
 	{
 		liveObstacles[i]->isStop = suddenStop;
@@ -116,7 +123,7 @@ void cGame::pizzaDraw()
 	{
 		livePeople[i]->move();
 		cGameEngine::renderPeople(livePeople[i]);
-		if (handlingSkillExec(livePeople[i]) == 1)
+		if (handlingSkillExec(livePeople[i], startTime) == 1)
 			continue;
 		livePeople[i]->moveHitBox();
 
@@ -144,7 +151,7 @@ void cGame::collisionThread()
 
 void cGame::drawThread()
 {
-	long long time = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+	long long startTime = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 	while (!isExit)
 	{
 		if (!isLose && !isPause)
@@ -153,7 +160,7 @@ void cGame::drawThread()
 			cGameEngine::refreshBackGround(false);
 			updateInfo();
 			updateSkillState();
-			pizzaDraw();
+			pizzaDraw(startTime);
 
 			gameMap::mapChangeTick();
 			cGameEngine::fillScreen();
@@ -601,7 +608,7 @@ void cGame::GameSettingsPanel()
 				selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
 				selectarrow.show();
 			}
-			 else if (currentarrowpos == 1)
+			 else if (currentarrowpos == 1 && !isStart)
 			{
 				Sound::playSoundEffect(SoundEffect::menuMove);
 				currentarrowpos++;
