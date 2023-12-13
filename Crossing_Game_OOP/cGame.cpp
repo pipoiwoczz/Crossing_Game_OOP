@@ -1143,14 +1143,14 @@ void cGame::prepareUI()
 	//cDWindow howtoplay(&rr, { 0,110 }, "howtoplay", true);
 	cLabel* t1 = new cLabel(rr, { 10, 5 }, "SCORES", 1, Color::red, true);
 	string point = to_string(totalPoint);
-	cLabel* t2 = new cLabel(rr, { 10, 15 }, point, 2, Color::red, true);
+	cLabel* t2 = new cLabel(rr, { 20, 15 }, point, 2, Color::red, true);
 	cLabel* t3 = new cLabel(rr, { 10, 25 }, "TIME", 1, Color::red, true);
 	time = int(calculateTime());
-	cLabel* t4 = new cLabel(rr, { 10, 35 }, to_string(time), 2, Color::red, true);
+	cLabel* t4 = new cLabel(rr, { 20, 35 }, to_string(time), 2, Color::red, true);
 	cLabel* t5 = new cLabel(rr, { 10, 150 }, "ESC: PAUSE", 1, Color::red, true);
 
 	cLabel* t6 = new cLabel(rr, { 10, 45 }, "COINS", 1, Color::red, true);
-	cLabel* t7 = new cLabel(rr, { 10, 55 }, "30 x 0", 2, Color::red, true);
+	cLabel* t7 = new cLabel(rr, { 20, 55 }, "30 x 0", 2, Color::red, true);
 	cLabel* t8 = new cLabel(rr, { 10, 65 }, "SKILLS", 1, Color::red, true);
 
 	cButton* skill1R = new cButton(rr, { 10, 80 }, "iconflashR", 1, true);
@@ -1159,6 +1159,7 @@ void cGame::prepareUI()
 	cButton* skill2U = new cButton(rr, { 60, 80 }, "iconfreezeU", 1);
 	cLabel* t9 = new cLabel(rr, { 10, 100 }, to_string(mainPeople->skillCooldown[0]), 1, Color::red);
 	cLabel* t10 = new cLabel(rr, { 60, 100 }, to_string(mainPeople->skillCooldown[1]), 1, Color::red);
+	cLabel* t11 = new cLabel(rr, {10, 140}, "LEVEL: " + to_string(gameLevel), 1, Color::red, true);
 
 	cLabel* t11 = new cLabel(rr, { 10, 120 }, "TAB: KEYBOARD CONTROL", 1, Color::red, true);
 
@@ -1713,18 +1714,25 @@ void cGame::nextLevel() {
 	if (currentPhase == 4) currentPhase--;
 	clearObjects();
 	spawnObstacle(CreatedLevel[currentTheme][(++currentPhase) % CreatedLevel[currentTheme].size()]);
+	spawnCoin();
 	coinBonus = 0;
 	timePause = 0;
 	timeStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 	timeEnd = timeStart;
 	timePauseStart = 0;
 	timePauseEnd = 0;
-
+	isPause = true;
 	mainPeople->setForceStop();
 	suddenStop = true;
+	string src[3] = { "jungle1.txt", "beach1.txt", "city1.txt" };
+	string themeString = src[currentTheme];
+	cDWindow theme(&window, themeString, true);
+	cDWindow suddenstop(&theme, { 0, 0 }, "levelUp.txt", true);
+	Sound::playSoundEffect(SoundEffect::levelup);
 	Sleep(2000);
 	suddenStop = false;
 	mainPeople->setForceStop();
+	isPause = false;
 
 	listLabel[2]->updateText("TIME");
 	listLabel[1]->updateText(to_string(totalPoint));
@@ -1733,6 +1741,7 @@ void cGame::nextLevel() {
 	coinNow = 0;
 	listLabel[6]->updateText("30 x " + to_string(coinBonus / 30));
 	listLabel[3]->updateText(to_string(time));
+	listLabel[10]->updateText("LEVEL: " + to_string(gameLevel));
 }
 
 void cGame::endlessMode() {

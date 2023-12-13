@@ -17,7 +17,8 @@ enum class SoundEffect {
 	vehicleFx = 7,
 	riverFx = 8,
 	flashFx = 9,
-	freezeFx = 10
+	freezeFx = 10,
+	levelup = 11
  };
 enum class SoundTrack {
 	background = 0
