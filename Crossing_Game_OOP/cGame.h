@@ -105,6 +105,8 @@ class cGame {
 
 		void GameDiePanel();
 
+		void GameHelpPanel();
+
 		void environmentImpact();
 
 		//short getNumberOfLane();

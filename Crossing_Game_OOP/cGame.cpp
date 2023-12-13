@@ -1155,6 +1155,7 @@ void cGame::prepareUI()
 	cLabel* t9 = new cLabel(rr, { 10, 100 }, to_string(mainPeople->skillCooldown[0]), 1, Color::red);
 	cLabel* t10 = new cLabel(rr, { 60, 100 }, to_string(mainPeople->skillCooldown[1]), 1, Color::red);
 
+	cLabel* t11 = new cLabel(rr, { 10, 120 }, "TAB: KEYBOARD CONTROL", 1, Color::red, true);
 
 	listWidget.push_back(skill1R);
 	listWidget.push_back(skill1U);
@@ -1172,6 +1173,7 @@ void cGame::prepareUI()
 	listLabel.push_back(t8);
 	listLabel.push_back(t9);
 	listLabel.push_back(t10);
+	listLabel.push_back(t11);
 }
 
 void cGame::handlingSkillFx()
@@ -1193,36 +1195,36 @@ void cGame::handlingSkillFx()
 
 void cGame::GameWinPanel()
 {
-
+	
 }
 
 void cGame::processLose()
 {
-	//int n[3] = { 0, 0, 0 };
-	//int k = 0;
-	//int temp = 0;
-	//ifstream ifs("Save//leaderboard.txt");
-	//if (ifs.is_open()) {
-	//	while (ifs >> temp) {
-	//		if (ifs.eof())
-	//			break;
-	//		n[k] = temp;
-	//		k++;
-	//	}
-	//}
-	//ifs.close();
+	int n[3] = { 0, 0, 0 };
+	int k = 0;
+	int temp = 0;
+	ifstream ifs("Save//leaderboard.txt");
+	if (ifs.is_open()) {
+		while (ifs >> temp) {
+			if (ifs.eof())
+				break;
+			n[k] = temp;
+			k++;
+		}
+	}
+	ifs.close();
 
-	//for (int ind = 0; ind < 3; ind++) {
-	//	if (mainPeople->totalPoint > n[ind]) {
-	//		n[ind] = totalPoint;
-	//		break;
-	//	}
-	//}
-	//ofstream ofs("Save//leaderboard.txt");
-	//for (int id = 0; id < 3; id++) {
-	//	ofs << n[id] << endl;
-	//}
-	//ofs.close();
+	for (int ind = 0; ind < 3; ind++) {
+		if (totalPoint > n[ind]) {
+			n[ind] = totalPoint;
+			break;
+		}
+	}
+	ofstream ofs("Save//leaderboard.txt");
+	for (int id = 0; id < 3; id++) {
+		ofs << n[id] << endl;
+	}
+	ofs.close();
 
 	timePauseStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 
@@ -1253,6 +1255,11 @@ void cGame::processLose()
 	Sleep(2000);
 }
 
+void cGame::GameHelpPanel()
+{
+
+}
+
 void cGame::MainGame() {
 	isStart = true;
 	isLose = false;
@@ -1261,6 +1268,7 @@ void cGame::MainGame() {
 	
 	timeStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 	prepareUI();
+
 	if (cGameEngine::startDrawThread) {
 		drawThreadHandle = thread(&cGame::drawThread, this);
 		collisionThreadHandle = thread(&cGame::collisionThread, this);
@@ -1282,6 +1290,11 @@ void cGame::MainGame() {
 			GamePausePanel();
 		}
 	
+		if ((GetKeyState(VK_TAB) & 0x8000) && !isLose)
+		{
+			GameHelpPanel();
+		}
+
 		if (!livePeople.empty() && mainPeople->passLevel) {
 			if (isComplete())
 			{
