@@ -151,7 +151,6 @@ void cGame::drawThread()
 		{
 			cGameEngine::swapHandle();
 			cGameEngine::refreshBackGround(false);
-			updateInfo();
 			updateSkillState();
 			pizzaDraw();
 

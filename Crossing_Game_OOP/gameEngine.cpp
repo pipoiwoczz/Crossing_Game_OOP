@@ -306,7 +306,8 @@ bool cGameEngine::showWidget(cWidget* pWidget, bool instant)
 	memcpy(reservedBuffer, pWidget->WidgetFace.textureArray, pWidget->WidgetFace.width * pWidget->WidgetFace.height * sizeof(CHAR_INFO));
 	if (pWidget->parentWindow)
 		replaceBlankPixel(reservedBuffer, { pWidget->WidgetFace.width, pWidget->WidgetFace.height }, pWidget->parentWindow->WidgetFace.textureArray, { pWidget->parentWindow->WidgetFace.width, pWidget->parentWindow->WidgetFace.height }, pWidget->offset);
-	WriteConsoleOutput(curHandle, reservedBuffer, { pWidget->WidgetFace.width, pWidget->WidgetFace.height}, { 0,0 }, &region);
+	WriteConsoleOutput(Hbuffer1, reservedBuffer, { pWidget->WidgetFace.width, pWidget->WidgetFace.height }, { 0,0 }, &region);
+	WriteConsoleOutput(Hbuffer2, reservedBuffer, { pWidget->WidgetFace.width, pWidget->WidgetFace.height}, { 0,0 }, &region);
 	if (instant)
 		SetConsoleActiveScreenBuffer(curHandle);
 	return true;
@@ -319,7 +320,8 @@ bool cGameEngine::unshowWidget(cWidget* pWidget, bool instant)
 	SMALL_RECT region = { pWidget->topleft.X, pWidget->topleft.Y, pWidget->botright.X, pWidget->botright.Y };
 	replaceAllPixel(reservedBuffer, { pWidget->WidgetFace.width,  pWidget->WidgetFace.height }, pWidget->parentWindow->WidgetFace.textureArray, { pWidget->parentWindow->WidgetFace.width, pWidget->parentWindow->WidgetFace.height }, pWidget->offset);
 
-	WriteConsoleOutput(curHandle, reservedBuffer, {pWidget->WidgetFace.width, pWidget->WidgetFace.height }, { 0, 0 }, &region);
+	WriteConsoleOutput(Hbuffer1, reservedBuffer, { pWidget->WidgetFace.width, pWidget->WidgetFace.height }, { 0, 0 }, &region);
+	WriteConsoleOutput(Hbuffer2, reservedBuffer, {pWidget->WidgetFace.width, pWidget->WidgetFace.height }, { 0, 0 }, &region);
 	if (instant)
 		SetConsoleActiveScreenBuffer(curHandle);
 	return true;
@@ -339,7 +341,8 @@ bool cGameEngine::HighLightButton(cButton* pButton, bool instant)
 		cGameEngine::reservedBuffer[i].Attributes = 16 * 4 + 4;
 	}
 
-	WriteConsoleOutput(curHandle, reservedBuffer, { W , H }, { 0, 0 }, &outerRect);
+	WriteConsoleOutput(Hbuffer1, reservedBuffer, { W , H }, { 0, 0 }, &outerRect);
+	WriteConsoleOutput(Hbuffer2, reservedBuffer, { W , H }, { 0, 0 }, &outerRect);
 	pButton->show(instant);
 	return true;
 
@@ -354,7 +357,8 @@ bool cGameEngine::UnHighLightButton(cButton* pButton, bool instant)
 	SMALL_RECT outerRect = { pButton->OTopleft.X, pButton->OTopleft.Y, pButton->OBotright.X, pButton->OBotright.Y };
 	replaceAllPixel(reservedBuffer, {short(pButton->OBotright.X - pButton->OTopleft.X + 1), short(pButton->OBotright.Y - pButton->OTopleft.Y + 1)}, pButton->parentWindow->WidgetFace.textureArray, { pButton->parentWindow->WidgetFace.width, pButton->parentWindow->WidgetFace.height }, erasepos);
 
-	WriteConsoleOutput(curHandle, reservedBuffer, {short(pButton->OBotright.X - pButton->OTopleft.X + 1), short(pButton->OBotright.Y - pButton->OTopleft.Y + 1)}, { 0, 0 }, &outerRect);
+	WriteConsoleOutput(Hbuffer1, reservedBuffer, { short(pButton->OBotright.X - pButton->OTopleft.X + 1), short(pButton->OBotright.Y - pButton->OTopleft.Y + 1) }, { 0, 0 }, &outerRect);
+	WriteConsoleOutput(Hbuffer2, reservedBuffer, {short(pButton->OBotright.X - pButton->OTopleft.X + 1), short(pButton->OBotright.Y - pButton->OTopleft.Y + 1)}, { 0, 0 }, &outerRect);
 	pButton->show(instant);
 	return true;
 
@@ -387,7 +391,8 @@ bool cGameEngine::showLabel(cLabel* pLabel, bool instant)
 			}
 		}
 
-		WriteConsoleOutput(curHandle, reservedBuffer, { W, H }, { 0,0 }, &charBox);
+		WriteConsoleOutput(Hbuffer1, reservedBuffer, { W, H }, { 0,0 }, &charBox);
+		WriteConsoleOutput(Hbuffer2, reservedBuffer, { W, H }, { 0,0 }, &charBox);
 		if (instant)
 			SetConsoleActiveScreenBuffer(curHandle);
 	}
@@ -403,7 +408,8 @@ bool cGameEngine::unshowLabel(cLabel* pLabel, bool instant)
 
 	replaceAllPixel(reservedBuffer, { short(pLabel->botright.X - pLabel->topleft.X + 1), short(pLabel->botright.Y - pLabel->topleft.Y + 1)}, pLabel->parentWindow->WidgetFace.textureArray, {pLabel->parentWindow->WidgetFace.width, pLabel->parentWindow->WidgetFace.height}, pLabel->offset);
 
-	WriteConsoleOutput(cGameEngine::curHandle, cGameEngine::reservedBuffer, { short(pLabel->botright.X - pLabel->topleft.X + 1), short(pLabel->botright.Y - pLabel->topleft.Y + 1) }, { 0, 0 }, &region);
+	WriteConsoleOutput(Hbuffer1, reservedBuffer, { short(pLabel->botright.X - pLabel->topleft.X + 1), short(pLabel->botright.Y - pLabel->topleft.Y + 1) }, { 0, 0 }, &region);
+	WriteConsoleOutput(Hbuffer2, reservedBuffer, { short(pLabel->botright.X - pLabel->topleft.X + 1), short(pLabel->botright.Y - pLabel->topleft.Y + 1) }, { 0, 0 }, &region);
 	if (instant)
 		SetConsoleActiveScreenBuffer(curHandle);
 	return true;
@@ -419,11 +425,13 @@ bool cGameEngine::showBar(cBar* pBar, bool instant)
 	COORD writepos = pBar->topleft;
 
 	paintBucket(reservedBuffer, { pBar->length, pBar->width }, pBar->backcolor);
-	WriteConsoleOutput(curHandle, reservedBuffer, { pBar->length, pBar->width }, { 0,0 }, &region);
+	WriteConsoleOutput(Hbuffer1, reservedBuffer, { pBar->length, pBar->width }, { 0,0 }, &region);
+	WriteConsoleOutput(Hbuffer2, reservedBuffer, { pBar->length, pBar->width }, { 0,0 }, &region);
 
 	region.Right = region.Right - (pBar->length - pBar->currentFill);
 	paintBucket(reservedBuffer, { pBar->currentFill, pBar->width }, pBar->forecolor);
-	WriteConsoleOutput(curHandle, reservedBuffer, { pBar->currentFill, pBar->width }, { 0,0 }, &region);
+	WriteConsoleOutput(Hbuffer1, reservedBuffer, { pBar->currentFill, pBar->width }, { 0,0 }, &region);
+	WriteConsoleOutput(Hbuffer2, reservedBuffer, { pBar->currentFill, pBar->width }, { 0,0 }, &region);
 
 	if (instant)
 		SetConsoleActiveScreenBuffer(curHandle);
@@ -437,7 +445,8 @@ bool cGameEngine::unshowBar(cBar* pBar, bool instant)
 		return false;
 	SMALL_RECT region = { pBar->topleft.X,  pBar->topleft.Y,  pBar->botright.X,  pBar->botright.Y };
 	replaceAllPixel(reservedBuffer, { pBar->length, pBar->width }, pBar->parentWindow->WidgetFace.textureArray, { pBar->parentWindow->WidgetFace.width, pBar->parentWindow->WidgetFace.height }, pBar->offset);
-	WriteConsoleOutput(curHandle, reservedBuffer, { pBar->length, pBar->width }, { 0,0 }, &region);
+	WriteConsoleOutput(Hbuffer1, reservedBuffer, { pBar->length, pBar->width }, { 0,0 }, &region);
+	WriteConsoleOutput(Hbuffer2, reservedBuffer, { pBar->length, pBar->width }, { 0,0 }, &region);
 	if (instant)
 		SetConsoleActiveScreenBuffer(curHandle);
 	return true;
@@ -471,7 +480,8 @@ void cGameEngine::playEffect(cObstacle* obsta, cPeople* player)
 		fillEffectivePixel(reservedBuffer, { w, h }, (obsta->pLFxFrames + j)->textureArray, { (obsta->pLFxFrames + j)->width, (obsta->pLFxFrames + j)->height }, {50, 30});
 
 		SMALL_RECT reg = { OuterFrameTopLeft.X + startpos.X , OuterFrameTopLeft.Y + startpos.Y,   OuterFrameTopLeft.X + startpos.X + (obsta->pLFxFrames + j)->width - 1,  OuterFrameTopLeft.X + startpos.X + (obsta->pLFxFrames + j)->height - 1 };
-		WriteConsoleOutput(curHandle, reservedBuffer, { w, h }, { 0, 0 }, &fxframe);
+		WriteConsoleOutput(Hbuffer1, reservedBuffer, { w, h }, { 0, 0 }, &fxframe);
+		WriteConsoleOutput(Hbuffer2, reservedBuffer, { w, h }, { 0, 0 }, &fxframe);
 		if (j == 1)
 			Sleep(500);
 
