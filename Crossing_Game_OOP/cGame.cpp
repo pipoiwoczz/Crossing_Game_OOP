@@ -1155,16 +1155,16 @@ void cGame::prepareUI()
 
 
 	cLabel* t5 = new cLabel(rr, { 10, 150 }, "ESC: PAUSE", 1, Color::red, true);
+	cLabel* t12 = new cLabel(rr, { 10, 140 }, "HELP: TAB", 1, Color::red, true);
 
 
-	cButton* skill1R = new cButton(rr, { 10, 80 }, "iconflashR", 1, true);
-	cButton* skill1U = new cButton(rr, { 10, 80 }, "iconflashU", 1);
-	cButton* skill2R = new cButton(rr, { 60, 80 }, "iconfreezeR", 1, true);
-	cButton* skill2U = new cButton(rr, { 60, 80 }, "iconfreezeU", 1);
-	cLabel* t9 = new cLabel(rr, { 10, 100 }, to_string(livePeople[0]->skillCooldown[0]), 1, Color::red);
-	cLabel* t10 = new cLabel(rr, { 60, 100 }, to_string(livePeople[0]->skillCooldown[1]), 1, Color::red);
+	cButton* skill1R = new cButton(rr, { 10, 90 }, "iconflashR", 1, true);
+	cButton* skill1U = new cButton(rr, { 10, 90 }, "iconflashU", 1);
+	cButton* skill2R = new cButton(rr, { 60, 90 }, "iconfreezeR", 1, true);
+	cButton* skill2U = new cButton(rr, { 60, 90 }, "iconfreezeU", 1);
+	cLabel* t9 = new cLabel(rr, { 10, 112 }, to_string(livePeople[0]->skillCooldown[0]), 1, Color::red);
+	cLabel* t10 = new cLabel(rr, { 60, 112 }, to_string(livePeople[0]->skillCooldown[1]), 1, Color::red);
 
-	cLabel* t12 = new cLabel(rr, { 10, 120 }, "HELP: TAB", 1, Color::red, true);
 
 	listWidget.push_back(skill1R);
 	listWidget.push_back(skill1U);
