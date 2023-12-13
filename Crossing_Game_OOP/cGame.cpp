@@ -100,7 +100,9 @@ void cGame::updateSkillState()
 void cGame::pizzaDraw(long long &startTime) {
 	for (int i = 0; i < liveObstacles.size(); i++)
 	{
-		liveObstacles[i]->isStop = suddenStop;
+		/*liveObstacles[i]->isStop = suddenStop;*/
+		if (suddenStop) 			
+			liveObstacles[i]->isStop = true;
 		liveObstacles[i]->move();
 		cGameEngine::renderObstacle(liveObstacles[i]);
 	}
@@ -1232,9 +1234,8 @@ void cGame::processLose()
 		nemesis->hitSound();
 		nemesis->hitEffect(victim);
 		nemesis->hitSound();
+		coinBonus = 0;
 	}
-
-	coinBonus = 0;
 
 	Sleep(1000);
 	cGameEngine::fillScreenWithLastFrame(true);
@@ -1380,7 +1381,6 @@ void cGame::randomStopThread()
 	int lane = obstacleLanes.size();
 	vector<long long> stopDuration;
 	vector<short> laneStopped;
-	vector<bool> flag;
 	vector<cTrafficLight*> traffic;
 	for (int i = 0; i < lane; i++) {
 		int x = rand() % 1000 + 500;
@@ -1401,10 +1401,10 @@ void cGame::randomStopThread()
 			
 			stopDuration[i] -= timePassed;
 			if (stopDuration[i] <= 0) {
-				long long timeRandom = (rand() % 1000 + 1000) * (-1); // control from > 0 -> stop , < 0  &  > timeRandom -> resume
+				long long timeRandom = (rand() % 5000 + 5000) * (-1); // control from > 0 -> stop , < 0  &  > timeRandom -> resume
 				if (stopDuration[i] < timeRandom) {
 					traffic[i]->changeLight(false);
-					stopDuration[i] = rand() % 1000 + 500;
+					stopDuration[i] = rand() % 5000 + 2500;
 				}
 				else {
 					traffic[i]->changeLight(true);
@@ -1413,14 +1413,12 @@ void cGame::randomStopThread()
 					if (ele->getPos().Y == laneStopped[i]) {
 						ele->resume();
 					}
-				}
-
-				
+				}				
 			}
 			else {
 				
 				for (cObstacle* ele : liveObstacles) {
-					if (ele->getPos().Y == obstacleLanes[i].Y) {
+					if (ele->getPos().Y == laneStopped[i]) {
 						ele->stop();
 					}
 				}
@@ -1459,12 +1457,12 @@ void cGame::save(string fileName) {
 	time.getTime();
 	ofs << time << endl;
 
-	ofs << gameOrder << " " << gameLevel << " " << currentTheme << " " << currentPhase << " " << totalPoint << " " << coinBonus << " " << totalTime << " " << timePause << endl;
+	ofs << gameOrder << " " << gameLevel << " " << currentTheme << " " << currentPhase << " " << totalTime << " " << timePause << endl;
 	// people and their position
 	ofs << livePeople.size() << endl;
 	for (cPeople* element : livePeople)
 	{
-		ofs << element->getPos().X << " " << element->getPos().Y << " " << endl;
+		ofs << element->getPos().X << " " << element->getPos().Y << " " << totalPoint << " " << coinBonus << endl;
 	}
 
 	// obstacles and their position
@@ -1717,7 +1715,7 @@ void cGame::load(string fileName)
 	Time time;
 	ifs >> time;
 
-	ifs >> game.gameOrder >> game.gameLevel >> game.currentTheme >> game.currentPhase >> game.totalPoint >> game.coinBonus >> game.totalTime >> game.timePause;
+	ifs >> game.gameOrder >> game.gameLevel >> game.currentTheme >> game.currentPhase >> game.totalTime >> game.timePause;
 
 	game.livePeople.resize(game.gameOrder);
 	int dump;
@@ -1727,6 +1725,7 @@ void cGame::load(string fileName)
 		short x, y;
 		ifs >> x >> y;
 		game.livePeople[i] = new cPeople({ x, y });
+		ifs >> game.totalPoint >> game.coinBonus;
 	}
 
 	int obstacleCount;
