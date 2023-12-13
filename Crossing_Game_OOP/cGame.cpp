@@ -330,7 +330,7 @@ void cGame::GamePlayPanel()
 	}
 	std::function<void()> panelFunct[1] = {
 		[&]() {
-			GameNewGamePanel();
+			game.GameNewGamePanel();
 		},
 
 	};
@@ -516,16 +516,16 @@ void cGame::GamePausePanel()
 	std::function<void()> panelFunct[6] = {
 		[&]() {
 			cGameEngine::fillScreenWithLastFrame(true);
-			resumeFunction();
-			isPause = false;
-			timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
-			timePause += (timePauseEnd - timePauseStart) / 1000  ;
+			game.resumeFunction();
+			game.isPause = false;
+			game.timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+			game.timePause += (game.timePauseEnd - game.timePauseStart) / 1000  ;
 		},
-		[&]() {GameSettingsPanel(); },
-		[&]() {GameSavePanel(); },
-		[&]() {GameLoadPanel(); },
-		[&]() {GameQuitPanel(true); },
-		[&]() {GameQuitPanel();	 }
+		[&]() {game.GameSettingsPanel(); },
+		[&]() {game.GameSavePanel(); },
+		[&]() {game.GameLoadPanel(); },
+		[&]() {game.GameQuitPanel(true); },
+		[&]() {game.GameQuitPanel();	 }
 	};
 
 	int current = 0;
@@ -956,9 +956,9 @@ void cGame::GameQuitPanel(bool fullexit)
 			Sound::playSoundEffect(SoundEffect::menuMove);
 			if (currentarrowpos == 0)
 			{
-				this->tomainMenu = true;
-				this->isPause = false;
-				this->isExit = true;
+				tomainMenu = true;
+				isPause = false;
+				isExit = true;
 				if (fullexit) 
 					cGame::mainloop = false;
 			}
@@ -1042,32 +1042,32 @@ void cGame::GameDiePanel() {
 
 	std::function<void()> panelFunct[3] = {
 	[&]() {
-		isPause = false;
-		isLose = false;
-		isExit = false;
-		for (int i = 0; i < livePeople.size(); i++)
+		game.isPause = false;
+		game.isLose = false;
+		game.isExit = false;
+		for (int i = 0; i < game.livePeople.size(); i++)
 		{
-			livePeople[i]->setPos({ short(234 + 40 * i), 145 });
-			livePeople[i]->setState(true);
-			livePeople[i]->resetCooldown();
+			game.livePeople[i]->setPos({ short(234 + 40 * i), 145 });
+			game.livePeople[i]->setState(true);
+			game.livePeople[i]->resetCooldown();
 
 		};
-		nemesis = nullptr;
-		victim = nullptr;
-		clearObjects();
-		currentPhase = 0;
-		spawnObstacle(CreatedLevel[currentTheme][currentPhase]);
+		game.nemesis = nullptr;
+		game.victim = nullptr;
+		game.clearObjects();
+		game.currentPhase = 0;
+		game.spawnObstacle(CreatedLevel[currentTheme][currentPhase]);
 
 		Sound::resumeCurrentTrack();
-		timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
-		timePause += (timePauseEnd - timePauseStart) / 1000;
+		game.timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+		game.timePause += (game.timePauseEnd - game.timePauseStart) / 1000;
 	},
 	[&]() {
-		GameLoadPanel();
+		game.GameLoadPanel();
 	},
 	[&]() {
-		currentPhase = 0;
-		GameQuitPanel();
+		game.currentPhase = 0;
+		game.GameQuitPanel();
 	}
 	};
 
@@ -1141,17 +1141,21 @@ void cGame::prepareUI()
 {
 	cDWindow* rr = new cDWindow(&window, { 504, 0 }, "panelinfo", true);
 	//cDWindow howtoplay(&rr, { 0,110 }, "howtoplay", true);
-	cLabel* t1 = new cLabel(rr, { 10, 5 }, "SCORES", 1, Color::red, true);
+	cLabel* t11 = new cLabel(rr, { 10, 5 }, "LEVEL: " + to_string(gameLevel), 1, Color::red, true);
+	cLabel* t1 = new cLabel(rr, { 10, 15 }, "SCORES:", 1, Color::red, true);
 	string point = to_string(totalPoint);
-	cLabel* t2 = new cLabel(rr, { 20, 15 }, point, 2, Color::red, true);
-	cLabel* t3 = new cLabel(rr, { 10, 25 }, "TIME", 1, Color::red, true);
+	cLabel* t2 = new cLabel(rr, { 20, 25 }, point, 2, Color::red, true);
+	cLabel* t3 = new cLabel(rr, { 10, 35 }, "TIME:", 1, Color::red, true);
 	time = int(calculateTime());
-	cLabel* t4 = new cLabel(rr, { 20, 35 }, to_string(time), 2, Color::red, true);
+	cLabel* t4 = new cLabel(rr, { 60, 35 }, to_string(time), 2, Color::red, true);
+
+	cLabel* t6 = new cLabel(rr, { 10, 45 }, "COINS:", 1, Color::red, true);
+	cLabel* t7 = new cLabel(rr, { 60, 45 }, "30 x 0", 2, Color::red, true);
+	cLabel* t8 = new cLabel(rr, { 10, 55 }, "SKILLS", 1, Color::red, true);
+
+
 	cLabel* t5 = new cLabel(rr, { 10, 150 }, "ESC: PAUSE", 1, Color::red, true);
 
-	cLabel* t6 = new cLabel(rr, { 10, 45 }, "COINS", 1, Color::red, true);
-	cLabel* t7 = new cLabel(rr, { 20, 55 }, "30 x 0", 2, Color::red, true);
-	cLabel* t8 = new cLabel(rr, { 10, 65 }, "SKILLS", 1, Color::red, true);
 
 	cButton* skill1R = new cButton(rr, { 10, 80 }, "iconflashR", 1, true);
 	cButton* skill1U = new cButton(rr, { 10, 80 }, "iconflashU", 1);
@@ -1159,7 +1163,6 @@ void cGame::prepareUI()
 	cButton* skill2U = new cButton(rr, { 60, 80 }, "iconfreezeU", 1);
 	cLabel* t9 = new cLabel(rr, { 10, 100 }, to_string(mainPeople->skillCooldown[0]), 1, Color::red);
 	cLabel* t10 = new cLabel(rr, { 60, 100 }, to_string(mainPeople->skillCooldown[1]), 1, Color::red);
-	cLabel* t11 = new cLabel(rr, {10, 140}, "LEVEL: " + to_string(gameLevel), 1, Color::red, true);
 
 	cLabel* t12 = new cLabel(rr, { 10, 120 }, "HELP: TAB", 1, Color::red, true);
 
@@ -1398,9 +1401,6 @@ void cGame::MainGame() {
 		{
 			processLose();
 			GameDiePanel();
-			game.isPause = false;
-			game.isLose = false;
-			game.isExit = false;
 		}
 		Sleep(10);
 	}
