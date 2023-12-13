@@ -16,6 +16,7 @@ void cGame::teleport(cPeople* pPeople)
 	if (pPeople->currentFrame == 0)
 	{
 		pPeople->topleft.Y -= 36;
+		pPeople->topleft.Y = min(pPeople->topleft.Y, PlayBoxRect.Bottom - pPeople->pMotionFrame->getHeight() + 1);
 	}
 	else if (pPeople->currentFrame == 1)
 	{
@@ -554,6 +555,7 @@ void cGame::GamePausePanel()
 			panelFunct[current]();
 			panel.show();
 			panelButton[current].show();
+			isPause = false;
 		}
 		Sleep(50);
 	}
@@ -1394,6 +1396,9 @@ void cGame::MainGame() {
 		{
 			processLose();
 			GameDiePanel();
+			game.isPause = false;
+			game.isLose = false;
+			game.isExit = false;
 		}
 		Sleep(10);
 	}
@@ -1892,9 +1897,12 @@ void cGame::load(string fileName)
 	timePauseEnd = timePauseStart;
 	timeStart -= totalTime * 1000;
 
-	gameMap::changeMapTheme(currentTheme);
-	gameMap::currentMap = &gameMap::listMap[currentTheme][currentPhase];
-	spawnEnvironment();	
+	gameMap::changeMapTheme(game.currentTheme);
+	gameMap::currentMap = &gameMap::listMap[game.currentTheme][game.currentPhase];
+	game.spawnEnvironment();	
+	mainPeople = game.livePeople[0];
+	nemesis = nullptr;
+	victim = nullptr;
 	if (isStart)
 	{
 		
