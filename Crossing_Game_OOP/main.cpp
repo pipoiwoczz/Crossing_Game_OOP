@@ -105,11 +105,11 @@ bool mainLoader()
 	cAsset::alphabetLoader();
 	cAsset::numberLoader();
 	cAsset::specialCharLoader();
-	cAsset::blankchar = cAsset::assetLoader("blank.txt", "Char//Alphabet//");
+	cAsset::blankchar = cAsset::assetLoader("blank", "Char//Alphabet//");
 	loadingBar.setProgress(false, 10);
 
-	cCoin::motionFrame = cAsset::assetLoader("coin.txt", TexturePrefix);
-	cAsset::flashEffect = cAsset::assetLoader("skillFlash.txt", FxPrefix);
+	cCoin::motionFrame = cAsset::assetLoader("coin", TexturePrefix);
+	cAsset::flashEffect = cAsset::assetLoader("skillFlash", FxPrefix);
 
 	cTrafficLight::motionFrames = cAsset::assetLoaders(trafficlightFile, TexturePrefix);
 	cLilyleaf::motionFrames = cAsset::assetLoaders(lilyFile, TexturePrefix);

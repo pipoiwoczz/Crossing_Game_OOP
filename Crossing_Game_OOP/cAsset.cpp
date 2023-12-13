@@ -56,7 +56,7 @@ short Texture::getWidth() {
 Texture cAsset::assetLoader(string filename, const string& prefix)
 {
     ifstream inGate;
-    inGate.open("Sprites//" + prefix + filename);
+    inGate.open("Sprites//" + prefix + filename + ".txt");
     Texture loaded;
     if (inGate.is_open()) {
         inGate >> loaded.height >> loaded.width;
@@ -134,7 +134,6 @@ void cAsset::alphabetLoader()
         char c = 'A' + i;
         string filepath = "Char//Alphabet//";
         filepath += c;
-        filepath += ".txt";
         alphabet.push_back(assetLoader(filepath));
     }
 }
@@ -143,14 +142,14 @@ void cAsset::numberLoader()
 {
     for (int i = 0; i <= 9; i++)
     {
-        number.push_back(assetLoader("Char//Number//" + to_string(i) + ".txt"));    
+        number.push_back(assetLoader("Char//Number//" + to_string(i)));    
     }
 }
 void cAsset::specialCharLoader()
 {
     for (int i = 1; i < 10   ; i++)
     {
-        special.push_back(assetLoader("Char//Special//sc" + to_string(i) + ".txt"));
+        special.push_back(assetLoader("Char//Special//sc" + to_string(i)));
     }
 }
 void cAsset::settingsLoader()

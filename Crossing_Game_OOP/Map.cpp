@@ -41,7 +41,7 @@
         {
             ifstream mapIn;
             gameMap map;
-            mapIn.open("Sprites//" + MapPrefix + filename);
+            mapIn.open("Sprites//" + MapPrefix + filename + ".txt");
             if (mapIn.is_open()) {
                 mapIn >> map.height >> map.width;
                 map.mapArray = new CHAR_INFO[map.height * map.width];

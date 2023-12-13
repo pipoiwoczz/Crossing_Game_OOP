@@ -90,6 +90,7 @@ public:
 	static void renderPeople(cPeople* pPeople);
 	static void renderObstacle(cObstacle* pObstacle);
 	static void renderEnvironment(cEnvironment* pEnvironmentObject);
+	static void renderWidget(cWidget* pWidget);
 
 	static void playEffect(cObstacle* obsta, cPeople* people);
 	static void playFlashEffect(const COORD& topleft);

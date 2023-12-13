@@ -100,8 +100,10 @@ void cGame::updateSkillState()
 void cGame::pizzaDraw(long long &startTime) {
 	for (int i = 0; i < liveObstacles.size(); i++)
 	{
-		if (hasSuddenStop)
+		if (!hasSuddenStop)
 			liveObstacles[i]->isStop = suddenStop;
+		else if (suddenStop) 			
+			liveObstacles[i]->isStop = true;
 		liveObstacles[i]->move();
 		cGameEngine::renderObstacle(liveObstacles[i]);
 	}
@@ -159,20 +161,22 @@ void cGame::drawThread()
 	}
 }
 
+
+
 bool cGame::InitGame()
 {
 	window.IsVisible = true;
 	window.topleft = { My_Windows.Left, My_Windows.Top };
 	window.botright = { My_Windows.Right, My_Windows.Bottom };
 	window.parentWindow = nullptr;
-	window.WidgetFace = cAsset::assetLoader(UIPrefix + "mainWD.txt");
+	window.WidgetFace = cAsset::assetLoader(UIPrefix + "mainWD");
 
 	mainMenu.IsVisible = true;
 		
 	mainMenu.topleft = { My_Windows.Left, My_Windows.Top };
 	mainMenu.botright = { My_Windows.Right, My_Windows.Bottom };
 	mainMenu.parentWindow = &window;
-	mainMenu.WidgetFace = cAsset::assetLoader(UIPrefix + "menuBg.txt");
+	mainMenu.WidgetFace = cAsset::assetLoader(UIPrefix + "menuBg");
 	mainMenu.show();
 	return true;
 }
@@ -180,20 +184,20 @@ bool cGame::InitGame()
 void cGame::onGameReady()
 {
 	mainMenu.show();
-	cDWindow panel(&mainMenu, { 479, 71 }, "panelmainmenu.txt", true);
+	cDWindow panel(&mainMenu, { 479, 71 }, "panelmainmenu", true);
 
 	cButton panelButton[4] = {
-		cButton(&panel, { 0, 0 }, "buttonplay.txt", 1),
-		cButton(&panel, { 0, 22 }, "buttonscoreboard.txt", 1),
-		cButton(&panel, { 0, 44 }, "buttonsettingsm.txt", 1),
-		cButton(&panel, { 0, 66 }, "buttonexitm.txt", 1)
+		cButton(&panel, { 0, 0 }, "buttonplay", 1),
+		cButton(&panel, { 0, 22 }, "buttonscoreboard", 1),
+		cButton(&panel, { 0, 44 }, "buttonsettingsm", 1),
+		cButton(&panel, { 0, 66 }, "buttonexitm", 1)
 	};
 
 	function<void()> panelFunction[4]{
-		[]() {game.GamePlayPanel(); },
-		[]() {game.ScoreBoard(); },
-		[]() {game.GameSettingsPanel(); },
-		[]() {game.GameQuitPanel(true); }
+		[&]() {game.GamePlayPanel(); },
+		[&]() {game.ScoreBoard(); },
+		[&]() {game.GameSettingsPanel(); },
+		[&]() {game.GameQuitPanel(true); }
 	};
 
 	int current = 0;
@@ -293,8 +297,8 @@ void cGame::prepareGame()
 void cGame::GamePlayPanel()
 {	
 	Time time[3];
-	string mapSaved[3] = { "emptymapload.txt", "emptymapload.txt" , "emptymapload.txt" };
-	string mapIconSaved[3] = { "iconemptyload.txt", "iconemptyload.txt", "iconemptyload.txt" };
+	string mapSaved[3] = { "emptymapload", "emptymapload" , "emptymapload" };
+	string mapIconSaved[3] = { "iconemptyload", "iconemptyload", "iconemptyload" };
 	string saved[3] = { "Save//save1.txt" ,"Save//save2.txt" , "Save//save3.txt" };
 	string labelText[3] = { "Empty", "Empty", "Empty" };
 	ifstream ifs;
@@ -309,33 +313,33 @@ void cGame::GamePlayPanel()
 				ifs >> j;
 			}
 			if (j == 0) {
-				mapSaved[i] = "junglemapload.txt";
-				mapIconSaved[i] = "iconmapjungle.txt";
+				mapSaved[i] = "junglemapload";
+				mapIconSaved[i] = "iconmapjungle";
 			}
 			else if (j == 1) {
-				mapSaved[i] = "beachmapload.txt";
-				mapIconSaved[i] = "iconmapbeach.txt";
+				mapSaved[i] = "beachmapload";
+				mapIconSaved[i] = "iconmapbeach";
 			}
 			else if (j == 2) {
-				mapSaved[i] = "citymapload.txt";
-				mapIconSaved[i] = "iconmapcity.txt";
+				mapSaved[i] = "citymapload";
+				mapIconSaved[i] = "iconmapcity";
 			}
 			ifs.close();
 		}
 	}
 	std::function<void()> panelFunct[1] = {
-		[]() {
-			game.GameNewGamePanel();
+		[&]() {
+			GameNewGamePanel();
 		},
 
 	};
 
 	tomainMenu = false;
-	cDWindow panel(&mainMenu, { 30, 6 }, "panelplay.txt", true);
-	cDWindow panelBackground(&panel, { 0, 0 }, "panelbackground.txt", false);
+	cDWindow panel(&mainMenu, { 30, 6 }, "panelplay", true);
+	cDWindow panelBackground(&panel, { 0, 0 }, "panelbackground", false);
 
 	cDWindow panelButton[4]{
-		cDWindow(&panel, { 2, 22 }, "buttonnewgame.txt", true),
+		cDWindow(&panel, { 2, 22 }, "buttonnewgame", true),
 		cDWindow(&panel, { 2, 50 }, mapSaved[0]),
 		cDWindow(&panel, { 2, 79 }, mapSaved[1]),
 		cDWindow(&panel, { 2, 108 }, mapSaved[2])
@@ -414,7 +418,7 @@ void cGame::GamePlayPanel()
 		{
 			Sound::playSoundEffect(SoundEffect::menuMove);
 			if (current == 0) {
-				game.GameNewGamePanel();
+				GameNewGamePanel();
 				for (int i = 0; i < 3; i++)
 				{
 					LabelLoad[i][0].show();
@@ -436,11 +440,11 @@ void cGame::GamePlayPanel()
 void cGame::GameNewGamePanel()
 {
 
-	cDWindow panel(&mainMenu, { 30, 6 }, "panelnewgame.txt", true);
+	cDWindow panel(&mainMenu, { 30, 6 }, "panelnewgame", true);
 	cButton panelButton[3] = {
-		cButton(&panel, { 20, 33 }, "iconmapjungle.txt", 1, true),
-		cButton(&panel, { 20, 65 }, "iconmapbeach.txt", 1, true),
-		cButton(&panel, { 20, 97 }, "iconmapcity.txt", 1, true)
+		cButton(&panel, { 20, 33 }, "iconmapjungle", 1, true),
+		cButton(&panel, { 20, 65 }, "iconmapbeach", 1, true),
+		cButton(&panel, { 20, 97 }, "iconmapcity", 1, true)
 	};
 
 	cLabel panelLabel[3] = {
@@ -498,29 +502,29 @@ void cGame::GamePausePanel()
 {
 	timePauseStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 	isPause = true;
-	cDWindow panel(&window, { 122, 11 }, "panelpause.txt", true);
+	cDWindow panel(&window, { 122, 11 }, "panelpause", true);
 	cButton panelButton[6]{
-		cButton(&panel, { 42, 21 }, "buttonresume.txt", 1),
-		cButton(&panel, { 42, 39 }, "buttonsettingsp.txt", 1),
-		cButton(&panel, { 42, 57 }, "buttonsave.txt", 1),
-		cButton(&panel, { 42, 75 }, "buttonload.txt", 1),
-		cButton(&panel, { 42, 93 }, "buttonexitdesktop.txt", 1),
-		cButton(&panel, { 42, 111 }, "buttonexitmain.txt", 1)
+		cButton(&panel, { 42, 21 }, "buttonresume", 1),
+		cButton(&panel, { 42, 39 }, "buttonsettingsp", 1),
+		cButton(&panel, { 42, 57 }, "buttonsave", 1),
+		cButton(&panel, { 42, 75 }, "buttonload", 1),
+		cButton(&panel, { 42, 93 }, "buttonexitdesktop", 1),
+		cButton(&panel, { 42, 111 }, "buttonexitmain", 1)
 	};
 
 	std::function<void()> panelFunct[6] = {
-		[]() {
+		[&]() {
 			cGameEngine::fillScreenWithLastFrame(true);
-			game.resumeFunction();
-			game.isPause = false;
-			game.timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
-			game.timePause += (game.timePauseEnd - game.timePauseStart) / 1000  ;
+			resumeFunction();
+			isPause = false;
+			timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+			timePause += (timePauseEnd - timePauseStart) / 1000  ;
 		},
-		[]() {game.GameSettingsPanel(); },
-		[]() {game.GameSavePanel(); },
-		[]() {game.GameLoadPanel(); },
-		[]() {game.GameQuitPanel(true); },
-		[]() {game.GameQuitPanel();	 }
+		[&]() {GameSettingsPanel(); },
+		[&]() {GameSavePanel(); },
+		[&]() {GameLoadPanel(); },
+		[&]() {GameQuitPanel(true); },
+		[&]() {GameQuitPanel();	 }
 	};
 
 	int current = 0;
@@ -557,7 +561,7 @@ void cGame::GamePausePanel()
 
 void cGame::GameSettingsPanel()
 {
-	cDWindow panel(&window, { 122, 11 }, "panelsettings.txt", true);
+	cDWindow panel(&window, { 122, 11 }, "panelsettings", true);
 	void (*panelFunct[2][2])() = {
 		{Sound::reduceSoundBackground, Sound::increaseSoundBackground},
 		{Sound::reduceEffectSound, Sound::increaseEffectSound},
@@ -571,16 +575,16 @@ void cGame::GameSettingsPanel()
 
 	cButton buttonPanel[2][2]{
 		{
-			cButton(&panel, { 20, 50 }, "rabbitchoose1.txt", 1, true),
-			cButton(&panel, { 20, 50 }, "rabbitchoose2.txt", 1, false)
+			cButton(&panel, { 20, 50 }, "rabbitchoose1", 1, true),
+			cButton(&panel, { 20, 50 }, "rabbitchoose2", 1, false)
 		},
 		{
-			cButton(&panel, { 140, 50 }, "cubechoose1.txt", 1, true),
-			cButton(&panel, { 140, 50 }, "cubechoose2.txt", 1, false) 
+			cButton(&panel, { 140, 50 }, "cubechoose1", 1, true),
+			cButton(&panel, { 140, 50 }, "cubechoose2", 1, false) 
 		}	
 	};
 
-	cDWindow selectarrow(&panel, { 210, 30 }, "arrowL.txt", true);
+	cDWindow selectarrow(&panel, { 210, 30 }, "arrowL", true);
 	short arrowPos[2] = { 30, 40 };
 	int currentarrowpos = 0;
 
@@ -692,8 +696,8 @@ void cGame::GameSettingsPanel()
 void cGame::GameSavePanel()
 {
 	Time time[3];
-	string mapIconSaved[3] = { "iconemptyload.txt", "iconemptyload.txt" , "iconemptyload.txt" };
-	string mapSaved[3] = { "emptymapload.txt", "emptymapload.txt", "emptymapload.txt" };
+	string mapIconSaved[3] = { "iconemptyload", "iconemptyload" , "iconemptyload" };
+	string mapSaved[3] = { "emptymapload", "emptymapload", "emptymapload" };
 	string saved[3] = { "save1.txt" ,"save2.txt" , "save3.txt" };
 	string labelText[3] = { "EMPTY", "EMPTY", "EMPTY" };
 	ifstream ifs;
@@ -708,24 +712,24 @@ void cGame::GameSavePanel()
 				ifs >> j;
 			}
 			if (j == 0) {
-				mapIconSaved[i] = "iconmapjungle.txt";
-				mapSaved[i] = "junglemapload.txt";
+				mapIconSaved[i] = "iconmapjungle";
+				mapSaved[i] = "junglemapload";
 			}
 			else if (j == 1) {
-				mapIconSaved[i] = "iconmapbeach.txt";
-				mapSaved[i] = "beachmapload.txt";
+				mapIconSaved[i] = "iconmapbeach";
+				mapSaved[i] = "beachmapload";
 			}
 			else if (j == 2) {
-				mapIconSaved[i] = "iconmapcity.txt";
-				mapSaved[i] = "citymapload.txt";
+				mapIconSaved[i] = "iconmapcity";
+				mapSaved[i] = "citymapload";
 			}
 			ifs.close();
 		}
 	}
 
-	cDWindow panel(&window, { 122, 11 }, "panelsave.txt", true);
+	cDWindow panel(&window, { 122, 11 }, "panelsave", true);
 	
-	cDWindow panelBackground(&panel, { 0, 0 }, "panelbackground.txt", false);
+	cDWindow panelBackground(&panel, { 0, 0 }, "panelbackground", false);
 
 	cButton mapIcons[3]{
 		cButton(&panel, {2, 42}, mapIconSaved[0], 1),
@@ -807,8 +811,8 @@ void cGame::GameSavePanel()
 void cGame::GameLoadPanel()
 {
 	Time time[3];
-	string mapIconSaved[3] = { "iconemptyload.txt", "iconemptyload.txt" , "iconemptyload.txt" };
-	string mapSaved[3] = { "emptymapload.txt", "emptymapload.txt", "emptymapload.txt" };
+	string mapIconSaved[3] = { "iconemptyload", "iconemptyload" , "iconemptyload" };
+	string mapSaved[3] = { "emptymapload", "emptymapload", "emptymapload" };
 	string saved[3] = { "save1.txt" ,"save2.txt" , "save3.txt" };
 	string labelText[3] = { "EMPTY", "EMPTY", "EMPTY" };
 	ifstream ifs;
@@ -823,24 +827,24 @@ void cGame::GameLoadPanel()
 				ifs >> j;
 			}
 			if (j == 0) {
-				mapIconSaved[i] = "iconmapjungle.txt";
-				mapSaved[i] = "junglemapload.txt";
+				mapIconSaved[i] = "iconmapjungle";
+				mapSaved[i] = "junglemapload";
 			}
 			else if (j == 1) {
-				mapIconSaved[i] = "iconmapbeach.txt";
-				mapSaved[i] = "beachmapload.txt";
+				mapIconSaved[i] = "iconmapbeach";
+				mapSaved[i] = "beachmapload";
 			}
 			else if (j == 2) {
-				mapIconSaved[i] = "iconmapcity.txt";
-				mapSaved[i] = "citymapload.txt";
+				mapIconSaved[i] = "iconmapcity";
+				mapSaved[i] = "citymapload";
 			}
 			ifs.close();
 		}
 	}
 
-	cDWindow panel(&window, { 122, 11 }, "panelload2.txt", true);
+	cDWindow panel(&window, { 122, 11 }, "panelload2", true);
 
-	cDWindow panelBackground(&panel, { 0, 0 }, "panelbackground.txt", false);
+	cDWindow panelBackground(&panel, { 0, 0 }, "panelbackground", false);
 
 	cButton mapIcons[3]{
 		cButton(&panel, {2, 42}, mapIconSaved[0], 1),
@@ -921,8 +925,8 @@ void cGame::GameLoadPanel()
 
 void cGame::GameQuitPanel(bool fullexit)
 {
-	cDWindow confirm(&window, { 177, 30 }, "panelconfirmexit.txt", true);
-	cDWindow selectarrow(&confirm, { 96, 37 }, "arrowenter.txt", true);
+	cDWindow confirm(&window, { 177, 30 }, "panelconfirmexit", true);
+	cDWindow selectarrow(&confirm, { 96, 37 }, "arrowenter", true);
 
 	short arrowPos[2] = { 24, 37 };
 	int currentarrowpos = 1;
@@ -1027,41 +1031,41 @@ void cGame::environmentImpact()
 }
 
 void cGame::GameDiePanel() {
-	cDWindow panel(&window, { 133, 11 }, "paneldie.txt", true);
+	cDWindow panel(&window, { 133, 11 }, "paneldie", true);
 	cButton panelButton[3]{
-		cButton(&panel, { 3, 28 }, "buttondieretry.txt", 1),
-		cButton(&panel, { 3, 59 }, "buttondieload.txt", 1),
-		cButton(&panel, { 3, 90 }, "buttondieback.txt", 1)
+		cButton(&panel, { 3, 28 }, "buttondieretry", 1),
+		cButton(&panel, { 3, 59 }, "buttondieload", 1),
+		cButton(&panel, { 3, 90 }, "buttondieback", 1)
 	};
 
 	std::function<void()> panelFunct[3] = {
-	[]() {
-		game.isPause = false;
-		game.isLose = false;
-		game.isExit = false;
-		for (int i = 0; i < cGame::game.livePeople.size(); i++)
+	[&]() {
+		isPause = false;
+		isLose = false;
+		isExit = false;
+		for (int i = 0; i < livePeople.size(); i++)
 		{
-			game.livePeople[i]->setPos({ short(234 + 40 * i), 145 });
-			game.livePeople[i]->setState(true);
-			game.livePeople[i]->resetCooldown();
+			livePeople[i]->setPos({ short(234 + 40 * i), 145 });
+			livePeople[i]->setState(true);
+			livePeople[i]->resetCooldown();
 
 		};
-		game.nemesis = nullptr;
-		game.victim = nullptr;
-		game.clearObjects();
-		game.currentPhase = 0;
-		game.spawnObstacle(game.CreatedLevel[game.currentTheme][game.currentPhase]);
+		nemesis = nullptr;
+		victim = nullptr;
+		clearObjects();
+		currentPhase = 0;
+		spawnObstacle(CreatedLevel[currentTheme][currentPhase]);
 
 		Sound::resumeCurrentTrack();
-		game.timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
-		game.timePause += (game.timePauseEnd - game.timePauseStart) / 1000;
+		timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+		timePause += (timePauseEnd - timePauseStart) / 1000;
 	},
-	[]() {
-		game.GameLoadPanel();
+	[&]() {
+		GameLoadPanel();
 	},
-	[]() {
-		game.currentPhase = 0;
-		game.GameQuitPanel();
+	[&]() {
+		currentPhase = 0;
+		GameQuitPanel();
 	}
 	};
 
@@ -1133,8 +1137,8 @@ short cGame::getGameOrder()
 
 void cGame::prepareUI()
 {
-	cDWindow* rr = new cDWindow(&window, { 504, 0 }, "panelinfo.txt", true);
-	//cDWindow howtoplay(&rr, { 0,110 }, "howtoplay.txt", true);
+	cDWindow* rr = new cDWindow(&window, { 504, 0 }, "panelinfo", true);
+	//cDWindow howtoplay(&rr, { 0,110 }, "howtoplay", true);
 	cLabel* t1 = new cLabel(rr, { 10, 5 }, "SCORES", 1, Color::red, true);
 	string point = to_string(totalPoint);
 	cLabel* t2 = new cLabel(rr, { 10, 15 }, point, 2, Color::red, true);
@@ -1147,10 +1151,10 @@ void cGame::prepareUI()
 	cLabel* t7 = new cLabel(rr, { 10, 55 }, "30 x 0", 2, Color::red, true);
 	cLabel* t8 = new cLabel(rr, { 10, 65 }, "SKILLS", 1, Color::red, true);
 
-	cButton* skill1R = new cButton(rr, { 10, 80 }, "iconflashR.txt", 1, true);
-	cButton* skill1U = new cButton(rr, { 10, 80 }, "iconflashU.txt", 1);
-	cButton* skill2R = new cButton(rr, { 60, 80 }, "iconfreezeR.txt", 1, true);
-	cButton* skill2U = new cButton(rr, { 60, 80 }, "iconfreezeU.txt", 1);
+	cButton* skill1R = new cButton(rr, { 10, 80 }, "iconflashR", 1, true);
+	cButton* skill1U = new cButton(rr, { 10, 80 }, "iconflashU", 1);
+	cButton* skill2R = new cButton(rr, { 60, 80 }, "iconfreezeR", 1, true);
+	cButton* skill2U = new cButton(rr, { 60, 80 }, "iconfreezeU", 1);
 	cLabel* t9 = new cLabel(rr, { 10, 100 }, to_string(mainPeople->skillCooldown[0]), 1, Color::red);
 	cLabel* t10 = new cLabel(rr, { 60, 100 }, to_string(mainPeople->skillCooldown[1]), 1, Color::red);
 
@@ -1194,7 +1198,91 @@ void cGame::handlingSkillFx()
 
 void cGame::GameWinPanel()
 {
-	
+	isPause = true;
+	mainPeople->passLevel = false;
+	Sound::pauseCurrentTrack();
+	string list[3] = { "jungle1", "beach1", "city1" };
+	cDWindow theme(&window, { 0,0 }, list[currentTheme]);
+	cDWindow firework[5]{
+		cDWindow(&theme, { 0, 0 }, "firework1"),
+		cDWindow(&theme, { 0, 0 }, "firework2"),
+		cDWindow(&theme, { 0, 0 }, "firework3"),
+		cDWindow(&theme, { 0, 0 }, "firework4"),
+		cDWindow(&theme, { 0, 0 }, "firework5")
+	};
+
+	cDWindow statue(&theme, { 0, 0 }, "statue");
+	cLabel prompt(&theme, { 150, 150 }, "Press Enter To Continue", 1, Color::black);
+
+	cDWindow panel(&theme, { 107, 50 }, "panelwinoption");
+	cButton panelButton[2] = {
+		cButton(&panel, {15, 16}, "buttonplayagain", 1),
+		cButton(&panel, {171, 16}, "buttontomainmenu", 1)
+	};
+
+	theme.show();
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 5; j++) {
+			firework[j].show();
+			Sleep(200);
+		}
+	}
+	theme.show();
+
+	Sleep(1000);
+	statue.show();
+	prompt.show();
+
+	while (true)
+	{
+		if (GetKeyState(0x0D) & 0x8000)
+			break;
+		Sleep(50);
+	}
+	Sleep(500);
+	theme.show();
+	panel.show();
+	int current = 0;
+	panelButton[current].show();
+	while (true) {
+
+		if ((GetKeyState(VK_LEFT) & 0x8000) && current > 0)
+		{
+			panelButton[current].unshow();
+			current--;
+			Sound::playSoundEffect(SoundEffect::menuMove);
+			panelButton[current].show();
+		}
+		if ((GetKeyState(VK_RIGHT) & 0x8000) && current < 1)
+		{
+			panelButton[current].unshow();
+			current++;
+			Sound::playSoundEffect(SoundEffect::menuMove);
+			panelButton[current].show();
+		}
+
+		if (GetKeyState(0x0D) & 0x8000)
+		{
+			if (current == 0)
+			{
+				currentPhase = 0;
+				clearObjects(true, true);
+				spawnObstacle(CreatedLevel[currentTheme][currentPhase]);
+				spawnEnvironment();
+				spawnCoin();
+				spawnPeople();
+				Sound::resumeCurrentTrack();
+				isPause = false;
+			}
+			else {
+				tomainMenu = true;
+				isExit = true;
+			}
+			break;
+		}
+		Sleep(50);
+	}
 }
 
 void cGame::processLose()
@@ -1202,7 +1290,7 @@ void cGame::processLose()
 	int n[3] = { 0, 0, 0 };
 	int k = 0;
 	int temp = 0;
-	ifstream ifs("Save//leaderboard.txt");
+	ifstream ifs("Save//leaderboard");
 	if (ifs.is_open()) {
 		while (ifs >> temp) {
 			if (ifs.eof())
@@ -1219,7 +1307,7 @@ void cGame::processLose()
 			break;
 		}
 	}
-	ofstream ofs("Save//leaderboard.txt");
+	ofstream ofs("Save//leaderboard");
 	for (int id = 0; id < 3; id++) {
 		ofs << n[id] << endl;
 	}
@@ -1239,11 +1327,11 @@ void cGame::processLose()
 	Sleep(1000);
 	cGameEngine::fillScreenWithLastFrame(true);
 	cDWindow dieeffect[5]{
-		cDWindow(&window, { 133, 11 }, "rip1.txt", false),
-		cDWindow(&window, { 133, 11 }, "rip2.txt", false),
-		cDWindow(&window, { 133, 11 }, "rip3.txt", false),
-		cDWindow(&window, {133, 11 }, "rip4.txt", false),
-		cDWindow(&window, {133, 11 }, "rip5.txt", false)
+		cDWindow(&window, { 133, 11 }, "rip1", false),
+		cDWindow(&window, { 133, 11 }, "rip2", false),
+		cDWindow(&window, { 133, 11 }, "rip3", false),
+		cDWindow(&window, {133, 11 }, "rip4", false),
+		cDWindow(&window, {133, 11 }, "rip5", false)
 	};
 	for (int i = 0; i < 5; i++)
 	{
@@ -1297,7 +1385,6 @@ void cGame::MainGame() {
 			if (isComplete())
 			{
 				GameWinPanel();
-				isExit = true;
 			}
 			else {
 				nextLevel();
@@ -1342,7 +1429,7 @@ void cGame::clearUI()
 
 bool cGame::isComplete()
 {
-	if (currentTheme + 1 == CreatedLevel[currentPhase].size())
+	if (currentPhase + 1 == CreatedLevel[currentTheme].size())
 	{
 		return true;
 	}
@@ -1445,11 +1532,11 @@ void cGame::randomStopThread()
 
 void cGame::resumeFunction()
 {	
-	cDWindow panel(&window, { 204, 50 }, "panelcountdown.txt", true);
+	cDWindow panel(&window, { 204, 50 }, "panelcountdown", true);
 	cDWindow countdown[3] = {
-		cDWindow(&panel, {28, 6}, "Count3.txt"),
-		cDWindow(&panel, {28, 6}, "Count2.txt"),
-		cDWindow(&panel, {20, 6}, "Count1.txt"),
+		cDWindow(&panel, {28, 6}, "Count3", false),
+		cDWindow(&panel, {28, 6}, "Count2", false),
+		cDWindow(&panel, {20, 6}, "Count1", false),
 	};
 	for (int i = 0; i < 3; i++)
 	{
@@ -1636,7 +1723,7 @@ void cGame::nextLevel() {
 
 	listLabel[2]->updateText("TIME");
 	listLabel[1]->updateText(to_string(totalPoint));
-	livePeople[0]->passLevel = false;
+	mainPeople->passLevel = false;
 	time = 0;
 	coinNow = 0;
 	listLabel[6]->updateText("30 x " + to_string(coinBonus / 30));
@@ -1701,7 +1788,7 @@ void cGame::endlessMode() {
 	//		string map[3] = { "jungle", "beach", "city" };
 	//		srand(NULL);
 	//		int rand_map = rand() % 3;
-	//		src += map[rand_map] + "//.txt";
+	//		src += map[rand_map] + "//";
 	//		spawnObstacle();
 	//	}
 	//	Sleep(10);
@@ -1718,7 +1805,7 @@ void cGame::load(string fileName)
 		hasSuddenStop = false;
 		randomStopThreadHandle.join();
 	}
-	game.clearObjects(true, true);
+	clearObjects(true, true);
 
 	ifstream ifs(fileName);
 	if (!ifs.is_open())
@@ -1726,23 +1813,23 @@ void cGame::load(string fileName)
 	Time time;
 	ifs >> time;
 
-	ifs >> game.gameOrder >> game.gameLevel >> game.currentTheme >> game.currentPhase >> game.totalTime >> game.timePause;
+	ifs >> gameOrder >> gameLevel >> currentTheme >> currentPhase >> totalTime >> timePause;
 
-	game.livePeople.resize(game.gameOrder);
+	livePeople.resize(gameOrder);
 	int dump;
 	ifs >> dump;
-	for (int i = 0; i < game.gameOrder; i++)
+	for (int i = 0; i < gameOrder; i++)
 	{
 		short x, y;
 		ifs >> x >> y;
-		game.livePeople[i] = new cPeople({ x, y });
-		ifs >> game.totalPoint >> game.coinBonus;
+		livePeople[i] = new cPeople({ x, y });
+		ifs >> totalPoint >> coinBonus;
 	}
-
+	mainPeople = livePeople[0];
 	int obstacleCount;
 	ifs >> obstacleCount;
 
-	game.liveObstacles.resize(obstacleCount);
+	liveObstacles.resize(obstacleCount);
 	for (int i = 0; i < obstacleCount; i++)
 	{
 		char type;
@@ -1753,30 +1840,30 @@ void cGame::load(string fileName)
 		switch (type)
 		{
 		case 'l':
-			game.liveObstacles[i] = new cLion(pos, speed, direction);
+			liveObstacles[i] = new cLion(pos, speed, direction);
 			break;
 		case 'r':
-			game.liveObstacles[i] = new cRhino(pos, speed, direction);
+			liveObstacles[i] = new cRhino(pos, speed, direction);
 			break;
 		case 'c':
-			game.liveObstacles[i] = new cCrocodile(pos, speed, direction);
+			liveObstacles[i] = new cCrocodile(pos, speed, direction);
 			break;
 
 		case 's':
-			game.liveObstacles[i] = new cShark(pos, speed, direction);
+			liveObstacles[i] = new cShark(pos, speed, direction);
 			break;
 		case 'S':
-			game.liveObstacles[i] = new cSurfer(pos, speed, direction);
+			liveObstacles[i] = new cSurfer(pos, speed, direction);
 			break;
 
 		case 'T': 
-			game.liveObstacles[i] = new cTruck(pos, speed, direction);
+			liveObstacles[i] = new cTruck(pos, speed, direction);
 			break;
 		case 'M': 
-			game.liveObstacles[i] = new cMotorbike(pos, speed, direction);
+			liveObstacles[i] = new cMotorbike(pos, speed, direction);
 			break;
 		case 'C': 
-			game.liveObstacles[i] = new cCar(pos, speed, direction);
+			liveObstacles[i] = new cCar(pos, speed, direction);
 			break;
 		default:
 			break;
@@ -1793,7 +1880,7 @@ void cGame::load(string fileName)
 		switch (type)
 		{
 		case '1':
-			game.environmentObject.push_back(new cCoin(pos));
+			environmentObject.push_back(new cCoin(pos));
 			break;
 		default:
 			break;
@@ -1805,11 +1892,12 @@ void cGame::load(string fileName)
 	timePauseEnd = timePauseStart;
 	timeStart -= totalTime * 1000;
 
-	gameMap::changeMapTheme(game.currentTheme);
-	gameMap::currentMap = &gameMap::listMap[game.currentTheme][game.currentPhase];
-	game.spawnEnvironment();	
+	gameMap::changeMapTheme(currentTheme);
+	gameMap::currentMap = &gameMap::listMap[currentTheme][currentPhase];
+	spawnEnvironment();	
 	if (isStart)
 	{
+		
 		isPause = false;
 	}
 	else {
@@ -1820,10 +1908,10 @@ void cGame::load(string fileName)
 }
 
 void cGame::ScoreBoard() {
-	cDWindow screen(&window, { 0, 0 }, "leaderboard.txt", true);
+	cDWindow screen(&window, { 0, 0 }, "leaderboard", true);
 	screen.show();
 
-	ifstream ifs("Save//leaderboard.txt");
+	ifstream ifs("Save//leaderboard");
 	if (!ifs.is_open())
 		return;
 	int i = 0;

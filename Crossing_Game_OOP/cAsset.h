@@ -11,51 +11,51 @@ extern const string MapPrefix;
 extern const string LevelPrefix;
 
 //Environment objects
-const vector<string> trafficlightFile {"trafficlightgreen.txt", "trafficlightred.txt"};
-const vector<string> lilyFile { "lily.txt" };		
-const vector<string> coinFile { "coin.txt" };
+const vector<string> trafficlightFile {"trafficlightgreen", "trafficlightred"};
+const vector<string> lilyFile { "lily" };		
+const vector<string> coinFile { "coin" };
 //Obstacles objects
-const vector<string> lionFileR { "LionR1.txt","LionR2.txt","LionR3.txt", "LionR2.txt" };
-const vector<string> lionFileL { "LionL1.txt", "LionL2.txt", "LionL3.txt", "LionL2.txt"};
+const vector<string> lionFileR { "LionR1","LionR2","LionR3", "LionR2" };
+const vector<string> lionFileL { "LionL1", "LionL2", "LionL3", "LionL2"};
 
-const vector<string> rhinoFileR { "RhinoR1.txt","RhinoR2.txt","RhinoR3.txt", "RhinoR2.txt"};
-const vector<string> rhinoFileL { "RhinoL1.txt","RhinoL2.txt","RhinoL3.txt", "RhinoL2.txt" };
+const vector<string> rhinoFileR { "RhinoR1","RhinoR2","RhinoR3", "RhinoR2"};
+const vector<string> rhinoFileL { "RhinoL1","RhinoL2","RhinoL3", "RhinoL2" };
 
-const vector<string> crocoFileR { "CrocodileR1.txt","CrocodileR2.txt","CrocodileR3.txt", "CrocodileR2.txt" };
-const vector<string> crocoFileL { "CrocodileL1.txt","CrocodileL2.txt","CrocodileL3.txt", "CrocodileL2.txt" };
+const vector<string> crocoFileR { "CrocodileR1","CrocodileR2","CrocodileR3", "CrocodileR2" };
+const vector<string> crocoFileL { "CrocodileL1","CrocodileL2","CrocodileL3", "CrocodileL2" };
 
-const vector<string> sharkFileR { "SharkR1.txt","SharkR2.txt" ,"SharkR3.txt" , "SharkR2.txt" };
-const vector<string> sharkFileL { "SharkL1.txt","SharkL2.txt" ,"SharkL3.txt" , "SharkL2.txt" };
+const vector<string> sharkFileR { "SharkR1","SharkR2" ,"SharkR3" , "SharkR2" };
+const vector<string> sharkFileL { "SharkL1","SharkL2" ,"SharkL3" , "SharkL2" };
 
-const vector<string> surferFileR { "SurferR1.txt","SurferR2.txt" ,"SurferR3.txt" , "SurferR2.txt" };
-const vector<string> surferFileL { "SurferL1.txt","SurferL2.txt" ,"SurferL3.txt" , "SurferL2.txt" };
+const vector<string> surferFileR { "SurferR1","SurferR2" ,"SurferR3" , "SurferR2" };
+const vector<string> surferFileL { "SurferL1","SurferL2" ,"SurferL3" , "SurferL2" };
 
-const vector<string> truckFileR { "TruckR.txt" };
-const vector<string> truckFileL { "TruckL.txt" };
+const vector<string> truckFileR { "TruckR" };
+const vector<string> truckFileL { "TruckL" };
 
-const vector<string> carFileR { "CarR.txt" };
-const vector<string> carFileL { "CarL.txt" };
+const vector<string> carFileR { "CarR" };
+const vector<string> carFileL { "CarL" };
 
-const vector<string> motorbFileR { "BikeR.txt" };
-const vector<string> motorbFileL { "BikeL.txt" };
+const vector<string> motorbFileR { "BikeR" };
+const vector<string> motorbFileL { "BikeL" };
 
-const string FxFrameFile { "fxframe.txt" };
-const vector<string> hedgeImpactEffect {"base.txt", "purple.txt", "blast.txt", "explosion1.txt","explosion2.txt", "explosion3.txt","fade1.txt", "fade2.txt", "fade3.txt", "dissappear.txt" };
-const vector<string> lionImpactEffect{"Lionimpact1.txt","Lionimpact2.txt","Lionimpact3.txt","Lionimpact4.txt","Lionimpact.txt" };
-const vector<string> RhinoImpactEffect{ "Rhinoimpact1.txt","Rhinoimpact2.txt","Rhinoimpact3.txt","Rhinoimpact4.txt","Rhinoimpact5.txt" };
-const vector<string> CrocoImpactEffect{ "Crocodileimpact1.txt","Crocodileimpact2.txt","Crocodileimpact3.txt","Crocodileimpact4.txt" };
-const vector<string> BikeImpactEffect{ "Bikeimpact1.txt","Bikeimpact2.txt","Bikeimpact3.txt","Bikeimpact4.txt" };
-const vector<string> CarImpactEffect{ "Carimpact1.txt","Carimpact2.txt","Carimpact3.txt" };
-const vector<string> TruckImpactEffect{ "Truckimpact1.txt","Truckimpact2.txt","Truckimpact3.txt"};
-const vector<string> SharkImpactEffect{ "Sharkimpact1.txt","Sharkimpact2.txt","Sharkimpact3.txt","Sharkimpact4.txt" };
-const vector<string> SurferImpactEffect{ "Surferimpact1.txt","Surferimpact2.txt","Surferimpact3.txt" };
+const string FxFrameFile { "fxframe" };
+const vector<string> hedgeImpactEffect {"base", "purple", "blast", "explosion1","explosion2", "explosion3","fade1", "fade2", "fade3", "dissappear" };
+const vector<string> lionImpactEffect{"Lionimpact1","Lionimpact2","Lionimpact3","Lionimpact4","Lionimpact" };
+const vector<string> RhinoImpactEffect{ "Rhinoimpact1","Rhinoimpact2","Rhinoimpact3","Rhinoimpact4","Rhinoimpact5" };
+const vector<string> CrocoImpactEffect{ "Crocodileimpact1","Crocodileimpact2","Crocodileimpact3","Crocodileimpact4" };
+const vector<string> BikeImpactEffect{ "Bikeimpact1","Bikeimpact2","Bikeimpact3","Bikeimpact4" };
+const vector<string> CarImpactEffect{ "Carimpact1","Carimpact2","Carimpact3" };
+const vector<string> TruckImpactEffect{ "Truckimpact1","Truckimpact2","Truckimpact3"};
+const vector<string> SharkImpactEffect{ "Sharkimpact1","Sharkimpact2","Sharkimpact3","Sharkimpact4" };
+const vector<string> SurferImpactEffect{ "Surferimpact1","Surferimpact2","Surferimpact3" };
 
 const vector<vector<string>> mapFiles{
-	{"jungle1.txt", "jungle2.txt", "jungle3.txt"},
-	{"beach1.txt", "beach2.txt", "beach3.txt"},
-	{"city1.txt"}
+	{"jungle1", "jungle2", "jungle3"},
+	{"beach1", "beach2", "beach3"},
+	{"city1"}
 };
-const vector<string> peopleFile { "up.txt", "right.txt", "down.txt", "left.txt"};
+const vector<string> peopleFile { "up", "right", "down", "left"};
 
 
 
