@@ -14,7 +14,7 @@ class cCoin;
 
 class cGame {
 	const vector <vector<string>> CreatedLevel{
-		{"jungle1.txt"},/*,"jungle2.txt"},,"jungle3.txt","jungle4.txt","jungle5.txt"},*/
+		{"jungle1.txt","jungle2.txt", "jungle3.txt","jungle4.txt","jungle5.txt"},
 		{"beach1.txt","beach2.txt","beach3.txt","beach4.txt","beach5.txt"},
 		{"city1.txt","city2.txt","city3.txt","city4.txt","city5.txt"}
 	};
@@ -118,7 +118,6 @@ class cGame {
 		void pizzaDraw(long long &startTime);
 
 
-		cPeople* mainPeople = nullptr;
 
 		void updateInfo();
 

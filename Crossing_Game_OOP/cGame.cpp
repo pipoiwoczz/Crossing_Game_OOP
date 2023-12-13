@@ -76,18 +76,18 @@ int cGame::handlingSkillExec(cPeople* pPeople, long long &startTime)
 void cGame::updateSkillState()
 {
 
-	if (mainPeople->skillCooldown[0] > 0)
+	if (livePeople[0]->skillCooldown[0] > 0)
 	{
-		listLabel[8] ->updateText(to_string(mainPeople->skillCooldown[0] / 1000));
+		listLabel[8] ->updateText(to_string(livePeople[0]->skillCooldown[0] / 1000));
 	}
 	else {
 		listWidget[0]->show();
 		listLabel[8] ->unshow();
 	}
 
-	if (mainPeople->skillCooldown[1] > 0)
+	if (livePeople[0]->skillCooldown[1] > 0)
 	{
-		listLabel[9]->updateText(to_string(mainPeople->skillCooldown[1] / 1000));
+		listLabel[9]->updateText(to_string(livePeople[0]->skillCooldown[1] / 1000));
 	}
 	else {
 		listWidget[2]->show();
@@ -330,7 +330,7 @@ void cGame::GamePlayPanel()
 	}
 	std::function<void()> panelFunct[1] = {
 		[&]() {
-			GameNewGamePanel();
+			game.GameNewGamePanel();
 		},
 
 	};
@@ -516,16 +516,16 @@ void cGame::GamePausePanel()
 	std::function<void()> panelFunct[6] = {
 		[&]() {
 			cGameEngine::fillScreenWithLastFrame(true);
-			resumeFunction();
-			isPause = false;
-			timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
-			timePause += (timePauseEnd - timePauseStart) / 1000  ;
+			game.resumeFunction();
+			game.isPause = false;
+			game.timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+			game.timePause += (game.timePauseEnd - game.timePauseStart) / 1000  ;
 		},
-		[&]() {GameSettingsPanel(); },
-		[&]() {GameSavePanel(); },
-		[&]() {GameLoadPanel(); },
-		[&]() {GameQuitPanel(true); },
-		[&]() {GameQuitPanel();	 }
+		[&]() {game.GameSettingsPanel(); },
+		[&]() {game.GameSavePanel(); },
+		[&]() {game.GameLoadPanel(); },
+		[&]() {game.GameQuitPanel(true); },
+		[&]() {game.GameQuitPanel();	 }
 	};
 
 	int current = 0;
@@ -956,9 +956,9 @@ void cGame::GameQuitPanel(bool fullexit)
 			Sound::playSoundEffect(SoundEffect::menuMove);
 			if (currentarrowpos == 0)
 			{
-				this->tomainMenu = true;
-				this->isPause = false;
-				this->isExit = true;
+				tomainMenu = true;
+				isPause = false;
+				isExit = true;
 				if (fullexit) 
 					cGame::mainloop = false;
 			}
@@ -1042,32 +1042,32 @@ void cGame::GameDiePanel() {
 
 	std::function<void()> panelFunct[3] = {
 	[&]() {
-		isPause = false;
-		isLose = false;
-		isExit = false;
-		for (int i = 0; i < livePeople.size(); i++)
+		game.isPause = false;
+		game.isLose = false;
+		game.isExit = false;
+		for (int i = 0; i < game.livePeople.size(); i++)
 		{
-			livePeople[i]->setPos({ short(234 + 40 * i), 145 });
-			livePeople[i]->setState(true);
-			livePeople[i]->resetCooldown();
+			game.livePeople[i]->setPos({ short(234 + 40 * i), 145 });
+			game.livePeople[i]->setState(true);
+			game.livePeople[i]->resetCooldown();
 
 		};
-		nemesis = nullptr;
-		victim = nullptr;
-		clearObjects();
-		currentPhase = 0;
-		spawnObstacle(CreatedLevel[currentTheme][currentPhase]);
+		game.nemesis = nullptr;
+		game.victim = nullptr;
+		game.clearObjects();
+		game.currentPhase = 0;
+		game.spawnObstacle(CreatedLevel[currentTheme][currentPhase]);
 
 		Sound::resumeCurrentTrack();
-		timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
-		timePause += (timePauseEnd - timePauseStart) / 1000;
+		game.timePauseEnd = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+		game.timePause += (game.timePauseEnd - game.timePauseStart) / 1000;
 	},
 	[&]() {
-		GameLoadPanel();
+		game.GameLoadPanel();
 	},
 	[&]() {
-		currentPhase = 0;
-		GameQuitPanel();
+		game.currentPhase = 0;
+		game.GameQuitPanel();
 	}
 	};
 
@@ -1141,25 +1141,28 @@ void cGame::prepareUI()
 {
 	cDWindow* rr = new cDWindow(&window, { 504, 0 }, "panelinfo", true);
 	//cDWindow howtoplay(&rr, { 0,110 }, "howtoplay", true);
-	cLabel* t1 = new cLabel(rr, { 10, 5 }, "SCORES", 1, Color::red, true);
+	cLabel* t11 = new cLabel(rr, { 10, 5 }, "LEVEL: " + to_string(gameLevel), 1, Color::red, true);
+	cLabel* t1 = new cLabel(rr, { 10, 15 }, "SCORES:", 1, Color::red, true);
 	string point = to_string(totalPoint);
-	cLabel* t2 = new cLabel(rr, { 20, 15 }, point, 2, Color::red, true);
-	cLabel* t3 = new cLabel(rr, { 10, 25 }, "TIME", 1, Color::red, true);
+	cLabel* t2 = new cLabel(rr, { 20, 25 }, point, 2, Color::red, true);
+	cLabel* t3 = new cLabel(rr, { 10, 35 }, "TIME:", 1, Color::red, true);
 	time = int(calculateTime());
-	cLabel* t4 = new cLabel(rr, { 20, 35 }, to_string(time), 2, Color::red, true);
+	cLabel* t4 = new cLabel(rr, { 10, 45 }, to_string(time), 2, Color::red, true);
+
+	cLabel* t6 = new cLabel(rr, { 10, 55 }, "COINS:", 1, Color::red, true);
+	cLabel* t7 = new cLabel(rr, { 10, 65 }, "30 x 0", 2, Color::red, true);
+	cLabel* t8 = new cLabel(rr, { 10, 75 }, "SKILLS", 1, Color::red, true);
+
+
 	cLabel* t5 = new cLabel(rr, { 10, 150 }, "ESC: PAUSE", 1, Color::red, true);
 
-	cLabel* t6 = new cLabel(rr, { 10, 45 }, "COINS", 1, Color::red, true);
-	cLabel* t7 = new cLabel(rr, { 20, 55 }, "30 x 0", 2, Color::red, true);
-	cLabel* t8 = new cLabel(rr, { 10, 65 }, "SKILLS", 1, Color::red, true);
 
 	cButton* skill1R = new cButton(rr, { 10, 80 }, "iconflashR", 1, true);
 	cButton* skill1U = new cButton(rr, { 10, 80 }, "iconflashU", 1);
 	cButton* skill2R = new cButton(rr, { 60, 80 }, "iconfreezeR", 1, true);
 	cButton* skill2U = new cButton(rr, { 60, 80 }, "iconfreezeU", 1);
-	cLabel* t9 = new cLabel(rr, { 10, 100 }, to_string(mainPeople->skillCooldown[0]), 1, Color::red);
-	cLabel* t10 = new cLabel(rr, { 60, 100 }, to_string(mainPeople->skillCooldown[1]), 1, Color::red);
-	cLabel* t11 = new cLabel(rr, {10, 140}, "LEVEL: " + to_string(gameLevel), 1, Color::red, true);
+	cLabel* t9 = new cLabel(rr, { 10, 100 }, to_string(livePeople[0]->skillCooldown[0]), 1, Color::red);
+	cLabel* t10 = new cLabel(rr, { 60, 100 }, to_string(livePeople[0]->skillCooldown[1]), 1, Color::red);
 
 	cLabel* t12 = new cLabel(rr, { 10, 120 }, "HELP: TAB", 1, Color::red, true);
 
@@ -1186,24 +1189,24 @@ void cGame::prepareUI()
 void cGame::handlingSkillFx()
 {
 	updateSkillState();
-	if (mainPeople->used[0])
+	if (livePeople[0]->used[0])
 	{
 		listWidget[1]->show();
 		Sound::playSoundEffect(SoundEffect::flashFx);
-		mainPeople->used[0] = false;
+		livePeople[0]->used[0] = false;
 	}
-	if (mainPeople->used[1])
+	if (livePeople[0]->used[1])
 	{
 		listWidget[3]->show();
 		Sound::playSoundEffect(SoundEffect::freezeFx);
-		mainPeople->used[1] = false;
+		livePeople[0]->used[1] = false;
 	}
 }
 
 void cGame::GameWinPanel()
 {
 	isPause = true;
-	mainPeople->passLevel = false;
+	livePeople[0]->passLevel = false;
 	Sound::pauseCurrentTrack();
 	string list[3] = { "jungle1", "beach1", "city1" };
 	cDWindow theme(&window, { 0,0 }, list[currentTheme]);
@@ -1385,7 +1388,7 @@ void cGame::MainGame() {
 			GameHelpPanel();
 		}
 
-		if (!livePeople.empty() && mainPeople->passLevel) {
+		if (!livePeople.empty() && livePeople[0]->passLevel) {
 			if (isComplete())
 			{
 				GameWinPanel();
@@ -1398,9 +1401,6 @@ void cGame::MainGame() {
 		{
 			processLose();
 			GameDiePanel();
-			game.isPause = false;
-			game.isLose = false;
-			game.isExit = false;
 		}
 		Sleep(10);
 	}
@@ -1594,7 +1594,7 @@ void cGame::spawnPeople() {
 	for (int i = 0; i < gameOrder; i++) {
 		livePeople.push_back(new cPeople());
 	}
-	mainPeople = livePeople[0];
+	livePeople[0] = livePeople[0];
 }
 
 void cGame::spawnObstacle(const string& levelFile) {
@@ -1723,7 +1723,7 @@ void cGame::nextLevel() {
 	timePauseStart = 0;
 	timePauseEnd = 0;
 	isPause = true;
-	mainPeople->setForceStop();
+	livePeople[0]->setForceStop();
 	suddenStop = true;
 	string src[3] = { "jungle1.txt", "beach1.txt", "city1.txt" };
 	string themeString = src[currentTheme];
@@ -1732,12 +1732,12 @@ void cGame::nextLevel() {
 	Sound::playSoundEffect(SoundEffect::levelup);
 	Sleep(2000);
 	suddenStop = false;
-	mainPeople->setForceStop();
+	livePeople[0]->setForceStop();
 	isPause = false;
 
 	listLabel[2]->updateText("TIME");
 	listLabel[1]->updateText(to_string(totalPoint));
-	mainPeople->passLevel = false;
+	livePeople[0]->passLevel = false;
 	time = 0;
 	coinNow = 0;
 	listLabel[6]->updateText("30 x " + to_string(coinBonus / 30));
@@ -1840,7 +1840,7 @@ void cGame::load(string fileName)
 		livePeople[i] = new cPeople({ x, y });
 		ifs >> totalPoint >> coinBonus;
 	}
-	mainPeople = livePeople[0];
+	livePeople[0] = livePeople[0];
 	int obstacleCount;
 	ifs >> obstacleCount;
 
@@ -1910,7 +1910,7 @@ void cGame::load(string fileName)
 	gameMap::changeMapTheme(game.currentTheme);
 	gameMap::currentMap = &gameMap::listMap[game.currentTheme][game.currentPhase];
 	game.spawnEnvironment();	
-	mainPeople = game.livePeople[0];
+	livePeople[0] = game.livePeople[0];
 	nemesis = nullptr;
 	victim = nullptr;
 	if (isStart)
