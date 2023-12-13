@@ -1635,9 +1635,9 @@ void cGame::nextLevel() {
 	this->gameLevel++;
 	//gameMap::nextMap();
 	calculatePoint();
-
+	if (currentPhase == 4) currentPhase--;
 	clearObjects();
-	spawnObstacle(CreatedLevel[currentTheme][(currentPhase + 1) % CreatedLevel[currentTheme].size()]);
+	spawnObstacle(CreatedLevel[currentTheme][(++currentPhase) % CreatedLevel[currentTheme].size()]);
 	coinBonus = 0;
 	timePause = 0;
 	timeStart = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
