@@ -1385,7 +1385,23 @@ void cGame::processLose()
 
 void cGame::GameHelpPanel()
 {
+	isPause = true;
+	cDWindow panel(&window, { 122, 21 }, "panelhelp", true);
+	cDWindow controlkey(&panel, { 10, 20 }, "howtoplay", true);
+	
+	cLabel quit(&panel, { 55, 5 }, "CLOSE HELP: ENTER", 1, Color::black, true);
+	cLabel skill1(&panel, { 140, 22 }, "TELEPORT: 1", 1, Color::black, true);
+	cLabel skill2(&panel, { 140, 35 }, "FREEZE: 2", 1, Color::black, true);
 
+	while (true)
+	{
+		if (GetKeyState(0x0D) & 0x8000)
+		{
+			break;
+		}
+		Sleep(50);
+	}
+	isPause = false;
 }
 
 void cGame::MainGame() {
