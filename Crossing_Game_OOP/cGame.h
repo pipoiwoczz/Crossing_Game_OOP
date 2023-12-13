@@ -16,9 +16,9 @@ class cCoin;
 class cGame {
 	COORD oldPos;
 	const vector <vector<string>> CreatedLevel{
-		{"jungle1.txt"},
-		{"beach1.txt"},
-		{"city1.txt"}
+		{"jungle1.txt","jungle2.txt","jungle3.txt","jungle4.txt","jungle5.txt"},
+		{"beach1.txt","beach2.txt","beach3.txt","beach4.txt","beach5.txt"},
+		{"city1.txt","city2.txt","city3.txt","city4.txt","city5.txt"}
 	};
 
 	static cGame game;
@@ -61,11 +61,11 @@ class cGame {
 
 	//Skills
 	int skillCooldown[2] = { 0, 0 };
-	int defaultSkillCooldown[2] = { 400, 400 };
+	int defaultSkillCooldown[2] = { 60000, 60000 };
 	int freezetime = 100;
 	vector<cWidget*> listSkill;
 	vector<cLabel*> cooldownLabel;
-	int handlingSkillExec(cPeople* pPeople);
+	int handlingSkillExec(cPeople* pPeople, long long &startTime);
 	void updateSkillState();
 	void teleport(cPeople* pPeople);
 	int skillValue = -1;
@@ -112,7 +112,7 @@ class cGame {
 		//vector<COORD> getPositionLane(); 		// COORD X is pos Y and Y is direction
 		void collisionThread();
 		void drawThread();
-		void pizzaDraw();
+		void pizzaDraw(long long &startTime);
 
 
 		vector<cPeople *> getPeople();
