@@ -468,7 +468,7 @@ void cGame::GamePlayPanel()
 }
 
 void cGame::chooseCharacter() {
-	cDWindow panel(&window, { 122, 11 }, "panelsettings", true);
+	cDWindow panel(&window, { 30, 6 }, "panelsettings", true);
 
 	cButton panelButton[2][2]{
 		{cButton(&panel, { 20, 40 }, "rabbitchoose1", 0, false), cButton(&panel, { 20, 40 }, "rabbitchoose2", 0, true)},
