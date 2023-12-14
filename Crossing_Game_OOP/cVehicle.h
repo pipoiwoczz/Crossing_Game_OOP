@@ -11,7 +11,6 @@ public:
 };
 
 class cTruck : public cVehicle {
-    //static cObstacle * bootstrapObjectcTruck;
     static vector<Texture> motionFramesL;
     static vector<Texture> motionFramesR;
 	static vector<Texture> impactFx;
@@ -21,7 +20,6 @@ public:
 
 
 	cTruck();
-	//cTruck(COORD In_pos, int difficulty, int ttm);
     cTruck (COORD In_pos, int speed, bool fromRight);
     ~cTruck();
     
@@ -30,7 +28,6 @@ public:
 };
 
 class cMotorbike : public cVehicle {
-    //static cObstacle * bootstrapObjectcMotorbike;
 
     static vector<Texture> motionFramesL;
     static vector<Texture> motionFramesR;
@@ -40,7 +37,6 @@ public:
 
 
 	cMotorbike();
-	//cMotorbike(COORD In_pos, int difficulty, int ttm);
     cMotorbike (COORD In_pos, int speed, bool fromRight);
     ~cMotorbike();
  
@@ -49,7 +45,6 @@ public:
 };
 
 class cCar : public cVehicle {
-    //static cObstacle * bootstrapObjectcMotorbike;
 
     static vector<Texture> motionFramesL;
     static vector<Texture> motionFramesR;
@@ -59,7 +54,6 @@ public:
 
 
     cCar();
-    //cCar(COORD In_pos, int difficulty, int ttm);
     cCar(COORD In_pos, int speed, bool fromRight);
     ~cCar();
 

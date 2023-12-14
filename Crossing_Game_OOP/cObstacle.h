@@ -42,7 +42,6 @@ public:
 
     cObstacle (COORD In_pos, int speed, bool fromRight); // constructor: set topleft and speed. timeUntilMove automatically set to be equal to speed
     virtual ~cObstacle();
-   // static void cleanBootstrap(); // clean up static objects vector. call before program exits. [better solutions?][No, unneccessary]
     
     COORD getPos();
     int getSpeed();
@@ -50,13 +49,6 @@ public:
     
     void setPos(COORD new_Pos);
     virtual void determineHitbox();
-
-    //static cObstacle* addObject(cObstacle*);
-    //static cObstacle * copyObject (char, COORD);
-    //static cObstacle * constructObject (char, COORD, int spd);
-    //virtual cObstacle * copy (COORD pos) = 0; // create object at pos, copying speed of original object
-    //virtual cObstacle * construct (COORD pos, int spd) = 0; // create object at pos, with speed set to spd
-    //// note: copy constructors have not been declared - currently using default copy constructors
 
     virtual void move(); // moves obstacle to new position
     void moveHitBox();

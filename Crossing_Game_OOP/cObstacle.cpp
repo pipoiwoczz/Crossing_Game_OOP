@@ -10,8 +10,6 @@ cObstacle::~cObstacle()
 
 cObstacle::cObstacle(COORD In_pos, int speed, bool fromRight) {
     topleft = In_pos;
-    /*speed = difficulty;
-    timeUntilMove = ttm;*/
     if (speed < 0)
         speed = 0;
     this -> speed = speed;

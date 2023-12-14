@@ -215,21 +215,6 @@ cLabel::cLabel(cDWindow* parentWindow, COORD offsetFromParentTopleft, const stri
 		show();
 }
 
-//cLabel::cLabel(cButton* parentWindow, COORD offsetFromParentTopleft, const string& text, const short& align, Color textColor, bool showNow)
-//{
-//	this->parentWindow = static_cast<cWidget*> (parentWindow);
-//	IsVisible = false;
-//	this->text = text;
-//	color = short(textColor);
-//	this->align = align;
-//	offset = offsetFromParentTopleft;
-//	topleft = { short(parentWindow->topleft.X + offsetFromParentTopleft.X), short(parentWindow->topleft.Y + offsetFromParentTopleft.Y) };
-//	topleft = { max(topleft.X, parentWindow->topleft.X), max(topleft.Y, parentWindow->topleft.Y) };
-//	createTextline();
-//
-//	if (showNow)
-//		show();
-//}
 void cLabel::updateText(const string& newText)
 {
 	unshow();

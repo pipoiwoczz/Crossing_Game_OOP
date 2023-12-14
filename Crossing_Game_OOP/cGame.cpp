@@ -688,8 +688,6 @@ void cGame::GamePausePanel()
 		if (GetKeyState(0x0D) & 0x8000)
 		{
 			Sound::playSoundEffect(SoundEffect::menuMove);
-			//panel.unshow();
-			//panelButton[current].unshow();
 			panelFunct[current]();
 			panel.show();
 			panelButton[current].show();
@@ -1211,7 +1209,6 @@ cGame::~cGame()
 	liveObstacles.clear();
 	livePeople.clear();
 	environmentObject.clear();
-	//cleanGame();
 }
 
 short cGame::getGameOrder()
@@ -1222,7 +1219,6 @@ short cGame::getGameOrder()
 void cGame::prepareUI()
 {
 	cDWindow* rr = new cDWindow(&window, { 504, 0 }, "panelinfo", true);
-	//cDWindow howtoplay(&rr, { 0,110 }, "howtoplay", true);
 
 	cLabel* t0 = new cLabel(rr, { 10, 3 }, "LEVEL: " + to_string(gameLevel), 1, Color::red, true);
 	cLabel* t1 = new cLabel(rr, { 10, 13 }, "SCORES:", 1, Color::red, true);
@@ -1661,7 +1657,6 @@ bool cGame::isImpact()
 			}
     }
 	return false;
-    //return livePeople.empty();
 }
 
 void cGame::updateInfo()
@@ -1907,10 +1902,8 @@ void cGame::nextLevel() {
 	int roundScore = bonus[count] + coinBonus + 100;
 	listLabel[2]->updateText(to_string(totalPoint) + " + " + to_string(roundScore));
 	listLabel[3]->updateText("TIME BONUS");
-	//listLabel[3]->updateText(to_string(bonus[count]));
 
 	this->gameLevel++;
-	//gameMap::nextMap();
 	calculatePoint();
 	if (currentPhase == 4) currentPhase--;
 	clearObjects(false, false, true);
@@ -1972,72 +1965,6 @@ void cGame::nextLevel() {
 	suddenStop = false;
 }
 
-void cGame::endlessMode() {
-	//spawnPeople();
-	//spawnObstacle();
-	////resetTime();
-	//thread drawingThread(&cGameEngine::pizzaDraw, this);
-	//Sound::playSoundList();
-	//Sound::playIntroSound();
-	////Sound::musicThread();
-	//while (true) {
-	//	if (GetKeyState(0x50) < 0 && 0x8000) {
-	//		pauseGame();
-	//	}
-	//	if (GetKeyState(0x53) < 0 && 0x8000) {
-	//		resumeGame(&cGameEngine::pGame);
-	//	}
-	//	if (GetKeyState(0x51) < 0 && 0x8000) {
-	//		// isExit = true;
-	//		// save game Menu here
-	//		// draw save game menu
-	//		// can save or not 
-	//		// if can save => save game
-	//		// if not => continue game
-	//	}
-	//	if (GetKeyState(0x1B) < 0 && 0x8000) {
-	//		isExit = true;
-	//		// save game Menu here
-	//		// draw save game menu
-	//		// can save or not 
-	//		// if can save => save game => exit game
-	//		// if not => exit game
-	//		break;
-	//	}
-	//	if (isImpact())
-	//	{
-	//		isLose = true;
-	//		break;
-	//	}
-	//	for (int i = 0; i < gameOrder; i++) {
-	//		livePeople[i]->move();
-	//	}
-	//	if (isFinishLevel()) {
-	//		this->gameLevel++;
-	//		calculatePoint();
-	//		resetTime();
-	//		srand(NULL);
-	//		int random = rand() % 7 + 1;
-	//		//gameMap::changeMap(BGIndex(random));
-	//		for (int i = 0; i < livePeople.size(); i++) {
-	//			livePeople[i]->setPos({ short(200 - 100 * i), 100 });
-	//		}
-	//		for (int i = 0; i < liveObstacles.size(); i++) {
-	//			delete liveObstacles[i];
-	//		}
-	//		liveObstacles.clear();
-	//		string src = "//Level//map_";
-	//		string map[3] = { "jungle", "beach", "city" };
-	//		srand(NULL);
-	//		int rand_map = rand() % 3;
-	//		src += map[rand_map] + "//";
-	//		spawnObstacle();
-	//	}
-	//	Sleep(10);
-	//}
-	//drawingThread.join();
-
-}
 
 void cGame::load(string fileName)
 {

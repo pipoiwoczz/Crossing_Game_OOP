@@ -1,8 +1,6 @@
 #ifndef _SETUP_H
 #define _SETUP_H
 #define _CRT_SECURE_NO_WARNINGS
-//#define _CRTDBG_MAP_ALLOC
-//#include <crtdbg.h>	
 
 
 #include <iostream>	
@@ -25,10 +23,6 @@
 
 #pragma comment(lib, "winmm.lib")
 
-//#ifdef _DEBUG
-//#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
-//#define new DEBUG_NEW
-//#endif
 
 using namespace std;
 
@@ -119,23 +113,11 @@ public:
 	}
 
 	friend ostream& operator<<(ostream& ofs, const Time& time) {
-		/*ofs.write((char*)&time.year, sizeof(int));
-		ofs.write((char*)&time.month, sizeof(int));
-		ofs.write((char*)&time.day, sizeof(int));
-		ofs.write((char*)&time.hour, sizeof(int));
-		ofs.write((char*)&time.minute, sizeof(int));
-		ofs.write((char*)&time.second, sizeof(int));*/
 		ofs << time.year << " " << time.month << " " << time.day << " " << time.hour << " " << time.minute << " " << time.second;
 		return ofs;
 	}
 
 	friend istream& operator>>(istream& ifs, Time& time) {
-		/*ifs.read((char*)&time.year, sizeof(int));
-		ifs.read((char*)&time.month, sizeof(int));
-		ifs.read((char*)&time.day, sizeof(int));
-		ifs.read((char*)&time.hour, sizeof(int));
-		ifs.read((char*)&time.minute, sizeof(int));
-		ifs.read((char*)&time.second, sizeof(int));*/
 		ifs >> time.year >> time.month >> time.day >> time.hour >> time.minute >> time.second;
 		return ifs;
 	}

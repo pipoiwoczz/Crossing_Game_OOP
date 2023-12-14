@@ -97,7 +97,6 @@ protected:
 public:
 	friend cGameEngine;
 	cLabel(cDWindow* parentWindow, COORD offsetFromParentTopleft, const string& text, const short& align, Color textColor, bool showNow = false);
-	//cLabel(cButton* parentWindow, COORD offsetFromParentTopleft, const string& text, const short& align, Color textColor, bool showNow = false);
 	bool show(bool showNow = true);
 	bool unshow(bool showNow = true);
 	void updateText(const string& newText);

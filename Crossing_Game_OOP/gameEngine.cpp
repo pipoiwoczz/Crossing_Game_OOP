@@ -282,10 +282,6 @@ void cGameEngine::renderEnvironment(cEnvironment* pEnvironmentObject)
 				pEnvironmentObject->currentFrame = (pEnvironmentObject->currentFrame + 1) % pEnvironmentObject->numMotionFrame;
 				pEnvironmentObject->pMotionFrame = pEnvironmentObject->pLMotionFrames + pEnvironmentObject->currentFrame;
 			}
-			/*else {
-				pObstacle->currentFrame = 0;
-				pObstacle->pMotionFrame = pObstacle->pLMotionFrames;
-			}*/
 
 
 			pEnvironmentObject->timeUntilRender = pEnvironmentObject->defaulttimeUntilRender;
@@ -312,10 +308,6 @@ void cGameEngine::renderCoin(cCoin* pCoin)
 				pCoin->currentFrame = (pCoin->currentFrame + 1) % pCoin->numMotionFrame;
 				pCoin->pMotionFrame = pCoin->pLMotionFrames + pCoin->currentFrame;
 			}
-			/*else {
-				pObstacle->currentFrame = 0;
-				pObstacle->pMotionFrame = pObstacle->pLMotionFrames;
-			}*/
 
 
 			pCoin->timeUntilRender = pCoin->defaulttimeUntilRender;
@@ -507,7 +499,6 @@ void cGameEngine::playEffect(cObstacle* obsta, cPeople* player)
 
 
 	player->pMotionFrame = player->pLMotionFrame + 3;
-	//replaceBlankPixel(player->pMotionFrame->textureArray, { player->pMotionFrame->width, player->pMotionFrame->height }, cAsset::FxFrame.textureArray, { w, h }, { 120, 25 });
 
 	COORD startpos = { 50, 25 };
 	for (int j = 0; j < obsta->numFxFrame; j++)

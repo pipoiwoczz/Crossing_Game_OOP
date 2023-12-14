@@ -162,7 +162,6 @@ class cGame {
 		void calculatePoint();
 
 		void nextLevel();
-		void endlessMode();
 
 		void spawnCoin();
 };
