@@ -133,7 +133,7 @@ int cPeople::useSkill()
 }
 
 bool cPeople::move() {
-	if (forceStop)
+	if (forceStop || passLevel)
 		return false;
 	if (moveCooldown > 0)
 	{

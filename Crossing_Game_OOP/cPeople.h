@@ -37,6 +37,7 @@ class cPeople {
 	bool passLevel = false;
 	bool forceStop = false;
 	bool used[2] = { false, false };
+	long long cur;
 	int skillCooldown[2] = { 0,0 };
 	public:
 		friend class cGame;
