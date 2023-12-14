@@ -59,6 +59,7 @@ class cGame {
 	cObstacle* nemesis = nullptr;
 	cPeople* victim = nullptr;
 
+	int singleSkin = 0;
 	//Skills
 	vector<vector<cWidget*>> SkillIcon;
 	vector<vector<cLabel*>> Skillcooldown;
@@ -103,6 +104,8 @@ class cGame {
 		void GamePausePanel();
 
 		void GameSettingsPanel();
+
+		void chooseCharacter();
 
 		void GameSavePanel();
 

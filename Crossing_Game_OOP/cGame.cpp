@@ -439,6 +439,61 @@ void cGame::GamePlayPanel()
 	}
 }
 
+void cGame::chooseCharacter() {
+	cDWindow panel(&window, { 122, 11 }, "panelsettings", true);
+
+	cButton panelButton[2][2]{
+		{cButton(&panel, { 20, 40 }, "rabbitchoose1", 0, false), cButton(&panel, { 20, 40 }, "rabbitchoose2", 0, true)},
+		{cButton(&panel, { 140, 40 }, "cubechoose1", 0, true), cButton(&panel, { 140, 40 }, "cubechoose2", 0) }
+	};
+
+
+
+	int current = 0;
+
+	while (true)
+	{
+		if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
+			Sound::playSoundEffect(SoundEffect::menuMove);
+			panelButton[current][0].show();
+			if (current == 0) {
+				current++;
+			}
+			else {
+				current--;
+			}
+			panelButton[current][1].show();
+		}
+		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
+			Sound::playSoundEffect(SoundEffect::menuMove);
+			panelButton[current][0].show();
+			if (current == 0) {
+				current++;
+			}
+			else {
+				current--;
+			}
+			panelButton[current][1].show();
+		}
+		Sleep(75);
+		if (GetAsyncKeyState(0x0D) & 0x8000) {
+			Sound::playSoundEffect(SoundEffect::menuMove);
+			if (current == 0) {
+				singleSkin = 0;
+			}
+			else {
+				singleSkin = 1;
+			}
+			break;
+		}
+		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
+			break;
+		}
+
+		
+	}
+}
+
 bool cGame::GameCharacterPanel()
 {
 	cDWindow panel(&window, { 30, 6 }, "panelcharacter", true);
@@ -461,6 +516,7 @@ bool cGame::GameCharacterPanel()
 	{
 		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			arrow[current][0].unshow(0);
 			arrow[current][1].unshow(0);
 			current--;
@@ -469,6 +525,7 @@ bool cGame::GameCharacterPanel()
 		}
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 1)
 		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
 			arrow[current][0].unshow(0);
 			arrow[current][1].unshow(0);
 			current++;
@@ -478,6 +535,9 @@ bool cGame::GameCharacterPanel()
 		if (GetKeyState(0x0D) & 0x8000)
 		{
 			gameOrder = current + 1;
+			if (gameOrder == 1) {
+				chooseCharacter();
+			}
 			break;
 		}
 		if (GetKeyState(VK_ESCAPE) & 0x8000)
@@ -1751,6 +1811,12 @@ void cGame::save(string fileName) {
 }
 
 void cGame::spawnPeople() {
+	if (gameOrder == 1) {
+		livePeople.push_back(new cPeople(0));
+		livePeople[0]->changeskin(SkinIndex(singleSkin));
+		cGameEngine::renderPeople(livePeople[0]);
+		return;
+	};
 	for (int i = 0; i < gameOrder; i++) {
 		livePeople.push_back(new cPeople(i));
 	}
