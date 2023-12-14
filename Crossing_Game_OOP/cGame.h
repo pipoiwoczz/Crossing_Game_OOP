@@ -113,7 +113,7 @@ class cGame {
 
 		void GameSavePanel();
 
-		void GameLoadPanel();
+		bool GameLoadPanel();
 
 		void GameQuitPanel(bool fullexit = false);
 

@@ -236,7 +236,6 @@ void cGame::onGameReady()
 			current--;
 			panelButton[current].show();
 		}
-
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 3)
 		{
 			Sound::playSoundEffect(SoundEffect::menuMove);
@@ -253,7 +252,7 @@ void cGame::onGameReady()
 			panel.show();
 			panelButton[current].show();
 		}
-		Sleep(10);
+		Sleep(250);
 	}
 }
 
@@ -574,20 +573,6 @@ bool cGame::GameCharacterPanel()
 		Sleep(50);
 	}
 	return true;
-	//panel.show();
-	//quit.show();
-
-	//cButton buttonPanel[2][2]{
-	//	{
-	//		cButton(&panel, { 20, 50 }, "rabbitchoose1", 1, true),
-	//		cButton(&panel, { 20, 50 }, "rabbitchoose2", 1, false)
-	//	},
-	//	{
-	//		cButton(&panel, { 140, 50 }, "cubechoose1", 1, true),
-	//		cButton(&panel, { 140, 50 }, "cubechoose2", 1, false)
-	//	}
-	//};
-
 }
 
 void cGame::GameNewGamePanel()
@@ -886,7 +871,7 @@ void cGame::GameSavePanel()
 	}
 }
 
-void cGame::GameLoadPanel()
+bool cGame::GameLoadPanel()
 {
 	Time time[3];
 	string mapIconSaved[3] = { "iconemptyload", "iconemptyload" , "iconemptyload" };
@@ -957,6 +942,7 @@ void cGame::GameLoadPanel()
 	int x = 0;
 	int current = 0;
 	slots[current].show();
+	Sleep(100);
 	while (true)
 	{
 		if ((GetKeyState(VK_DOWN) & 0x8000) && current < 2)
@@ -995,10 +981,11 @@ void cGame::GameLoadPanel()
 			break;
 		}
 		if (GetKeyState(VK_ESCAPE) & 0x8000) {
-			break;
+			return true;
 		}
 		Sleep(50);
 	}
+	return false;
 }
 
 void cGame::GameQuitPanel(bool fullexit)
@@ -1130,6 +1117,8 @@ void cGame::GameDiePanel() {
 		cButton(&panel, { 3, 90 }, "buttondieback", 1)
 	};
 
+	bool br = false;
+
 	std::function<void()> panelFunct[3] = {
 	[&]() {
 		game.isPause = false;
@@ -1153,7 +1142,8 @@ void cGame::GameDiePanel() {
 		game.timePause += (game.timePauseEnd - game.timePauseStart) / 1000;
 	},
 	[&]() {
-		game.GameLoadPanel();
+		br = game.GameLoadPanel();
+		cGameEngine::fillScreenWithLastFrame();
 	},
 	[&]() {
 		game.currentPhase = 0;
@@ -1184,7 +1174,7 @@ void cGame::GameDiePanel() {
 		{
 			Sound::playSoundEffect(SoundEffect::menuMove);
 			panelFunct[current]();
-			if (current < 2)
+			if (current == 0 || !br)
 				break;
 			panel.show();
 			panelButton[current].show();

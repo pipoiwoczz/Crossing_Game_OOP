@@ -186,9 +186,10 @@ void cGameEngine::fillScreen()
 
 void cGameEngine::fillScreenWithLastFrame(bool fillNow)
 {
+	WriteConsoleOutput(curHandle, mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, { 0,0 }, &PlayBoxRect);
 	if (fillNow)
 	{
-		WriteConsoleOutput(curHandle, mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, { 0,0 }, &PlayBoxRect);
+		SetConsoleActiveScreenBuffer(curHandle);
 	}
 }
 
