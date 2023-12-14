@@ -115,7 +115,7 @@ void cGame::updateSkillState()
 
 }
 
-void cGame::pizzaDraw(long long &startTime) {
+void cGame::pizzaDraw(long long startTime[2]) {
 	for (int i = 0; i < liveObstacles.size(); i++)
 	{
 		if (!hasSuddenStop)
@@ -143,7 +143,7 @@ void cGame::pizzaDraw(long long &startTime) {
 	{
 		livePeople[i]->move();
 		cGameEngine::renderPeople(livePeople[i]);
-		if (handlingSkillExec(livePeople[i], startTime) == 1)
+		if (handlingSkillExec(livePeople[i], startTime[i]) == 1)
 			continue;
 		livePeople[i]->moveHitBox();
 
@@ -168,7 +168,10 @@ void cGame::collisionThread()
 
 void cGame::drawThread()
 {
-	long long startTime = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
+	long long startTime[2] ={
+		chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count(), 
+		chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count()
+	};
 	while (!isExit)
 	{
 		if (!isLose && !isPause)

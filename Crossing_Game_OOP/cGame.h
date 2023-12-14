@@ -128,7 +128,7 @@ class cGame {
 		//vector<COORD> getPositionLane(); 		// COORD X is pos Y and Y is direction
 		void collisionThread();
 		void drawThread();
-		void pizzaDraw(long long &startTime);
+		void pizzaDraw(long long startTime[2]);
 
 
 
