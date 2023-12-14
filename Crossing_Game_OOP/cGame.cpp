@@ -1196,16 +1196,16 @@ void cGame::prepareUI()
 {
 	cDWindow* rr = new cDWindow(&window, { 504, 0 }, "panelinfo", true);
 	//cDWindow howtoplay(&rr, { 0,110 }, "howtoplay", true);
-	cLabel* t11 = new cLabel(rr, { 10, 5 }, "LEVEL: " + to_string(gameLevel), 1, Color::red, true);
+	cLabel* t11 = new cLabel(rr, { 20, 5 }, "LEVEL: " + to_string(gameLevel), 1, Color::red, true);
 	cLabel* t1 = new cLabel(rr, { 10, 15 }, "SCORES:", 1, Color::red, true);
 	string point = to_string(totalPoint);
 	cLabel* t2 = new cLabel(rr, { 20, 25 }, point, 2, Color::red, true);
 	cLabel* t3 = new cLabel(rr, { 10, 35 }, "TIME:", 1, Color::red, true);
 	time = int(calculateTime());
-	cLabel* t4 = new cLabel(rr, { 10, 45 }, to_string(time), 2, Color::red, true);
+	cLabel* t4 = new cLabel(rr, { 20, 45 }, to_string(time), 2, Color::red, true);
 
 	cLabel* t6 = new cLabel(rr, { 10, 55 }, "COINS:", 1, Color::red, true);
-	cLabel* t7 = new cLabel(rr, { 10, 65 }, "30 x 0", 2, Color::red, true);
+	cLabel* t7 = new cLabel(rr, { 20, 65 }, "30 x 0", 2, Color::red, true);
 	cLabel* t8 = new cLabel(rr, { 10, 75 }, "SKILLS:", 1, Color::red, true);
 
 
@@ -1215,23 +1215,23 @@ void cGame::prepareUI()
 	SkillIcon.resize(gameOrder);
 	Skillcooldown.resize(gameOrder);
 
-	SkillIcon[0].push_back(new cButton(rr, { 10, 80 }, "iconflashR", 1, true));
-	SkillIcon[0].push_back(new cButton(rr, { 10, 80 }, "iconflashU", 1));
-	SkillIcon[0].push_back(new cButton(rr, { 60, 80 }, "iconfreezeR", 1, true));
-	SkillIcon[0].push_back(new cButton(rr, { 60, 80 }, "iconfreezeU", 1));
+	SkillIcon[0].push_back(new cButton(rr, { 10, 85 }, "iconflashR", 1, true));
+	SkillIcon[0].push_back(new cButton(rr, { 10, 85 }, "iconflashU", 1));
+	SkillIcon[0].push_back(new cButton(rr, { 60, 85 }, "iconfreezeR", 1, true));
+	SkillIcon[0].push_back(new cButton(rr, { 60, 85 }, "iconfreezeU", 1));
 
 	Skillcooldown[0].push_back(new cLabel(rr, {10, 102}, to_string(livePeople[0]->skillCooldown[0]), 1, Color::red));
 	Skillcooldown[0].push_back(new cLabel(rr, {60, 102}, to_string(livePeople[0]->skillCooldown[1]), 1, Color::red));
 
 	if (gameOrder == 2)
 	{
-		SkillIcon[1].push_back(new cButton(rr, { 10, 115 }, "iconflashR", 1, true));
-		SkillIcon[1].push_back(new cButton(rr, { 10, 115 }, "iconflashU", 1));
-		SkillIcon[1].push_back(new cButton(rr, { 60, 115 }, "iconfreezeR", 1, true));
-		SkillIcon[1].push_back(new cButton(rr, { 60, 115 }, "iconfreezeU", 1));
+		SkillIcon[1].push_back(new cButton(rr, { 10, 112 }, "iconflashR", 1, true));
+		SkillIcon[1].push_back(new cButton(rr, { 10, 112 }, "iconflashU", 1));
+		SkillIcon[1].push_back(new cButton(rr, { 60, 112 }, "iconfreezeR", 1, true));
+		SkillIcon[1].push_back(new cButton(rr, { 60, 112 }, "iconfreezeU", 1));
 
-		Skillcooldown[1].push_back(new cLabel(rr, { 10, 137 }, to_string(livePeople[1]->skillCooldown[0]), 1, Color::red));
-		Skillcooldown[1].push_back(new cLabel(rr, { 60, 137 }, to_string(livePeople[1]->skillCooldown[1]), 1, Color::red));
+		Skillcooldown[1].push_back(new cLabel(rr, { 10, 129 }, to_string(livePeople[1]->skillCooldown[0]), 1, Color::red));
+		Skillcooldown[1].push_back(new cLabel(rr, { 60, 129 }, to_string(livePeople[1]->skillCooldown[1]), 1, Color::red));
 	}
 
 	listWidget.push_back(rr);
@@ -1461,18 +1461,23 @@ void cGame::GameHelpPanel()
 {
 	isPause = true;
 	cDWindow panel(&window, { 122, 21 }, "panelhelp", true);
-	cDWindow controlkey(&panel, { 10, 20 }, "howtoplay", true);
 	
 	cLabel quit(&panel, { 55, 5 }, "CLOSE HELP: ENTER", 1, Color::black, true);
-	cLabel skill1(&panel, { 140, 22 }, "TELEPORT: R", 1, Color::black, true);
-	cLabel skill2(&panel, { 140, 35 }, "FREEZE: F", 1, Color::black, true);
-
-	while (true)
-	{
+	
+	cLabel control(&panel, { 75, 20 }, "CONTROL KEY", 1, Color::black, true);
+	cDWindow howtoplay1(&panel, { 10, 30 }, "howtoplay1", true);
+	cDWindow howtoplay2(&panel, { 140, 30 }, "howtoplay2", true);
+	cLabel player1(&panel, { 35, 70 }, "PLAYER 1", 1, Color::black, true);
+	cLabel player2(&panel, { 165, 70 }, "PLAYER 2", 1, Color::black, true);
+	cLabel skill(&panel, { 90, 80 }, "SKILL", 1, Color::black, true);
+	cLabel skill1(&panel, { 25, 90 }, "FLASH: O", 1, Color::black, true);
+	cLabel skill2(&panel, { 25, 100 }, "FREEZE: P", 1, Color::black, true);
+	cLabel skill3(&panel, { 160, 90 }, "FLASH: R", 1, Color::black, true);
+	cLabel skill4(&panel, { 160, 100 }, "FREEZE: F", 1, Color::black, true);
+	
+	while  (true) {
 		if (GetKeyState(0x0D) & 0x8000)
-		{
 			break;
-		}
 		Sleep(50);
 	}
 	isPause = false;
@@ -1482,12 +1487,12 @@ bool cGame::checkPassLevel()
 {
 	for (int i = 0; i < livePeople.size(); i++)
 	{
-		if (livePeople[i]->passLevel)
+		if (!livePeople[i]->passLevel)
 		{
-			return true;
+			return false;
 		}
 	}
-	return false;
+	return true;
 }
 
 void cGame::MainGame() {
@@ -1897,7 +1902,7 @@ void cGame::nextLevel() {
 		if (livePeople[i]->passLevel)
 		{
 			newLevelPos = livePeople[i]->getPos();
-			livePeople[1 - i]->setPos(livePeople[i]->getPos());
+			//livePeople[1 - i]->setPos(livePeople[i]->getPos());
 		}
 	}
 
@@ -1913,7 +1918,7 @@ void cGame::nextLevel() {
 	coinNow = 0;
 	listLabel[6]->updateText("30 x " + to_string(coinBonus / 30));
 	listLabel[3]->updateText(to_string(time));
-	listLabel[10]->updateText("LEVEL: " + to_string(gameLevel));
+	listLabel[8]->updateText("LEVEL: " + to_string(gameLevel));
 	
 	isPause = false;
 	suddenStop = false;
