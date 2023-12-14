@@ -25,8 +25,9 @@ class cGame {
 	vector<COORD> obstacleLanes;
     vector<cObstacle*> liveObstacles;
 	vector<cEnvironment*>  environmentObject;
+	vector<cCoin*> coins;
     vector<cPeople *> livePeople;
-	vector<cWidget*> listWidget;
+	vector<cDWindow*> listWidget;
 	vector<cLabel*> listLabel;
 
 	short gameOrder, gameLevel; // order: 1 or 2 player
@@ -63,7 +64,8 @@ class cGame {
 	vector<vector<cWidget*>> SkillIcon;
 	vector<vector<cLabel*>> Skillcooldown;
 	int defaultSkillCooldown[2] = { 60000, 60000 };
-	int freezetime = 100;
+	int freeze = -1;
+	int defaultFreezetime = 200;
 	void handlingSkillFx();
 	int handlingSkillExec(cPeople* pPeople, long long &startTime);
 	void updateSkillState();
@@ -82,7 +84,7 @@ class cGame {
 		
 		static void onGameReady();
 		
-		void clearObjects(bool clearPeople = false, bool clearEnvironment = false);
+		void clearObjects(bool clearPeople = false, bool clearEnvironment = false, bool clearCoin = false);
 
 		void spawnObstacle(const string& levelFile);
 
@@ -93,6 +95,8 @@ class cGame {
 		void prepareGame();
 		void prepareUI();
 		void clearUI();
+		void clearSkillUI();
+		void prepareSkillUI();
 
 		void GamePlayPanel();
 

@@ -36,6 +36,7 @@ int cGame::handlingSkillExec(cPeople* pPeople, long long &startTime)
 	long long cur = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now().time_since_epoch()).count();
 	long long pass = cur - startTime;
 	int skillValue = pPeople->useSkill();
+	
 	if (pPeople->skillCooldown[0] == 0 && skillValue == 0)
 	{
 		pPeople->oldPos = pPeople->topleft;
@@ -47,29 +48,42 @@ int cGame::handlingSkillExec(cPeople* pPeople, long long &startTime)
 		return 1;
 	}
 
-	if (pPeople->skillCooldown[0] > 0)
-	{
-		if (defaultSkillCooldown[0] - pPeople->skillCooldown[0] < 500)
-			cGameEngine::playFlashEffect(pPeople->oldPos);
-
-		pPeople->skillCooldown[0] = max(pPeople->skillCooldown[0]-pass, 0);
-	}
-
 	if (pPeople->skillCooldown[1] == 0 && skillValue == 1)
 	{
 		suddenStop = true;
 		pPeople->used[1] = true;
 		pPeople->skillCooldown[1] = defaultSkillCooldown[1];
+		freeze = defaultFreezetime;
 		return 0;
 	}
 
-	if (pPeople->skillCooldown[1] > 0)
+	if (pPeople->skillCooldown[0] > 0 || pPeople->skillCooldown[1] > 0)
 	{
-		if (defaultSkillCooldown[1] - pPeople->skillCooldown[1] >= 3000)
-			suddenStop = false;
-		pPeople->skillCooldown[1] = max(pPeople->skillCooldown[1] - pass, 0);
+		if (pPeople->skillCooldown[0] > 0)
+		{
+			if (defaultSkillCooldown[0] - pPeople->skillCooldown[0] < 500)
+				cGameEngine::playFlashEffect(pPeople->oldPos);
+
+			pPeople->skillCooldown[0] = max(pPeople->skillCooldown[0] - pass, 0);
+		}
+		
+		if (pPeople->skillCooldown[1] > 0)
+		{
+			pPeople->skillCooldown[1] = max(pPeople->skillCooldown[1] - pass, 0);
+		}
+		startTime = cur;
 	}
-	startTime = cur;
+	if (freeze > -1)
+	{
+		freeze--;
+	}
+	if (freeze == 0)
+	{
+		suddenStop = false;
+	}
+
+
+
 	return -1;
 }
 
@@ -116,6 +130,12 @@ void cGame::pizzaDraw(long long &startTime) {
 	{
 		cGameEngine::renderEnvironment(environmentObject[i]);
 		environmentObject[i]->move();
+	}
+
+	for (int i = 0; i < coins.size(); i++)
+	{
+		cGameEngine::renderCoin(coins[i]);
+		coins[i]->move();
 	}
 
 	//put people onto buffer
@@ -233,11 +253,11 @@ void cGame::onGameReady()
 			panel.show();
 			panelButton[current].show();
 		}
-		Sleep(100);
+		Sleep(10);
 	}
 }
 
-void cGame::clearObjects(bool clearPeople, bool clearEnvironment)
+void cGame::clearObjects(bool clearPeople, bool clearEnvironment, bool clearCoin)
 {
 	for (int i = 0; i < liveObstacles.size(); i++)
 		delete liveObstacles[i];
@@ -247,6 +267,15 @@ void cGame::clearObjects(bool clearPeople, bool clearEnvironment)
 		for (int i = 0; i < environmentObject.size(); i++)
 			delete environmentObject[i];
 		environmentObject.clear();
+
+
+	}
+
+	if (clearCoin)
+	{
+		for (int i = 0; i < coins.size(); i++)
+			delete coins[i];
+		coins.clear();
 	}
 
 	if (clearPeople)
@@ -291,7 +320,7 @@ void cGame::spawnEnvironment() //summon environment objects of current map theme
 
 void cGame::prepareGame()
 {
-	clearObjects();
+	clearObjects(true, true, true);
 	spawnObstacle(CreatedLevel[currentTheme][currentPhase]);
 	spawnEnvironment();
 	spawnCoin();
@@ -418,10 +447,8 @@ void cGame::GamePlayPanel()
 			if (current == 0) {
 				if (game.GameCharacterPanel())
 					GameNewGamePanel();
-				else {
-					panel.show();
-					panelButton[current].show();
-				}
+				panel.show();
+				panelButton[current].show();
 				for (int i = 0; i < 3; i++)
 				{
 					LabelLoad[i][0].show();
@@ -1026,6 +1053,7 @@ void cGame::GameQuitPanel(bool fullexit)
 void cGame::environmentImpact()
 {
 	bool isCook = false;
+
 	for (int j = 0; j < environmentObject.size(); j++)
 	{
 		if (!environmentObject[j]->friendly)
@@ -1068,18 +1096,31 @@ void cGame::environmentImpact()
 				if (environmentObject[j]->getType() == '1') {
 					for (int u = 0; u < livePeople.size(); u++)
 					{
-						if (environmentObject[j]->Box.isOverlap(livePeople[u]->mBox))
-						{
-							environmentObject[j]->hitSound();
-							coinBonus += 30;
-							delete environmentObject[j];
-							environmentObject.erase(environmentObject.begin() + j);
-						}
+						
 					}
 				}
 			}
 		}
 	}
+
+	for (int u = 0; u < livePeople.size(); u++)
+	{
+		for (int j = 0; j < coins.size(); j++)
+		{
+			if (coins[j]->Box.isOverlap(livePeople[u]->mBox))
+			{
+				coins[j]->hitSound();
+				coinBonus += 30;
+
+				cCoin* temp = coins[j];
+				coins[j] = coins[coins.size() - 1];
+				coins[coins.size() - 1] = temp;
+				delete coins[coins.size() - 1];
+				coins.pop_back();
+			}
+		}
+	}
+
 	if (isCook)
 	{
 		Sleep(200);
@@ -1196,7 +1237,8 @@ void cGame::prepareUI()
 {
 	cDWindow* rr = new cDWindow(&window, { 504, 0 }, "panelinfo", true);
 	//cDWindow howtoplay(&rr, { 0,110 }, "howtoplay", true);
-	cLabel* t11 = new cLabel(rr, { 10, 5 }, "LEVEL: " + to_string(gameLevel), 1, Color::red, true);
+
+	cLabel* t0 = new cLabel(rr, { 10, 5 }, "LEVEL: " + to_string(gameLevel), 1, Color::red, true);
 	cLabel* t1 = new cLabel(rr, { 10, 15 }, "SCORES:", 1, Color::red, true);
 	string point = to_string(totalPoint);
 	cLabel* t2 = new cLabel(rr, { 20, 25 }, point, 2, Color::red, true);
@@ -1204,38 +1246,19 @@ void cGame::prepareUI()
 	time = int(calculateTime());
 	cLabel* t4 = new cLabel(rr, { 10, 45 }, to_string(time), 2, Color::red, true);
 
-	cLabel* t6 = new cLabel(rr, { 10, 55 }, "COINS:", 1, Color::red, true);
-	cLabel* t7 = new cLabel(rr, { 10, 65 }, "30 x 0", 2, Color::red, true);
-	cLabel* t8 = new cLabel(rr, { 10, 75 }, "SKILLS:", 1, Color::red, true);
+	cLabel* t5 = new cLabel(rr, { 10, 55 }, "COINS:", 1, Color::red, true);
+	cLabel* t6 = new cLabel(rr, { 10, 65 }, "30 x 0", 2, Color::red, true);
+	cLabel* t7 = new cLabel(rr, { 10, 75 }, "SKILLS:", 1, Color::red, true);
 
 
-	cLabel* t5 = new cLabel(rr, { 10, 150 }, "ESC: PAUSE", 1, Color::red, true);
-	cLabel* t12 = new cLabel(rr, { 10, 140 }, "HELP: TAB", 1, Color::red, true);
+	cLabel* t8 = new cLabel(rr, { 10, 150 }, "ESC: PAUSE", 1, Color::red, true);
+	cLabel* t9 = new cLabel(rr, { 10, 140 }, "HELP: TAB", 1, Color::red, true);
 
-	SkillIcon.resize(gameOrder);
-	Skillcooldown.resize(gameOrder);
-
-	SkillIcon[0].push_back(new cButton(rr, { 10, 80 }, "iconflashR", 1, true));
-	SkillIcon[0].push_back(new cButton(rr, { 10, 80 }, "iconflashU", 1));
-	SkillIcon[0].push_back(new cButton(rr, { 60, 80 }, "iconfreezeR", 1, true));
-	SkillIcon[0].push_back(new cButton(rr, { 60, 80 }, "iconfreezeU", 1));
-
-	Skillcooldown[0].push_back(new cLabel(rr, {10, 102}, to_string(livePeople[0]->skillCooldown[0]), 1, Color::red));
-	Skillcooldown[0].push_back(new cLabel(rr, {60, 102}, to_string(livePeople[0]->skillCooldown[1]), 1, Color::red));
-
-	if (gameOrder == 2)
-	{
-		SkillIcon[1].push_back(new cButton(rr, { 10, 115 }, "iconflashR", 1, true));
-		SkillIcon[1].push_back(new cButton(rr, { 10, 115 }, "iconflashU", 1));
-		SkillIcon[1].push_back(new cButton(rr, { 60, 115 }, "iconfreezeR", 1, true));
-		SkillIcon[1].push_back(new cButton(rr, { 60, 115 }, "iconfreezeU", 1));
-
-		Skillcooldown[1].push_back(new cLabel(rr, { 10, 137 }, to_string(livePeople[1]->skillCooldown[0]), 1, Color::red));
-		Skillcooldown[1].push_back(new cLabel(rr, { 60, 137 }, to_string(livePeople[1]->skillCooldown[1]), 1, Color::red));
-	}
 
 	listWidget.push_back(rr);
+	prepareSkillUI();
 
+	listLabel.push_back(t0);
 	listLabel.push_back(t1);
 	listLabel.push_back(t2);
 	listLabel.push_back(t3);
@@ -1244,9 +1267,7 @@ void cGame::prepareUI()
 	listLabel.push_back(t6);
 	listLabel.push_back(t7);
 	listLabel.push_back(t8);
-
-	listLabel.push_back(t11);
-	listLabel.push_back(t12);
+	listLabel.push_back(t9);
 }
 
 void cGame::handlingSkillFx()
@@ -1277,15 +1298,12 @@ void cGame::GameWinPanel()
 	int bonus[6] = { 120, 70, 35, 15, 5, 0 };
 	int count = min(int(calculateTime() / 5), 5);
 	int roundScore = bonus[count] + coinBonus + 100;
-	listLabel[1]->updateText(to_string(totalPoint) + " + " + to_string(roundScore));
-	listLabel[2]->updateText("TIME BONUS");
-	listLabel[3]->updateText(to_string(bonus[count]));
 	totalPoint+= roundScore;
 
 	int n[3] = { 0, 0, 0 };
 	int k = 0;
 	int temp = 0;
-	ifstream ifs("Save//leaderboard");
+	ifstream ifs("Save//leaderboard.txt");
 	if (ifs.is_open()) {
 		while (ifs >> temp) {
 			if (ifs.eof())
@@ -1302,7 +1320,7 @@ void cGame::GameWinPanel()
 			break;
 		}
 	}
-	ofstream ofs("Save//leaderboard");
+	ofstream ofs("Save//leaderboard.txt");
 	for (int id = 0; id < 3; id++) {
 		ofs << n[id] << endl;
 	}
@@ -1383,7 +1401,7 @@ void cGame::GameWinPanel()
 			{
 				currentPhase = 0;
 				resetTime();
-				clearObjects(true, true);
+				clearObjects(true, true, true);
 				spawnObstacle(CreatedLevel[currentTheme][currentPhase]);
 				spawnEnvironment();
 				spawnCoin();
@@ -1406,7 +1424,7 @@ void cGame::processLose()
 	int n[3] = { 0, 0, 0 };
 	int k = 0;
 	int temp = 0;
-	ifstream ifs("Save//leaderboard");
+	ifstream ifs("Save//leaderboard.txt");
 	if (ifs.is_open()) {
 		while (ifs >> temp) {
 			if (ifs.eof())
@@ -1423,7 +1441,7 @@ void cGame::processLose()
 			break;
 		}
 	}
-	ofstream ofs("Save//leaderboard");
+	ofstream ofs("Save//leaderboard.txt");
 	for (int id = 0; id < 3; id++) {
 		ofs << n[id] << endl;
 	}
@@ -1552,7 +1570,7 @@ void cGame::MainGame() {
 		randomStopThreadHandle.join();
 	}
 
-	clearObjects(true, true);
+	clearObjects(true, true, true);
 	clearUI();
 	isStart = false;
 }
@@ -1569,6 +1587,36 @@ void cGame::clearUI()
 		delete listLabel[i];
 	}
 	listLabel.clear();
+	clearSkillUI();
+}
+
+void cGame::prepareSkillUI()
+{
+	SkillIcon.resize(gameOrder);
+	Skillcooldown.resize(gameOrder);
+	listWidget[0]->botright;
+	SkillIcon[0].push_back(new cButton(listWidget[0], {10, 80}, "iconflashR", 1, true));
+	SkillIcon[0].push_back(new cButton(listWidget[0], { 10, 80 }, "iconflashU", 1));
+	SkillIcon[0].push_back(new cButton(listWidget[0], { 60, 80 }, "iconfreezeR", 1, true));
+	SkillIcon[0].push_back(new cButton(listWidget[0], { 60, 80 }, "iconfreezeU", 1));
+
+	Skillcooldown[0].push_back(new cLabel(listWidget[0], { 10, 102 }, to_string(livePeople[0]->skillCooldown[0]), 1, Color::red));
+	Skillcooldown[0].push_back(new cLabel(listWidget[0], { 60, 102 }, to_string(livePeople[0]->skillCooldown[1]), 1, Color::red));
+
+	if (gameOrder == 2)
+	{
+		SkillIcon[1].push_back(new cButton(listWidget[0], { 10, 115 }, "iconflashR", 1, true));
+		SkillIcon[1].push_back(new cButton(listWidget[0], { 10, 115 }, "iconflashU", 1));
+		SkillIcon[1].push_back(new cButton(listWidget[0], { 60, 115 }, "iconfreezeR", 1, true));
+		SkillIcon[1].push_back(new cButton(listWidget[0], { 60, 115 }, "iconfreezeU", 1));
+
+		Skillcooldown[1].push_back(new cLabel(listWidget[0], { 10, 137 }, to_string(livePeople[1]->skillCooldown[0]), 1, Color::red));
+		Skillcooldown[1].push_back(new cLabel(listWidget[0], { 60, 137 }, to_string(livePeople[1]->skillCooldown[1]), 1, Color::red));
+	}
+}
+
+void cGame::clearSkillUI()
+{
 	for (int i = 0; i < SkillIcon.size(); i++)
 	{
 		for (int j = 0; j < SkillIcon[i].size(); j++)
@@ -1626,7 +1674,7 @@ void cGame::updateInfo()
 {
 	if (calculateTime() - time >= 1 || calculateTime() < time) {
 		time = int(calculateTime());
-		listLabel[3]->updateText(to_string(time));
+		listLabel[4]->updateText(to_string(time));
 	}
 	if (coinBonus != coinNow) {
 		listLabel[6]->updateText("30 x " + to_string(coinBonus / 30));
@@ -1735,10 +1783,8 @@ void cGame::save(string fileName) {
 		ofs << liveObstacles[i]->getType() << " " << liveObstacles[i]->getPos().X << " " << liveObstacles[i]->getPos().Y << " " << liveObstacles[i]->getSpeed() << " " << liveObstacles[i]->getDirection() << endl;
 	}
 
-	for (int i = 0; i < environmentObject.size(); i++) {
-		if (environmentObject[i]->getType() == '1') {
-			ofs << environmentObject [i]->getType() << " " << environmentObject[i]->getPos().X << " " << environmentObject[i]->getPos().Y << endl;
-		}
+	for (int i = 0; i < coins.size(); i++) {
+			ofs << coins[i]->getType() << " " << coins[i]->getPos().X << " " << coins[i]->getPos().Y << endl;
 	}
 
 	ofs.close();
@@ -1814,15 +1860,15 @@ void cGame::spawnCoin() {
 	for (int i = 0; i < random; i++) {
 		short y = 4 + (rand() % 9) * 18;
 		short x = rand() % 475 + 1;
-		for (int j = 0; j < environmentObject.size(); j++) {
-			if (environmentObject[j]->getType() == '1') {
-				while (environmentObject[j]->getPos().Y == y && abs(environmentObject[j]->getPos().X - x) <= 24) {
+		for (int j = 0; j < coins.size(); j++) {
+			if (coins[j]->getType() == '1') {
+				while (coins[j]->getPos().Y == y && abs(coins[j]->getPos().X - x) <= 24) {
 					y = 4 + (rand() % 9) * 18;
 					x = rand() % 475 + 1;
 				}
 			}
 		}
-		environmentObject.push_back(new cCoin({ x, y }));
+		coins.push_back(new cCoin({ x, y }));
 	}
 }
 
@@ -1859,15 +1905,15 @@ void cGame::nextLevel() {
 	int bonus[6] = { 120, 70, 35, 15, 5, 0 };
 	int count = min(int(calculateTime() / 5), 5);
 	int roundScore = bonus[count] + coinBonus + 100;
-	listLabel[1]->updateText(to_string(totalPoint) + " + " + to_string(roundScore));
-	listLabel[2]->updateText("TIME BONUS");
-	listLabel[3]->updateText(to_string(bonus[count]));
+	listLabel[2]->updateText(to_string(totalPoint) + " + " + to_string(roundScore));
+	listLabel[3]->updateText("TIME BONUS");
+	//listLabel[3]->updateText(to_string(bonus[count]));
 
 	this->gameLevel++;
 	//gameMap::nextMap();
 	calculatePoint();
 	if (currentPhase == 4) currentPhase--;
-	clearObjects();
+	clearObjects(false, false, true);
 	spawnObstacle(CreatedLevel[currentTheme][(++currentPhase) % CreatedLevel[currentTheme].size()]);
 	spawnCoin();
 	coinBonus = 0;
@@ -1894,15 +1940,22 @@ void cGame::nextLevel() {
 	for (int i = 0; i < livePeople.size(); i++)
 	{
 		livePeople[i]->setForceStop();
-		if (livePeople[i]->passLevel)
+	}
+	if (livePeople.size() > 1)
+	{
+		for (int i = 0; i < livePeople.size(); i++)
 		{
-			newLevelPos = livePeople[i]->getPos();
-			livePeople[1 - i]->setPos(livePeople[i]->getPos());
+			if (livePeople[i]->passLevel)
+			{
+				newLevelPos = livePeople[i]->getPos();
+				livePeople[1 - i]->setPos(livePeople[i]->getPos());
+			}
 		}
 	}
 
-	listLabel[2]->updateText("TIME");
-	listLabel[1]->updateText(to_string(totalPoint));
+
+	listLabel[3]->updateText("TIME");
+	listLabel[2]->updateText(to_string(totalPoint));
 
 	for (int i = 0; i < livePeople.size(); i++)
 	{
@@ -1912,8 +1965,8 @@ void cGame::nextLevel() {
 	time = 0;
 	coinNow = 0;
 	listLabel[6]->updateText("30 x " + to_string(coinBonus / 30));
-	listLabel[3]->updateText(to_string(time));
-	listLabel[10]->updateText("LEVEL: " + to_string(gameLevel));
+	listLabel[4]->updateText(to_string(time));
+	listLabel[0]->updateText("LEVEL: " + to_string(gameLevel));
 	
 	isPause = false;
 	suddenStop = false;
@@ -1994,7 +2047,7 @@ void cGame::load(string fileName)
 		hasSuddenStop = false;
 		randomStopThreadHandle.join();
 	}
-	clearObjects(true, true);
+	clearObjects(true, true, true);
 
 	ifstream ifs(fileName);
 	if (!ifs.is_open())
@@ -2005,6 +2058,7 @@ void cGame::load(string fileName)
 	ifs >> gameOrder >> gameLevel >> currentTheme >> currentPhase >> totalTime >> timePause;
 
 	livePeople.resize(gameOrder);
+	
 	int dump;
 	ifs >> dump;
 	for (int i = 0; i < gameOrder; i++)
@@ -2068,7 +2122,7 @@ void cGame::load(string fileName)
 		switch (type)
 		{
 		case '1':
-			environmentObject.push_back(new cCoin(pos));
+			coins.push_back(new cCoin(pos));
 			break;
 		default:
 			break;
@@ -2087,7 +2141,8 @@ void cGame::load(string fileName)
 	victim = nullptr;
 	if (isStart)
 	{
-		
+		clearSkillUI();
+		prepareSkillUI();
 		isPause = false;
 	}
 	else {
@@ -2101,7 +2156,7 @@ void cGame::ScoreBoard() {
 	cDWindow screen(&window, { 0, 0 }, "leaderboard", true);
 	screen.show();
 
-	ifstream ifs("Save//leaderboard");
+	ifstream ifs("Save//leaderboard.txt");
 	if (!ifs.is_open())
 		return;
 	int i = 0;

@@ -173,6 +173,8 @@ void cGameEngine::refreshBackGround(bool fillNow)
 	if (fillNow)
 	{
 		WriteConsoleOutput(curHandle, mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, { 0,0 }, &PlayBoxRect);
+		SetConsoleActiveScreenBuffer(curHandle);
+
 	}
 }
 
@@ -294,6 +296,36 @@ void cGameEngine::renderEnvironment(cEnvironment* pEnvironmentObject)
 
 	
 	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pEnvironmentObject->pMotionFrame->textureArray, { pEnvironmentObject->pMotionFrame->width, pEnvironmentObject->pMotionFrame->height }, pEnvironmentObject->topleft);
+}
+
+void cGameEngine::renderCoin(cCoin* pCoin)
+{
+	if (pCoin->pMotionFrame == nullptr)
+		return;
+	if (pCoin->hasFrameMove)
+	{
+		if (pCoin->timeUntilRender == 0)
+		{
+			if (!pCoin->isStop)
+			{
+				pCoin->currentFrame = (pCoin->currentFrame + 1) % pCoin->numMotionFrame;
+				pCoin->pMotionFrame = pCoin->pLMotionFrames + pCoin->currentFrame;
+			}
+			/*else {
+				pObstacle->currentFrame = 0;
+				pObstacle->pMotionFrame = pObstacle->pLMotionFrames;
+			}*/
+
+
+			pCoin->timeUntilRender = pCoin->defaulttimeUntilRender;
+		}
+		else {
+			pCoin->timeUntilRender--;
+		}
+	}
+
+
+	fillEffectivePixel(mainBuffer, { gameMap::currentMap->width, gameMap::currentMap->height }, pCoin->pMotionFrame->textureArray, { pCoin->pMotionFrame->width, pCoin->pMotionFrame->height }, pCoin->topleft);
 }
 
 void cGameEngine::renderWidget(cWidget* pWidget)

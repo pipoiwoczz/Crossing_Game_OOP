@@ -12,6 +12,7 @@ class cButton;
 class cDWindow;
 class cLabel;
 class cBar;
+class cCoin;
 
 class cPeople;
 class cObstacle;
@@ -91,6 +92,7 @@ public:
 	static void renderObstacle(cObstacle* pObstacle);
 	static void renderEnvironment(cEnvironment* pEnvironmentObject);
 	static void renderWidget(cWidget* pWidget);
+	static void renderCoin(cCoin* pCoin);
 
 	static void playEffect(cObstacle* obsta, cPeople* people);
 	static void playFlashEffect(const COORD& topleft);
