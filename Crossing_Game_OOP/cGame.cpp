@@ -229,7 +229,6 @@ void cGame::onGameReady()
 
 	int current = 0;
 	panelButton[current].show();
-
 	while (mainloop)
 	{
 		if ((GetKeyState(VK_UP) & 0x8000) && current > 0)
@@ -255,7 +254,7 @@ void cGame::onGameReady()
 			panel.show();
 			panelButton[current].show();
 		}
-		Sleep(250);
+		Sleep(100);
 	}
 }
 

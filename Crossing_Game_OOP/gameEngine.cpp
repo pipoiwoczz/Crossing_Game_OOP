@@ -142,7 +142,7 @@ bool cGameEngine::startEngine()
 	reservedBuffer = new CHAR_INFO[cGameEngine::buffsize.X * cGameEngine::buffsize.Y];
 
 	curHandle = Hbuffer1;
-	SetConsoleActiveScreenBuffer(Hbuffer1);
+	SetConsoleActiveScreenBuffer(curHandle);
 
 
 	return true;

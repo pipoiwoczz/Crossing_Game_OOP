@@ -171,6 +171,8 @@ bool cGame::mainloop = mainLoader();
 
 int main() {
 	srand(NULL);
+	Sound::playTrack(SoundTrack::background);
+	Sound::pauseCurrentTrack();
 	cGame::onGameReady();
 	cAsset::settingSave();
 
