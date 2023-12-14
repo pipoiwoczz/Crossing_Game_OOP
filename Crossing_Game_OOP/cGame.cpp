@@ -734,106 +734,40 @@ void cGame::GameSettingsPanel()
 
 	while (true)
 	{
-		
-
-		//if ((GetKeyState(VK_DOWN) & 0x8000) && currentarrowpos < 1)
-		//{
-		//	if (currentarrowpos < 1) 
-		//	{
-		//		Sound::playSoundEffect(SoundEffect::menuMove);
-		//		currentarrowpos++;
-		//		selectarrow.unshow();
-		//		selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
-		//		selectarrow.show();
-		//	}
-		//	 else if (currentarrowpos == 1 && !isStart)
-		//	{
-		//		Sound::playSoundEffect(SoundEffect::menuMove);
-		//		currentarrowpos++;
-		//		selectarrow.unshow();
-		//		buttonPanel[0][0].show();
-		//		buttonPanel[1][0].show();
-		//		buttonPanel[currentarrowpos - 2][1].show();
-		//		buttonPanel[currentarrowpos - 2][1].onSelect();
-		//	}
-		//}
-		//if ((GetKeyState(VK_UP) & 0x8000) && currentarrowpos > 0)
-		//{
-		//	Sound::playSoundEffect(SoundEffect::menuMove);
-		//	if (currentarrowpos < 2) {
-		//		currentarrowpos--;
-		//		selectarrow.unshow();
-		//		selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
-		//		selectarrow.show();
-		//	}
-		//	else if (currentarrowpos >= 2) {
-		//		Sound::playSoundEffect(SoundEffect::menuMove);
-		//		currentarrowpos = 1;
-		//		selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
-		//		selectarrow.show();		
-		//		//buttonPanel[currentarrowpos - 2][1].show();
-		//		buttonPanel[0][1].onDeSelect();
-		//		buttonPanel[1][1].onDeSelect();
-		//		buttonPanel[0][0].show();
-		//		buttonPanel[1][0].show();
-		//	}
-		//}
-		//if (GetKeyState(VK_LEFT) & 0x8000)
-		//{
-		//	if (currentarrowpos < 2)
-		//	{
-		//		Sound::playSoundEffect(SoundEffect::menuMove);
-		//		panelFunct[currentarrowpos][0]();
-		//		panelInfo[currentarrowpos][1].updateText(to_string(getVolume[currentarrowpos]() / 10));
-		//		Sleep(250);
-		//	}
-		//	else if (currentarrowpos == 3)  {
-		//		Sound::playSoundEffect(SoundEffect::menuMove);
-		//		buttonPanel[currentarrowpos - 2][1].onDeSelect();
-		//		currentarrowpos--;
-		//		selectarrow.unshow();
-		//		buttonPanel[0][0].show();
-		//		buttonPanel[1][0].show();
-		//		buttonPanel[currentarrowpos - 2][1].show();
-		//		buttonPanel[currentarrowpos - 2][1].onSelect();
-		//	}
-		//}
-		//if (GetKeyState(VK_RIGHT) & 0x8000)
-		//{
-		//	if (currentarrowpos < 2)
-		//	{
-		//		Sound::playSoundEffect(SoundEffect::menuMove);
-		//		panelFunct[currentarrowpos][1]();
-		//		panelInfo[currentarrowpos][1].updateText(to_string(getVolume[currentarrowpos]() / 10));
-		//		Sleep(250);
-		//	}
-		//	else {
-		//		if (currentarrowpos == 2) {
-		//			Sound::playSoundEffect(SoundEffect::menuMove);
-		//			buttonPanel[currentarrowpos - 2][1].onDeSelect();
-		//			currentarrowpos++;
-		//			selectarrow.unshow();
-		//			buttonPanel[0][0].show();
-		//			buttonPanel[1][0].show();
-		//			buttonPanel[currentarrowpos - 2][1].show();
-		//			buttonPanel[currentarrowpos - 2][1].onSelect();
-		//		}
-		//	}
-		//}
-		//Sleep(50);
-		//if ((GetKeyState(0x0D) & 0x8000)) {
-		//	Sound::playSoundEffect(SoundEffect::menuMove);
-		//	if (currentarrowpos >= 2) {
-		//		bool change = (currentarrowpos == 3) ? false : true;
-		//		cPeople::changeskin(change);
-		//		break;
-		//	}
-		//}
-		//if (GetKeyState(VK_ESCAPE) & 0x8000)
-		//{
-		//	break;
-		//}
-		//Sleep(50);
+		if ((GetKeyState(VK_DOWN) & 0x8000) && currentarrowpos < 1)
+		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
+			currentarrowpos++;
+			selectarrow.unshow();
+			selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
+			selectarrow.show();
+		}
+		if ((GetKeyState(VK_UP) & 0x8000) && currentarrowpos > 0)
+		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
+			currentarrowpos--;
+			selectarrow.unshow();
+			selectarrow.setOffset({ selectarrow.getOffset().X, arrowPos[currentarrowpos] });
+			selectarrow.show();
+		}
+		if (GetKeyState(VK_LEFT) & 0x8000)
+		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
+			panelFunct[currentarrowpos][0]();
+			panelInfo[currentarrowpos][1].updateText(to_string(getVolume[currentarrowpos]() / 10));
+		}
+		if (GetKeyState(VK_RIGHT) & 0x8000)
+		{
+			Sound::playSoundEffect(SoundEffect::menuMove);
+			panelFunct[currentarrowpos][1]();
+			panelInfo[currentarrowpos][1].updateText(to_string(getVolume[currentarrowpos]() / 10));
+		}
+		Sleep(50);
+		if (GetKeyState(VK_ESCAPE) & 0x8000)
+		{
+			break;
+		}
+		Sleep(50);
 	}
 }
 
